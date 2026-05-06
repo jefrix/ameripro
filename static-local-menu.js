@@ -142,6 +142,7 @@
     setPlaceholderLayer('opportunity', false);
     window.GlobalDataRestaurants?.setActive?.(false);
     window.GlobalDataOpportunity?.setActive?.(false);
+    window.GlobalDataCities?.setActive?.(false);
     window.GlobalDataCountyDrilldown?.clearSelection?.();
   }
 
@@ -227,7 +228,11 @@
       color: '#cfe2ff',
       active: localState.cities,
       onToggle: () => {
-        activateMapLayer(() => setPlaceholderLayer('cities', !localState.cities));
+        const next = !localState.cities;
+        activateMapLayer(() => {
+          setPlaceholderLayer('cities', next);
+          window.GlobalDataCities?.setActive?.(next);
+        });
       },
     }));
     const note = document.createElement('div');
@@ -343,6 +348,7 @@
       if (['cities', 'ameripro', 'restaurants', 'opportunity'].includes(name)) {
         setPlaceholderLayer(name, next);
       }
+      if (name === 'cities') window.GlobalDataCities?.setActive?.(next);
       if (name === 'restaurants') window.GlobalDataRestaurants?.setActive?.(next);
       if (name === 'opportunity') window.GlobalDataOpportunity?.setActive?.(next);
       refreshRows();
@@ -357,6 +363,13 @@
     if (event.target?.tagName === 'INPUT' || event.target?.tagName === 'TEXTAREA') return;
     if (event.key === 'c' || event.key === 'C') {
       activateMapLayer(() => setCountiesVisible(!localState.counties));
+    }
+    if (event.key === 'i' || event.key === 'I') {
+      const next = !localState.cities;
+      activateMapLayer(() => {
+        setPlaceholderLayer('cities', next);
+        window.GlobalDataCities?.setActive?.(next);
+      });
     }
     if (event.key === 'p' || event.key === 'P') {
       const next = !localState.opportunity;

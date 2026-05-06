@@ -267,6 +267,8 @@
     const key = `${countyName}:${list.map(item => item.id).join('|')}`;
     if (renderKey === key && feed.classList.contains('county-drilldown-mode')) return;
     renderKey = key;
+    feed.classList.remove('city-feed-mode');
+    feed.querySelector('[data-city-feed-board]')?.remove();
     feed.classList.add('county-drilldown-mode');
     let board = feed.querySelector('[data-county-drilldown-board]');
     if (!board) {

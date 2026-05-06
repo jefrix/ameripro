@@ -145,6 +145,7 @@
   ].filter(city => city.pop > MIN_POPULATION);
 
   let lastViewBox = '';
+  let selectedCity = null;
 
   function ensureStyle() {
     if (document.querySelector('[data-local-cities-style]')) return;
@@ -164,6 +165,14 @@
         stroke-width: 0.85;
         vector-effect: non-scaling-stroke;
         filter: drop-shadow(0 0 2px rgba(207,226,255,0.62));
+      }
+      .local-city-marker {
+        cursor: pointer;
+        pointer-events: all;
+      }
+      .local-city-hit {
+        fill: transparent;
+        pointer-events: all;
       }
       .local-city-dot.major {
         fill: #ff8a3d;
@@ -185,6 +194,127 @@
         stroke: rgba(0,0,0,0.78);
         stroke-width: 2.5;
         pointer-events: none;
+      }
+      .local-city-selected {
+        display: none;
+        fill: none;
+        stroke: #f5d142;
+        stroke-width: 1.2;
+        vector-effect: non-scaling-stroke;
+        filter: drop-shadow(0 0 7px rgba(245,209,66,0.82));
+      }
+      .local-city-marker:hover .local-city-selected,
+      .local-city-marker.selected .local-city-selected {
+        display: block;
+      }
+      .local-city-marker.selected .local-city-dot {
+        stroke: #fff6cf;
+        stroke-width: 1.35;
+      }
+      .feed.city-feed-mode > .feed-head,
+      .feed.city-feed-mode > .feed-list,
+      .feed.city-feed-mode > [data-ameripro-tank-board],
+      .feed.city-feed-mode > [data-restaurant-feed-board],
+      .feed.city-feed-mode > [data-opportunity-board],
+      .feed.city-feed-mode > [data-county-drilldown-board] {
+        display: none;
+      }
+      .feed:not(.city-feed-mode) > [data-city-feed-board] {
+        display: none;
+      }
+      .city-feed-board {
+        height: 100%;
+        min-height: 0;
+        overflow: hidden;
+        display: grid;
+        grid-template-rows: auto auto minmax(0, 1fr);
+        gap: 8px;
+        padding: 10px 12px;
+        font-family: var(--mono);
+        color: var(--text);
+      }
+      .city-feed-head {
+        display: flex;
+        justify-content: space-between;
+        gap: 10px;
+        color: #cfe2ff;
+        font-size: 10px;
+        letter-spacing: 0.18em;
+      }
+      .city-selected-card {
+        border: 1px solid rgba(207,226,255,0.48);
+        background: rgba(0,10,22,0.64);
+        padding: 8px;
+        box-shadow: inset 0 0 18px rgba(207,226,255,0.05);
+      }
+      .city-title {
+        color: #f5d142;
+        font-size: 11px;
+        letter-spacing: 0.1em;
+        margin-bottom: 7px;
+      }
+      .city-row {
+        display: grid;
+        grid-template-columns: 90px minmax(0, 1fr);
+        gap: 8px;
+        align-items: start;
+        font-size: 9px;
+        line-height: 1.35;
+        margin-bottom: 2px;
+      }
+      .city-row span:first-child {
+        color: var(--text-dim);
+        letter-spacing: 0.12em;
+      }
+      .city-row b {
+        color: #cfe2ff;
+        overflow-wrap: anywhere;
+      }
+      .city-list {
+        min-height: 0;
+        overflow-y: auto;
+        border-top: 1px solid rgba(26,49,83,0.75);
+      }
+      .city-list button {
+        width: 100%;
+        display: grid;
+        grid-template-columns: minmax(0,1fr) auto;
+        gap: 8px;
+        padding: 7px 0;
+        border: 0;
+        border-bottom: 1px solid rgba(26,49,83,0.55);
+        background: transparent;
+        color: var(--text);
+        text-align: left;
+        font-family: var(--mono);
+        cursor: pointer;
+      }
+      .city-list button:hover,
+      .city-list button.active {
+        color: #f5d142;
+      }
+      .city-list strong,
+      .city-list small {
+        display: block;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+      }
+      .city-list strong {
+        font-size: 9px;
+        letter-spacing: 0.1em;
+      }
+      .city-list small {
+        color: var(--text-dim);
+        font-size: 8px;
+        letter-spacing: 0.08em;
+        margin-top: 2px;
+      }
+      .city-pop {
+        color: rgba(207,226,255,0.72);
+        font-size: 7px;
+        letter-spacing: 0.12em;
+        align-self: center;
       }
       .local-placeholder-layer[data-local-placeholder="cities"] .local-placeholder-badge {
         display: none;
@@ -213,6 +343,36 @@
 
   function cityRadius(population) {
     return Math.max(2.1, Math.min(17, Math.sqrt(population) / 42));
+  }
+
+  function escapeHtml(value) {
+    return String(value ?? '').replace(/[&<>"']/g, char => ({
+      '&': '&amp;',
+      '<': '&lt;',
+      '>': '&gt;',
+      '"': '&quot;',
+      "'": '&#39;',
+    }[char]));
+  }
+
+  function formatPop(value) {
+    return Number(value || 0).toLocaleString();
+  }
+
+  function cityClass(city) {
+    if (city.service) return 'AMERIPRO SERVICE HUB';
+    if (city.pop >= 100000) return 'MAJOR CITY';
+    if (city.pop >= 30000) return 'REGIONAL CITY';
+    return 'LOCAL MARKET';
+  }
+
+  function selected() {
+    return CITIES.find(city => city.name === selectedCity) || null;
+  }
+
+  function row(label, value, color) {
+    const style = color ? ` style="color:${escapeHtml(color)}"` : '';
+    return `<div class="city-row"><span>${escapeHtml(label)}</span><b${style}>${escapeHtml(value || '--')}</b></div>`;
   }
 
   function shouldLabel(city) {
@@ -248,8 +408,26 @@
       const [x, y] = project([city.lon, city.lat]);
       const radius = cityRadius(city.pop);
       const wrap = document.createElementNS('http://www.w3.org/2000/svg', 'g');
+      wrap.setAttribute('class', `local-city-marker ${city.name === selectedCity ? 'selected' : ''}`);
       wrap.dataset.cityName = city.name;
       wrap.dataset.population = String(city.pop);
+      wrap.setAttribute('tabindex', '0');
+      wrap.setAttribute('role', 'button');
+      wrap.setAttribute('aria-label', city.name);
+
+      const hit = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
+      hit.setAttribute('class', 'local-city-hit');
+      hit.setAttribute('cx', x.toFixed(2));
+      hit.setAttribute('cy', y.toFixed(2));
+      hit.setAttribute('r', Math.max(9, radius * 1.8).toFixed(2));
+      wrap.appendChild(hit);
+
+      const selectedRing = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
+      selectedRing.setAttribute('class', 'local-city-selected');
+      selectedRing.setAttribute('cx', x.toFixed(2));
+      selectedRing.setAttribute('cy', y.toFixed(2));
+      selectedRing.setAttribute('r', (Math.max(8, radius * 1.95)).toFixed(2));
+      wrap.appendChild(selectedRing);
 
       if (city.pop >= 30000 || city.service) {
         const orbit = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
@@ -270,6 +448,17 @@
       title.textContent = `${city.name}: ${city.pop.toLocaleString()} people`;
       dot.appendChild(title);
       wrap.appendChild(dot);
+      wrap.addEventListener('click', event => {
+        event.preventDefault();
+        event.stopPropagation();
+        pickCity(city.name, { focusPanel: true });
+      });
+      wrap.addEventListener('keydown', event => {
+        if (event.key !== 'Enter' && event.key !== ' ') return;
+        event.preventDefault();
+        event.stopPropagation();
+        pickCity(city.name, { focusPanel: true });
+      });
       group.appendChild(wrap);
       addLabel(group, city, x, y, radius);
     });
@@ -280,6 +469,85 @@
   function placeholderActive(name) {
     const node = document.querySelector(`[data-local-placeholder="${name}"]`);
     return Boolean(node && node.style.display !== 'none');
+  }
+
+  function renderBoard() {
+    const feed = document.querySelector('.rail-right .feed');
+    if (!feed || !placeholderActive('cities')) return;
+    if (window.GlobalDataLocalEventOwner && window.GlobalDataLocalEventOwner !== 'cities') return;
+    ensureStyle();
+    const current = selected() || CITIES[0];
+    if (!current) return;
+    selectedCity = current.name;
+    feed.classList.remove('ameripro-feed-mode', 'restaurant-feed-mode', 'county-drilldown-mode', 'opportunity-feed-mode');
+    feed.classList.add('city-feed-mode');
+    feed.querySelector('[data-restaurant-feed-board]')?.remove();
+    feed.querySelector('[data-opportunity-board]')?.remove();
+    feed.querySelector('[data-ameripro-tank-board]')?.remove();
+    feed.querySelector('[data-county-drilldown-board]')?.remove();
+    let board = feed.querySelector('[data-city-feed-board]');
+    if (!board) {
+      board = document.createElement('div');
+      board.className = 'city-feed-board';
+      board.dataset.cityFeedBoard = '1';
+      feed.appendChild(board);
+    }
+    const key = `${current.name}:${CITIES.length}`;
+    if (board.dataset.renderKey === key) return;
+    board.dataset.renderKey = key;
+    board.innerHTML = [
+      '<div class="city-feed-head">',
+      '<span>CITIES</span>',
+      `<span>${CITIES.length} MARKETS</span>`,
+      '</div>',
+      '<div class="city-selected-card">',
+      `<div class="city-title">${escapeHtml(current.name.toUpperCase())}</div>`,
+      row('CLASS', cityClass(current), current.service ? '#5bd7ff' : current.pop >= 100000 ? '#ff8a3d' : '#cfe2ff'),
+      row('POPULATION', formatPop(current.pop)),
+      row('COORD', `${current.lat.toFixed(4)}, ${current.lon.toFixed(4)}`),
+      row('SERVICE', current.service ? 'Ameripro office/service-area city' : 'Mapped Georgia municipality'),
+      row('SOURCE', 'Static Georgia municipal seed data'),
+      '</div>',
+      '<div class="city-list" data-city-list>',
+      CITIES.map(city => [
+        `<button class="${city.name === selectedCity ? 'active' : ''}" data-city-row="${escapeHtml(city.name)}">`,
+        '<span>',
+        `<strong>${escapeHtml(city.name)}</strong>`,
+        `<small>${escapeHtml(cityClass(city))}</small>`,
+        '</span>',
+        `<span class="city-pop">${formatPop(city.pop)}</span>`,
+        '</button>',
+      ].join('')).join(''),
+      '</div>',
+    ].join('');
+    board.querySelectorAll('[data-city-row]').forEach(button => {
+      button.addEventListener('click', () => pickCity(button.dataset.cityRow, { focusPanel: true }));
+    });
+  }
+
+  function focusPanel() {
+    const list = document.querySelector('[data-city-list]');
+    const row = list?.querySelector('button.active');
+    if (!list || !row) return;
+    const rowTop = row.offsetTop - list.offsetTop;
+    list.scrollTop = Math.max(0, rowTop - (list.clientHeight / 2) + (row.clientHeight / 2));
+  }
+
+  function resetBoard() {
+    const feed = document.querySelector('.rail-right .feed.city-feed-mode');
+    if (!feed) return;
+    feed.classList.remove('city-feed-mode');
+    feed.querySelector('[data-city-feed-board]')?.remove();
+  }
+
+  function pickCity(name, options = {}) {
+    selectedCity = name || selectedCity || CITIES[0]?.name || '';
+    window.GlobalDataLocalEventOwner = 'cities';
+    document.querySelectorAll('.local-city-marker').forEach(node => {
+      node.classList.toggle('selected', node.dataset.cityName === selectedCity);
+    });
+    renderBoard();
+    if (options.focusPanel) focusPanel();
   }
 
   function syncLayer() {
@@ -297,10 +565,28 @@
     svg.querySelectorAll('[data-local-cities]').forEach(node => {
       node.style.display = active ? '' : 'none';
     });
+    if (active && (!window.GlobalDataLocalEventOwner || window.GlobalDataLocalEventOwner === 'cities')) renderBoard();
+    if (!active) resetBoard();
 
     const sub = document.querySelector('[data-local-menu-layer="cities"] .layer-sub');
     if (sub) sub.textContent = `${CITIES.length} CITIES / POP > 3K / SCALED`;
   }
+
+  window.GlobalDataCities = {
+    setActive(active) {
+      if (active) {
+        if (!selectedCity) selectedCity = CITIES[0]?.name || '';
+        if (!window.GlobalDataLocalEventOwner) window.GlobalDataLocalEventOwner = 'cities';
+        renderBoard();
+      } else {
+        if (window.GlobalDataLocalEventOwner === 'cities') window.GlobalDataLocalEventOwner = '';
+        resetBoard();
+      }
+      syncLayer();
+    },
+    selectCity: pickCity,
+    getCities: () => CITIES.slice(),
+  };
 
   setInterval(syncLayer, 300);
 })();

@@ -634,10 +634,11 @@
     if (!feed || !placeholderActive()) return;
     if (window.GlobalDataLocalEventOwner && window.GlobalDataLocalEventOwner !== 'restaurants') return;
     ensureStyle();
-    feed.classList.remove('ameripro-feed-mode', 'restaurant-feed-mode', 'county-drilldown-mode', 'opportunity-feed-mode');
+    feed.classList.remove('ameripro-feed-mode', 'restaurant-feed-mode', 'county-drilldown-mode', 'opportunity-feed-mode', 'city-feed-mode');
     feed.querySelector('[data-county-drilldown-board]')?.remove();
     feed.querySelector('[data-opportunity-board]')?.remove();
     feed.querySelector('[data-ameripro-tank-board]')?.remove();
+    feed.querySelector('[data-city-feed-board]')?.remove();
     feed.classList.add('restaurant-feed-mode');
     let board = feed.querySelector('[data-restaurant-feed-board]');
     if (!board) {
