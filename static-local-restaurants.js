@@ -4,6 +4,26 @@
     .filter(item => Number.isFinite(Number(item.lat)) && Number.isFinite(Number(item.lon)))
     .sort((a, b) => String(a.name || '').localeCompare(String(b.name || '')));
   const BOUNDS = { minLon: -85.70, maxLon: -80.75, minLat: 30.30, maxLat: 35.08 };
+  const SERVICE_COLORS = {
+    default: '#5bd7ff',
+    green: '#73ff9a',
+    yellow: '#f5d142',
+    red: '#ff4f5f',
+  };
+  const MONTHS = {
+    january: 0, jan: 0,
+    february: 1, feb: 1,
+    march: 2, mar: 2,
+    april: 3, apr: 3,
+    may: 4,
+    june: 5, jun: 5,
+    july: 6, jul: 6,
+    august: 7, aug: 7,
+    september: 8, sep: 8, sept: 8,
+    october: 9, oct: 9,
+    november: 10, nov: 10,
+    december: 11, dec: 11,
+  };
 
   let active = false;
   let selectedId = CUSTOMERS[0]?.id || null;
@@ -33,15 +53,16 @@
         pointer-events: all;
       }
       .local-restaurant-dot {
-        fill: rgba(91,215,255,0.94);
+        fill: var(--service-color, rgba(91,215,255,0.94));
         stroke: rgba(207,226,255,0.95);
         stroke-width: 0.75;
         vector-effect: non-scaling-stroke;
-        filter: drop-shadow(0 0 4px rgba(91,215,255,0.75));
+        filter: drop-shadow(0 0 4px var(--service-glow, rgba(91,215,255,0.75)));
       }
       .local-restaurant-marker.city-estimated .local-restaurant-dot {
-        fill: rgba(91,215,255,0.46);
+        fill: var(--service-color, rgba(91,215,255,0.46));
         stroke: rgba(91,215,255,0.72);
+        opacity: 0.62;
       }
       .local-restaurant-plus {
         stroke: rgba(0,8,18,0.92);
@@ -74,8 +95,31 @@
         display: block;
       }
       .local-restaurant-marker.selected .local-restaurant-dot {
-        fill: #73ff9a;
         stroke: #f7ffe8;
+        stroke-width: 1.25;
+      }
+      .restaurant-status-legend {
+        display: grid;
+        grid-template-columns: repeat(4, minmax(0,1fr));
+        gap: 5px;
+        font-family: var(--mono);
+        font-size: 7px;
+        letter-spacing: 0.08em;
+        color: var(--text-dim);
+      }
+      .restaurant-status-legend span {
+        display: flex;
+        align-items: center;
+        gap: 4px;
+        min-width: 0;
+      }
+      .restaurant-status-legend i {
+        display: inline-block;
+        width: 7px;
+        height: 7px;
+        background: var(--status-color, #5bd7ff);
+        box-shadow: 0 0 6px var(--status-color, #5bd7ff);
+        flex: 0 0 auto;
       }
       .feed.restaurant-feed-mode > .feed-head,
       .feed.restaurant-feed-mode > .feed-list {
@@ -86,7 +130,7 @@
       }
       .restaurant-feed-board {
         display: grid;
-        grid-template-rows: auto auto minmax(0, 1fr);
+        grid-template-rows: auto auto auto minmax(0, 1fr);
         gap: 8px;
         height: 100%;
         min-height: 0;
@@ -231,6 +275,74 @@
     return CUSTOMERS.find(item => item.id === selectedId) || CUSTOMERS[0] || null;
   }
 
+  function addMonths(date, delta) {
+    return new Date(date.getFullYear(), date.getMonth() + delta, 1);
+  }
+
+  function parseSchedulePeriod(value) {
+    const text = String(value || '').trim().toLowerCase();
+    const match = text.match(/([a-z]+)\s+(\d{4})/i);
+    if (!match) return null;
+    const month = MONTHS[match[1]];
+    const year = Number(match[2]);
+    if (!Number.isFinite(year) || month === undefined) return null;
+    return new Date(year, month, 1);
+  }
+
+  function intervalMonths(service) {
+    const text = String(service?.frequency || '').toLowerCase();
+    if (text.includes('monthly') && !text.includes('bi')) return 1;
+    if (text.includes('bi-month') || text.includes('bimonth') || text.includes('every 2')) return 2;
+    if (text.includes('semi') || text.includes('6')) return 6;
+    if (text.includes('annual') || text.includes('year')) return 12;
+    return 3;
+  }
+
+  function inferLastService(service) {
+    const next = parseSchedulePeriod(service?.next || service?.period);
+    if (!next) return null;
+    return addMonths(next, -intervalMonths(service));
+  }
+
+  function serviceStatus(item) {
+    const services = item?.ameriproSchedule?.services || [];
+    if (!services.length) {
+      return {
+        key: 'default',
+        label: 'DEFAULT',
+        color: SERVICE_COLORS.default,
+        note: 'No Ameripro service schedule match',
+      };
+    }
+    const now = new Date();
+    const dated = services
+      .map(service => ({ service, last: inferLastService(service) }))
+      .filter(entry => entry.last instanceof Date && !Number.isNaN(entry.last.valueOf()));
+    if (!dated.length) {
+      return {
+        key: 'default',
+        label: 'DEFAULT',
+        color: SERVICE_COLORS.default,
+        note: 'Schedule period unavailable',
+      };
+    }
+    dated.sort((a, b) => a.last - b.last);
+    const oldest = dated[0];
+    const days = Math.max(0, Math.floor((now - oldest.last) / 86400000));
+    if (days > 60) {
+      return { key: 'red', label: 'SERVICE DUE', color: SERVICE_COLORS.red, days, last: oldest.last, service: oldest.service };
+    }
+    if (days > 30) {
+      return { key: 'yellow', label: 'WATCH', color: SERVICE_COLORS.yellow, days, last: oldest.last, service: oldest.service };
+    }
+    return { key: 'green', label: 'CURRENT', color: SERVICE_COLORS.green, days, last: oldest.last, service: oldest.service };
+  }
+
+  function formatMonth(date) {
+    if (!(date instanceof Date) || Number.isNaN(date.valueOf())) return '';
+    return date.toLocaleDateString('en-US', { month: 'short', year: 'numeric' });
+  }
+
   function nearestMarkerFromPointer(svg, event) {
     let nearest = null;
     let nearestDistance = Infinity;
@@ -286,9 +398,13 @@
     CUSTOMERS.forEach(item => {
       const [x, y] = project([Number(item.lon), Number(item.lat)]);
       const marker = document.createElementNS('http://www.w3.org/2000/svg', 'g');
+      const status = serviceStatus(item);
       marker.setAttribute('class', `local-restaurant-marker ${item.locationQuality === 'city-estimated' ? 'city-estimated' : ''} ${item.id === selectedId ? 'selected' : ''}`);
       marker.setAttribute('transform', `translate(${x.toFixed(2)} ${y.toFixed(2)})`);
+      marker.style.setProperty('--service-color', status.color);
+      marker.style.setProperty('--service-glow', status.color);
       marker.dataset.customerId = item.id;
+      marker.dataset.serviceStatus = status.key;
       marker.setAttribute('tabindex', '0');
       marker.setAttribute('role', 'button');
       marker.setAttribute('aria-label', item.name || 'Restaurant customer');
@@ -328,11 +444,18 @@
       : 'Street-matched location';
     const schedule = item.ameriproSchedule || {};
     const summary = schedule.summary || {};
+    const status = serviceStatus(item);
     const rows = [
       ['ADDRESS', locationText(item)],
       ['SERVICE', item.serviceFocus || 'Grease trap / exhaust hood service'],
       ['TYPE', item.type || 'Restaurant / food service customer'],
+      ['STATUS', status.label],
     ];
+    if (status.last) {
+      rows.push(['LAST EST', `${formatMonth(status.last)} / ${status.days} days`]);
+    } else {
+      rows.push(['LAST EST', status.note]);
+    }
     rows.push(['TRAP', item.greaseTrapSizeGal || item.greaseTrapLocation
       ? `${item.greaseTrapSizeGal ? `${item.greaseTrapSizeGal} gal` : 'Size unknown'} / ${item.greaseTrapLocation || 'Location unknown'}`
       : 'Not found in older list']);
@@ -391,14 +514,20 @@
       `<div class="restaurant-selected-title">${escapeHtml(selected?.name || 'SELECT A RESTAURANT')}</div>`,
       detailRows(selected),
       '</div>',
+      '<div class="restaurant-status-legend">',
+      `<span><i style="--status-color:${SERVICE_COLORS.default}"></i>DEFAULT</span>`,
+      `<span><i style="--status-color:${SERVICE_COLORS.green}"></i>0-30D</span>`,
+      `<span><i style="--status-color:${SERVICE_COLORS.yellow}"></i>31-60D</span>`,
+      `<span><i style="--status-color:${SERVICE_COLORS.red}"></i>60D+</span>`,
+      '</div>',
       '<div class="restaurant-feed-list" data-restaurant-feed-list>',
       CUSTOMERS.map(item => [
-        `<button class="restaurant-feed-row ${item.id === selectedId ? 'active' : ''}" data-restaurant-row="${escapeHtml(item.id)}">`,
+        `<button class="restaurant-feed-row ${item.id === selectedId ? 'active' : ''}" data-restaurant-row="${escapeHtml(item.id)}" style="--status-color:${serviceStatus(item).color}">`,
         '<span>',
         `<strong>${escapeHtml(item.name)}</strong>`,
         `<small>${escapeHtml([item.city, item.state].filter(Boolean).join(', '))}${item.ameriproSchedule?.serviceTypes?.length ? ` / ${escapeHtml(item.ameriproSchedule.serviceTypes.join(' + '))}` : item.greaseTrapSizeGal ? ` / ${item.greaseTrapSizeGal} gal ${item.greaseTrapLocation || ''}` : ''}</small>`,
         '</span>',
-        `<span class="restaurant-quality">${qualityLabel(item)}</span>`,
+        `<span class="restaurant-quality" style="color:var(--status-color)">${serviceStatus(item).label}</span>`,
         '</button>',
       ].join('')).join(''),
       '</div>',

@@ -196,7 +196,7 @@
     panel.appendChild(layerRow({
       keyName: 'opportunity',
       hotkey: 'P',
-      label: 'PROSPECTS',
+      label: 'SALES',
       sub: 'TARGET MARKETS / OPEN FIELD',
       color: '#ff8a42',
       active: localState.opportunity,
