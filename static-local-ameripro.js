@@ -14,10 +14,12 @@
     {
       id: 'large-truck-1',
       label: 'Large Pump Truck 1',
+      nickname: 'Grinch',
       shortLabel: 'L1',
       kind: 'Large Pump Truck',
       tank: 'Large truck tank',
       capacity: 'Large',
+      capacityGallons: 5000,
       lat: BASE.lat + 0.030,
       lon: BASE.lon - 0.030,
       color: '#73ff9a',
@@ -25,10 +27,12 @@
     {
       id: 'large-truck-2',
       label: 'Large Pump Truck 2',
+      nickname: 'Hulk',
       shortLabel: 'L2',
       kind: 'Large Pump Truck',
       tank: 'Large truck tank',
       capacity: 'Large',
+      capacityGallons: 5000,
       lat: BASE.lat + 0.018,
       lon: BASE.lon + 0.034,
       color: '#73ff9a',
@@ -36,10 +40,12 @@
     {
       id: 'small-truck-1',
       label: 'Small Pump Truck',
+      nickname: 'Shrek',
       shortLabel: 'S1',
       kind: 'Small Pump Truck',
       tank: 'Small truck tank',
       capacity: 'Small',
+      capacityGallons: 1000,
       lat: BASE.lat - 0.030,
       lon: BASE.lon - 0.018,
       color: '#5bd7ff',
@@ -51,6 +57,7 @@
       kind: 'Stationary Frak Tank',
       tank: 'Dublin grease holding tank',
       capacity: 'Stationary',
+      capacityGallons: 20000,
       lat: BASE.lat,
       lon: BASE.lon,
       color: '#f5d142',
@@ -93,6 +100,22 @@
   function row(label, value, color) {
     const style = color ? ` style="color:${escapeHtml(color)}"` : '';
     return `<div class="insp-row"><span>${escapeHtml(label)}</span><b${style}>${escapeHtml(value || '--')}</b></div>`;
+  }
+
+  function formatGallons(value) {
+    return `${Math.round(Number(value) || 0).toLocaleString()} gal`;
+  }
+
+  function gallonsFor(asset) {
+    return Math.round((asset.capacityGallons || 0) * ((levels[asset.id] || 0) / 100));
+  }
+
+  function stepGallons(asset) {
+    return Math.round((asset.capacityGallons || 0) * (LEVEL_STEP / 100));
+  }
+
+  function tankDisplayName(asset) {
+    return asset.nickname ? `${asset.label} / ${asset.nickname}` : asset.label;
   }
 
   function ensureStyle() {
@@ -236,7 +259,7 @@
       }
       .ameripro-tank-row {
         display: grid;
-        grid-template-columns: minmax(0, 1fr) 46px;
+        grid-template-columns: minmax(0, 1fr) 82px;
         align-content: center;
         gap: 7px 9px;
         padding: 8px 12px;
@@ -269,10 +292,19 @@
         grid-row: span 2;
         align-self: center;
         justify-self: end;
+        display: grid;
+        gap: 2px;
+        text-align: right;
         color: var(--asset-color, #73ff9a);
         font-family: var(--mono);
         font-size: 12px;
         letter-spacing: 0.08em;
+      }
+      .ameripro-tank-level small {
+        color: var(--text-dim);
+        font-size: 7.5px;
+        letter-spacing: 0.06em;
+        white-space: nowrap;
       }
       .ameripro-tank-control {
         grid-column: 1 / -1;
@@ -315,6 +347,124 @@
         color: var(--text-dim);
         font-size: 11px;
         line-height: 1.45;
+      }
+      .globe-wrap.ameripro-tanks-mode [data-local-map-overlay] {
+        opacity: 0.18;
+      }
+      .ameripro-tanks-visual {
+        position: absolute;
+        inset: 42px 34px 34px;
+        z-index: 12;
+        display: grid;
+        grid-template-rows: auto minmax(0, 1fr);
+        gap: 18px;
+        padding: 22px;
+        border: 1px solid rgba(115,255,154,0.35);
+        background:
+          linear-gradient(rgba(115,255,154,0.035) 1px, transparent 1px),
+          linear-gradient(90deg, rgba(115,255,154,0.035) 1px, transparent 1px),
+          rgba(2, 10, 21, 0.82);
+        background-size: 42px 42px, 42px 42px, auto;
+        box-shadow: inset 0 0 28px rgba(115,255,154,0.05), 0 0 30px rgba(0,0,0,0.35);
+      }
+      .ameripro-tanks-visual-head {
+        display: flex;
+        align-items: baseline;
+        justify-content: space-between;
+        gap: 18px;
+        font-family: var(--mono);
+        letter-spacing: 0.18em;
+        color: #73ff9a;
+      }
+      .ameripro-tanks-visual-head strong {
+        font-size: 13px;
+        font-weight: 600;
+      }
+      .ameripro-tanks-visual-head span {
+        color: var(--text-dim);
+        font-size: 9px;
+      }
+      .ameripro-tank-grid {
+        min-height: 0;
+        display: grid;
+        grid-template-columns: repeat(4, minmax(118px, 1fr));
+        gap: 16px;
+        align-items: stretch;
+      }
+      .ameripro-tank-card {
+        min-width: 0;
+        border: 1px solid rgba(26,49,83,0.86);
+        background: rgba(3, 12, 24, 0.68);
+        color: var(--text);
+        cursor: pointer;
+        padding: 14px 12px;
+        display: grid;
+        grid-template-rows: auto minmax(150px, 1fr) auto;
+        gap: 12px;
+        font-family: var(--mono);
+        text-align: left;
+      }
+      .ameripro-tank-card:hover,
+      .ameripro-tank-card.selected {
+        border-color: var(--asset-color, #73ff9a);
+        background: rgba(115,255,154,0.075);
+      }
+      .ameripro-tank-card-title {
+        display: grid;
+        gap: 4px;
+      }
+      .ameripro-tank-card-title strong {
+        color: var(--asset-color, #73ff9a);
+        font-size: 11px;
+        letter-spacing: 0.12em;
+        overflow-wrap: anywhere;
+      }
+      .ameripro-tank-card-title span {
+        color: var(--text-dim);
+        font-size: 8px;
+        letter-spacing: 0.12em;
+      }
+      .ameripro-tank-vessel {
+        position: relative;
+        align-self: stretch;
+        justify-self: center;
+        width: min(82px, 62%);
+        min-height: 150px;
+        border: 1px solid var(--asset-color, #73ff9a);
+        border-radius: 6px 6px 13px 13px;
+        background: rgba(0,0,0,0.36);
+        overflow: hidden;
+        box-shadow: inset 0 0 16px rgba(0,0,0,0.7), 0 0 14px rgba(115,255,154,0.08);
+      }
+      .ameripro-tank-vessel::before {
+        content: "";
+        position: absolute;
+        left: 0;
+        right: 0;
+        top: 0;
+        height: 18px;
+        border-bottom: 1px solid rgba(207,226,255,0.18);
+        background: rgba(255,255,255,0.03);
+        z-index: 2;
+      }
+      .ameripro-tank-vessel-fill {
+        position: absolute;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        height: var(--level, 0%);
+        background: linear-gradient(180deg, #ff7050, #f5d142 46%, #73ff9a);
+        transition: height .14s linear;
+      }
+      .ameripro-tank-card-metrics {
+        display: grid;
+        gap: 5px;
+        font-size: 9px;
+        letter-spacing: 0.1em;
+      }
+      .ameripro-tank-card-metrics b {
+        color: var(--asset-color, #73ff9a);
+        font-weight: 600;
       }
     `;
     document.head.appendChild(style);
@@ -398,6 +548,54 @@
     svg.querySelectorAll('[data-ameripro-assets]').forEach(node => node.remove());
   }
 
+  function renderTankVisual() {
+    const wrap = document.querySelector('.globe-wrap');
+    if (!wrap || !placeholderActive()) return;
+    ensureStyle();
+    wrap.classList.add('ameripro-tanks-mode');
+    let visual = wrap.querySelector('[data-ameripro-tanks-visual]');
+    if (!visual) {
+      visual = document.createElement('div');
+      visual.className = 'ameripro-tanks-visual';
+      visual.dataset.ameriproTanksVisual = '1';
+      wrap.appendChild(visual);
+    }
+    visual.innerHTML = [
+      '<div class="ameripro-tanks-visual-head">',
+      '<strong>TANK LEVELS</strong>',
+      '<span>5% STEP / GALLON TRACKING</span>',
+      '</div>',
+      '<div class="ameripro-tank-grid">',
+      ASSETS.map(asset => {
+        const level = levels[asset.id] || 0;
+        const gallons = gallonsFor(asset);
+        return [
+          `<button class="ameripro-tank-card ${selectedId === asset.id ? 'selected' : ''}" data-ameripro-visual-tank="${escapeHtml(asset.id)}" style="--asset-color:${asset.color};--level:${level}%">`,
+          '<span class="ameripro-tank-card-title">',
+          `<strong>${escapeHtml(tankDisplayName(asset))}</strong>`,
+          `<span>${escapeHtml(asset.kind)} / ${formatGallons(asset.capacityGallons)} CAP</span>`,
+          '</span>',
+          '<span class="ameripro-tank-vessel"><span class="ameripro-tank-vessel-fill"></span></span>',
+          '<span class="ameripro-tank-card-metrics">',
+          `<span><b>${level}%</b> FULL</span>`,
+          `<span><b>${formatGallons(gallons)}</b> CURRENT</span>`,
+          `<span>${formatGallons(stepGallons(asset))} PER CLICK</span>`,
+          '</span>',
+          '</button>',
+        ].join('');
+      }).join(''),
+      '</div>',
+    ].join('');
+    visual.querySelectorAll('[data-ameripro-visual-tank]').forEach(button => {
+      button.addEventListener('click', () => selectAsset(button.dataset.ameriproVisualTank));
+    });
+  }
+
+  function clearTankVisual() {
+    document.querySelector('.globe-wrap')?.classList.remove('ameripro-tanks-mode');
+    document.querySelector('[data-ameripro-tanks-visual]')?.remove();
+  }
+
   function resetSelectedClass() {
     document.querySelectorAll('.ameripro-marker-selected').forEach(node => node.classList.remove('ameripro-marker-selected'));
     if (selectedId) {
@@ -418,6 +616,7 @@
       row('SERVICE', 'FOG / GREASE TRAPS / HOODS'),
       row('PHONE', BASE.phone),
       row('FLEET', '3 PUMP TRUCKS / 1 FRAK TANK', '#73ff9a'),
+      row('TRUCKS', 'GRINCH / HULK / SHREK', '#73ff9a'),
       row('TANK INPUT', 'EVENT PANE +/- CONTROLS', '#f5d142'),
       '</div>',
     ].join('');
@@ -434,12 +633,14 @@
       '<button data-ameripro-close type="button">x</button>',
       '</div>',
       '<div class="insp-body">',
-      `<div class="insp-title" style="color:${asset.color}">${escapeHtml(asset.label)}</div>`,
+      `<div class="insp-title" style="color:${asset.color}">${escapeHtml(tankDisplayName(asset))}</div>`,
       '<div class="heat-bar"><div class="heat-fill" style="width:100%;background:#73ff9a"></div></div>',
       row('TYPE', asset.kind.toUpperCase()),
+      asset.nickname ? row('NICKNAME', asset.nickname.toUpperCase(), asset.color) : '',
       row('TANK', asset.tank.toUpperCase()),
-      row('CAPACITY', asset.capacity.toUpperCase()),
-      row('LEVEL', `${level}%`, asset.color),
+      row('CAPACITY', formatGallons(asset.capacityGallons)),
+      row('LEVEL', `${level}% / ${formatGallons(gallonsFor(asset))}`, asset.color),
+      row('5% STEP', formatGallons(stepGallons(asset))),
       row('BASE', BASE.address),
       row('SOURCE', asset.fixed ? 'USER INPUT / DUBLIN FRAK TANK' : 'USER INPUT / AMERIPRO FLEET'),
       '<div class="insp-note">Use the tank controls in the Event pane to update levels.</div>',
@@ -461,6 +662,7 @@
     resetSelectedClass();
     renderAsset(asset);
     renderTankBoard();
+    renderTankVisual();
   }
 
   function setLevel(id, level) {
@@ -469,6 +671,7 @@
     levels[id] = Math.max(0, Math.min(100, Math.round(Number(level) || 0)));
     saveLevels();
     updateTankBoardValues(id);
+    renderTankVisual();
     if (selectedId === id) renderAsset(asset);
   }
 
@@ -487,6 +690,7 @@
     if (board) {
       ASSETS.forEach(asset => updateTankBoardValues(asset.id));
       updateTankBoardSelection();
+      renderTankVisual();
       return;
     }
     board = document.createElement('div');
@@ -529,9 +733,9 @@
     const selected = selectedId === asset.id ? ' selected' : '';
     return [
       `<div class="ameripro-tank-row${selected}" data-ameripro-tank-row="${escapeHtml(asset.id)}" style="--asset-color:${asset.color};--level:${level}%">`,
-      `<div class="ameripro-tank-name">${escapeHtml(asset.label)}</div>`,
-      `<div class="ameripro-tank-level" data-ameripro-level-text="${escapeHtml(asset.id)}">${level}%</div>`,
-      `<div class="ameripro-tank-kind">${escapeHtml(asset.kind)} / ${escapeHtml(asset.capacity)}</div>`,
+      `<div class="ameripro-tank-name">${escapeHtml(tankDisplayName(asset))}</div>`,
+      `<div class="ameripro-tank-level" data-ameripro-level-text="${escapeHtml(asset.id)}"><strong>${level}%</strong><small>${formatGallons(gallonsFor(asset))}</small></div>`,
+      `<div class="ameripro-tank-kind">${escapeHtml(asset.kind)} / ${formatGallons(asset.capacityGallons)} cap / ${formatGallons(stepGallons(asset))} step</div>`,
       '<div class="ameripro-tank-control">',
       `<button class="ameripro-tank-step" data-ameripro-level-step="-${LEVEL_STEP}" data-ameripro-level-id="${escapeHtml(asset.id)}" type="button" aria-label="Lower ${escapeHtml(asset.label)} level">-</button>`,
       '<div class="ameripro-tank-track"><span></span></div>',
@@ -542,11 +746,12 @@
   }
 
   function updateTankBoardValues(id) {
+    const asset = ASSETS.find(item => item.id === id);
     const rowNode = document.querySelector(`[data-ameripro-tank-row="${id}"]`);
     const text = document.querySelector(`[data-ameripro-level-text="${id}"]`);
     const level = levels[id] || 0;
     if (rowNode) rowNode.style.setProperty('--level', `${level}%`);
-    if (text) text.textContent = `${level}%`;
+    if (text && asset) text.innerHTML = `<strong>${level}%</strong><small>${formatGallons(gallonsFor(asset))}</small>`;
   }
 
   function updateTankBoardSelection() {
@@ -570,12 +775,14 @@
     if (active) {
       renderOverview();
       renderTankBoard();
+      renderTankVisual();
     }
     if (!active) {
       selectedId = null;
       resetSelectedClass();
       resetInspectorIfAmeripro();
       resetTankBoard();
+      clearTankVisual();
     }
   }
 
@@ -586,9 +793,11 @@
     drawAssets();
     if (next && !document.querySelector('.ameripro-inspector')) renderOverview();
     if (next) renderTankBoard();
+    if (next) renderTankVisual();
     if (!next) {
       resetInspectorIfAmeripro();
       resetTankBoard();
+      clearTankVisual();
     }
   }
 
