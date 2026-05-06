@@ -251,5 +251,5 @@
 
   applyStoredEdits();
   ensureStyle();
-  setInterval(decorate, 500);
+  setInterval(decorate, window.AmeriproPerformance?.interval?.(500) || 500);
 })();

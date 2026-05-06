@@ -825,5 +825,5 @@
     getCustomers: () => CUSTOMERS.slice(),
   };
 
-  setInterval(sync, 450);
+  setInterval(sync, window.AmeriproPerformance?.interval?.(450) || 450);
 })();

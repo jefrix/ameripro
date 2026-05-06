@@ -633,7 +633,7 @@
     }
   });
 
-  setInterval(injectUi, 1200);
+  setInterval(injectUi, window.AmeriproPerformance?.interval?.(1200) || 1200);
 
   window.GlobeEngine.create = function localLayerCreate(el, theme) {
     const engine = originalCreate(el, theme);

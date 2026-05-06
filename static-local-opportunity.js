@@ -35,6 +35,6 @@
   function sync(){style();menu();draw();localActive()?board():reset();}
   window.GlobalDataOpportunity={setActive,getActive:()=>localActive(),selectMarket:pick,getMarkets:()=>data()};
   window.addEventListener('keydown',e=>{if(!document.querySelector('.globe-wrap.local-map-mode'))return;if(e.target?.tagName==='INPUT'||e.target?.tagName==='TEXTAREA')return;if(e.key==='o'||e.key==='O')setActive(!active);});
-  setInterval(sync,650);
+  setInterval(sync,window.AmeriproPerformance?.interval?.(650)||650);
 })();
 

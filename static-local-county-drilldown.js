@@ -384,5 +384,5 @@
     getSelectedCounty: () => selectedCounty,
     clearSelection,
   };
-  setInterval(sync, 1000);
+  setInterval(sync, window.AmeriproPerformance?.interval?.(1000) || 1000);
 })();

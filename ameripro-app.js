@@ -20,7 +20,7 @@
       if (node) node.textContent = formatEasternTime();
     };
     tick();
-    setInterval(tick, 1000);
+    setInterval(tick, window.AmeriproPerformance?.interval?.(1000) || 1000);
   }
 
   function bootLocalMap() {

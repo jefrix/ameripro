@@ -190,5 +190,5 @@
     renderForm(board);
   }
 
-  setInterval(decorate, 450);
+  setInterval(decorate, window.AmeriproPerformance?.interval?.(450) || 450);
 })();

@@ -412,6 +412,7 @@
   }
 
   function shouldLabel(city) {
+    if (window.AmeriproPerformance?.isActive?.()) return false;
     return city.service || city.pop >= 50000 || [
       'Gainesville',
       'Rome',
@@ -630,5 +631,5 @@
     getCities: () => CITIES.slice(),
   };
 
-  setInterval(syncLayer, 300);
+  setInterval(syncLayer, window.AmeriproPerformance?.interval?.(300) || 300);
 })();

@@ -846,5 +846,5 @@
     getLevels: () => ({ ...levels }),
   };
 
-  setInterval(sync, 300);
+  setInterval(sync, window.AmeriproPerformance?.interval?.(300) || 300);
 })();

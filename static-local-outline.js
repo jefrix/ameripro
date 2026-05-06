@@ -126,5 +126,5 @@
     svg.insertBefore(group, svg.firstChild);
   }
 
-  setInterval(ensureOutline, 300);
+  setInterval(ensureOutline, window.AmeriproPerformance?.interval?.(300) || 300);
 })();

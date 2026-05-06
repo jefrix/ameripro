@@ -390,5 +390,5 @@
     }
   });
 
-  setInterval(syncLocalMenu, 400);
+  setInterval(syncLocalMenu, window.AmeriproPerformance?.interval?.(400) || 400);
 })();

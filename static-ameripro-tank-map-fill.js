@@ -89,5 +89,5 @@
   }
 
   syncMarkerFills();
-  setInterval(syncMarkerFills, 500);
+  setInterval(syncMarkerFills, window.AmeriproPerformance?.interval?.(500) || 500);
 })();
