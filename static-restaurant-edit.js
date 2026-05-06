@@ -53,7 +53,7 @@
         margin-bottom: 7px;
       }
       .restaurant-selected-top .restaurant-selected-title { margin-bottom: 0; min-width: 0; }
-      .restaurant-feed-list { min-height: 120px !important; overflow-y: visible !important; }
+      .restaurant-feed-list { min-height: 0 !important; overflow-y: auto !important; }
       .restaurant-edit-btn,
       .restaurant-edit-action {
         border: 1px solid rgba(115,255,154,0.45);

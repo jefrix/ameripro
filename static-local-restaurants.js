@@ -522,6 +522,8 @@
       existing.querySelectorAll('.local-restaurant-marker').forEach(node => {
         node.classList.toggle('selected', node.dataset.customerId === selectedId);
       });
+      const selectedMarker = existing.querySelector('.local-restaurant-marker.selected');
+      if (selectedMarker) existing.appendChild(selectedMarker);
       svg.appendChild(existing);
       return;
     }
@@ -693,12 +695,17 @@
     const board = document.querySelector('[data-restaurant-feed-board]');
     const card = board?.querySelector('.restaurant-selected-card');
     const row = board?.querySelector('.restaurant-feed-row.active');
+    const list = board?.querySelector('[data-restaurant-feed-list]');
     if (!board || !card) return;
+    board.scrollTop = 0;
+    if (list) list.scrollTop = 0;
     card.classList.remove('attention');
     void card.offsetWidth;
     card.classList.add('attention');
-    card.scrollIntoView({ block: 'start', inline: 'nearest' });
-    row?.scrollIntoView({ block: 'center', inline: 'nearest' });
+    if (row && list) {
+      const rowTop = row.offsetTop - list.offsetTop;
+      list.scrollTop = Math.max(0, rowTop - (list.clientHeight / 2) + (row.clientHeight / 2));
+    }
   }
 
   function resetBoard() {
