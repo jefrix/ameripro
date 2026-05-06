@@ -109,7 +109,6 @@
     if (!item) return '';
     const rows = [
       ['ADDRESS', locationText(item)],
-      ['COUNTY', item.county],
       ['CONTACT', item.contactInfo],
       ['SERVICE', item.serviceFocus || 'Grease trap / exhaust hood service'],
       ['TYPE', item.type || 'Restaurant / food service customer'],
