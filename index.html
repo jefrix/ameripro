@@ -5,12 +5,25 @@
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>Ameripro Local Operations</title>
 <script src="static-performance-mode.js?v=1"></script>
+<script>document.documentElement.classList.add('auth-locked');</script>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="style.css?v=2" />
+<link rel="stylesheet" href="style.css?v=3" />
 </head>
-<body>
+<body class="auth-locked">
+<div class="password-gate" data-password-gate>
+  <form class="password-panel" data-password-form>
+    <div class="password-kicker">AMERIPRO ACCESS</div>
+    <h1>Local Operations</h1>
+    <label for="password-input">Password</label>
+    <div class="password-row">
+      <input id="password-input" type="password" autocomplete="current-password" data-password-input autofocus />
+      <button type="submit">ENTER</button>
+    </div>
+    <div class="password-error" data-password-error aria-live="polite"></div>
+  </form>
+</div>
 <div id="root">
   <div class="app ameripro-app">
     <header class="top-bar">
@@ -94,5 +107,6 @@
 <script src="static-local-county-drilldown.js?v=5"></script>
 <script src="static-local-outline.js?v=2"></script>
 <script src="ameripro-app.js?v=2"></script>
+<script src="static-password-gate.js?v=1"></script>
 </body>
 </html>

@@ -10,6 +10,103 @@ html, body {
   -webkit-font-smoothing: antialiased;
   user-select: none;
 }
+
+html.auth-locked,
+body.auth-locked {
+  overflow: hidden;
+}
+
+body.auth-locked #root {
+  pointer-events: none;
+  filter: blur(3px) brightness(0.55);
+}
+
+.password-gate {
+  position: fixed;
+  inset: 0;
+  z-index: 10000;
+  display: grid;
+  place-items: center;
+  background:
+    linear-gradient(180deg, rgba(3,10,20,0.78), rgba(3,10,20,0.92)),
+    repeating-linear-gradient(0deg, transparent 0, transparent 3px, rgba(59,141,245,0.07) 4px);
+}
+
+.password-panel {
+  width: min(420px, calc(100vw - 32px));
+  border: 1px solid var(--edge);
+  background: rgba(4,13,27,0.96);
+  padding: 28px;
+  box-shadow: 0 0 0 1px rgba(115,255,154,0.08), 0 24px 80px rgba(0,0,0,0.5);
+}
+
+.password-kicker {
+  color: #73ff9a;
+  font-family: var(--mono);
+  font-size: 10px;
+  letter-spacing: 0.32em;
+  margin-bottom: 10px;
+}
+
+.password-panel h1 {
+  margin: 0 0 22px;
+  font-size: 22px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.password-panel label {
+  display: block;
+  margin-bottom: 8px;
+  color: var(--text-dim);
+  font-family: var(--mono);
+  font-size: 10px;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+}
+
+.password-row {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 8px;
+}
+
+.password-row input {
+  min-width: 0;
+  height: 36px;
+  border: 1px solid var(--edge);
+  background: rgba(0,0,0,0.34);
+  color: var(--text);
+  padding: 0 10px;
+  font-family: var(--mono);
+  font-size: 14px;
+  outline: none;
+}
+
+.password-row input:focus {
+  border-color: #73ff9a;
+}
+
+.password-row button {
+  height: 38px;
+  border: 1px solid var(--accent-warm);
+  background: rgba(245,177,66,0.08);
+  color: var(--accent-warm);
+  padding: 0 14px;
+  font-family: var(--mono);
+  font-size: 10px;
+  letter-spacing: 0.18em;
+  cursor: pointer;
+}
+
+.password-error {
+  min-height: 16px;
+  margin-top: 12px;
+  color: #ff4b4b;
+  font-family: var(--mono);
+  font-size: 10px;
+  letter-spacing: 0.2em;
+}
 :root {
   --bg1: #050b17; --bg2: #08142a; --panel: #0a1930; --edge: #1a3153;
   --text: #cfe2ff; --text-dim: #7a94b8; --accent: #3b8df5; --accent-warm: #f5b142;
