@@ -129,6 +129,35 @@
     layer.style.display = active ? 'block' : 'none';
   }
 
+  function disableTanks() {
+    if (!localState.ameripro) return;
+    setPlaceholderLayer('ameripro', false);
+    window.GlobalDataAmeripro?.setActive?.(false);
+  }
+
+  function disableMapLayers() {
+    setCountiesVisible(false);
+    setPlaceholderLayer('cities', false);
+    setPlaceholderLayer('restaurants', false);
+    setPlaceholderLayer('opportunity', false);
+    window.GlobalDataRestaurants?.setActive?.(false);
+    window.GlobalDataOpportunity?.setActive?.(false);
+    window.GlobalDataCountyDrilldown?.clearSelection?.();
+  }
+
+  function setTanksLayer(next) {
+    if (next) disableMapLayers();
+    setPlaceholderLayer('ameripro', next);
+    window.GlobalDataAmeripro?.setActive?.(next);
+    refreshRows();
+  }
+
+  function activateMapLayer(callback) {
+    disableTanks();
+    callback();
+    refreshRows();
+  }
+
   function layerLabel(name) {
     return String(name)
       .replace(/([A-Z])/g, ' $1')
@@ -141,15 +170,12 @@
     panel.appendChild(layerRow({
       keyName: 'ameripro',
       hotkey: 'A',
-      label: 'AMERIPRO',
-      sub: 'FLEET / FOG TANK LEVELS',
+      label: 'TANKS',
+      sub: 'TRUCKS / FRAK TANK / LEVELS',
       color: '#73ff9a',
       active: localState.ameripro,
       onToggle: () => {
-        const next = !localState.ameripro;
-        setPlaceholderLayer('ameripro', next);
-        window.GlobalDataAmeripro?.setActive?.(next);
-        refreshRows();
+        setTanksLayer(!localState.ameripro);
       },
     }));
     panel.appendChild(layerRow({
@@ -161,9 +187,10 @@
       active: localState.restaurants,
       onToggle: () => {
         const next = !localState.restaurants;
-        setPlaceholderLayer('restaurants', next);
-        window.GlobalDataRestaurants?.setActive?.(next);
-        refreshRows();
+        activateMapLayer(() => {
+          setPlaceholderLayer('restaurants', next);
+          window.GlobalDataRestaurants?.setActive?.(next);
+        });
       },
     }));
     panel.appendChild(layerRow({
@@ -175,9 +202,10 @@
       active: localState.opportunity,
       onToggle: () => {
         const next = !localState.opportunity;
-        setPlaceholderLayer('opportunity', next);
-        window.GlobalDataOpportunity?.setActive?.(next);
-        refreshRows();
+        activateMapLayer(() => {
+          setPlaceholderLayer('opportunity', next);
+          window.GlobalDataOpportunity?.setActive?.(next);
+        });
       },
     }));
     panel.appendChild(layerRow({
@@ -188,8 +216,7 @@
       color: '#73ff9a',
       active: localState.counties,
       onToggle: () => {
-        setCountiesVisible(!localState.counties);
-        refreshRows();
+        activateMapLayer(() => setCountiesVisible(!localState.counties));
       },
     }));
     panel.appendChild(layerRow({
@@ -200,8 +227,7 @@
       color: '#cfe2ff',
       active: localState.cities,
       onToggle: () => {
-        setPlaceholderLayer('cities', !localState.cities);
-        refreshRows();
+        activateMapLayer(() => setPlaceholderLayer('cities', !localState.cities));
       },
     }));
     const note = document.createElement('div');
@@ -307,13 +333,18 @@
 
   window.GlobalDataLocalMenu = {
     setLayer(name, active) {
-      if (name === 'counties') setCountiesVisible(Boolean(active));
-      if (['cities', 'ameripro', 'restaurants', 'opportunity'].includes(name)) {
-        setPlaceholderLayer(name, Boolean(active));
+      const next = Boolean(active);
+      if (name === 'ameripro') {
+        setTanksLayer(next);
+        return;
       }
-      if (name === 'ameripro') window.GlobalDataAmeripro?.setActive?.(Boolean(active));
-      if (name === 'restaurants') window.GlobalDataRestaurants?.setActive?.(Boolean(active));
-      if (name === 'opportunity') window.GlobalDataOpportunity?.setActive?.(Boolean(active));
+      if (next) disableTanks();
+      if (name === 'counties') setCountiesVisible(next);
+      if (['cities', 'ameripro', 'restaurants', 'opportunity'].includes(name)) {
+        setPlaceholderLayer(name, next);
+      }
+      if (name === 'restaurants') window.GlobalDataRestaurants?.setActive?.(next);
+      if (name === 'opportunity') window.GlobalDataOpportunity?.setActive?.(next);
       refreshRows();
     },
     getLayer(name) {
@@ -325,26 +356,24 @@
     if (!document.querySelector('.globe-wrap.local-map-mode')) return;
     if (event.target?.tagName === 'INPUT' || event.target?.tagName === 'TEXTAREA') return;
     if (event.key === 'c' || event.key === 'C') {
-      setCountiesVisible(!localState.counties);
-      refreshRows();
+      activateMapLayer(() => setCountiesVisible(!localState.counties));
     }
     if (event.key === 'p' || event.key === 'P') {
       const next = !localState.opportunity;
-      setPlaceholderLayer('opportunity', next);
-      window.GlobalDataOpportunity?.setActive?.(next);
-      refreshRows();
+      activateMapLayer(() => {
+        setPlaceholderLayer('opportunity', next);
+        window.GlobalDataOpportunity?.setActive?.(next);
+      });
     }
     if (event.key === 'a' || event.key === 'A') {
-      const next = !localState.ameripro;
-      setPlaceholderLayer('ameripro', next);
-      window.GlobalDataAmeripro?.setActive?.(next);
-      refreshRows();
+      setTanksLayer(!localState.ameripro);
     }
     if (event.key === 'r' || event.key === 'R') {
       const next = !localState.restaurants;
-      setPlaceholderLayer('restaurants', next);
-      window.GlobalDataRestaurants?.setActive?.(next);
-      refreshRows();
+      activateMapLayer(() => {
+        setPlaceholderLayer('restaurants', next);
+        window.GlobalDataRestaurants?.setActive?.(next);
+      });
     }
   });
 

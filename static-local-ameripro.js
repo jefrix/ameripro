@@ -394,27 +394,8 @@
     const svg = document.querySelector('[data-local-map-svg]');
     if (!svg) return;
     ensureStyle();
-    const viewBox = svg.getAttribute('viewBox') || '';
-    const isActive = placeholderActive();
-    const exists = Boolean(svg.querySelector('[data-ameripro-assets]'));
-    if (viewBox === lastViewBox && exists) {
-      svg.querySelectorAll('[data-ameripro-assets]').forEach(node => { node.style.display = isActive ? '' : 'none'; });
-      return;
-    }
-
-    lastViewBox = viewBox;
+    lastViewBox = svg.getAttribute('viewBox') || '';
     svg.querySelectorAll('[data-ameripro-assets]').forEach(node => node.remove());
-    const project = projectFactory(svg);
-    const group = document.createElementNS('http://www.w3.org/2000/svg', 'g');
-    group.dataset.ameriproAssets = '1';
-    group.style.display = isActive ? '' : 'none';
-
-    ASSETS.forEach(asset => {
-      const [x, y] = project([asset.lon, asset.lat]);
-      group.appendChild(assetIcon(asset, x, y));
-    });
-
-    svg.appendChild(group);
   }
 
   function resetSelectedClass() {
@@ -601,7 +582,7 @@
   function sync() {
     const next = placeholderActive();
     const rowSub = document.querySelector('[data-local-menu-layer="ameripro"] .layer-sub');
-    if (rowSub) rowSub.textContent = '3 TRUCKS / FRAK TANK / LEVELS';
+    if (rowSub) rowSub.textContent = 'TRUCKS / FRAK TANK / LEVELS';
     drawAssets();
     if (next && !document.querySelector('.ameripro-inspector')) renderOverview();
     if (next) renderTankBoard();
