@@ -379,11 +379,11 @@
   }
 
   function localEdits() {
-    return loadJson(EDITS_KEY, {});
+    return window.AmeriproSharedState?.readRestaurantEdits?.() || loadJson(EDITS_KEY, {});
   }
 
   function localAdditions() {
-    return loadJson(ADDITIONS_KEY, []);
+    return window.AmeriproSharedState?.readRestaurantAdditions?.() || loadJson(ADDITIONS_KEY, []);
   }
 
   function buildCustomerList() {
@@ -741,6 +741,7 @@
     if (added) {
       Object.assign(added, edit, { edited: true });
       saveJson(ADDITIONS_KEY, additions);
+      window.AmeriproSharedState?.syncRestaurantAdditions?.(additions);
     }
     rebuildCustomers();
     if (id) selectedId = id;
@@ -780,6 +781,7 @@
     const additions = localAdditions();
     additions.push(item);
     saveJson(ADDITIONS_KEY, additions);
+    window.AmeriproSharedState?.syncRestaurantAdditions?.(additions);
     rebuildCustomers();
     selectedId = item.id;
     window.GlobalDataLocalEventOwner = 'restaurants';
@@ -823,6 +825,14 @@
     },
     getCustomers: () => CUSTOMERS.slice(),
   };
+
+  window.addEventListener('ameripro:shared-state', event => {
+    const keys = event.detail?.changedKeys || [];
+    if (!keys.includes('restaurantEdits') && !keys.includes('restaurantAdditions')) return;
+    rebuildCustomers();
+    drawRestaurants();
+    renderBoard();
+  });
 
   setInterval(sync, window.AmeriproPerformance?.interval?.(450) || 450);
 })();

@@ -6,7 +6,7 @@
 
   function loadEdits() {
     try {
-      return JSON.parse(localStorage.getItem(KEY) || '{}') || {};
+      return window.AmeriproSharedState?.readRestaurantEdits?.() || JSON.parse(localStorage.getItem(KEY) || '{}') || {};
     } catch {
       return {};
     }
@@ -14,6 +14,7 @@
 
   function saveEdits(edits) {
     localStorage.setItem(KEY, JSON.stringify(edits));
+    window.AmeriproSharedState?.syncRestaurantEdits?.(edits);
   }
 
   function escapeHtml(value) {

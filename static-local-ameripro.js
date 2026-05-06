@@ -72,7 +72,7 @@
 
   function readLevels() {
     try {
-      const saved = JSON.parse(localStorage.getItem(LEVEL_KEY) || '{}');
+      const saved = window.AmeriproSharedState?.readTankLevels?.() || JSON.parse(localStorage.getItem(LEVEL_KEY) || '{}');
       return ASSETS.reduce((acc, asset) => {
         const value = Number(saved[asset.id]);
         acc[asset.id] = Number.isFinite(value) ? Math.max(0, Math.min(100, Math.round(value))) : 0;
@@ -85,6 +85,7 @@
 
   function saveLevels() {
     localStorage.setItem(LEVEL_KEY, JSON.stringify(levels));
+    window.AmeriproSharedState?.syncTankLevels?.(levels);
   }
 
   function escapeHtml(value) {
@@ -845,6 +846,26 @@
     setLevel,
     getLevels: () => ({ ...levels }),
   };
+
+  window.addEventListener('ameripro:shared-state', event => {
+    if (!event.detail?.changedKeys?.includes('tankLevels')) return;
+    const incoming = event.detail?.tankLevels;
+    if (!incoming || typeof incoming !== 'object') return;
+    let changed = false;
+    ASSETS.forEach(asset => {
+      const value = Number(incoming[asset.id]);
+      const next = Number.isFinite(value) ? Math.max(0, Math.min(100, Math.round(value))) : 0;
+      if (levels[asset.id] !== next) {
+        levels[asset.id] = next;
+        changed = true;
+      }
+    });
+    if (!changed) return;
+    renderTankBoard();
+    renderTankVisual();
+    ASSETS.forEach(asset => updateTankBoardValues(asset.id));
+    if (selectedId) renderAsset(ASSETS.find(asset => asset.id === selectedId));
+  });
 
   setInterval(sync, window.AmeriproPerformance?.interval?.(300) || 300);
 })();

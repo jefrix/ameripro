@@ -15,11 +15,19 @@ Included layers:
 Run locally from this folder:
 
 ```powershell
-python -m http.server 3020
+npm start
 ```
 
 Then open:
 
 ```text
 http://localhost:3020/
+```
+
+When started with `npm start`, tank levels, restaurant edits, and locally added restaurants are shared through `data/operator-state.json` so every tablet connected to the same server sees the same operator data.
+
+To publish the current shared operator state back to GitHub:
+
+```powershell
+npm run publish-state
 ```

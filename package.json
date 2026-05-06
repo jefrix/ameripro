@@ -1,6 +1,7 @@
 {
   "scripts": {
-    "start": "python -m http.server 3020"
+    "start": "node server.js",
+    "publish-state": "node scripts/publish-state.js"
   },
   "private": true
 }
