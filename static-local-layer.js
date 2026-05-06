@@ -381,6 +381,7 @@
     stage?.addEventListener('pointerdown', event => {
       if (!document.querySelector('.globe-wrap.local-map-mode') || localZoom <= MIN_LOCAL_ZOOM) return;
       if (event.target?.closest?.('[data-local-zoom-controls]')) return;
+      if (event.target?.closest?.('[data-customer-id], .local-restaurant-marker, .opportunity-marker, .local-county')) return;
       dragState = {
         id: event.pointerId,
         x: event.clientX,

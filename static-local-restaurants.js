@@ -492,13 +492,13 @@
         nearest = marker;
       }
     });
-    return nearestDistance <= 18 ? nearest : null;
+    return nearestDistance <= 28 ? nearest : null;
   }
 
   function installMapClickFallback(svg) {
     if (svg.dataset.localRestaurantClickFallback) return;
     svg.dataset.localRestaurantClickFallback = '1';
-    svg.addEventListener('click', event => {
+    const handleClick = event => {
       if (!placeholderActive()) return;
       const directMarker = event.target?.closest?.('.local-restaurant-marker');
       const marker = directMarker || nearestMarkerFromPointer(svg, event);
@@ -506,7 +506,13 @@
       event.preventDefault();
       event.stopPropagation();
       selectCustomer(marker.dataset.customerId, { focusPanel: true });
-    }, true);
+    };
+    svg.addEventListener('click', handleClick, true);
+    const stage = svg.closest('.local-map-stage');
+    if (stage && !stage.dataset.localRestaurantStageClickFallback) {
+      stage.dataset.localRestaurantStageClickFallback = '1';
+      stage.addEventListener('click', handleClick, false);
+    }
   }
 
   function drawRestaurants() {
