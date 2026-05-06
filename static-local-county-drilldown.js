@@ -247,12 +247,9 @@
     const cy = box.y + box.height / 2;
     const tx = stageBox.width / 2 - cx * scale;
     const ty = stageBox.height / 2 - cy * scale;
-    svg.style.transformOrigin = '0 0';
-    svg.style.transform = `translate(${tx.toFixed(1)}px, ${ty.toFixed(1)}px) scale(${scale.toFixed(2)})`;
-    const label = document.querySelector('[data-local-zoom-label]');
-    if (label) label.textContent = `${scale.toFixed(1)}x`;
-    const tick = document.querySelector('[data-local-zoom-tick]');
-    if (tick) tick.style.top = `${(1 - ((scale - 1) / 4)) * 100}%`;
+    if (window.GlobalDataLocalLayer?.setView) {
+      window.GlobalDataLocalLayer.setView({ zoom: scale, pan: { x: tx, y: ty } });
+    }
   }
 
   function selectRestaurant(item) {

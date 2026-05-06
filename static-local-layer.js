@@ -10,6 +10,9 @@
   let countyCache = null;
   let overlayReady = false;
   let localZoom = 1;
+  let localPan = { x: 0, y: 0 };
+  let dragState = null;
+  let suppressPanClick = false;
 
   function ensureLayer(engine) {
     if (!engine.layerGroups) engine.layerGroups = {};
@@ -165,13 +168,24 @@
         border: 1px solid rgba(115,255,154,0.22);
         background: rgba(0,0,0,0.16);
         overflow: hidden;
+        touch-action: none;
+      }
+      .local-map-stage.is-pannable {
+        cursor: grab;
+      }
+      .local-map-stage.is-panning {
+        cursor: grabbing;
       }
       .local-map-svg {
         width: 100%;
         height: 100%;
         display: block;
-        transform-origin: 50% 50%;
+        transform-origin: 0 0;
         transition: transform 0.16s ease-out;
+        will-change: transform;
+      }
+      .local-map-stage.is-panning .local-map-svg {
+        transition: none;
       }
       .local-zoom-controls {
         position: absolute;
@@ -289,10 +303,39 @@
     return Math.max(MIN_LOCAL_ZOOM, Math.min(MAX_LOCAL_ZOOM, Number(value) || MIN_LOCAL_ZOOM));
   }
 
+  function stagePoint(stage, event) {
+    const rect = stage.getBoundingClientRect();
+    return {
+      x: Number(event?.clientX) - rect.left,
+      y: Number(event?.clientY) - rect.top,
+    };
+  }
+
+  function clampLocalPan() {
+    const stage = document.querySelector('[data-local-map-overlay] .local-map-stage');
+    const rect = stage?.getBoundingClientRect();
+    if (!rect?.width || !rect?.height || localZoom <= MIN_LOCAL_ZOOM) {
+      localPan = { x: 0, y: 0 };
+      return;
+    }
+    const minX = rect.width - rect.width * localZoom;
+    const minY = rect.height - rect.height * localZoom;
+    localPan.x = Math.max(minX, Math.min(0, localPan.x));
+    localPan.y = Math.max(minY, Math.min(0, localPan.y));
+  }
+
   function applyLocalZoom() {
     const overlay = document.querySelector('[data-local-map-overlay]');
     const svg = overlay?.querySelector('[data-local-map-svg]');
-    if (svg) svg.style.transform = `scale(${localZoom})`;
+    const stage = overlay?.querySelector('.local-map-stage');
+    clampLocalPan();
+    if (svg) {
+      svg.style.transform = `translate(${localPan.x.toFixed(1)}px, ${localPan.y.toFixed(1)}px) scale(${localZoom.toFixed(3)})`;
+    }
+    if (stage) {
+      stage.classList.toggle('is-pannable', localZoom > MIN_LOCAL_ZOOM);
+      if (localZoom <= MIN_LOCAL_ZOOM) stage.classList.remove('is-panning');
+    }
     const tick = overlay?.querySelector('[data-local-zoom-tick]');
     const label = overlay?.querySelector('[data-local-zoom-label]');
     const progress = (localZoom - MIN_LOCAL_ZOOM) / (MAX_LOCAL_ZOOM - MIN_LOCAL_ZOOM);
@@ -300,8 +343,27 @@
     if (label) label.textContent = `${localZoom.toFixed(1)}x`;
   }
 
-  function zoomLocalBy(factor) {
-    localZoom = clampZoom(localZoom * factor);
+  function setLocalZoom(value, anchor) {
+    const overlay = document.querySelector('[data-local-map-overlay]');
+    const stage = overlay?.querySelector('.local-map-stage');
+    const rect = stage?.getBoundingClientRect();
+    const oldZoom = localZoom;
+    localZoom = clampZoom(value);
+    if (rect?.width && rect?.height && localZoom !== oldZoom) {
+      const point = anchor || { x: rect.width / 2, y: rect.height / 2 };
+      const ratio = localZoom / oldZoom;
+      localPan.x = point.x - (point.x - localPan.x) * ratio;
+      localPan.y = point.y - (point.y - localPan.y) * ratio;
+    }
+    applyLocalZoom();
+  }
+
+  function zoomLocalBy(factor, anchor) {
+    setLocalZoom(localZoom * factor, anchor);
+  }
+
+  function setPan(x, y) {
+    localPan = { x: Number(x) || 0, y: Number(y) || 0 };
     applyLocalZoom();
   }
 
@@ -310,11 +372,53 @@
     overlay.dataset.localZoomWired = '1';
     overlay.querySelector('[data-local-zoom-in]')?.addEventListener('click', () => zoomLocalBy(1.25));
     overlay.querySelector('[data-local-zoom-out]')?.addEventListener('click', () => zoomLocalBy(0.8));
-    overlay.querySelector('.local-map-stage')?.addEventListener('wheel', event => {
+    const stage = overlay.querySelector('.local-map-stage');
+    stage?.addEventListener('wheel', event => {
       if (!document.querySelector('.globe-wrap.local-map-mode')) return;
       event.preventDefault();
-      zoomLocalBy(event.deltaY < 0 ? 1.18 : 0.85);
+      zoomLocalBy(event.deltaY < 0 ? 1.18 : 0.85, stagePoint(stage, event));
     }, { passive: false });
+    stage?.addEventListener('pointerdown', event => {
+      if (!document.querySelector('.globe-wrap.local-map-mode') || localZoom <= MIN_LOCAL_ZOOM) return;
+      if (event.target?.closest?.('[data-local-zoom-controls]')) return;
+      dragState = {
+        id: event.pointerId,
+        x: event.clientX,
+        y: event.clientY,
+        panX: localPan.x,
+        panY: localPan.y,
+        moved: false,
+      };
+      stage.classList.add('is-panning');
+      stage.setPointerCapture?.(event.pointerId);
+    });
+    stage?.addEventListener('pointermove', event => {
+      if (!dragState || dragState.id !== event.pointerId) return;
+      event.preventDefault();
+      if (Math.abs(event.clientX - dragState.x) > 3 || Math.abs(event.clientY - dragState.y) > 3) {
+        dragState.moved = true;
+      }
+      localPan.x = dragState.panX + event.clientX - dragState.x;
+      localPan.y = dragState.panY + event.clientY - dragState.y;
+      applyLocalZoom();
+    });
+    function endDrag(event) {
+      if (!dragState || dragState.id !== event.pointerId) return;
+      if (dragState.moved) {
+        suppressPanClick = true;
+        setTimeout(() => { suppressPanClick = false; }, 160);
+      }
+      stage.classList.remove('is-panning');
+      stage.releasePointerCapture?.(event.pointerId);
+      dragState = null;
+    }
+    stage?.addEventListener('pointerup', endDrag);
+    stage?.addEventListener('pointercancel', endDrag);
+    stage?.addEventListener('click', event => {
+      if (!suppressPanClick) return;
+      event.preventDefault();
+      event.stopPropagation();
+    }, true);
   }
 
   function countyBounds(counties) {
@@ -495,10 +599,18 @@
     setActive: applyLocal,
     redraw: () => loadGeorgiaCounties().then(drawCountyMap),
     setZoom: value => {
-      localZoom = clampZoom(value);
-      applyLocalZoom();
+      setLocalZoom(value);
     },
     getZoom: () => localZoom,
+    setView: options => {
+      if (!options || typeof options !== 'object') return;
+      const zoom = clampZoom(options.zoom ?? localZoom);
+      localZoom = zoom;
+      if (options.pan) localPan = { x: Number(options.pan.x) || 0, y: Number(options.pan.y) || 0 };
+      applyLocalZoom();
+    },
+    setPan,
+    getPan: () => ({ ...localPan }),
   };
 
   window.addEventListener('keydown', event => {
