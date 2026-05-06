@@ -41,8 +41,8 @@
     style.dataset.restaurantEditOverlayStyle = '1';
     style.textContent = `
       .restaurant-feed-board {
-        grid-template-rows: auto minmax(0, auto) minmax(120px, 1fr) !important;
-        overflow-y: auto !important;
+        grid-template-rows: auto auto auto minmax(0, 1fr) !important;
+        overflow: hidden !important;
       }
       .restaurant-selected-card { scroll-margin-top: 8px; }
       .restaurant-selected-top {
@@ -70,7 +70,7 @@
       .restaurant-edit-form { display: grid; gap: 7px; margin-top: 7px; }
       .restaurant-edit-row {
         display: grid;
-        grid-template-columns: 74px minmax(0, 1fr);
+        grid-template-columns: 96px minmax(0, 1fr);
         gap: 8px;
         align-items: center;
       }
@@ -109,6 +109,8 @@
     if (!item) return '';
     const rows = [
       ['ADDRESS', locationText(item)],
+      ['COUNTY', item.county],
+      ['CONTACT', item.contactInfo],
       ['SERVICE', item.serviceFocus || 'Grease trap / exhaust hood service'],
       ['TYPE', item.type || 'Restaurant / food service customer'],
       ['TRAP', item.greaseTrapSizeGal || item.greaseTrapLocation
@@ -139,6 +141,8 @@
       editInput('CITY', 'city', item.city || ''),
       editInput('STATE', 'state', item.state || ''),
       editInput('ZIP', 'zip', item.zip || ''),
+      editInput('COUNTY', 'county', item.county || ''),
+      editInput('CONTACT', 'contactInfo', item.contactInfo || ''),
       editInput('SERVICE', 'serviceFocus', item.serviceFocus || 'Grease trap / exhaust hood service'),
       editInput('TYPE', 'type', item.type || 'Restaurant / food service customer'),
       editInput('TRAP GAL', 'greaseTrapSizeGal', item.greaseTrapSizeGal || '', 'number'),
@@ -174,6 +178,8 @@
       city: clean(data.get('city')),
       state: clean(data.get('state')),
       zip: clean(data.get('zip')),
+      county: clean(data.get('county')),
+      contactInfo: clean(data.get('contactInfo')),
       serviceFocus: clean(data.get('serviceFocus')),
       type: clean(data.get('type')),
       greaseTrapLocation: clean(data.get('greaseTrapLocation')),
@@ -187,6 +193,7 @@
     const edits = loadEdits();
     edits[item.id] = edit;
     saveEdits(edits);
+    window.GlobalDataRestaurants?.applyEdit?.(item.id, edit);
     Object.assign(item, edit, { edited: true });
     const source = (DATA.customers || []).find(customer => customer.id === item.id);
     if (source) Object.assign(source, edit, { edited: true });

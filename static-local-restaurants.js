@@ -1,9 +1,21 @@
 (function () {
   const DATA = window.AMERIPRO_RESTAURANTS || { metadata: {}, customers: [] };
-  const CUSTOMERS = (DATA.customers || [])
-    .filter(item => Number.isFinite(Number(item.lat)) && Number.isFinite(Number(item.lon)))
-    .sort((a, b) => String(a.name || '').localeCompare(String(b.name || '')));
+  const EDITS_KEY = 'gd_restaurant_edits_v1';
+  const ADDITIONS_KEY = 'gd_restaurant_additions_v1';
   const BOUNDS = { minLon: -85.70, maxLon: -80.75, minLat: 30.30, maxLat: 35.08 };
+  const CITY_COORDS = {
+    americus: [32.0724, -84.2327],
+    atlanta: [33.7490, -84.3880],
+    brunswick: [31.1499, -81.4915],
+    dublin: [32.5404, -82.9038],
+    hinesville: [31.8469, -81.5959],
+    macon: [32.8407, -83.6324],
+    pooler: [32.1155, -81.2471],
+    savannah: [32.0809, -81.0912],
+    statesboro: [32.4488, -81.7832],
+    vidalia: [32.2177, -82.4135],
+    'warner robins': [32.6130, -83.6242],
+  };
   const SERVICE_COLORS = {
     default: '#5bd7ff',
     green: '#73ff9a',
@@ -26,6 +38,8 @@
   };
 
   let active = false;
+  let customerRevision = 0;
+  let CUSTOMERS = buildCustomerList();
   let selectedId = CUSTOMERS[0]?.id || null;
   let lastViewBox = '';
 
@@ -137,6 +151,7 @@
         padding: 10px 12px;
         font-family: var(--mono);
         color: var(--text);
+        overflow: hidden;
       }
       .restaurant-feed-head {
         display: flex;
@@ -156,6 +171,7 @@
         background: rgba(0, 10, 22, 0.62);
         padding: 8px;
         box-shadow: inset 0 0 18px rgba(115,255,154,0.06);
+        overflow: visible;
       }
       .restaurant-selected-card.attention {
         border-color: rgba(115,255,154,0.95);
@@ -176,16 +192,23 @@
       }
       .restaurant-info-row {
         display: grid;
-        grid-template-columns: 74px minmax(0, 1fr);
+        grid-template-columns: 96px minmax(0, 1fr);
         gap: 8px;
         align-items: start;
         font-size: 9px;
         line-height: 1.35;
         color: #cfe2ff;
+        margin-bottom: 2px;
       }
       .restaurant-info-row span:first-child {
         color: var(--text-dim);
         letter-spacing: 0.12em;
+      }
+      .restaurant-info-row b {
+        display: block;
+        min-width: 0;
+        overflow-wrap: anywhere;
+        word-break: normal;
       }
       .restaurant-feed-list {
         min-height: 0;
@@ -273,6 +296,119 @@
 
   function selectedCustomer() {
     return CUSTOMERS.find(item => item.id === selectedId) || CUSTOMERS[0] || null;
+  }
+
+  function clean(value) {
+    return String(value || '').trim();
+  }
+
+  function hashString(value) {
+    return String(value || '').split('').reduce((total, char) => total + char.charCodeAt(0), 0);
+  }
+
+  function clamp(value, min, max) {
+    return Math.max(min, Math.min(max, value));
+  }
+
+  function inferCoordinates(input) {
+    const cityKey = clean(input.city).toLowerCase();
+    const matches = CUSTOMERS.filter(item => clean(item.city).toLowerCase() === cityKey);
+    let lat;
+    let lon;
+    if (matches.length) {
+      lat = matches.reduce((sum, item) => sum + Number(item.lat), 0) / matches.length;
+      lon = matches.reduce((sum, item) => sum + Number(item.lon), 0) / matches.length;
+    } else if (CITY_COORDS[cityKey]) {
+      [lat, lon] = CITY_COORDS[cityKey];
+    } else {
+      [lat, lon] = CITY_COORDS.dublin;
+    }
+    const seed = hashString(`${input.name}:${input.street}:${input.city}:${input.county}`);
+    const offsetA = ((seed % 17) - 8) * 0.006;
+    const offsetB = (((seed / 17) % 17) - 8) * 0.006;
+    return {
+      lat: clamp(lat + offsetA, BOUNDS.minLat, BOUNDS.maxLat),
+      lon: clamp(lon + offsetB, BOUNDS.minLon, BOUNDS.maxLon),
+    };
+  }
+
+  function nextQuarterPeriod() {
+    return formatMonth(addMonths(new Date(), 3)).replace(/^([A-Z][a-z]{2})/, match => {
+      const full = {
+        Jan: 'January', Feb: 'February', Mar: 'March', Apr: 'April',
+        May: 'May', Jun: 'June', Jul: 'July', Aug: 'August',
+        Sep: 'September', Oct: 'October', Nov: 'November', Dec: 'December',
+      };
+      return full[match] || match;
+    });
+  }
+
+  function serviceSummaryFor(input) {
+    const services = [];
+    const summary = {};
+    const period = nextQuarterPeriod();
+    if (input.greaseTrap) {
+      const service = { type: 'Grease Trap', frequency: 'Quarterly', next: period, period };
+      services.push(service);
+      summary['Interior Grease'] = service;
+    }
+    if (input.exhaustHood) {
+      const service = { type: 'Hood', frequency: 'Quarterly', next: period, period };
+      services.push(service);
+      summary.Hood = service;
+    }
+    if (!services.length) return null;
+    return {
+      summary,
+      services,
+      serviceTypes: services.map(service => service.type),
+      locallyAdded: true,
+    };
+  }
+
+  function loadJson(key, fallback) {
+    try {
+      return JSON.parse(localStorage.getItem(key) || '') || fallback;
+    } catch {
+      return fallback;
+    }
+  }
+
+  function saveJson(key, value) {
+    localStorage.setItem(key, JSON.stringify(value));
+  }
+
+  function localEdits() {
+    return loadJson(EDITS_KEY, {});
+  }
+
+  function localAdditions() {
+    return loadJson(ADDITIONS_KEY, []);
+  }
+
+  function buildCustomerList() {
+    const edits = localEdits();
+    const seen = new Set();
+    const raw = [...(DATA.customers || []), ...localAdditions()];
+    return raw
+      .filter(item => Number.isFinite(Number(item.lat)) && Number.isFinite(Number(item.lon)))
+      .filter(item => {
+        const id = String(item?.id || '');
+        if (!id || seen.has(id)) return false;
+        seen.add(id);
+        return true;
+      })
+      .map(item => {
+        if (item?.id && edits[item.id]) Object.assign(item, edits[item.id], { edited: true });
+        return item;
+      })
+      .sort((a, b) => String(a.name || '').localeCompare(String(b.name || '')));
+  }
+
+  function rebuildCustomers() {
+    CUSTOMERS = buildCustomerList();
+    customerRevision += 1;
+    lastViewBox = '';
   }
 
   function addMonths(date, delta) {
@@ -447,6 +583,8 @@
     const status = serviceStatus(item);
     const rows = [
       ['ADDRESS', locationText(item)],
+      ['COUNTY', item.county],
+      ['CONTACT', item.contactInfo],
       ['SERVICE', item.serviceFocus || 'Grease trap / exhaust hood service'],
       ['TYPE', item.type || 'Restaurant / food service customer'],
       ['STATUS', status.label],
@@ -502,7 +640,20 @@
     }
     const selected = selectedCustomer();
     const meta = DATA.metadata || {};
-    const renderKey = `${selected?.id || 'none'}:${CUSTOMERS.length}:${meta.streetMatches || 0}:${meta.ameriproScheduleMatchedRows || 0}`;
+    const selectedKey = selected ? [
+      selected.id,
+      selected.name,
+      selected.street,
+      selected.city,
+      selected.county,
+      selected.contactInfo,
+      selected.serviceFocus,
+      selected.greaseTrapSizeGal,
+      selected.greaseTrapLocation,
+      selected.edited ? 'edited' : '',
+      selected.locallyAdded ? 'local' : '',
+    ].join('|') : 'none';
+    const renderKey = `${customerRevision}:${selectedKey}:${CUSTOMERS.length}:${meta.streetMatches || 0}:${meta.ameriproScheduleMatchedRows || 0}`;
     if (board.dataset.renderKey === renderKey) return;
     board.dataset.renderKey = renderKey;
     board.innerHTML = [
@@ -567,6 +718,65 @@
     if (options.focusPanel) focusEventPanel();
   }
 
+  function applyEdit(id, edit = {}) {
+    const item = CUSTOMERS.find(customer => customer.id === id);
+    if (item) Object.assign(item, edit, { edited: true });
+    const source = (DATA.customers || []).find(customer => customer.id === id);
+    if (source) Object.assign(source, edit, { edited: true });
+    const additions = localAdditions();
+    const added = additions.find(customer => customer.id === id);
+    if (added) {
+      Object.assign(added, edit, { edited: true });
+      saveJson(ADDITIONS_KEY, additions);
+    }
+    rebuildCustomers();
+    if (id) selectedId = id;
+    drawRestaurants();
+    renderBoard();
+  }
+
+  function addCustomer(input = {}) {
+    const name = clean(input.name);
+    const city = clean(input.city);
+    if (!name || !city) return null;
+    const coords = inferCoordinates(input);
+    const services = serviceSummaryFor(input);
+    const serviceNames = [
+      input.greaseTrap ? 'Grease trap' : '',
+      input.exhaustHood ? 'Exhaust hood' : '',
+    ].filter(Boolean);
+    const item = {
+      id: `local-${Date.now()}-${Math.round(Math.random() * 10000)}`,
+      name,
+      county: clean(input.county),
+      street: clean(input.street || input.address),
+      city,
+      state: clean(input.state) || 'GA',
+      zip: clean(input.zip),
+      contactInfo: clean(input.contactInfo),
+      lat: coords.lat,
+      lon: coords.lon,
+      locationQuality: 'city-estimated',
+      matchedAddress: '',
+      locallyAdded: true,
+      customer: Boolean(services),
+      type: services ? 'Restaurant / Ameripro customer' : 'Restaurant / sales prospect',
+      serviceFocus: serviceNames.length ? `${serviceNames.join(' / ')} service` : 'Sales prospect',
+    };
+    if (services) item.ameriproSchedule = services;
+    const additions = localAdditions();
+    additions.push(item);
+    saveJson(ADDITIONS_KEY, additions);
+    rebuildCustomers();
+    selectedId = item.id;
+    window.GlobalDataLocalEventOwner = 'restaurants';
+    window.GlobalDataLocalMenu?.setLayer?.('opportunity', false);
+    window.GlobalDataOpportunity?.setActive?.(false);
+    window.GlobalDataLocalMenu?.setLayer?.('restaurants', true);
+    selectCustomer(item.id, { focusPanel: true });
+    return item;
+  }
+
   function setActive(next) {
     active = Boolean(next);
     if (active) window.GlobalDataLocalEventOwner = 'restaurants';
@@ -591,6 +801,13 @@
     setActive,
     getActive: () => placeholderActive(),
     selectCustomer,
+    addCustomer,
+    applyEdit,
+    redraw: () => {
+      rebuildCustomers();
+      drawRestaurants();
+      renderBoard();
+    },
     getCustomers: () => CUSTOMERS.slice(),
   };
 
