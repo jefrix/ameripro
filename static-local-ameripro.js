@@ -409,6 +409,11 @@
         border-color: var(--asset-color, #73ff9a);
         background: rgba(115,255,154,0.075);
       }
+      .ameripro-tank-card.warning-full {
+        border-color: #ff4f5f;
+        background: rgba(255,79,95,0.075);
+        box-shadow: inset 0 0 22px rgba(255,79,95,0.08), 0 0 16px rgba(255,79,95,0.16);
+      }
       .ameripro-tank-card-title {
         display: grid;
         gap: 4px;
@@ -455,6 +460,25 @@
         height: var(--level, 0%);
         background: linear-gradient(180deg, #ff7050, #f5d142 46%, #73ff9a);
         transition: height .14s linear;
+      }
+      .ameripro-tank-warning {
+        position: absolute;
+        left: 7px;
+        right: 7px;
+        top: 38%;
+        z-index: 4;
+        display: block;
+        padding: 6px 5px;
+        border: 1px solid #ff4f5f;
+        background: rgba(45,0,8,0.86);
+        color: #ff9ba3;
+        font-size: 9px;
+        font-weight: 700;
+        letter-spacing: 0.12em;
+        line-height: 1.2;
+        text-align: center;
+        text-transform: uppercase;
+        box-shadow: 0 0 12px rgba(255,79,95,0.46);
       }
       .ameripro-tank-card-metrics {
         display: grid;
@@ -569,13 +593,16 @@
       ASSETS.map(asset => {
         const level = levels[asset.id] || 0;
         const gallons = gallonsFor(asset);
+        const isFullWarning = asset.id === 'frak-tank' && level >= 90;
         return [
-          `<button class="ameripro-tank-card ${selectedId === asset.id ? 'selected' : ''}" data-ameripro-visual-tank="${escapeHtml(asset.id)}" style="--asset-color:${asset.color};--level:${level}%">`,
+          `<button class="ameripro-tank-card ${selectedId === asset.id ? 'selected' : ''} ${isFullWarning ? 'warning-full' : ''}" data-ameripro-visual-tank="${escapeHtml(asset.id)}" style="--asset-color:${asset.color};--level:${level}%">`,
           '<span class="ameripro-tank-card-title">',
           `<strong>${escapeHtml(tankDisplayName(asset))}</strong>`,
           `<span>${escapeHtml(asset.kind)} / ${formatGallons(asset.capacityGallons)} CAP</span>`,
           '</span>',
-          '<span class="ameripro-tank-vessel"><span class="ameripro-tank-vessel-fill"></span></span>',
+          '<span class="ameripro-tank-vessel"><span class="ameripro-tank-vessel-fill"></span>',
+          isFullWarning ? '<span class="ameripro-tank-warning">Warning: Full</span>' : '',
+          '</span>',
           '<span class="ameripro-tank-card-metrics">',
           `<span><b>${level}%</b> FULL</span>`,
           `<span><b>${formatGallons(gallons)}</b> CURRENT</span>`,
