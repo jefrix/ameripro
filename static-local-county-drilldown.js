@@ -226,6 +226,14 @@
     return { key: 'client', label: 'CLIENT', color: '#73ff9a' };
   }
 
+  function isClient(item) {
+    return item?.customer !== false;
+  }
+
+  function isScheduled(item) {
+    return Boolean(item?.ameriproSchedule?.serviceTypes?.length || item?.ameriproSchedule?.services?.length);
+  }
+
   function locationText(item) {
     return [item.street, item.city, item.state, item.zip].filter(Boolean).join(', ');
   }
@@ -279,6 +287,9 @@
     }
     const dueCount = list.filter(item => statusFor(item).key === 'due').length;
     const exactCount = list.filter(item => item.locationQuality === 'exact').length;
+    const clientCount = list.filter(isClient).length;
+    const scheduledCount = list.filter(isScheduled).length;
+    const openCount = Math.max(0, list.length - clientCount);
     board.innerHTML = [
       '<div class="county-drilldown-head">',
       '<span>COUNTY RESTAURANTS</span>',
@@ -286,7 +297,9 @@
       '</div>',
       '<div class="county-drilldown-summary">',
       `<div class="county-drilldown-title">${escapeHtml(String(countyName || 'GEORGIA').toUpperCase())} COUNTY</div>`,
-      row('AMERIPRO', `${list.length} clients`, '#73ff9a'),
+      row('RESTAURANTS', `${list.length} known / ${clientCount} clients`, '#f5d142'),
+      row('SCHEDULED', `${scheduledCount} on Ameripro schedule`, scheduledCount ? '#73ff9a' : '#7a94b8'),
+      row('OPEN LEADS', openCount ? `${openCount} non-client records` : 'none in current list', openCount ? '#f5d142' : '#7a94b8'),
       row('SERVICE DUE', dueCount ? `${dueCount} flagged` : 'schedule pending', dueCount ? '#ff4f5f' : '#7a94b8'),
       row('LOCATION', `${exactCount} exact / ${Math.max(0, list.length - exactCount)} estimated`),
       row('NEXT IMPORT', 'public restaurants + contact status', '#f5d142'),

@@ -359,6 +359,42 @@
     return Number(value || 0).toLocaleString();
   }
 
+  function customers() {
+    return window.GlobalDataRestaurants?.getCustomers?.() || [];
+  }
+
+  function miles(a, b) {
+    const earthRadius = 3958.8;
+    const deg = Math.PI / 180;
+    const dLat = (b.lat - a.lat) * deg;
+    const dLon = (b.lon - a.lon) * deg;
+    const lat1 = a.lat * deg;
+    const lat2 = b.lat * deg;
+    const h = Math.sin(dLat / 2) ** 2
+      + Math.cos(lat1) * Math.cos(lat2) * Math.sin(dLon / 2) ** 2;
+    return earthRadius * 2 * Math.atan2(Math.sqrt(h), Math.sqrt(1 - h));
+  }
+
+  function isClient(item) {
+    return item?.customer !== false;
+  }
+
+  function isScheduled(item) {
+    return Boolean(item?.ameriproSchedule?.serviceTypes?.length || item?.ameriproSchedule?.services?.length);
+  }
+
+  function nearbyRestaurants(city, radius = 18) {
+    return customers()
+      .filter(item => Number.isFinite(Number(item.lat)) && Number.isFinite(Number(item.lon)))
+      .filter(item => miles(city, { lat: Number(item.lat), lon: Number(item.lon) }) <= radius);
+  }
+
+  function marketEstimate(city, known) {
+    if (city.pop >= 100000) return Math.max(known, Math.round(city.pop / 950));
+    if (city.pop >= 30000) return Math.max(known, Math.round(city.pop / 750));
+    return Math.max(known, Math.round(city.pop / 620));
+  }
+
   function cityClass(city) {
     if (city.service) return 'AMERIPRO SERVICE HUB';
     if (city.pop >= 100000) return 'MAJOR CITY';
@@ -479,6 +515,10 @@
     const current = selected() || CITIES[0];
     if (!current) return;
     selectedCity = current.name;
+    const nearby = nearbyRestaurants(current);
+    const clients = nearby.filter(isClient);
+    const scheduled = nearby.filter(isScheduled);
+    const estimate = marketEstimate(current, nearby.length);
     feed.classList.remove('ameripro-feed-mode', 'restaurant-feed-mode', 'county-drilldown-mode', 'opportunity-feed-mode');
     feed.classList.add('city-feed-mode');
     feed.querySelector('[data-restaurant-feed-board]')?.remove();
@@ -504,6 +544,8 @@
       `<div class="city-title">${escapeHtml(current.name.toUpperCase())}</div>`,
       row('CLASS', cityClass(current), current.service ? '#5bd7ff' : current.pop >= 100000 ? '#ff8a3d' : '#cfe2ff'),
       row('POPULATION', formatPop(current.pop)),
+      row('RESTAURANTS', `${nearby.length} known / ${estimate} est. market`, '#f5d142'),
+      row('CLIENTS', `${clients.length} Ameripro / ${scheduled.length} scheduled`, clients.length ? '#73ff9a' : '#7a94b8'),
       row('COORD', `${current.lat.toFixed(4)}, ${current.lon.toFixed(4)}`),
       row('SERVICE', current.service ? 'Ameripro office/service-area city' : 'Mapped Georgia municipality'),
       row('SOURCE', 'Static Georgia municipal seed data'),
