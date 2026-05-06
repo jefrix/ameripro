@@ -53,6 +53,20 @@
     if (node) node.textContent = text;
   }
 
+  function hasOperatorData(state) {
+    return Boolean(
+      Object.keys(state?.tankLevels || {}).length ||
+      Object.keys(state?.restaurantEdits || {}).length ||
+      (Array.isArray(state?.restaurantAdditions) && state.restaurantAdditions.length)
+    );
+  }
+
+  function shouldApplyFetchedState(state, source) {
+    if (source !== 'published') return true;
+    if (state?.updatedAt) return true;
+    return hasOperatorData(state);
+  }
+
   function applyState(state, source) {
     const changedKeys = ['tankLevels', 'restaurantEdits', 'restaurantAdditions']
       .filter(key => Object.prototype.hasOwnProperty.call(state, key));
@@ -77,15 +91,20 @@
     try {
       const state = await fetchState(ENDPOINT);
       online = true;
-      applyState(state, 'server');
+      if (!options.probeOnly) applyState(state, 'server');
       updateStatus('SYNCED');
       return true;
     } catch {
       online = false;
       if (!options.apiOnly) {
         try {
-          applyState(await fetchState('data/operator-state.json'), 'published');
-          updateStatus('PUBLISHED');
+          const state = await fetchState('data/operator-state.json');
+          if (shouldApplyFetchedState(state, 'published')) {
+            applyState(state, 'published');
+            updateStatus('PUBLISHED');
+          } else {
+            updateStatus('LOCAL');
+          }
           return false;
         } catch {
           // Keep browser-local fallback data.
@@ -98,8 +117,6 @@
 
   async function saveNow(partial) {
     applyState({ ...readLocalState(), ...partial }, 'local');
-    if (!online) await load({ apiOnly: true });
-    if (!online) return false;
     try {
       const response = await fetch(ENDPOINT, {
         method: 'POST',
