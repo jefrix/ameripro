@@ -118,6 +118,7 @@
         opacity: 0.32;
       }
       .ameripro-marker-label {
+        display: none;
         fill: #ffffff;
         font-family: var(--mono);
         font-size: 8px;
@@ -127,6 +128,10 @@
         paint-order: stroke;
         stroke: rgba(0,0,0,0.82);
         stroke-width: 2.2;
+      }
+      .ameripro-asset:hover .ameripro-marker-label,
+      .ameripro-marker-selected .ameripro-marker-label {
+        display: block;
       }
       .ameripro-marker-selected .ameripro-marker-body {
         stroke: #ffffff;
@@ -341,6 +346,9 @@
     group.style.setProperty('--asset-glow', glow);
     group.dataset.ameriproAsset = asset.id;
     group.dataset.name = asset.label;
+    const title = document.createElementNS('http://www.w3.org/2000/svg', 'title');
+    title.textContent = asset.label;
+    group.appendChild(title);
 
     if (asset.fixed) {
       const tank = document.createElementNS('http://www.w3.org/2000/svg', 'path');
