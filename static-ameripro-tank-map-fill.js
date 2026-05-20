@@ -1,9 +1,9 @@
 (function () {
   const LEVEL_KEY = 'gd_ameripro_tank_levels';
   const ASSET_SPECS = {
-    'large-truck-1': { xOffset: -13, yOffset: -5, width: 15, height: 8, rx: 0 },
-    'large-truck-2': { xOffset: -13, yOffset: -5, width: 15, height: 8, rx: 0 },
-    'small-truck-1': { xOffset: -13, yOffset: -5, width: 15, height: 8, rx: 0 },
+    'large-truck-1': { xOffset: -11.13, yOffset: -4, width: 11.25, height: 6, rx: 0 },
+    'large-truck-2': { xOffset: -11.13, yOffset: -4, width: 11.25, height: 6, rx: 0 },
+    'small-truck-1': { xOffset: -9.25, yOffset: -3, width: 7.5, height: 4, rx: 0 },
     'frak-tank': { xOffset: -10, yOffset: -4, width: 20, height: 8, rx: 3 },
   };
 

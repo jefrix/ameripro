@@ -1,7 +1,7 @@
 (function () {
   const BOUNDS = { minLon: -85.62, maxLon: -80.84, minLat: 30.36, maxLat: 35.01 };
   const LEVEL_KEY = 'gd_ameripro_tank_levels';
-  const LEVEL_STEP = 5;
+  const DEFAULT_LEVEL_STEP_PERCENT = 5;
   const BASE = {
     name: 'AmeriPro Environmental Services',
     address: '210 Savannah Ave, East Dublin, GA 31027',
@@ -20,6 +20,7 @@
       tank: 'Large truck tank',
       capacity: 'Large',
       capacityGallons: 5000,
+      visualScale: 0.75,
       lat: BASE.lat + 0.030,
       lon: BASE.lon - 0.030,
       color: '#73ff9a',
@@ -33,6 +34,7 @@
       tank: 'Large truck tank',
       capacity: 'Large',
       capacityGallons: 5000,
+      visualScale: 0.75,
       lat: BASE.lat + 0.018,
       lon: BASE.lon + 0.034,
       color: '#73ff9a',
@@ -46,6 +48,7 @@
       tank: 'Small truck tank',
       capacity: 'Small',
       capacityGallons: 1000,
+      visualScale: 0.5,
       lat: BASE.lat - 0.030,
       lon: BASE.lon - 0.018,
       color: '#5bd7ff',
@@ -58,6 +61,8 @@
       tank: 'Dublin grease holding tank',
       capacity: 'Stationary',
       capacityGallons: 20000,
+      stepGallons: 500,
+      visualScale: 1,
       lat: BASE.lat,
       lon: BASE.lon,
       color: '#f5d142',
@@ -75,12 +80,18 @@
       const saved = window.AmeriproSharedState?.readTankLevels?.() || JSON.parse(localStorage.getItem(LEVEL_KEY) || '{}');
       return ASSETS.reduce((acc, asset) => {
         const value = Number(saved[asset.id]);
-        acc[asset.id] = Number.isFinite(value) ? Math.max(0, Math.min(100, Math.round(value))) : 0;
+        acc[asset.id] = normalizeLevel(value);
         return acc;
       }, {});
     } catch {
       return {};
     }
+  }
+
+  function normalizeLevel(value) {
+    const numeric = Number(value);
+    if (!Number.isFinite(numeric)) return 0;
+    return Math.max(0, Math.min(100, Math.round(numeric * 10) / 10));
   }
 
   function saveLevels() {
@@ -107,12 +118,23 @@
     return `${Math.round(Number(value) || 0).toLocaleString()} gal`;
   }
 
+  function formatLevel(value) {
+    const level = normalizeLevel(value);
+    return Number.isInteger(level) ? `${level}%` : `${level.toFixed(1)}%`;
+  }
+
   function gallonsFor(asset) {
     return Math.round((asset.capacityGallons || 0) * ((levels[asset.id] || 0) / 100));
   }
 
   function stepGallons(asset) {
-    return Math.round((asset.capacityGallons || 0) * (LEVEL_STEP / 100));
+    return Math.round(asset.stepGallons || ((asset.capacityGallons || 0) * (DEFAULT_LEVEL_STEP_PERCENT / 100)));
+  }
+
+  function stepPercent(asset) {
+    const capacity = Number(asset.capacityGallons) || 0;
+    if (!capacity) return DEFAULT_LEVEL_STEP_PERCENT;
+    return Math.round((stepGallons(asset) / capacity) * 1000) / 10;
   }
 
   function tankDisplayName(asset) {
@@ -432,10 +454,11 @@
       }
       .ameripro-tank-vessel {
         position: relative;
-        align-self: stretch;
+        align-self: center;
         justify-self: center;
-        width: min(82px, 62%);
-        min-height: 150px;
+        width: min(calc(82px * var(--tank-scale, 1)), 62%);
+        height: calc(100% * var(--tank-scale, 1));
+        min-height: 96px;
         border: 1px solid var(--asset-color, #73ff9a);
         border-radius: 6px 6px 13px 13px;
         background: rgba(0,0,0,0.36);
@@ -588,15 +611,21 @@
     visual.innerHTML = [
       '<div class="ameripro-tanks-visual-head">',
       '<strong>TANK LEVELS</strong>',
-      '<span>5% STEP / GALLON TRACKING</span>',
+      '<span>GALLON-BASED STEPS / SIZE SCALED</span>',
       '</div>',
       '<div class="ameripro-tank-grid">',
       ASSETS.map(asset => {
         const level = levels[asset.id] || 0;
         const gallons = gallonsFor(asset);
         const isFullWarning = asset.id === 'frak-tank' && level >= 90;
+        const visualScale = asset.visualScale || 1;
+        const tankStyle = [
+          `--asset-color:${asset.color}`,
+          `--level:${level}%`,
+          `--tank-scale:${visualScale}`,
+        ].join(';');
         return [
-          `<button class="ameripro-tank-card ${selectedId === asset.id ? 'selected' : ''} ${isFullWarning ? 'warning-full' : ''}" data-ameripro-visual-tank="${escapeHtml(asset.id)}" style="--asset-color:${asset.color};--level:${level}%">`,
+          `<button class="ameripro-tank-card ${selectedId === asset.id ? 'selected' : ''} ${isFullWarning ? 'warning-full' : ''}" data-ameripro-visual-tank="${escapeHtml(asset.id)}" style="${tankStyle}">`,
           '<span class="ameripro-tank-card-title">',
           `<strong>${escapeHtml(tankDisplayName(asset))}</strong>`,
           `<span>${escapeHtml(asset.kind)} / ${formatGallons(asset.capacityGallons)} CAP</span>`,
@@ -605,7 +634,7 @@
           isFullWarning ? '<span class="ameripro-tank-warning">Warning: Full</span>' : '',
           '</span>',
           '<span class="ameripro-tank-card-metrics">',
-          `<span><b>${level}%</b> FULL</span>`,
+          `<span><b>${formatLevel(level)}</b> FULL</span>`,
           `<span><b>${formatGallons(gallons)}</b> CURRENT</span>`,
           `<span>${formatGallons(stepGallons(asset))} PER CLICK</span>`,
           '</span>',
@@ -667,8 +696,8 @@
       asset.nickname ? row('NICKNAME', asset.nickname.toUpperCase(), asset.color) : '',
       row('TANK', asset.tank.toUpperCase()),
       row('CAPACITY', formatGallons(asset.capacityGallons)),
-      row('LEVEL', `${level}% / ${formatGallons(gallonsFor(asset))}`, asset.color),
-      row('5% STEP', formatGallons(stepGallons(asset))),
+      row('LEVEL', `${formatLevel(level)} / ${formatGallons(gallonsFor(asset))}`, asset.color),
+      row('CLICK STEP', formatGallons(stepGallons(asset))),
       row('BASE', BASE.address),
       row('SOURCE', asset.fixed ? 'USER INPUT / DUBLIN FRAK TANK' : 'USER INPUT / AMERIPRO FLEET'),
       '<div class="insp-note">Use the tank controls in the Event pane to update levels.</div>',
@@ -696,7 +725,7 @@
   function setLevel(id, level) {
     const asset = ASSETS.find(item => item.id === id);
     if (!asset) return;
-    levels[id] = Math.max(0, Math.min(100, Math.round(Number(level) || 0)));
+    levels[id] = normalizeLevel(level);
     saveLevels();
     updateTankBoardValues(id);
     renderTankVisual();
@@ -759,15 +788,16 @@
   function tankRow(asset) {
     const level = levels[asset.id] || 0;
     const selected = selectedId === asset.id ? ' selected' : '';
+    const delta = stepPercent(asset);
     return [
       `<div class="ameripro-tank-row${selected}" data-ameripro-tank-row="${escapeHtml(asset.id)}" style="--asset-color:${asset.color};--level:${level}%">`,
       `<div class="ameripro-tank-name">${escapeHtml(tankDisplayName(asset))}</div>`,
-      `<div class="ameripro-tank-level" data-ameripro-level-text="${escapeHtml(asset.id)}"><strong>${level}%</strong><small>${formatGallons(gallonsFor(asset))}</small></div>`,
+      `<div class="ameripro-tank-level" data-ameripro-level-text="${escapeHtml(asset.id)}"><strong>${formatLevel(level)}</strong><small>${formatGallons(gallonsFor(asset))}</small></div>`,
       `<div class="ameripro-tank-kind">${escapeHtml(asset.kind)} / ${formatGallons(asset.capacityGallons)} cap / ${formatGallons(stepGallons(asset))} step</div>`,
       '<div class="ameripro-tank-control">',
-      `<button class="ameripro-tank-step" data-ameripro-level-step="-${LEVEL_STEP}" data-ameripro-level-id="${escapeHtml(asset.id)}" type="button" aria-label="Lower ${escapeHtml(asset.label)} level">-</button>`,
+      `<button class="ameripro-tank-step" data-ameripro-level-step="-${delta}" data-ameripro-level-id="${escapeHtml(asset.id)}" type="button" aria-label="Lower ${escapeHtml(asset.label)} level">-</button>`,
       '<div class="ameripro-tank-track"><span></span></div>',
-      `<button class="ameripro-tank-step" data-ameripro-level-step="${LEVEL_STEP}" data-ameripro-level-id="${escapeHtml(asset.id)}" type="button" aria-label="Raise ${escapeHtml(asset.label)} level">+</button>`,
+      `<button class="ameripro-tank-step" data-ameripro-level-step="${delta}" data-ameripro-level-id="${escapeHtml(asset.id)}" type="button" aria-label="Raise ${escapeHtml(asset.label)} level">+</button>`,
       '</div>',
       '</div>',
     ].join('');
@@ -779,7 +809,7 @@
     const text = document.querySelector(`[data-ameripro-level-text="${id}"]`);
     const level = levels[id] || 0;
     if (rowNode) rowNode.style.setProperty('--level', `${level}%`);
-    if (text && asset) text.innerHTML = `<strong>${level}%</strong><small>${formatGallons(gallonsFor(asset))}</small>`;
+    if (text && asset) text.innerHTML = `<strong>${formatLevel(level)}</strong><small>${formatGallons(gallonsFor(asset))}</small>`;
   }
 
   function updateTankBoardSelection() {
@@ -854,7 +884,7 @@
     let changed = false;
     ASSETS.forEach(asset => {
       const value = Number(incoming[asset.id]);
-      const next = Number.isFinite(value) ? Math.max(0, Math.min(100, Math.round(value))) : 0;
+      const next = normalizeLevel(value);
       if (levels[asset.id] !== next) {
         levels[asset.id] = next;
         changed = true;
