@@ -603,3 +603,315 @@ html.performance-mode .rail-hd {
 html.performance-mode .local-map-svg {
   transition: none !important;
 }
+
+/* ============ MOBILE LAYOUT ============ */
+@media (max-width: 760px) {
+  html,
+  body {
+    width: 100%;
+    min-height: 100dvh;
+    height: auto;
+    overflow-x: hidden;
+    overflow-y: auto;
+    user-select: auto;
+  }
+
+  #root {
+    width: 100%;
+    min-height: 100dvh;
+    height: auto;
+  }
+
+  .app {
+    min-height: 100dvh;
+    height: auto;
+    display: grid;
+    grid-template-rows: auto auto;
+  }
+
+  .top-bar {
+    min-height: 0;
+    flex-wrap: wrap;
+    align-items: flex-start;
+    padding: 8px 10px;
+    gap: 8px 10px;
+  }
+
+  .tb-left,
+  .tb-center,
+  .tb-right {
+    flex: 1 1 100%;
+    min-width: 0;
+  }
+
+  .tb-center {
+    justify-content: flex-start;
+    order: 3;
+  }
+
+  .tb-right {
+    justify-content: space-between;
+    gap: 8px;
+    order: 2;
+  }
+
+  .logo {
+    gap: 8px;
+    min-width: 0;
+  }
+
+  .logo svg {
+    width: 28px;
+    height: 28px;
+    flex: 0 0 auto;
+  }
+
+  .logo-t {
+    font-size: clamp(11px, 3.7vw, 13px);
+    letter-spacing: 0.1em;
+    overflow-wrap: anywhere;
+  }
+
+  .logo-st,
+  .dtg-val {
+    font-size: 8px;
+    letter-spacing: 0.08em;
+  }
+
+  .class-banner,
+  .op-badge,
+  .perf-toggle {
+    font-size: 8px;
+    letter-spacing: 0.14em;
+  }
+
+  .class-banner {
+    width: 100%;
+    padding: 5px 8px;
+    text-align: center;
+  }
+
+  .main {
+    display: flex;
+    flex-direction: column;
+    min-height: 0;
+    height: auto;
+    overflow: visible;
+  }
+
+  .rail-left,
+  .rail-right,
+  .globe-wrap {
+    width: 100%;
+    min-height: 0;
+    overflow: visible;
+  }
+
+  .rail-left {
+    order: 1;
+    max-height: none;
+  }
+
+  .layers {
+    max-height: 34dvh;
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .layer-row {
+    padding: 9px 10px;
+  }
+
+  .layer-sub {
+    white-space: normal;
+    line-height: 1.3;
+  }
+
+  .rail-ft {
+    padding: 8px 10px;
+  }
+
+  .globe-wrap {
+    order: 2;
+    height: 64dvh;
+    min-height: 430px;
+    overflow: hidden;
+  }
+
+  .local-map-overlay {
+    padding: 12px !important;
+    gap: 8px !important;
+  }
+
+  .local-map-top,
+  .local-map-foot {
+    flex-wrap: wrap !important;
+    gap: 6px 10px !important;
+    letter-spacing: 0.12em !important;
+  }
+
+  .local-map-title {
+    flex: 1 1 100%;
+    font-size: 10px !important;
+  }
+
+  .local-map-status,
+  .local-map-foot {
+    font-size: 8px !important;
+  }
+
+  .local-map-stage {
+    min-height: 0 !important;
+  }
+
+  .local-zoom-controls {
+    right: 8px !important;
+    gap: 5px !important;
+  }
+
+  .local-zoom-controls button {
+    width: 30px !important;
+    height: 30px !important;
+  }
+
+  .local-zoom-rail {
+    height: 64px !important;
+  }
+
+  .ameripro-tanks-visual {
+    inset: 8px !important;
+    padding: 10px !important;
+    gap: 10px !important;
+    overflow-y: auto !important;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .ameripro-tanks-visual-head {
+    display: grid !important;
+    gap: 5px !important;
+    letter-spacing: 0.12em !important;
+  }
+
+  .ameripro-tanks-visual-head strong {
+    font-size: 11px !important;
+  }
+
+  .ameripro-tanks-visual-head span {
+    font-size: 8px !important;
+    line-height: 1.35 !important;
+  }
+
+  .ameripro-tank-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+    gap: 10px !important;
+    align-items: start !important;
+  }
+
+  .ameripro-tank-card {
+    min-height: 260px !important;
+    grid-template-rows: auto 150px auto !important;
+    padding: 10px 8px !important;
+    gap: 8px !important;
+  }
+
+  .ameripro-tank-card-title strong {
+    font-size: 9px !important;
+    line-height: 1.35 !important;
+  }
+
+  .ameripro-tank-card-title span,
+  .ameripro-tank-card-metrics {
+    font-size: 7.5px !important;
+    line-height: 1.35 !important;
+  }
+
+  .ameripro-tank-vessel {
+    min-height: 108px !important;
+    max-height: 150px !important;
+  }
+
+  .picked-wrap {
+    left: 10px;
+    right: 10px;
+    bottom: 10px;
+    width: auto;
+  }
+
+  .rail-right {
+    order: 3;
+    min-height: 52dvh;
+  }
+
+  .inspector {
+    max-height: none;
+    overflow: visible;
+  }
+
+  .insp-body {
+    max-height: 42dvh;
+    overflow-y: auto;
+  }
+
+  .feed {
+    min-height: 44dvh;
+  }
+
+  .feed-title {
+    white-space: normal;
+  }
+
+  .feed-meta {
+    flex-wrap: wrap;
+  }
+
+  .bottom-bar {
+    flex-wrap: wrap;
+    height: auto;
+    min-height: 28px;
+    gap: 6px 12px;
+    padding: 6px 10px;
+  }
+}
+
+@media (max-width: 480px) {
+  .top-bar {
+    padding: 7px 8px;
+  }
+
+  .tb-right {
+    display: grid;
+    grid-template-columns: auto 1fr;
+    align-items: center;
+  }
+
+  .dtg {
+    align-items: flex-start;
+  }
+
+  .op-badge {
+    grid-column: 1 / -1;
+    width: 100%;
+    text-align: center;
+  }
+
+  .globe-wrap {
+    height: 68dvh;
+    min-height: 460px;
+  }
+
+  .ameripro-tank-grid {
+    grid-template-columns: 1fr !important;
+  }
+
+  .ameripro-tank-card {
+    min-height: 250px !important;
+  }
+
+  .password-row {
+    grid-template-columns: 1fr;
+  }
+
+  .password-row button {
+    width: 100%;
+  }
+}

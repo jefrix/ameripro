@@ -514,6 +514,76 @@
         color: var(--asset-color, #73ff9a);
         font-weight: 600;
       }
+      @media (max-width: 760px) {
+        .ameripro-tank-board {
+          height: auto;
+          max-height: none;
+          grid-template-rows: auto;
+          overflow: visible;
+        }
+        .ameripro-tank-row {
+          grid-template-columns: minmax(0, 1fr) 76px;
+          padding: 8px 10px;
+        }
+        .ameripro-tank-control {
+          grid-template-columns: 34px minmax(0, 1fr) 34px;
+        }
+        .ameripro-tank-step {
+          width: 34px;
+          height: 30px;
+        }
+        .ameripro-tanks-visual {
+          inset: 8px;
+          padding: 10px;
+          gap: 10px;
+          overflow-y: auto;
+          -webkit-overflow-scrolling: touch;
+        }
+        .ameripro-tanks-visual-head {
+          display: grid;
+          gap: 5px;
+          letter-spacing: 0.12em;
+        }
+        .ameripro-tanks-visual-head strong {
+          font-size: 11px;
+        }
+        .ameripro-tanks-visual-head span {
+          font-size: 8px;
+          line-height: 1.35;
+        }
+        .ameripro-tank-grid {
+          grid-template-columns: repeat(2, minmax(0, 1fr));
+          gap: 10px;
+          align-items: start;
+        }
+        .ameripro-tank-card {
+          min-height: 260px;
+          grid-template-rows: auto 150px auto;
+          padding: 10px 8px;
+          gap: 8px;
+        }
+        .ameripro-tank-card-title strong {
+          font-size: 9px;
+          line-height: 1.35;
+        }
+        .ameripro-tank-card-title span,
+        .ameripro-tank-card-metrics {
+          font-size: 7.5px;
+          line-height: 1.35;
+        }
+        .ameripro-tank-vessel {
+          min-height: 108px;
+          max-height: 150px;
+        }
+      }
+      @media (max-width: 480px) {
+        .ameripro-tank-grid {
+          grid-template-columns: 1fr;
+        }
+        .ameripro-tank-card {
+          min-height: 250px;
+        }
+      }
     `;
     document.head.appendChild(style);
   }
