@@ -194,6 +194,22 @@ td.m{font-family:var(--mono);font-size:13.5px;white-space:nowrap}
 .calc input{font:500 16px var(--mono);padding:7px 8px;border:1px solid var(--mute);background:var(--bg);color:var(--fg);width:100%;border-radius:2px}
 .calcout{grid-column:1/-1;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;border-top:1px solid var(--line);padding-top:10px}
 .calcout b{display:block;font:700 34px/1.05 var(--display)}
+.fcard{background:var(--sheet);border:1px solid var(--line);padding:13px 15px;display:grid;gap:9px;font-size:15.5px;line-height:1.42}
+.fcard.live{border:2px solid var(--warn)}
+.fcard h3{font-size:22px}
+.fcard ol{margin:0;padding-left:1.35em;display:grid;gap:4px}
+.frow{display:grid;grid-template-columns:96px minmax(0,1fr);gap:8px}
+.frow>b{font:600 14px/1.45 var(--display);text-transform:uppercase;letter-spacing:.04em;color:var(--mute)}
+.frow>div{min-width:0}
+.fbtn{font:600 17px/1.2 var(--display);padding:9px 13px;border:2px solid var(--fg);background:var(--tag);color:var(--tagfg);cursor:pointer;border-radius:2px;justify-self:start}
+.fbtn:disabled{background:transparent;color:var(--mute);border-color:var(--line);cursor:not-allowed}
+.fdone{font-weight:600;color:var(--on)}
+.flist{display:grid;gap:6px;margin-top:6px}
+.flist details{background:var(--sheet);border:1px solid var(--line);padding:0 13px}
+.flist summary{cursor:pointer;font:600 19px/1.25 var(--display);padding:9px 0}
+.flist details>.fbody{display:grid;gap:9px;padding:0 0 13px;font-size:15.5px;line-height:1.42}
+.flist ol{margin:0;padding-left:1.35em;display:grid;gap:4px}
+@media (max-width:480px){.frow{grid-template-columns:minmax(0,1fr);gap:1px}}
 .noteslink{display:block;font:600 22px/1.2 var(--display);padding:14px 16px;border:2px solid var(--fg);text-decoration:none;justify-self:start;max-width:100%}
 .noteslink::after{content:" \2192"}
 .noteslink:hover{background:var(--tag);color:var(--tagfg);border-color:var(--tagfg)}
@@ -297,7 +313,7 @@ td.m{font-family:var(--mono);font-size:13.5px;white-space:nowrap}
 
 <section class="stack" id="panel">
   <h2>Run the panel</h2>
-  <p>This door is a sim of ours, using the same press logic. It opens in Auto and running. Press <b>Auto stop</b> and watch the feed quit while the screws keep turning. Then try the fault buttons. The clock runs 60 times faster than real life.</p>
+  <p>This door is a sim of ours, using the same press logic. It opens in Auto and running. Press <b>Auto stop</b> and watch the feed quit while the screws keep turning. Then trip a fault, follow its card and reset it. You can also tap a fault lamp on the door to read its card. The clock runs 60 times faster than real life.</p>
   <div class="sim">
     <div class="stack" style="gap:10px;min-width:0">
       <div class="door">
@@ -313,6 +329,7 @@ td.m{font-family:var(--mono);font-size:13.5px;white-space:nowrap}
       <div class="status" id="status"><span id="stxt"></span><span class="clock" id="clk"></span></div>
       <div class="dgwrap" id="dg2"></div>
       <div class="chips" id="chips"></div>
+      <div class="fcard" id="fcard" aria-live="polite"></div>
       <div>
         <div id="rungs"></div>
         <p class="legend" style="margin-top:6px">Solid outline: contact closed. Dashed red: contact open, and this is what is stopping that device.</p>
@@ -566,10 +583,14 @@ td.m{font-family:var(--mono);font-size:13.5px;white-space:nowrap}
     </tbody>
   </table></div>
   <div class="notes" style="margin-top:12px">
-    <div><h3>Resetting a tripped overload</h3><p>Set the mode switch to Stop first, because the machine could start and injure someone when the relay resets. Turn off main power, fix the cause, press the blue RESET button on the overload (the manual says white, but ours are blue, with a red STOP), then return to our mode. A very hot relay may need to cool first. If it keeps tripping, stop and contact the maker or agent.</p></div>
+    <div><h3>Resetting a tripped overload</h3><p>The operator does this reset. Set the mode switch to Stop first, because the machine could start and injure someone when the relay resets. Turn off main power, fix the cause, press the blue RESET button on the overload (the manual says white, but ours are blue, with a red STOP), then return to our mode. A very hot relay may need to cool first. If it keeps tripping, stop and contact the maker or agent.</p></div>
     <div><h3>Recovering from an E-stop</h3><p>Set <span class="tag">SA2</span> to Stop first, because the machine could start and injure someone when the button releases. Twist the button to the right to release it, deal with the fault, then choose our mode and restart.</p></div>
     <div><h3>Clearing a drive error</h3><p>Set the mode switch to Stop, fix the cause, reset the drive as its own manual directs, then return to our mode. The press manual mentions a program or reset key, but our ATV320 has an ESC key and a green dial that also works as ENT. Menus are REF for speed, MON for monitoring and COnF for setup. Schneider's programming manual NVE41295 covers the error codes.</p></div>
   </div>
+  <h3 style="margin-top:12px">Fault by fault</h3>
+  <p>Fault lamps and low tanks don't need a dial turned. Fix the cause, then reset. Every overload stays at its set value.</p>
+  <div class="flist" id="flist"></div>
+  <p class="small mute">Causes and reset order come from the maker's manual and our drawings. Which machines keep running comes from the drawings. These steps are general for each pump until the pump manuals are added.</p>
   <p class="small mute">Manual names on our panel: COS-1 is <span class="tag">SA2</span>, EMS is <span class="tag">SB1</span>, CSL is each OFF/ON switch, OL-0 is the fault lamps, INV-1 is <span class="tag">U1</span> and <span class="tag">U2</span>, WL-1 is <span class="tag">H1</span>, TLR-2 is <span class="tag">KT2</span> and TLR-3 is <span class="tag">KT1</span>.</p>
 </section>
 
@@ -781,7 +802,7 @@ Object.keys(PINS).forEach(function(k){
 var S={sa2:'auto',sa1:'local',sa11:true,sa12:true,sa4:false,sa5:false,sa6:false,estop:false,
   ka5:true,km11:true,km12:true,km2:true,km3:false,km4:false,y1:false,lvs:true,level:.55,barrel:.8,
   kt1:0,kt2:0,kt2c:true,start:false,stop:false,sb2:0,
-  plc:false,polyLow:false,slLow:false,fr4:false,fr3:false,u1:false,fr2:false,t:0};
+  plc:false,polyLow:false,slLow:false,fr4:false,fr3:false,u1:false,u2:false,fr2:false,t:0};
 var CELLS=[
  {id:'pw',l:'Power',k:'lampw',d:'<span class="tag">H1</span> Wired after main breaker QF1, so it stays lit even with the E-stop pressed. It does not mean the control circuit is live.'},
  {id:'f1',l:'Drive motor 1# Fault',k:'lamp',d:'<span class="tag">H30</span> Lit when drive <span class="tag">U1</span> reports a fault through <span class="tag">KA20</span>.'},
@@ -817,7 +838,7 @@ var byId={};CELLS.forEach(function(c){byId[c.id]=c});
 function info(c){$('#info').innerHTML='<b>'+c.l+'.</b> '+c.d;$$('.cell').forEach(function(e){e.classList.toggle('sel',e.getAttribute('data-id')===c.id)})}
 var seq=['man','stop','auto','stop'],seqI=2;
 $('#grid').addEventListener('click',function(e){
-  var b=e.target.closest('.cell');if(!b)return;var id=b.getAttribute('data-id');info(byId[id]);
+  var b=e.target.closest('.cell');if(!b)return;var id=b.getAttribute('data-id');info(byId[id]);if(LAMP_F[id])showCard(LAMP_F[id]);
   if(id==='sa2'){seqI=(seqI+1)%4;S.sa2=seq[seqI]}
   else if(id==='sa1'){S.sa1=S.sa1==='local'?'remote':'local'}
   else if(['sa11','sa12','sa4','sa5','sa6'].indexOf(id)>=0){S[id]=!S[id]}
@@ -827,9 +848,38 @@ $('#grid').addEventListener('click',function(e){
   else if(id==='es'){S.estop=!S.estop}
 });
 $$('.pot').forEach(function(p){p.addEventListener('click',function(){$('#info').innerHTML='<b>Speed dials.</b> <span class="tag">R1</span> and <span class="tag">R2</span> set the speed of <span class="tag">U1</span> and <span class="tag">U2</span> through each drive\'s analog input. Their locked covers keep settings from drifting. Not part of this demo.'})});
-var CH=[['polyLow','Polymer tank runs low'],['slLow','Sludge tank runs low'],['fr4','Trip dosing pump'],['fr3','Trip sludge pump'],['u1','Fault drive 1#'],['plc','Close PLC start contact']];
+var CH=[['polyLow','Polymer tank runs low'],['slLow','Sludge tank runs low'],['fr4','Trip dosing pump'],['fr3','Trip sludge pump'],['fr2','Trip mixer'],['u1','Fault drive 1#'],['u2','Fault drive 2#'],['plc','Close PLC start contact']];
+var RESET_COMMON=function(fr,sw){return ['Turn the mode switch <span class="tag">'+sw+'</span> to Stop.','Turn off main power and follow our lockout procedure. Keep clear of the drives and terminals.','Fix the cause. If the relay is very hot, let it cool first.','Press the blue RESET on <span class="tag">'+fr+'</span>, in the row under the contactors. Leave its dial alone.','Close the door, restore power and pick the mode. In Auto, press Auto start.']};
+var AUTO_FIRST='In Auto, press <b>Auto stop</b> so feed and polymer stop and the screws clear the barrel.';
+var FAULTS={
+ fr3:{t:'Sludge pump tripped',see:'<b>Sludge pump Fault</b> lamp on. <span class="tag">KM3</span> stops. The mixer and screws keep running, and polymer can keep dosing.',first:AUTO_FIRST,cause:'Blocked or worn impeller, foreign matter, air in the pump, closed valve or blocked line.',steps:RESET_COMMON('FR3','SA2'),btn:'Press RESET on FR3',stop:'SA2'},
+ fr4:{t:'Dosing pump tripped',see:'<b>Dosing pump Fault</b> lamp on. <span class="tag">KM4</span> stops, but <b>raw sludge keeps going in with no polymer</b>.',first:'Act right away. '+AUTO_FIRST,cause:'Blocked polymer line, damaged pump parts or foreign matter. Check the polymer tank while you are there.',steps:RESET_COMMON('FR4','SA2').concat(['Check for 5&ndash;10 mm flocs before you leave it running.']),btn:'Press RESET on FR4',stop:'SA2'},
+ fr2:{t:'Mixer tripped',see:'<b>Mixer motor Fault</b> lamp on. <span class="tag">KM2</span> stops, but feed and polymer keep going with nothing mixing them.',first:'Act right away. '+AUTO_FIRST,cause:'Jammed paddles, debris or heavy buildup in the mixing tank. Stay out of the tank unless the power is locked out.',steps:RESET_COMMON('FR2','SA2').concat(['Check for 5&ndash;10 mm flocs before you leave it running.']),btn:'Press RESET on FR2',stop:'SA2'},
+ u1:{t:'Drive 1# fault',see:'<b>Drive motor 1# Fault</b> lamp on. Screw 1 stops. Screw 2, feed and polymer keep going, so one barrel is taking the load.',first:AUTO_FIRST+' Write down the code on drive <span class="tag">U1</span> before anything else.',cause:'Look up the code in Schneider manual NVE41295. Common causes are overload from sludge buildup, a plate gap below 4 mm, dried sludge or a supply voltage problem.',steps:['Turn <span class="tag">SA2</span> to Stop.','Fix the cause. Lock out the power before touching the screw or plate.','Reset drive <span class="tag">U1</span> as its manual directs for that code.','Pick the mode. In Auto, press Auto start.','Watch the screw and the drive display as it restarts.'],btn:'Reset drive U1',stop:'SA2',note:'Don\'t change the speed dial or drive settings to clear a fault. If the code returns or won\'t clear, stop and call the maker or Blake.'},
+ u2:{t:'Drive 2# fault',see:'<b>Drive motor 2# Fault</b> lamp on. Screw 2 stops. Screw 1, feed and polymer keep going, so one barrel is taking the load.',first:AUTO_FIRST+' Write down the code on drive <span class="tag">U2</span> before anything else.',cause:'Look up the code in Schneider manual NVE41295. Common causes are overload from sludge buildup, a plate gap below 4 mm, dried sludge or a supply voltage problem.',steps:['Turn <span class="tag">SA2</span> to Stop.','Fix the cause. Lock out the power before touching the screw or plate.','Reset drive <span class="tag">U2</span> as its manual directs for that code.','Pick the mode. In Auto, press Auto start.','Watch the screw and the drive display as it restarts.'],btn:'Reset drive U2',stop:'SA2',note:'Don\'t change the speed dial or drive settings to clear a fault. If the code returns or won\'t clear, stop and call the maker or Blake.'},
+ polyLow:{t:'Polymer tank low',see:'<b>No lamp comes on.</b> Once a float is wired to 36/37, the dosing pump stops, but raw sludge keeps going in. Cloudy filtrate or poor flocs may be your first clue.',first:'Act right away. '+AUTO_FIRST,cause:'The polymer tank ran down, or the float is stuck or wired wrong.',steps:['Make up polymer at our set dose and dilution, and refill the tank.','Check that the float moves freely.','Press Auto start, then check for 5&ndash;10 mm flocs.'],btn:'Tank refilled',note:'If our terminals are still jumpered, nothing stops the pump running dry. Watch this tank until the float is fitted.'},
+ slLow:{t:'Sludge tank low',see:'<b>No lamp comes on.</b> Once a float is wired to 31/32, the sludge pump stops. Polymer can keep dosing until the mixing tank level stops it.',first:AUTO_FIRST,cause:'The sludge tank ran down, or the float is stuck or wired wrong.',steps:['Refill the sludge tank.','Check that the float moves freely.','Press Auto start. If the machine is still in Auto, the pump can restart by itself as soon as the float recovers.'],btn:'Tank refilled',note:'If our terminals are still jumpered, nothing stops the pump running dry. Watch this tank until the float is fitted.'},
+ fr5:{t:'Separator main motor tripped',see:'<b>Main motor Fault</b> lamp on. <span class="tag">KM5</span> stops. In Auto, the sewage pump also stops because it depends on the main motor.',first:'Stop any liquid still reaching the screen, and turn <span class="tag">SA8</span> to Stop.',cause:'Jammed screw, debris or packed solids in the trough or end housing. Lock out the power before opening the panel.',steps:RESET_COMMON('FR5','SA8'),note:'The demo doesn\'t run the separator. Check screw rotation after any wiring work.'},
+ fr6:{t:'Separator sewage pump tripped',see:'<b>Submersible sewage pump Fault</b> lamp on. <span class="tag">KM6</span> stops. The main motor keeps running.',first:'Turn <span class="tag">SA8</span> to Stop once the screw has cleared the trough.',cause:'Clogged or worn pump, debris in the inlet, closed valve or blocked line. Lock out the power before pulling the pump.',steps:RESET_COMMON('FR6','SA8'),note:'The demo doesn\'t run the separator.'}
+};
+var RULE='<b>Call for help if it trips again.</b> The manual says to stop and contact the maker or agent if a relay keeps tripping, because forcing it can cause serious damage. Don\'t turn up an overload dial, change the speed or hold RESET to keep it running.';
+function fBody(f){return '<div class="frow"><b>You\'ll see</b><div>'+f.see+'</div></div><div class="frow"><b>First</b><div>'+f.first+'</div></div><div class="frow"><b>Check</b><div>'+f.cause+'</div></div><div class="frow"><b>Fix it</b><div><ol>'+f.steps.map(function(x){return '<li>'+x+'</li>'}).join('')+'</ol></div></div>'+(f.note?'<div class="frow"><b>Note</b><div>'+f.note+'</div></div>':'')}
+var curF=null,doneF=null;
+function showCard(k){curF=k;doneF=null;drawCard()}
+function drawCard(){var c=$('#fcard');
+ if(doneF){c.className='fcard';c.innerHTML='<div class="fdone">'+doneF+'</div>';return}
+ if(!curF){c.className='fcard';c.innerHTML='<h3>Fault instructions</h3><p>Trip a fault above or tap a fault lamp on the door. Its card appears here with what to do.</p>';return}
+ var f=FAULTS[curF],on=!!S[curF];c.className='fcard'+(on?' live':'');
+ var h='<h3>'+f.t+'</h3>'+fBody(f)+'<div>'+RULE+'</div>';
+ if(on&&f.btn){h+='<button class="fbtn" type="button" id="fbtn">'+f.btn+'</button><div class="small mute" id="fhint"></div>'}
+ c.innerHTML=h;syncBtn()}
+function syncBtn(){if(!curF||!S[curF])return;var f=FAULTS[curF],b=$('#fbtn');if(!b)return;var ok=!f.stop||S.sa2==='stop';b.disabled=!ok;var hh=$('#fhint');if(hh)hh.textContent=ok?'':'Turn the Manual/Stop/Auto switch on the door to Stop first.'}
+$('#fcard').addEventListener('click',function(e){if(e.target.id!=='fbtn'||e.target.disabled)return;var k=curF;S[k]=false;var ch=$('.chip[data-c="'+k+'"]');if(ch)ch.setAttribute('aria-pressed','false');curF=null;doneF=FAULTS[k].t+' cleared. '+(FAULTS[k].stop?'Pick the mode on the door, then press Auto start if you\'re running in Auto.':'Press Auto start, then check for good flocs.');drawCard()});
+var LAMP_F={f1:'u1',f2:'u2',f3:'fr2',f4:'fr3',f5:'fr4',f6:'fr5',f7:'fr6'};
 $('#chips').innerHTML=CH.map(function(c){return '<button class="chip" type="button" aria-pressed="false" data-c="'+c[0]+'">'+c[1]+'</button>'}).join('');
-$$('.chip').forEach(function(b){b.addEventListener('click',function(){var k=b.getAttribute('data-c');S[k]=!S[k];b.setAttribute('aria-pressed',S[k]?'true':'false')})});
+$$('.chip').forEach(function(b){b.addEventListener('click',function(){var k=b.getAttribute('data-c');if(k==='plc'){S.plc=!S.plc;b.setAttribute('aria-pressed',S.plc?'true':'false');return}S[k]=true;b.setAttribute('aria-pressed','true');showCard(k)})});
+drawCard();
+$('#flist').innerHTML=['fr3','fr4','fr2','u1','u2','polyLow','slLow','fr5','fr6'].map(function(k){var f=FAULTS[k];return '<details><summary>'+f.t+'</summary><div class="fbody">'+fBody(f)+'</div></details>'}).join('');
 
 $('#dg2').innerHTML=machine('m2');var m2=$('#m2');
 function stn2off(){$$('.stn',m2).forEach(function(g){g.setAttribute('hidden','');g.style.display='none'})}stn2off();
@@ -843,8 +893,8 @@ function step(dt){
   S.start=S.stop=false;
   var coil=auto&&!S.ka5; S.kt2=coil?S.kt2+dt:0; S.kt2c=!coil||S.kt2<30;
   var n21=auto&&(S.ka5||S.km11||S.km12)&&S.kt2c, n19=man||n21;
-  S.km11=n19&&S.sa11&&!S.u1; S.km12=n19&&S.sa12;
-  S.km2=(man&&S.sa4)||(auto&&S.ka5);
+  S.km11=n19&&S.sa11&&!S.u1; S.km12=n19&&S.sa12&&!S.u2;
+  S.km2=((man&&S.sa4)||(auto&&S.ka5))&&!S.fr2;
   if(S.level>=HIGH)S.lvs=false; else if(S.level<=LOW)S.lvs=true;
   var ak=auto&&S.ka5&&S.lvs;
   S.km3=((man&&S.sa5)||ak)&&!S.slLow&&!S.fr3;
@@ -869,7 +919,7 @@ function render(screw,live,auto,man,ka3,coil){
   /* door */
   function cell(id){return $('.cell[data-id="'+id+'"]')}
   function lamp(id,on){$('[data-lamp]',cell(id)).classList.toggle('lit',!!on)}
-  lamp('pw',true);lamp('f1',live&&S.u1);lamp('f2',false);lamp('f3',false);lamp('f4',live&&S.fr3);lamp('f5',live&&S.fr4);lamp('f6',false);lamp('f7',false);
+  lamp('pw',true);lamp('f1',live&&S.u1);lamp('f2',live&&S.u2);lamp('f3',live&&S.fr2);lamp('f4',live&&S.fr3);lamp('f5',live&&S.fr4);lamp('f6',false);lamp('f7',false);
   function knob(id,ang,lit,pos){var c=cell(id),k=$('[data-knob]',c);k.style.transform='rotate('+ang+'deg)';if(lit!==undefined)k.classList.toggle('lit',!!lit);$('[data-pos]',c).textContent=pos||''}
   [['sa11',S.km11],['sa12',S.km12],['sa4',S.km2],['sa5',S.km3],['sa6',S.km4]].forEach(function(p){knob(p[0],S[p[0]]?35:-35,p[1],S[p[0]]?'ON':'OFF')});
   knob('sa2',S.sa2==='man'?-45:S.sa2==='auto'?45:0,undefined,S.sa2==='man'?'MANUAL':S.sa2==='auto'?'AUTO':'STOP');
@@ -885,8 +935,8 @@ function render(screw,live,auto,man,ka3,coil){
   var R=[
    ['KA5 auto run',S.ka5,S.sa1==='remote'?[sa2Auto,['SA1 Remote',true],['PLC 18/41',S.plc]]:[sa2Auto,['SB3 or hold',S.ka5],['SB4',true]]],
    ['KM11 drive 1#',S.km11,drive('SA11',S.sa11,'KA20',!S.u1)],
-   ['KM12 drive 2#',S.km12,drive('SA12',S.sa12,'KA21',true)],
-   ['KM2 mixer',S.km2,m?[sa2Man,['SA4',S.sa4],['FR2',true]]:[sa2Auto,['KA5',S.ka5],['FR2',true]]],
+   ['KM12 drive 2#',S.km12,drive('SA12',S.sa12,'KA21',!S.u2)],
+   ['KM2 mixer',S.km2,m?[sa2Man,['SA4',S.sa4],['FR2',!S.fr2]]:[sa2Auto,['KA5',S.ka5],['FR2',!S.fr2]]],
    ['KM3 sludge pump',S.km3,m?[sa2Man,['SA5',S.sa5],['Float 31/32',!S.slLow],['FR3',!S.fr3]]:[sa2Auto,['KA5',S.ka5],['LVS1',S.lvs],['Float 31/32',!S.slLow],['FR3',!S.fr3]]],
    ['KM4 dosing pump',S.km4,m?[sa2Man,['SA6',S.sa6],['Float 36/37',!S.polyLow],['FR4',!S.fr4]]:[sa2Auto,['KA5',S.ka5],['LVS1',S.lvs],['Float 36/37',!S.polyLow],['FR4',!S.fr4]]],
    ['Y1 wash valve',S.y1,[['KT1 pulse',screw&&S.kt1>=10],['or SB2',S.sb2>0]]]
@@ -909,12 +959,14 @@ function render(screw,live,auto,man,ka3,coil){
     else msg='Auto, idle. Press Auto start.';
   }else{
     if(S.km3&&!S.km4){msg='Sludge going in with no polymer. Nothing in the circuit stops this.';warn=true}
+    else if(S.fr2&&(S.km3||S.km4)){msg='Mixer tripped. Feed and polymer keep going with nothing mixing them.';warn=true}
     else if(S.lvs&&!S.km3&&(S.slLow||S.fr3)){msg='Sludge feed stopped. Polymer keeps dosing until the tank level says stop.';warn=S.km4}
     else if(!screw){msg='No screw running. Check SA11 and SA12, which still apply in Auto.';warn=true}
-    else if(S.u1||!S.sa11||!S.sa12){msg='One screw down. Its fault or switch blocks only that drive, and the other carries on.';warn=S.u1}
+    else if(S.u1||S.u2||!S.sa11||!S.sa12){msg='One screw down. Its fault or switch blocks only that drive, and the other carries on.';warn=S.u1||S.u2}
     else if(!S.lvs){msg='Running. Tank at high rod, so LVS1 has paused feed and polymer.'}
     else msg='Running. Feed, polymer, mixer and both screws on.';
   }
+  syncBtn();
   $('#stxt').textContent=msg;
   var st=$('#status');st.classList.toggle('w',warn);
   var mins=Math.floor(S.t);$('#clk').textContent='Wash in '+(screw?Math.max(0,Math.ceil(10-S.kt1)):'-')+' min\nTank '+Math.round(S.level*100)+'%';$('#clk').style.whiteSpace='pre';
