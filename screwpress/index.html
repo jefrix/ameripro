@@ -202,7 +202,21 @@ td.m{font-family:var(--mono);font-size:13.5px;white-space:nowrap}
 .frow>b{font:600 14px/1.45 var(--display);text-transform:uppercase;letter-spacing:.04em;color:var(--mute)}
 .frow>div{min-width:0}
 .fbtn{font:600 17px/1.2 var(--display);padding:9px 13px;border:2px solid var(--fg);background:var(--tag);color:var(--tagfg);cursor:pointer;border-radius:2px;justify-self:start}
-.fbtn:disabled{background:transparent;color:var(--mute);border-color:var(--line);cursor:not-allowed}
+.fbtn[aria-disabled="true"]{background:transparent;color:var(--mute);border-color:var(--line)}
+.seg{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:2px;width:100%}
+.seg button{all:unset;cursor:pointer;text-align:center;font:600 11px/22px var(--mono);border:1px solid var(--mute);border-radius:1px;color:var(--fg)}
+.seg button[aria-pressed="true"]{background:var(--plate);color:var(--platefg);border-color:var(--plate)}
+.seg button:focus-visible{outline:3px solid var(--tag)}
+#pop{position:fixed;inset:0;z-index:30;background:#000b;display:grid;place-items:center;padding:16px max(16px,env(safe-area-inset-right,0px)) 16px max(16px,env(safe-area-inset-left,0px));overflow:auto}
+.popc{background:var(--sheet);color:var(--fg);max-width:540px;width:100%;border-top:8px solid var(--warn);padding:18px 20px;display:grid;gap:12px;box-shadow:0 14px 50px #0009}
+.popc.warn{border-top-color:var(--tag)}
+.popc h3{font-size:26px}
+.popk{font:600 13px/1 var(--mono);letter-spacing:.06em;text-transform:uppercase;color:var(--mute)}
+.popc ol{margin:0;padding-left:1.45em;display:grid;gap:5px;font-size:16px;line-height:1.38}
+.popc li.done{color:var(--mute);text-decoration:line-through}
+.popc li.now{font-weight:700}
+.popc li.now::after{content:" \2190 do this next";font:500 12px var(--mono);color:var(--warn);white-space:nowrap}
+.popb{font:600 18px/1.2 var(--display);padding:10px 16px;border:2px solid var(--fg);background:var(--tag);color:var(--tagfg);cursor:pointer;border-radius:2px;justify-self:start}
 .fdone{font-weight:600;color:var(--on)}
 .flist{display:grid;gap:6px;margin-top:6px}
 .flist details{background:var(--sheet);border:1px solid var(--line);padding:0 13px}
@@ -234,6 +248,7 @@ td.m{font-family:var(--mono);font-size:13.5px;white-space:nowrap}
 </style>
 </head>
 <body>
+
 
 <div class="wrap">
 
@@ -313,7 +328,7 @@ td.m{font-family:var(--mono);font-size:13.5px;white-space:nowrap}
 
 <section class="stack" id="panel">
   <h2>Run the panel</h2>
-  <p>This door is a sim of ours, using the same press logic. It opens in Auto and running. Press <b>Auto stop</b> and watch the feed quit while the screws keep turning. Then trip a fault, follow its card and reset it. You can also tap a fault lamp on the door to read its card. The clock runs 60 times faster than real life.</p>
+  <p>This door is a sim of ours, using the same press logic. It opens in Auto and running. Press <b>Auto stop</b> and watch the feed quit while the screws keep turning. Then trip a fault, follow its card and reset it. You can also tap a fault lamp on the door to read its card. If you press something out of order, a popup explains the problem and the safe way to restart. The clock runs 60 times faster than real life.</p>
   <div class="sim">
     <div class="stack" style="gap:10px;min-width:0">
       <div class="door">
@@ -822,7 +837,7 @@ var CELLS=[
  {id:'sb2',l:'Solenoid valve OFF/ON',k:'pbg',d:'<span class="tag">SB2</span> Fires the wash valve by hand. Lit whenever <span class="tag">Y1</span> is open.'},
  {id:'start',l:'Auto start',k:'pbg',d:'<span class="tag">SB3</span> Latches <span class="tag">KA5</span> when <span class="tag">SA2</span> is in Auto and <span class="tag">SA1</span> is Local. Lit while the auto cycle is running.'},
  {id:'stop',l:'Auto stop',k:'pbr',d:'<span class="tag">SB4</span> Drops <span class="tag">KA5</span>. Feed stops at once, and the screws run on until <span class="tag">KT2</span> times out.'},
- {id:'sa2',l:'Manual/ Stop/Auto',k:'sel3',d:'<span class="tag">SA2</span> The master mode switch for the press. Each click moves it one position, so Stop always comes between Manual and Auto.'},
+ {id:'sa2',l:'Manual/ Stop/Auto',k:'sel3',d:'<span class="tag">SA2</span> The master mode switch for the press. Use M, S or A to choose Manual, Stop or Auto. Clicking the knob also moves between Stop and the last mode.'},
  {id:'sa8',l:'Solid liquid equilibrium Manual/ stop/Auto',k:'na',d:'<span class="tag">SA8</span> Mode switch for the separator. Not part of this demo.'},
  {id:'sa9',l:'Solid liquid equilibrium Manual/ stop/Remote',k:'na',d:'<span class="tag">SA9</span> Chooses local or PLC control of the separator. Not part of this demo.'},
  {id:'sa10',l:'Control Circuit Manual/ stop/Auto',k:'na',d:'<span class="tag">SA10</span> Runs <span class="tag">KM7</span> by hand, or on timer <span class="tag">KT3</span> pulses while the separator runs. This is the vibrator. Not part of this demo.'},
@@ -833,21 +848,22 @@ var CELLS=[
 $('#grid').innerHTML=CELLS.map(function(c){
   var g={lamp:'<span class="lamp" data-lamp></span>',lampw:'<span class="lamp w" data-lamp></span>',na:'<span class="knob na"></span>',sel2:'<span class="knob" data-knob></span>',sel3:'<span class="knob" data-knob></span>',bsel:'<span class="knob blue" data-knob></span>',pbg:'<span class="pb g" data-pb></span>',pbr:'<span class="pb r" data-pb></span>',es:'<span class="es" data-pb></span>'}[c.k];
   var lb=c.id==='es'?'<span class="lbl" style="visibility:hidden">E-stop</span>':'<span class="lbl">'+c.l+'</span>';
+  if(c.id==='sa2')return '<div class="cell" data-id="sa2" role="group" aria-label="'+c.l+'">'+lb+g+'<span class="posn" data-pos></span><span class="seg"><button type="button" data-m="man" aria-label="Set to Manual">M</button><button type="button" data-m="stop" aria-label="Set to Stop">S</button><button type="button" data-m="auto" aria-label="Set to Auto">A</button></span></div>';
   return '<button class="cell" type="button" data-id="'+c.id+'" aria-label="'+c.l+'">'+lb+g+'<span class="posn" data-pos></span></button>'}).join('');
 var byId={};CELLS.forEach(function(c){byId[c.id]=c});
 function info(c){$('#info').innerHTML='<b>'+c.l+'.</b> '+c.d;$$('.cell').forEach(function(e){e.classList.toggle('sel',e.getAttribute('data-id')===c.id)})}
-var seq=['man','stop','auto','stop'],seqI=2;
+var prevMode='auto',restartPending=false;
 $('#grid').addEventListener('click',function(e){
   var b=e.target.closest('.cell');if(!b)return;var id=b.getAttribute('data-id');info(byId[id]);if(LAMP_F[id])showCard(LAMP_F[id]);
-  if(id==='sa2'){seqI=(seqI+1)%4;S.sa2=seq[seqI]}
+  if(id==='sa2'){var sg=e.target.closest('[data-m]');setMode(sg?sg.getAttribute('data-m'):(S.sa2==='stop'?prevMode:'stop'))}
   else if(id==='sa1'){S.sa1=S.sa1==='local'?'remote':'local'}
-  else if(['sa11','sa12','sa4','sa5','sa6'].indexOf(id)>=0){S[id]=!S[id]}
-  else if(id==='start'){S.start=true}
+  else if(['sa11','sa12','sa4','sa5','sa6'].indexOf(id)>=0){if(!S[id]&&trips().length){popup({t:'Clear the fault before turning anything on',m:'Running a machine with a fault still active can damage it or hide what caused the trip. The demo left this switch off.'})}else{S[id]=!S[id]}}
+  else if(id==='start'){tryStart()}
   else if(id==='stop'){S.stop=true}
   else if(id==='sb2'){S.sb2=1.2}
-  else if(id==='es'){S.estop=!S.estop}
+  else if(id==='es'){if(S.estop&&S.sa2!=='stop'){popup({t:'Turn the switch to Stop before releasing',m:'The manual warns the machine could start and injure someone if the E-stop is released with the mode switch out of Stop. The demo kept the button pressed.',steps:estopSteps()})}else{S.estop=!S.estop}}
 });
-$$('.pot').forEach(function(p){p.addEventListener('click',function(){$('#info').innerHTML='<b>Speed dials.</b> <span class="tag">R1</span> and <span class="tag">R2</span> set the speed of <span class="tag">U1</span> and <span class="tag">U2</span> through each drive\'s analog input. Their locked covers keep settings from drifting. Not part of this demo.'})});
+$$('.pot').forEach(function(p){p.addEventListener('click',function(){if(trips().length){popup({t:'Speed dials don\'t clear a fault',m:'Changing speed can hide the cause or overload the drive. Leave the dials where they are and clear the fault first.'})}$('#info').innerHTML='<b>Speed dials.</b> <span class="tag">R1</span> and <span class="tag">R2</span> set the speed of <span class="tag">U1</span> and <span class="tag">U2</span> through each drive\'s analog input. Their locked covers keep settings from drifting. Not part of this demo.'})});
 var CH=[['polyLow','Polymer tank runs low'],['slLow','Sludge tank runs low'],['fr4','Trip dosing pump'],['fr3','Trip sludge pump'],['fr2','Trip mixer'],['u1','Fault drive 1#'],['u2','Fault drive 2#'],['plc','Close PLC start contact']];
 var RESET_COMMON=function(fr,sw){return ['Turn the mode switch <span class="tag">'+sw+'</span> to Stop.','Turn off main power and follow our lockout procedure. Keep clear of the drives and terminals.','Fix the cause. If the relay is very hot, let it cool first.','Press the blue RESET on <span class="tag">'+fr+'</span>, in the row under the contactors. Leave its dial alone.','Close the door, restore power and pick the mode. In Auto, press Auto start.']};
 var AUTO_FIRST='In Auto, press <b>Auto stop</b> so feed and polymer stop and the screws clear the barrel.';
@@ -865,16 +881,48 @@ var FAULTS={
 var RULE='<b>Call for help if it trips again.</b> The manual says to stop and contact the maker or agent if a relay keeps tripping, because forcing it can cause serious damage. Don\'t turn up an overload dial, change the speed or hold RESET to keep it running.';
 function fBody(f){return '<div class="frow"><b>You\'ll see</b><div>'+f.see+'</div></div><div class="frow"><b>First</b><div>'+f.first+'</div></div><div class="frow"><b>Check</b><div>'+f.cause+'</div></div><div class="frow"><b>Fix it</b><div><ol>'+f.steps.map(function(x){return '<li>'+x+'</li>'}).join('')+'</ol></div></div>'+(f.note?'<div class="frow"><b>Note</b><div>'+f.note+'</div></div>':'')}
 var curF=null,doneF=null;
+function trips(){return ['fr3','fr4','fr2','u1','u2'].filter(function(k){return S[k]})}
+function lows(){return ['polyLow','slLow'].filter(function(k){return S[k]})}
+var TSA='the <b>Manual/Stop/Auto</b> switch';
+function recSteps(){
+ var t=trips(),l=lows();
+ if(t.length){var f=FAULTS[t[0]];return [['Press <b>Auto stop</b>.',!S.ka5],['Turn '+TSA+' to <b>Stop</b>.',S.sa2==='stop'],['Fix the cause on the <b>'+f.t+'</b> card. Lock out the power first.',false],['Use <b>'+f.btn+'</b>.',false],['Turn the switch to <b>Auto</b>.',false],['Press <b>Auto start</b>, then watch it restart.',false]]}
+ if(l.length){var g=FAULTS[l[0]];return [['Press <b>Auto stop</b>.',!S.ka5],['Deal with <b>'+g.t+'</b>, then use <b>'+g.btn+'</b>.',false],['Turn '+TSA+' to <b>Auto</b> if needed.',S.sa2==='auto'],['Press <b>Auto start</b>, then check for good flocs.',false]]}
+ return [['Turn '+TSA+' to <b>Auto</b>.',S.sa2==='auto'],['Set the Local/Remote switch to <b>Local</b>.',S.sa1==='local'],['Press <b>Auto start</b>, then check for good flocs.',false]];
+}
+function estopSteps(){return [['Turn '+TSA+' to <b>Stop</b>.',S.sa2==='stop'],['Twist the E-stop to release it.',false],['Deal with whatever caused the stop.',false],['Turn the switch to <b>Auto</b>, then press <b>Auto start</b>.',false]]}
+var popLast=null;
+function popup(o){if($('#pop'))return;popLast=document.activeElement;
+ var st=o.steps||recSteps(),seen=false,li=st.map(function(x){var c='';if(x[1])c='done';else if(!seen){c='now';seen=true}return '<li class="'+c+'">'+x[0]+'</li>'}).join('');
+ var d=document.createElement('div');d.id='pop';d.innerHTML='<div class="popc'+(o.warn?' warn':'')+'" role="alertdialog" aria-modal="true" aria-labelledby="pop-t" aria-describedby="pop-m"><div class="popk">'+(o.warn?'Caution':'Not yet')+'</div><h3 id="pop-t">'+o.t+'</h3><p id="pop-m">'+o.m+'</p><div class="stack" style="gap:6px"><b>How to restart safely</b><ol>'+li+'</ol></div><button class="popb" type="button" id="pop-ok">Got it</button></div>';
+ document.body.appendChild(d);$('#pop-ok').focus();
+ function close(){d.remove();document.removeEventListener('keydown',key);var t=trips()[0]||lows()[0];if(t&&curF!==t)showCard(t);try{if(popLast&&popLast.focus)popLast.focus()}catch(x){}}
+ function key(e){if(e.key==='Escape'||e.key==='Enter'){e.preventDefault();close()}else if(e.key==='Tab'){e.preventDefault();$('#pop-ok').focus()}}
+ $('#pop-ok').addEventListener('click',close);d.addEventListener('click',function(e){if(e.target===d)close()});document.addEventListener('keydown',key);
+}
+function setMode(m){var old=S.sa2;if(old===m)return;if(old!=='stop')prevMode=old;
+ var skipped=m==='stop'&&S.ka5;S.sa2=m;if(m!=='auto')S.ka5=false;
+ if(skipped){popup({warn:true,t:'That skipped Auto stop',m:'Going straight to Stop halts the screws at once and leaves sludge under pressure in the barrel. Next time press Auto stop first so the screws can clear it. You can continue from here, but stop and read the fault card if a screw won\'t turn or a drive faults on restart.'})}
+ else if(m!=='stop'&&trips().length){popup({t:'Stay at Stop until the fault is cleared',m:'The overload or drive fault is still active. Moving out of Stop could restart the machine when the fault clears.'})}
+ else if(m==='man'&&restartPending){popup({warn:true,t:'Manual isn\'t the way to restart',m:'The manual says to use Manual only for checking pumps and motors. The level rods don\'t control the sludge pump there, so the mixing tank can overflow.'})}
+}
+function tryStart(){
+ if(S.estop){popup({t:'The E-stop is still pressed',m:'Auto start won\'t work until the E-stop is released safely.',steps:estopSteps()});return}
+ if(trips().length||lows().length){popup({t:'Clear the fault before Auto start',m:'Starting now would run the rest of the machine with one part down, which can send untreated sludge through the press. The real panel may not block this, so the demo stops you here.'});return}
+ if(S.sa1==='remote'){popup({t:'The panel is set to Remote',m:'In Remote, the PLC starts the press and the Auto start button does nothing.'});return}
+ if(S.sa2!=='auto'){popup({t:'Auto start only works in Auto',m:'The switch is at '+(S.sa2==='man'?'Manual':'Stop')+', so this button has no effect.'});return}
+ S.start=true;restartPending=false;
+}
 function showCard(k){curF=k;doneF=null;drawCard()}
 function drawCard(){var c=$('#fcard');
  if(doneF){c.className='fcard';c.innerHTML='<div class="fdone">'+doneF+'</div>';return}
  if(!curF){c.className='fcard';c.innerHTML='<h3>Fault instructions</h3><p>Trip a fault above or tap a fault lamp on the door. Its card appears here with what to do.</p>';return}
  var f=FAULTS[curF],on=!!S[curF];c.className='fcard'+(on?' live':'');
  var h='<h3>'+f.t+'</h3>'+fBody(f)+'<div>'+RULE+'</div>';
- if(on&&f.btn){h+='<button class="fbtn" type="button" id="fbtn">'+f.btn+'</button><div class="small mute" id="fhint"></div>'}
+ if(on&&f.btn){h+='<button class="fbtn" type="button" id="fbtn" aria-disabled="false">'+f.btn+'</button><div class="small mute" id="fhint"></div>'}
  c.innerHTML=h;syncBtn()}
-function syncBtn(){if(!curF||!S[curF])return;var f=FAULTS[curF],b=$('#fbtn');if(!b)return;var ok=!f.stop||S.sa2==='stop';b.disabled=!ok;var hh=$('#fhint');if(hh)hh.textContent=ok?'':'Turn the Manual/Stop/Auto switch on the door to Stop first.'}
-$('#fcard').addEventListener('click',function(e){if(e.target.id!=='fbtn'||e.target.disabled)return;var k=curF;S[k]=false;var ch=$('.chip[data-c="'+k+'"]');if(ch)ch.setAttribute('aria-pressed','false');curF=null;doneF=FAULTS[k].t+' cleared. '+(FAULTS[k].stop?'Pick the mode on the door, then press Auto start if you\'re running in Auto.':'Press Auto start, then check for good flocs.');drawCard()});
+function syncBtn(){if(!curF||!S[curF])return;var f=FAULTS[curF],b=$('#fbtn');if(!b)return;var ok=!f.stop||S.sa2==='stop';b.setAttribute('aria-disabled',ok?'false':'true');var hh=$('#fhint');if(hh)hh.textContent=ok?'':'Turn the Manual/Stop/Auto switch on the door to Stop first.'}
+$('#fcard').addEventListener('click',function(e){if(e.target.id!=='fbtn')return;if(FAULTS[curF].stop&&S.sa2!=='stop'){popup({t:'Turn the switch to Stop before resetting',m:'The machine could start and injure someone when this resets. Reset only with the Manual/Stop/Auto switch at Stop.'});return}var k=curF;if(FAULTS[k].stop)restartPending=true;S[k]=false;var ch=$('.chip[data-c="'+k+'"]');if(ch)ch.setAttribute('aria-pressed','false');curF=null;doneF=FAULTS[k].t+' cleared. '+(FAULTS[k].stop?'To restart, turn the switch to Auto, then press Auto start.':'Press Auto start, then check for good flocs.');drawCard()});
 var LAMP_F={f1:'u1',f2:'u2',f3:'fr2',f4:'fr3',f5:'fr4',f6:'fr5',f7:'fr6'};
 $('#chips').innerHTML=CH.map(function(c){return '<button class="chip" type="button" aria-pressed="false" data-c="'+c[0]+'">'+c[1]+'</button>'}).join('');
 $$('.chip').forEach(function(b){b.addEventListener('click',function(){var k=b.getAttribute('data-c');if(k==='plc'){S.plc=!S.plc;b.setAttribute('aria-pressed',S.plc?'true':'false');return}S[k]=true;b.setAttribute('aria-pressed','true');showCard(k)})});
@@ -923,6 +971,7 @@ function render(screw,live,auto,man,ka3,coil){
   function knob(id,ang,lit,pos){var c=cell(id),k=$('[data-knob]',c);k.style.transform='rotate('+ang+'deg)';if(lit!==undefined)k.classList.toggle('lit',!!lit);$('[data-pos]',c).textContent=pos||''}
   [['sa11',S.km11],['sa12',S.km12],['sa4',S.km2],['sa5',S.km3],['sa6',S.km4]].forEach(function(p){knob(p[0],S[p[0]]?35:-35,p[1],S[p[0]]?'ON':'OFF')});
   knob('sa2',S.sa2==='man'?-45:S.sa2==='auto'?45:0,undefined,S.sa2==='man'?'MANUAL':S.sa2==='auto'?'AUTO':'STOP');
+  $$('.seg button').forEach(function(x){x.setAttribute('aria-pressed',x.getAttribute('data-m')===S.sa2?'true':'false')});
   knob('sa1',S.sa1==='local'?-35:35,undefined,S.sa1==='local'?'LOCAL':'REMOTE');
   $('[data-pb]',cell('sb2')).classList.toggle('lit',S.y1);
   $('[data-pb]',cell('start')).classList.toggle('lit',S.ka5);
@@ -985,6 +1034,7 @@ window.__calcFlow=calcFlow;
 
 })();
 </script>
+
 
 </body>
 </html>
