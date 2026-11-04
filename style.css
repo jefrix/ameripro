@@ -225,6 +225,21 @@ body.auth-locked #root {
   background: rgba(115,255,154,0.10);
 }
 
+.tb-actions {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  flex-shrink: 0;
+}
+.tb-link {
+  display: inline-flex;
+  align-items: center;
+  color: #73ff9a;
+  border-color: #73ff9a;
+  text-decoration: none;
+  white-space: nowrap;
+}
+
 /* ============ MAIN LAYOUT ============ */
 .main {
   display: grid;
