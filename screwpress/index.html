@@ -202,6 +202,10 @@ td.m{font-family:var(--mono);font-size:13.5px;white-space:nowrap}
 .frow>b{font:600 14px/1.45 var(--display);text-transform:uppercase;letter-spacing:.04em;color:var(--mute)}
 .frow>div{min-width:0}
 .fbtn{font:600 17px/1.2 var(--display);padding:9px 13px;border:2px solid var(--fg);background:var(--tag);color:var(--tagfg);cursor:pointer;border-radius:2px;justify-self:start}
+.plcrow{display:flex;flex-wrap:wrap;gap:6px 10px;align-items:center;border-top:1px solid var(--line);padding-top:10px}
+.plcrow>span{font-size:14px;line-height:1.35;color:var(--mute);flex:1 1 220px;min-width:0}
+#plcbtn[aria-disabled="true"]{color:var(--mute);border-color:var(--line);background:transparent}
+#plcbtn[aria-pressed="true"]{background:var(--on);border-color:var(--on);color:#fff}
 .fbtn[aria-disabled="true"]{background:transparent;color:var(--mute);border-color:var(--line)}
 .seg{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:2px;width:100%}
 .seg button{all:unset;cursor:pointer;text-align:center;font:600 11px/22px var(--mono);border:1px solid var(--mute);border-radius:1px;color:var(--fg)}
@@ -344,6 +348,7 @@ td.m{font-family:var(--mono);font-size:13.5px;white-space:nowrap}
       <div class="status" id="status"><span id="stxt"></span><span class="clock" id="clk"></span></div>
       <div class="dgwrap" id="dg2"></div>
       <div class="chips" id="chips"></div>
+      <div class="plcrow"><button class="chip" type="button" id="plcbtn" aria-pressed="false" aria-disabled="true">PLC remote start</button><span id="plchint"></span></div>
       <div class="fcard" id="fcard" aria-live="polite"></div>
       <div>
         <div id="rungs"></div>
@@ -856,15 +861,15 @@ var prevMode='auto',restartPending=false;
 $('#grid').addEventListener('click',function(e){
   var b=e.target.closest('.cell');if(!b)return;var id=b.getAttribute('data-id');info(byId[id]);if(LAMP_F[id])showCard(LAMP_F[id]);
   if(id==='sa2'){var sg=e.target.closest('[data-m]');setMode(sg?sg.getAttribute('data-m'):(S.sa2==='stop'?prevMode:'stop'))}
-  else if(id==='sa1'){S.sa1=S.sa1==='local'?'remote':'local'}
-  else if(['sa11','sa12','sa4','sa5','sa6'].indexOf(id)>=0){if(!S[id]&&trips().length){popup({t:'Clear the fault before turning anything on',m:'Running a machine with a fault still active can damage it or hide what caused the trip. The demo left this switch off.'})}else{S[id]=!S[id]}}
+  else if(id==='sa1'){S.sa1=S.sa1==='local'?'remote':'local';if(S.sa1==='local')S.plc=false}
+  else if(['sa11','sa12','sa4','sa5','sa6'].indexOf(id)>=0){if(!S[id]&&trips().length){popup({t:'Clear the fault before turning anything on',m:'Running a machine with a fault still active can damage it or hide what caused the trip. The demo left this switch off.'})}else{S[id]=!S[id];if(['sa4','sa5','sa6'].indexOf(id)>=0&&S.sa2!=='man')manualOnly(id)}}
   else if(id==='start'){tryStart()}
   else if(id==='stop'){S.stop=true}
   else if(id==='sb2'){S.sb2=1.2}
   else if(id==='es'){if(S.estop&&S.sa2!=='stop'){popup({t:'Turn the switch to Stop before releasing',m:'The manual warns the machine could start and injure someone if the E-stop is released with the mode switch out of Stop. The demo kept the button pressed.',steps:estopSteps()})}else{S.estop=!S.estop}}
 });
 $$('.pot').forEach(function(p){p.addEventListener('click',function(){if(trips().length){popup({t:'Speed dials don\'t clear a fault',m:'Changing speed can hide the cause or overload the drive. Leave the dials where they are and clear the fault first.'})}$('#info').innerHTML='<b>Speed dials.</b> <span class="tag">R1</span> and <span class="tag">R2</span> set the speed of <span class="tag">U1</span> and <span class="tag">U2</span> through each drive\'s analog input. Their locked covers keep settings from drifting. Not part of this demo.'})});
-var CH=[['polyLow','Polymer tank runs low'],['slLow','Sludge tank runs low'],['fr4','Trip dosing pump'],['fr3','Trip sludge pump'],['fr2','Trip mixer'],['u1','Fault drive 1#'],['u2','Fault drive 2#'],['plc','Close PLC start contact']];
+var CH=[['polyLow','Polymer tank runs low'],['slLow','Sludge tank runs low'],['fr4','Trip dosing pump'],['fr3','Trip sludge pump'],['fr2','Trip mixer'],['u1','Fault drive 1#'],['u2','Fault drive 2#']];
 var SW_PRESS='the <b>Manual/Stop/Auto</b> switch (fourth row, fourth from left)';
 var SW_SEP='the <b>Solid liquid equilibrium Manual/stop/Auto</b> switch (fourth row, far right)';
 var RESET_COMMON=function(fr,sw){return ['Turn '+sw+' to Stop.','Turn off main power and follow our lockout procedure. Keep clear of the drives and terminals.','Fix the cause. If the relay is very hot, let it cool first.','Open the cabinet and find the overload relay with the yellow <span class="tag">'+fr+'</span> label, in the row under the contactors. Press its blue RESET. Leave its dial alone.','Close the door, restore power and pick the mode. In Auto, press the green <b>Auto start</b> button (fourth row, second from left).']};
@@ -895,8 +900,8 @@ function recSteps(){
 function estopSteps(){return [['Turn '+TSA+' to <b>Stop</b>.',S.sa2==='stop'],['Twist the E-stop to release it.',false],['Deal with whatever caused the stop.',false],['Turn the switch to <b>Auto</b>, then press <b>Auto start</b>.',false]]}
 var popLast=null;
 function popup(o){if($('#pop'))return;popLast=document.activeElement;
- var st=o.steps||recSteps(),seen=false,li=st.map(function(x){var c='';if(x[1])c='done';else if(!seen){c='now';seen=true}return '<li class="'+c+'">'+x[0]+'</li>'}).join('');
- var d=document.createElement('div');d.id='pop';d.innerHTML='<div class="popc'+(o.warn?' warn':'')+'" role="alertdialog" aria-modal="true" aria-labelledby="pop-t" aria-describedby="pop-m"><div class="popk">'+(o.warn?'Caution':'Not yet')+'</div><h3 id="pop-t">'+o.t+'</h3><p id="pop-m">'+o.m+'</p><div class="stack" style="gap:6px"><b>How to restart safely</b><ol>'+li+'</ol></div><button class="popb" type="button" id="pop-ok">Got it</button></div>';
+ var st=o.steps===false?[]:(o.steps||recSteps()),seen=false,li=st.map(function(x){var c='';if(x[1])c='done';else if(!seen){c='now';seen=true}return '<li class="'+c+'">'+x[0]+'</li>'}).join('');
+ var d=document.createElement('div');d.id='pop';d.innerHTML='<div class="popc'+(o.warn?' warn':'')+'" role="alertdialog" aria-modal="true" aria-labelledby="pop-t" aria-describedby="pop-m"><div class="popk">'+(o.kick||(o.warn?'Caution':'Not yet'))+'</div><h3 id="pop-t">'+o.t+'</h3><p id="pop-m">'+o.m+'</p>'+(st.length?'<div class="stack" style="gap:6px"><b>How to restart safely</b><ol>'+li+'</ol></div>':'')+'<button class="popb" type="button" id="pop-ok">Got it</button></div>';
  document.body.appendChild(d);$('#pop-ok').focus();
  function close(){d.remove();document.removeEventListener('keydown',key);var t=trips()[0]||lows()[0];if(t&&curF!==t)showCard(t);try{if(popLast&&popLast.focus)popLast.focus()}catch(x){}}
  function key(e){if(e.key==='Escape'||e.key==='Enter'){e.preventDefault();close()}else if(e.key==='Tab'){e.preventDefault();$('#pop-ok').focus()}}
@@ -908,6 +913,14 @@ function setMode(m){var old=S.sa2;if(old===m)return;if(old!=='stop')prevMode=old
  else if(m!=='stop'&&trips().length){popup({t:'Stay at Stop until the fault is cleared',m:'The overload or drive fault is still active. Moving out of Stop could restart the machine when the fault clears.'})}
  else if(m==='man'&&restartPending){popup({warn:true,t:'Manual isn\'t the way to restart',m:'The manual says to use Manual only for checking pumps and motors. The level rods don\'t control the sludge pump there, so the mixing tank can overflow.'})}
 }
+function manualOnly(id){var n={sa4:'mixer',sa5:'sludge pump',sa6:'dosing pump'}[id];
+ popup({kick:'Good to know',warn:true,steps:false,t:'This switch only works in Manual',m:S.sa2==='auto'?'In Auto, the panel runs the '+n+' by itself, so this switch has no effect. To stop it, press the red <b>Auto stop</b> button (fourth row, third from left).':'The Manual/Stop/Auto switch is at Stop, so this switch has no effect. To run the '+n+' by itself, use Manual, and only to check pumps and motors.'})}
+$('#plcbtn').addEventListener('click',function(){
+ if(S.sa1!=='remote'){popup({kick:'Good to know',warn:true,steps:false,t:'Remote start needs Remote',m:'A plant PLC can only start the press with the Local/Remote switch at Remote. It\'s the knob at the far right of the second row. Leave the real switch on Local unless a PLC is connected to terminals 18 and 41.'});return}
+ if(S.sa2!=='auto'){popup({kick:'Good to know',warn:true,steps:false,t:'Remote start also needs Auto',m:'Turn the Manual/Stop/Auto switch (fourth row, fourth from left) to Auto first.'});return}
+ S.plc=!S.plc});
+function syncPlc(){var b=$('#plcbtn'),ok=S.sa1==='remote'&&S.sa2==='auto';b.setAttribute('aria-disabled',ok?'false':'true');b.setAttribute('aria-pressed',S.plc?'true':'false');
+ $('#plchint').textContent=S.sa1!=='remote'?'Not a fault. Only works with the Local/Remote switch at Remote.':S.sa2!=='auto'?'Remote is on. Turn the Manual/Stop/Auto switch to Auto to use this.':S.plc?'PLC contact closed, so the press runs. Press again to open it and stop.':'Stands in for a plant PLC. Press to close its contact and start the press.'}
 function tryStart(){
  if(S.estop){popup({t:'The E-stop is still pressed',m:'Auto start won\'t work until the E-stop is released safely.',steps:estopSteps()});return}
  if(trips().length||lows().length){popup({t:'Clear the fault before Auto start',m:'Starting now would run the rest of the machine with one part down, which can send untreated sludge through the press. The real panel may not block this, so the demo stops you here.'});return}
@@ -927,7 +940,7 @@ function syncBtn(){if(!curF||!S[curF])return;var f=FAULTS[curF],b=$('#fbtn');if(
 $('#fcard').addEventListener('click',function(e){if(e.target.id!=='fbtn')return;if(FAULTS[curF].stop&&S.sa2!=='stop'){popup({t:'Turn the switch to Stop before resetting',m:'The machine could start and injure someone when this resets. Reset only with the Manual/Stop/Auto switch at Stop.'});return}var k=curF;if(FAULTS[k].stop)restartPending=true;S[k]=false;var ch=$('.chip[data-c="'+k+'"]');if(ch)ch.setAttribute('aria-pressed','false');curF=null;doneF=FAULTS[k].t+' cleared. '+(FAULTS[k].stop?'To restart, turn the switch to Auto, then press Auto start.':'Press Auto start, then check for good flocs.');drawCard()});
 var LAMP_F={f1:'u1',f2:'u2',f3:'fr2',f4:'fr3',f5:'fr4',f6:'fr5',f7:'fr6'};
 $('#chips').innerHTML=CH.map(function(c){return '<button class="chip" type="button" aria-pressed="false" data-c="'+c[0]+'">'+c[1]+'</button>'}).join('');
-$$('.chip').forEach(function(b){b.addEventListener('click',function(){var k=b.getAttribute('data-c');if(k==='plc'){S.plc=!S.plc;b.setAttribute('aria-pressed',S.plc?'true':'false');return}S[k]=true;b.setAttribute('aria-pressed','true');showCard(k)})});
+$$('.chip').forEach(function(b){b.addEventListener('click',function(){var k=b.getAttribute('data-c');S[k]=true;b.setAttribute('aria-pressed','true');showCard(k)})});
 drawCard();
 $('#flist').innerHTML=['fr3','fr4','fr2','u1','u2','polyLow','slLow','fr5','fr6'].map(function(k){var f=FAULTS[k];return '<details><summary>'+f.t+'</summary><div class="fbody">'+fBody(f)+'</div></details>'}).join('');
 
@@ -1017,7 +1030,7 @@ function render(screw,live,auto,man,ka3,coil){
     else if(!S.lvs){msg='Running. Tank at high rod, so LVS1 has paused feed and polymer.'}
     else msg='Running. Feed, polymer, mixer and both screws on.';
   }
-  syncBtn();
+  syncBtn();syncPlc();
   $('#stxt').textContent=msg;
   var st=$('#status');st.classList.toggle('w',warn);
   var mins=Math.floor(S.t);$('#clk').textContent='Wash in '+(screw?Math.max(0,Math.ceil(10-S.kt1)):'-')+' min\nTank '+Math.round(S.level*100)+'%';$('#clk').style.whiteSpace='pre';
