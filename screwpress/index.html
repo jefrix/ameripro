@@ -1054,7 +1054,7 @@ function render(screw,live,auto,man,ka3,coil){
     else if(S.km3&&S.level>=.99){msg='Manual: tank full and going out the overflow. Rods have no say in this mode.';warn=true}
     else if(S.km3){msg='Manual: the operator is the level control. Rods do not stop the pump.'}
     else if(screw){msg='Manual: screws turning on the door switches.'}
-    else msg='Manual: nothing runs until it's switched on.';
+    else msg='Manual: nothing runs until a switch is turned on.';
   }else if(!S.ka5){
     if(screw){msg='Run-on: feed and polymer off, screws clearing the barrel. KT2 stops them in '+left+' min.'}
     else if(S.sa1==='remote'){msg='Remote: waiting on the PLC start contact at terminals 18/41.'}
