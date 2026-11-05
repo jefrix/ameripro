@@ -271,7 +271,7 @@ td.m{font-family:var(--mono);font-size:13.5px;white-space:nowrap}
   <div class="stack" style="gap:20px">
     <h4>AMERIPRO &ndash; Jeff Ricks, Technical Director</h4>
     <h1>How the PJDL&#8209;302 works</h1>
-    <p class="lead">This is a two-shaft multi-disc screw press. Polymer makes wet sludge clump, a slow screw drags those clumps uphill through a stack of steel rings, and the water squeezes out between the rings. What comes out the top is a damp cake.</p>
+    <p class="lead">This is a two-shaft multi-disc screw press, custom-built for us in China to process restaurant fats, oils and grease (F.O.G.). Polymer makes wet F.O.G. sludge clump, a slow screw drags those clumps uphill through a stack of steel rings, and the water squeezes out between the rings. What comes out the top is a damp cake.</p>
     <div class="plate" aria-label="Nameplate data">
       <div><span>Model</span><b>PJDL-302</b></div>
       <div><span>Power</span><b>2.05 kW</b><i>2.75 hp</i></div>
@@ -527,7 +527,7 @@ td.m{font-family:var(--mono);font-size:13.5px;white-space:nowrap}
 
 <section class="stack" id="startup">
   <h2>Starting it up</h2>
-  <p>This condenses the manual's start-up pages and adapts them to our panel. Have an electrician do the supply wiring and phase check. Settle the jumpers and missing relays on the <a href="notes.html">notes page</a> before putting it in service.</p>
+  <p>This condenses the manual's start-up pages and adapts them to our panel. The press manual covers the whole PJDL series and doesn't address F.O.G., so use it for general operation. The wiring drawings are the reference for this panel. Have an electrician do the supply wiring and phase check. Settle the jumpers and missing relays on the <a href="notes.html">notes page</a> before putting it in service.</p>
   <div class="notes">
     <div class="stack"><h3>Before power</h3><ol class="steps">
       <li>Check the machine against the order and nameplate, and photograph any shipping damage before accepting it.</li>
@@ -565,7 +565,7 @@ td.m{font-family:var(--mono);font-size:13.5px;white-space:nowrap}
       </ul></div>
   </div>
   <h3 style="margin-top:12px">Feed and polymer calculator</h3>
-  <p>Uses the formulas on manual pages 21&ndash;22. Its example of 12 kg-DS/h at 10,000 mg/L gives 20 L/min of sludge, and 18 kg-DS/h at 0.6% diluted 1,000 times gives 1.8 L/min of polymer. The starting values below are examples, not recommendations. Our polymer supplier or a jar test sets the real dose.</p>
+  <p>Uses the formulas on manual pages 21&ndash;22. Its example of 12 kg-DS/h at 10,000 mg/L gives 20 L/min of sludge, and 18 kg-DS/h at 0.6% diluted 1,000 times gives 1.8 L/min of polymer. The starting values below are examples, not recommendations, and aren't F.O.G. figures. Use the maker's numbers once we have them. Our polymer supplier or a jar test sets the real dose.</p>
   <form class="calc" id="calc">
     <label for="c-ds">Dry solids target (kg-DS/h)<input id="c-ds" type="number" min="0" step="1" value="70"></label>
     <label for="c-conc">Sludge concentration (mg/L)<input id="c-conc" type="number" min="1" step="1000" value="10000"></label>
@@ -734,7 +734,7 @@ function setLevels(root,lev){
 
 /* ---------- stages ---------- */
 var ST=[
- ['Feed','KM3','Sludge is pumped in','The sludge pump lifts wet sludge from the sludge tank into the metering tank. A weir and a level adjustment pipe there decide how much passes on to the mixing tank, and the excess returns through the overflow. That pipe sets the feed rate. In Auto, electrode rods in the mixing tank stop the pump at high level and restart it when the level falls.',[['KM3','sludge pump contactor, overload FR3'],['LVS1','FLR-202C level relay, reading rods E1 to E3 in the mixing tank'],['31/32','sludge tank low-level float']]],
+ ['Feed','KM3','Sludge is pumped in','The sludge pump lifts wet F.O.G. sludge from the sludge tank into the metering tank. A weir and a level adjustment pipe there decide how much passes on to the mixing tank, and the excess returns through the overflow. That pipe sets the feed rate. In Auto, electrode rods in the mixing tank stop the pump at high level and restart it when the level falls.',[['KM3','sludge pump contactor, overload FR3'],['LVS1','FLR-202C level relay, reading rods E1 to E3 in the mixing tank'],['31/32','sludge tank low-level float']]],
  ['Dose','KM4','Polymer is added','The dosing pump injects dissolved polymer (flocculant) from a separate tank, and it starts and stops with the sludge pump. Getting this right matters more than anything else on the machine. Without polymer, fine solids stay suspended and run through the rings with the water. Too much is also a problem, and the troubleshooting section lists the signs.',[['KM4','dosing pump contactor'],['LVS1','same level gate as the sludge pump'],['36/37','dissolving tank low-level float']]],
  ['Flocculate','KM2','The mixer builds flocs','The mixer folds polymer through the sludge in the flocculation mixing tank. Long polymer chains grab the fine particles and bind them into soft clumps called flocs, which the manual translates as "alum flower". It says good flocs are roughly 5&ndash;10 mm across and allows about 3 minutes of reaction time. Flocs are fragile, so they then flow gently through two flexible hoses, one to the low end of each barrel.',[['KM2','mixer motor contactor']]],
  ['Thicken','U1 U2','Free water drains first','At the low end the thread pitch is wide and the ring gaps are at their largest, so pressure is low. Most of the water simply drains out through the gaps into the catch tray. Two parallel barrels do this side by side, each with its own motor and 0.75 kW drive.',[['U1, U2','ATV320 variable-speed drives'],['KM11, KM12','start each motor fan and tell its drive to run'],['R1, R2','door dials that set each screw speed']]],
