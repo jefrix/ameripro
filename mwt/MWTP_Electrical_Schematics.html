@@ -1,0 +1,1099 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>MWTP-50 & MWTP-250 Electrical Schematics, One-Line Diagrams & Panel Schedules</title>
+  <script src="https://www.gstatic.com/antigravity/web/dev/tailwindcss.min.js"></script>
+  <style>
+    :root {
+      --background: #0b1120;
+      --foreground: #f1f5f9;
+      --card: #111827;
+      --secondary: #1e293b;
+      --secondary-foreground: #e2e8f0;
+      --muted-foreground: #94a3b8;
+      --border: #1e293b;
+      --blueprint-bg: #081226;
+      --blueprint-grid: rgba(56, 189, 248, 0.08);
+    }
+    html.light {
+      --background: #f8fafc;
+      --foreground: #0f172a;
+      --card: #ffffff;
+      --secondary: #f1f5f9;
+      --secondary-foreground: #1e293b;
+      --muted-foreground: #475569;
+      --border: #cbd5e1;
+      --blueprint-bg: #f8fafc;
+      --blueprint-grid: rgba(15, 23, 42, 0.06);
+    }
+    body {
+      background-color: var(--background);
+      color: var(--foreground);
+      font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    }
+    .blueprint-canvas {
+      background-color: var(--blueprint-bg);
+      background-image:
+        linear-gradient(to right, var(--blueprint-grid) 1px, transparent 1px),
+        linear-gradient(to bottom, var(--blueprint-grid) 1px, transparent 1px);
+      background-size: 24px 24px;
+    }
+    .sheet-tab.active {
+      background-color: #2563eb;
+      color: #ffffff;
+      border-color: #3b82f6;
+    }
+    @media print {
+      html, body {
+        background: #ffffff !important;
+        color: #000000 !important;
+        font-size: 11px;
+      }
+      .no-print {
+        display: none !important;
+      }
+      .sheet-section {
+        display: block !important;
+        page-break-after: always;
+        border: 1px solid #94a3b8 !important;
+        margin-bottom: 16px;
+      }
+      .blueprint-canvas {
+        background: #ffffff !important;
+      }
+      svg text {
+        fill: #0f172a !important;
+      }
+      svg rect[fill="#0f172a"], svg rect[fill="#111827"], svg rect[fill="#0b1528"] {
+        fill: #f8fafc !important;
+      }
+    }
+  </style>
+</head>
+<body class="min-h-screen p-4 md:p-6 space-y-5">
+
+  <!-- Top Engineering Title Block & Controls -->
+  <header class="bg-[var(--card)] border border-[var(--border)] rounded-xl p-4 shadow-sm flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4 no-print">
+    <div>
+      <div class="flex flex-wrap items-center gap-2">
+        <a href="index.html" class="px-2.5 py-1 rounded text-xs font-mono font-semibold bg-[var(--secondary)] text-[var(--secondary-foreground)] border border-[var(--border)] hover:border-blue-500 transition">← Portal Home</a>
+        <span class="px-2.5 py-0.5 rounded-full text-xs font-bold bg-amber-500/15 text-amber-400 border border-amber-500/30">ELECTRICAL ENGINEERING &amp; UL-508A PACKAGE</span>
+        <span class="px-2.5 py-0.5 rounded-full text-xs font-mono bg-emerald-500/15 text-emerald-400 border border-emerald-500/30">MWTP-50 (240V 1Φ) &amp; MWTP-250 (480V 3Φ)</span>
+        <a href="MWTP_Piping_and_Plumbing_Diagrams.html" class="px-2.5 py-0.5 rounded-full text-xs font-semibold bg-cyan-500/15 text-cyan-400 border border-cyan-500/30 hover:bg-cyan-500/25 transition">Open Piping &amp; Plumbing Diagrams →</a>
+      </div>
+      <h1 class="text-lg md:text-xl font-extrabold mt-1">Electrical One-Line Schematics, Panel Schedules, VFD Wiring &amp; PLC Safety Ladder</h1>
+      <p class="text-xs text-[var(--muted-foreground)]">For Licensed Electrical Contractor, UL-508A Panel Shop &amp; Electrical PE Review • NEC Articles 250, 430, 445, 551 &amp; UL-508A Reference</p>
+    </div>
+
+    <div class="flex flex-wrap items-center gap-2">
+      <button onclick="showSheet('all')" id="tab-all" class="sheet-tab px-3 py-2 rounded-lg text-xs font-semibold bg-[var(--secondary)] text-[var(--secondary-foreground)] border border-[var(--border)] transition">Show All 4 Sheets</button>
+      <button onclick="window.print()" class="px-3.5 py-2 rounded-lg text-xs font-bold bg-blue-600 hover:bg-blue-500 text-white shadow transition">Print / Save PDF (All Sheets)</button>
+      <button onclick="toggleTheme()" id="theme-btn" class="px-3 py-2 rounded-lg text-xs font-semibold bg-[var(--secondary)] text-[var(--secondary-foreground)] border border-[var(--border)] transition">Theme: Dark</button>
+    </div>
+  </header>
+
+  <!-- Engineering Notice Banner -->
+  <div class="bg-amber-500/10 border border-amber-500/40 rounded-xl px-4 py-3 text-xs flex flex-col md:flex-row md:items-center md:justify-between gap-2">
+    <div>
+      <strong class="text-amber-400 uppercase font-mono">PRELIMINARY FOR PE &amp; UL-508A SHOP REVIEW (REV B — NOV 2026):</strong>
+      <span class="text-[var(--muted-foreground)]"> Confirm exact motor full-load amps (FLA) from nameplate data prior to ordering circuit breakers, overload relays, and VFD line reactors. All control panels must bear a UL-508A industrial control panel label with verified Short-Circuit Current Rating (SCCR ≥ 25 kA @ 480V / 10 kA @ 240V).</span>
+    </div>
+    <span class="font-mono text-[11px] text-amber-300 shrink-0">DWG SET: E-101 THROUGH E-104</span>
+  </div>
+
+  <!-- Sheet Selector Tabs -->
+  <nav class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-2.5 no-print">
+    <button onclick="showSheet('e1')" id="tab-e1" class="sheet-tab active p-3 rounded-xl border border-[var(--border)] bg-[var(--card)] text-left transition">
+      <div class="text-xs font-mono font-bold text-emerald-400">SHEET E-101 • MWTP-50 (RESTAURANT)</div>
+      <div class="text-sm font-bold mt-0.5">240V 1-Phase One-Line &amp; VFD Phase Conversion</div>
+      <div class="text-[11px] text-[var(--muted-foreground)] mt-0.5">50A Shore Plug + 20 kW Gen + 100A Main Panel</div>
+    </button>
+    <button onclick="showSheet('e2')" id="tab-e2" class="sheet-tab p-3 rounded-xl border border-[var(--border)] bg-[var(--card)] text-left transition">
+      <div class="text-xs font-mono font-bold text-blue-400">SHEET E-102 • MWTP-250 (HOSPITAL)</div>
+      <div class="text-sm font-bold mt-0.5">480V / 208V 3-Phase One-Line &amp; MCC Schedule</div>
+      <div class="text-[11px] text-[var(--muted-foreground)] mt-0.5">80 kW Gen + 200A Cam-Lok + 45 kVA Transformer</div>
+    </button>
+    <button onclick="showSheet('e3')" id="tab-e3" class="sheet-tab p-3 rounded-xl border border-[var(--border)] bg-[var(--card)] text-left transition">
+      <div class="text-xs font-mono font-bold text-purple-400">SHEET E-103 • UL-508A CONTROL PANEL</div>
+      <div class="text-sm font-bold mt-0.5">24VDC Power, Safety Relay Ladder &amp; PLC I/O</div>
+      <div class="text-[11px] text-[var(--muted-foreground)] mt-0.5">Hardwired XV-602 Trip, Cl₂ Gas Lockout &amp; Analog I/O</div>
+    </button>
+    <button onclick="showSheet('e4')" id="tab-e4" class="sheet-tab p-3 rounded-xl border border-[var(--border)] bg-[var(--card)] text-left transition">
+      <div class="text-xs font-mono font-bold text-amber-400">SHEET E-104 • ELECTRICIAN SCHEDULES</div>
+      <div class="text-sm font-bold mt-0.5">Wire/Conduit Schedule, Grounding &amp; NEC Checklist</div>
+      <div class="text-[11px] text-[var(--muted-foreground)] mt-0.5">THWN-2 / VFD Shielded Cable, Bonding &amp; Megger Spec</div>
+    </button>
+  </nav>
+
+  <!-- ========================================================================= -->
+  <!-- SHEET E-101: MWTP-50-GN22 (240V SINGLE-PHASE) ONE-LINE & PANEL SCHEDULE   -->
+  <!-- ========================================================================= -->
+  <section id="sheet-e1" class="sheet-section bg-[var(--card)] border border-[var(--border)] rounded-2xl overflow-hidden shadow-lg space-y-6 p-5 md:p-6">
+    <div class="flex flex-col md:flex-row md:items-center md:justify-between border-b border-[var(--border)] pb-4 gap-3">
+      <div>
+        <div class="flex items-center gap-2">
+          <span class="px-2 py-0.5 rounded text-xs font-mono font-bold bg-emerald-500/20 text-emerald-400">DWG E-101</span>
+          <span class="text-xs font-mono text-[var(--muted-foreground)]">SYSTEM: MWTP-50-GN22 ("KITCHENSHIELD-50") • 22-FT COMPACT GOOSENECK</span>
+        </div>
+        <h2 class="text-lg font-bold mt-1">240V / 120V Single-Phase Power One-Line Schematic &amp; Phase-Converting VFD Bus</h2>
+        <p class="text-xs text-[var(--muted-foreground)]">Allows operation from a standard restaurant 240V 50A twist-lock shore receptacle OR the onboard 20 kW diesel generator without 3-phase utility service.</p>
+      </div>
+      <div class="bg-[var(--secondary)] border border-[var(--border)] rounded-lg px-3 py-2 text-xs font-mono shrink-0">
+        <div><strong>SYSTEM VOLTAGE:</strong> 120/240V, 1-Phase, 3-Wire + GND (60 Hz)</div>
+        <div><strong>MAIN BUS RATING:</strong> 100A Copper Bus (UL-67 / UL-508A)</div>
+        <div><strong>SHORE CAP MODE:</strong> PLC limits peak to 38.5A (≤ 40A continuous on 50A plug)</div>
+      </div>
+    </div>
+
+    <!-- SVG One-Line Diagram for MWTP-50 -->
+    <div class="blueprint-canvas border border-[var(--border)] rounded-xl p-3 overflow-x-auto">
+      <svg viewBox="0 0 1150 610" class="w-full min-w-[920px] h-auto" xmlns="http://www.w3.org/2000/svg">
+        <!-- Title & Legend Bar inside Drawing -->
+        <rect x="10" y="10" width="1130" height="36" rx="6" fill="#0f172a" stroke="#334155" stroke-width="1.5"/>
+        <text x="24" y="33" fill="#34d399" font-family="monospace" font-size="13" font-weight="bold">E-101: MWTP-50-GN22 SINGLE-LINE DIAGRAM (120/240V 1Φ INPUT → 230V 3Φ VFD MOTOR OUTPUT)</text>
+        <text x="1125" y="33" text-anchor="end" fill="#94a3b8" font-family="monospace" font-size="11">SCALE: NTS • REV B</text>
+
+        <!-- SOURCE 1: 20 kW DIESEL GENERATOR -->
+        <rect x="40" y="65" width="270" height="105" rx="8" fill="#111827" stroke="#f59e0b" stroke-width="2"/>
+        <circle cx="82" cy="117" r="24" fill="#1e293b" stroke="#f59e0b" stroke-width="2.5"/>
+        <text x="82" y="114" text-anchor="middle" fill="#fbbf24" font-family="monospace" font-size="14" font-weight="bold">GEN</text>
+        <text x="82" y="129" text-anchor="middle" fill="#fbbf24" font-family="monospace" font-size="10">20 kW</text>
+        <text x="120" y="88" fill="#f8fafc" font-family="monospace" font-size="12" font-weight="bold">GEN-801 (GOOSENECK DECK)</text>
+        <text x="120" y="106" fill="#cbd5e1" font-family="monospace" font-size="10">20 kW / 20 kVA Standby/Prime</text>
+        <text x="120" y="121" fill="#cbd5e1" font-family="monospace" font-size="10">120/240V 1Φ, 83.3A Max, 1800 RPM</text>
+        <text x="120" y="136" fill="#fbbf24" font-family="monospace" font-size="10">Gen Breaker CB-G1: 90A / 2P</text>
+        <text x="120" y="151" fill="#94a3b8" font-family="monospace" font-size="10">Feeder: 3#3 AWG + #6 GND (1.25" EMT)</text>
+
+        <!-- SOURCE 2: 240V 50A SHORE POWER INLET -->
+        <rect x="360" y="65" width="290" height="105" rx="8" fill="#111827" stroke="#38bdf8" stroke-width="2"/>
+        <rect x="380" y="95" width="44" height="44" rx="6" fill="#1e293b" stroke="#38bdf8" stroke-width="2"/>
+        <text x="402" y="115" text-anchor="middle" fill="#38bdf8" font-family="monospace" font-size="11" font-weight="bold">CS6375</text>
+        <text x="402" y="129" text-anchor="middle" fill="#38bdf8" font-family="monospace" font-size="10">50A</text>
+        <text x="436" y="88" fill="#f8fafc" font-family="monospace" font-size="12" font-weight="bold">SHORE INLET (CS6375 / NEMA 14-50)</text>
+        <text x="436" y="106" fill="#cbd5e1" font-family="monospace" font-size="10">125/250V 50A Weatherproof Twist-Lock</text>
+        <text x="436" y="121" fill="#cbd5e1" font-family="monospace" font-size="10">50-ft #6/4 SOOW Cord to Bldg Plug</text>
+        <text x="436" y="136" fill="#38bdf8" font-family="monospace" font-size="10">Inlet Breaker CB-S1: 50A / 2P + SPD</text>
+        <text x="436" y="151" fill="#34d399" font-family="monospace" font-size="10">Aux Contact → PLC DI_07 (40A Cap Mode)</text>
+
+        <!-- BONDING / GROUNDING CALLOUT BOX -->
+        <rect x="700" y="65" width="420" height="105" rx="8" fill="#111827" stroke="#10b981" stroke-width="1.5" stroke-dasharray="5,3"/>
+        <text x="716" y="88" fill="#34d399" font-family="monospace" font-size="12" font-weight="bold">NEC ART. 250 / 551 GROUNDING &amp; NEUTRAL ISOLATION</text>
+        <text x="716" y="106" fill="#cbd5e1" font-family="monospace" font-size="10">1. Neutral (N) and Equipment Ground (PE) are ISOLATED in Main Panel MDP-50.</text>
+        <text x="716" y="122" fill="#cbd5e1" font-family="monospace" font-size="10">2. On SHORE POWER: Neutral-to-Ground bond is at the restaurant's service panel.</text>
+        <text x="716" y="138" fill="#cbd5e1" font-family="monospace" font-size="10">3. On GENERATOR (Separately Derived System): 3-Pole ATS switches Neutral OR</text>
+        <text x="716" y="152" fill="#cbd5e1" font-family="monospace" font-size="10">   contactor bonds N-PE at GEN-801 only when generator is the active source.</text>
+
+        <!-- Feeder Lines into ATS -->
+        <line x1="175" y1="170" x2="175" y2="205" stroke="#f59e0b" stroke-width="3"/>
+        <line x1="175" y1="205" x2="310" y2="205" stroke="#f59e0b" stroke-width="3"/>
+        <line x1="310" y1="205" x2="310" y2="225" stroke="#f59e0b" stroke-width="3"/>
+
+        <line x1="505" y1="170" x2="505" y2="205" stroke="#38bdf8" stroke-width="3"/>
+        <line x1="505" y1="205" x2="370" y2="205" stroke="#38bdf8" stroke-width="3"/>
+        <line x1="370" y1="205" x2="370" y2="225" stroke="#38bdf8" stroke-width="3"/>
+
+        <!-- ATS-801 BLOCK -->
+        <rect x="235" y="225" width="210" height="68" rx="8" fill="#1e293b" stroke="#a855f7" stroke-width="2.5"/>
+        <text x="340" y="246" text-anchor="middle" fill="#e9d5ff" font-family="monospace" font-size="12" font-weight="bold">ATS-801 (100A, 3-POLE SOLID N)</text>
+        <text x="340" y="263" text-anchor="middle" fill="#cbd5e1" font-family="monospace" font-size="10">Open-Transition Auto Transfer Switch</text>
+        <text x="340" y="279" text-anchor="middle" fill="#a855f7" font-family="monospace" font-size="10">Shore Priority + Gen Auto-Start Relay</text>
+
+        <!-- Line from ATS to Main Bus -->
+        <line x1="340" y1="293" x2="340" y2="335" stroke="#f8fafc" stroke-width="4"/>
+        <text x="352" y="318" fill="#f8fafc" font-family="monospace" font-size="10" font-weight="bold">MB-1: 100A / 2P MAIN BREAKER + TYPE 1 SPD (50 kA)</text>
+
+        <!-- MAIN 240V / 120V BUS BAR (MDP-50) -->
+        <line x1="35" y1="335" x2="1115" y2="335" stroke="#38bdf8" stroke-width="6"/>
+        <text x="40" y="325" fill="#38bdf8" font-family="monospace" font-size="12" font-weight="bold">MDP-50 MAIN BUS: 120/240V 1-PHASE, 100A COPPER BUS (UL-508A ENCLOSURE CP-701 POWER SECTION)</text>
+
+        <!-- BRANCH 1: P-101 VFD (3 HP INTAKE PUMP) -->
+        <line x1="95" y1="335" x2="95" y2="380" stroke="#38bdf8" stroke-width="2.5"/>
+        <rect x="30" y="380" width="135" height="195" rx="6" fill="#111827" stroke="#38bdf8" stroke-width="1.5"/>
+        <text x="97" y="400" text-anchor="middle" fill="#38bdf8" font-family="monospace" font-size="11" font-weight="bold">CB-1: 30A / 2P</text>
+        <text x="97" y="415" text-anchor="middle" fill="#94a3b8" font-family="monospace" font-size="9">2#10 + #10G THWN-2</text>
+        <rect x="42" y="425" width="110" height="54" rx="4" fill="#1e293b" stroke="#06b6d4" stroke-width="1.5"/>
+        <text x="97" y="443" text-anchor="middle" fill="#22d3ee" font-family="monospace" font-size="10" font-weight="bold">VFD-101 (5 HP 1Φ)</text>
+        <text x="97" y="457" text-anchor="middle" fill="#cbd5e1" font-family="monospace" font-size="9">240V 1Φ → 230V 3Φ</text>
+        <text x="97" y="470" text-anchor="middle" fill="#94a3b8" font-family="monospace" font-size="9">+3% Line Reactor</text>
+        <line x1="97" y1="479" x2="97" y2="510" stroke="#22d3ee" stroke-width="2"/>
+        <circle cx="97" cy="532" r="22" fill="#0f172a" stroke="#22d3ee" stroke-width="2"/>
+        <text x="97" y="530" text-anchor="middle" fill="#f8fafc" font-family="monospace" font-size="10" font-weight="bold">P-101</text>
+        <text x="97" y="543" text-anchor="middle" fill="#22d3ee" font-family="monospace" font-size="9">3.0 HP</text>
+        <text x="97" y="567" text-anchor="middle" fill="#cbd5e1" font-family="monospace" font-size="9">Raw Intake (9.6A 3Φ)</text>
+
+        <!-- BRANCH 2: P-401 VFD (1.5 HP CT TRANSFER PUMP) -->
+        <line x1="250" y1="335" x2="250" y2="380" stroke="#38bdf8" stroke-width="2.5"/>
+        <rect x="182" y="380" width="135" height="195" rx="6" fill="#111827" stroke="#38bdf8" stroke-width="1.5"/>
+        <text x="249" y="400" text-anchor="middle" fill="#38bdf8" font-family="monospace" font-size="11" font-weight="bold">CB-2: 20A / 2P</text>
+        <text x="249" y="415" text-anchor="middle" fill="#94a3b8" font-family="monospace" font-size="9">2#12 + #12G THWN-2</text>
+        <rect x="194" y="425" width="110" height="54" rx="4" fill="#1e293b" stroke="#10b981" stroke-width="1.5"/>
+        <text x="249" y="443" text-anchor="middle" fill="#34d399" font-family="monospace" font-size="10" font-weight="bold">VFD-401 (2 HP 1Φ)</text>
+        <text x="249" y="457" text-anchor="middle" fill="#cbd5e1" font-family="monospace" font-size="9">240V 1Φ → 230V 3Φ</text>
+        <text x="249" y="470" text-anchor="middle" fill="#94a3b8" font-family="monospace" font-size="9">+3% Line Reactor</text>
+        <line x1="249" y1="479" x2="249" y2="510" stroke="#34d399" stroke-width="2"/>
+        <circle cx="249" cy="532" r="22" fill="#0f172a" stroke="#34d399" stroke-width="2"/>
+        <text x="249" y="530" text-anchor="middle" fill="#f8fafc" font-family="monospace" font-size="10" font-weight="bold">P-401</text>
+        <text x="249" y="543" text-anchor="middle" fill="#34d399" font-family="monospace" font-size="9">1.5 HP</text>
+        <text x="249" y="567" text-anchor="middle" fill="#cbd5e1" font-family="monospace" font-size="9">CT Return (5.2A 3Φ)</text>
+
+        <!-- BRANCH 3: P-601A VFD (3 HP BOOSTER LEAD) -->
+        <line x1="402" y1="335" x2="402" y2="380" stroke="#38bdf8" stroke-width="2.5"/>
+        <rect x="334" y="380" width="135" height="195" rx="6" fill="#111827" stroke="#38bdf8" stroke-width="1.5"/>
+        <text x="401" y="400" text-anchor="middle" fill="#38bdf8" font-family="monospace" font-size="11" font-weight="bold">CB-3: 30A / 2P</text>
+        <text x="401" y="415" text-anchor="middle" fill="#94a3b8" font-family="monospace" font-size="9">2#10 + #10G THWN-2</text>
+        <rect x="346" y="425" width="110" height="54" rx="4" fill="#1e293b" stroke="#3b82f6" stroke-width="1.5"/>
+        <text x="401" y="443" text-anchor="middle" fill="#60a5fa" font-family="monospace" font-size="10" font-weight="bold">VFD-601A (5HP 1Φ)</text>
+        <text x="401" y="457" text-anchor="middle" fill="#cbd5e1" font-family="monospace" font-size="9">240V 1Φ → 230V 3Φ</text>
+        <text x="401" y="470" text-anchor="middle" fill="#94a3b8" font-family="monospace" font-size="9">PT-603 PID Loop</text>
+        <line x1="401" y1="479" x2="401" y2="510" stroke="#60a5fa" stroke-width="2"/>
+        <circle cx="401" cy="532" r="22" fill="#0f172a" stroke="#60a5fa" stroke-width="2"/>
+        <text x="401" y="530" text-anchor="middle" fill="#f8fafc" font-family="monospace" font-size="10" font-weight="bold">P-601A</text>
+        <text x="401" y="543" text-anchor="middle" fill="#60a5fa" font-family="monospace" font-size="9">3.0 HP</text>
+        <text x="401" y="567" text-anchor="middle" fill="#cbd5e1" font-family="monospace" font-size="9">Booster A (9.6A 3Φ)</text>
+
+        <!-- BRANCH 4: P-601B VFD (3 HP BOOSTER LAG / BACKWASH) -->
+        <line x1="554" y1="335" x2="554" y2="380" stroke="#38bdf8" stroke-width="2.5"/>
+        <rect x="486" y="380" width="135" height="195" rx="6" fill="#111827" stroke="#38bdf8" stroke-width="1.5"/>
+        <text x="553" y="400" text-anchor="middle" fill="#38bdf8" font-family="monospace" font-size="11" font-weight="bold">CB-4: 30A / 2P</text>
+        <text x="553" y="415" text-anchor="middle" fill="#94a3b8" font-family="monospace" font-size="9">2#10 + #10G THWN-2</text>
+        <rect x="498" y="425" width="110" height="54" rx="4" fill="#1e293b" stroke="#3b82f6" stroke-width="1.5"/>
+        <text x="553" y="443" text-anchor="middle" fill="#60a5fa" font-family="monospace" font-size="10" font-weight="bold">VFD-601B (5HP 1Φ)</text>
+        <text x="553" y="457" text-anchor="middle" fill="#cbd5e1" font-family="monospace" font-size="9">240V 1Φ → 230V 3Φ</text>
+        <text x="553" y="470" text-anchor="middle" fill="#94a3b8" font-family="monospace" font-size="9">Lag + UF Backwash</text>
+        <line x1="553" y1="479" x2="553" y2="510" stroke="#60a5fa" stroke-width="2"/>
+        <circle cx="553" cy="532" r="22" fill="#0f172a" stroke="#60a5fa" stroke-width="2"/>
+        <text x="553" y="530" text-anchor="middle" fill="#f8fafc" font-family="monospace" font-size="10" font-weight="bold">P-601B</text>
+        <text x="553" y="543" text-anchor="middle" fill="#60a5fa" font-family="monospace" font-size="9">3.0 HP</text>
+        <text x="553" y="567" text-anchor="middle" fill="#cbd5e1" font-family="monospace" font-size="9">Booster B (9.6A 3Φ)</text>
+
+        <!-- BRANCH 5: CMP-801A/B DUPLEX INSTRUMENT AIR -->
+        <line x1="706" y1="335" x2="706" y2="380" stroke="#38bdf8" stroke-width="2.5"/>
+        <rect x="638" y="380" width="135" height="195" rx="6" fill="#111827" stroke="#f59e0b" stroke-width="1.5"/>
+        <text x="705" y="400" text-anchor="middle" fill="#fbbf24" font-family="monospace" font-size="11" font-weight="bold">CB-5: 20A / 2P</text>
+        <text x="705" y="415" text-anchor="middle" fill="#94a3b8" font-family="monospace" font-size="9">2#12 + #12G THWN-2</text>
+        <rect x="650" y="425" width="110" height="54" rx="4" fill="#1e293b" stroke="#f59e0b" stroke-width="1.5"/>
+        <text x="705" y="443" text-anchor="middle" fill="#fbbf24" font-family="monospace" font-size="10" font-weight="bold">DUPLEX STARTER</text>
+        <text x="705" y="457" text-anchor="middle" fill="#cbd5e1" font-family="monospace" font-size="9">Lead/Lag Alternator</text>
+        <text x="705" y="470" text-anchor="middle" fill="#94a3b8" font-family="monospace" font-size="9">PSL-801 @ 65 PSI</text>
+        <line x1="705" y1="479" x2="705" y2="510" stroke="#fbbf24" stroke-width="2"/>
+        <circle cx="705" cy="532" r="22" fill="#0f172a" stroke="#fbbf24" stroke-width="2"/>
+        <text x="705" y="530" text-anchor="middle" fill="#f8fafc" font-family="monospace" font-size="10" font-weight="bold">CMP-801</text>
+        <text x="705" y="543" text-anchor="middle" fill="#fbbf24" font-family="monospace" font-size="9">2×1.5 HP</text>
+        <text x="705" y="567" text-anchor="middle" fill="#cbd5e1" font-family="monospace" font-size="9">Oil-Free Air (6.8A)</text>
+
+        <!-- BRANCH 6: HVAC & FREEZE HEATER -->
+        <line x1="858" y1="335" x2="858" y2="380" stroke="#38bdf8" stroke-width="2.5"/>
+        <rect x="790" y="380" width="135" height="195" rx="6" fill="#111827" stroke="#f43f5e" stroke-width="1.5"/>
+        <text x="857" y="400" text-anchor="middle" fill="#fb7185" font-family="monospace" font-size="11" font-weight="bold">CB-6: 20A / 2P</text>
+        <text x="857" y="415" text-anchor="middle" fill="#94a3b8" font-family="monospace" font-size="9">2#12 + #12G THWN-2</text>
+        <rect x="802" y="425" width="110" height="54" rx="4" fill="#1e293b" stroke="#f43f5e" stroke-width="1.5"/>
+        <text x="857" y="443" text-anchor="middle" fill="#fb7185" font-family="monospace" font-size="10" font-weight="bold">SHORE SHED RELAY</text>
+        <text x="857" y="457" text-anchor="middle" fill="#cbd5e1" font-family="monospace" font-size="9">CR-SHED (PLC DO_15)</text>
+        <text x="857" y="470" text-anchor="middle" fill="#94a3b8" font-family="monospace" font-size="9">Pauses in 45s BW</text>
+        <line x1="857" y1="479" x2="857" y2="510" stroke="#fb7185" stroke-width="2"/>
+        <rect x="822" y="510" width="70" height="44" rx="6" fill="#0f172a" stroke="#fb7185" stroke-width="2"/>
+        <text x="857" y="530" text-anchor="middle" fill="#f8fafc" font-family="monospace" font-size="10" font-weight="bold">HVAC-901</text>
+        <text x="857" y="544" text-anchor="middle" fill="#fb7185" font-family="monospace" font-size="9">2.4–3.1kW</text>
+        <text x="857" y="567" text-anchor="middle" fill="#cbd5e1" font-family="monospace" font-size="9">Heat Pump + Freeze</text>
+
+        <!-- BRANCH 7-12: 120V CONTROLS, UV, DOSING & LIGHTING -->
+        <line x1="1025" y1="335" x2="1025" y2="380" stroke="#a855f7" stroke-width="2.5"/>
+        <rect x="940" y="380" width="180" height="195" rx="6" fill="#111827" stroke="#a855f7" stroke-width="1.5"/>
+        <text x="1030" y="400" text-anchor="middle" fill="#c084fc" font-family="monospace" font-size="11" font-weight="bold">120V BRANCHES (L1/L2-N)</text>
+        <text x="952" y="422" fill="#e2e8f0" font-family="monospace" font-size="9.5">• CB-7 (15A/1P): UV-401A (450W)</text>
+        <text x="952" y="440" fill="#e2e8f0" font-family="monospace" font-size="9.5">• CB-8 (15A/1P): UV-401B (450W)</text>
+        <text x="952" y="458" fill="#e2e8f0" font-family="monospace" font-size="9.5">• CB-9 (15A/1P): CP-701 24VDC</text>
+        <text x="952" y="474" fill="#94a3b8" font-family="monospace" font-size="9">  PSU + PLC + HMI + Analyzers</text>
+        <text x="952" y="492" fill="#e2e8f0" font-family="monospace" font-size="9.5">• CB-10 (15A/1P): Dosing Pumps</text>
+        <text x="952" y="508" fill="#94a3b8" font-family="monospace" font-size="9">  P-501 / P-502A,B / P-503</text>
+        <text x="952" y="526" fill="#e2e8f0" font-family="monospace" font-size="9.5">• CB-11 (15A/1P): Chem Exhaust</text>
+        <text x="952" y="542" fill="#94a3b8" font-family="monospace" font-size="9">  EF-901 + Interior/Scene LEDs</text>
+        <text x="952" y="560" fill="#e2e8f0" font-family="monospace" font-size="9.5">• CB-12 (20A/1P): GFCI Wet Lab</text>
+      </svg>
+    </div>
+
+    <!-- Panel MDP-50 Circuit Schedule Table -->
+    <div class="space-y-2">
+      <h3 class="text-sm font-bold uppercase tracking-wider text-emerald-400 font-mono">Panel Schedule: MDP-50 (120/240V 1-Phase, 3-Wire + Ground, 100A Main Breaker)</h3>
+      <div class="overflow-x-auto border border-[var(--border)] rounded-xl">
+        <table class="w-full text-left text-xs">
+          <thead class="bg-[var(--secondary)] text-[var(--secondary-foreground)] font-mono uppercase border-b border-[var(--border)]">
+            <tr>
+              <th class="py-2.5 px-3">Ckt #</th>
+              <th class="py-2.5 px-3">Breaker</th>
+              <th class="py-2.5 px-3">Equipment Tag &amp; Description</th>
+              <th class="py-2.5 px-3">HP / Watts</th>
+              <th class="py-2.5 px-3">240V 1Φ Input FLA</th>
+              <th class="py-2.5 px-3">Wire &amp; Conduit</th>
+              <th class="py-2.5 px-3">Starter / VFD Type &amp; Notes</th>
+            </tr>
+          </thead>
+          <tbody class="divide-y divide-[var(--border)] font-mono">
+            <tr>
+              <td class="py-2 px-3 font-bold text-emerald-400">MB-1</td>
+              <td class="py-2 px-3">100A / 2P</td>
+              <td class="py-2 px-3 font-sans font-semibold">Main Panel Disconnect (Fed from ATS-801 Load Terminals)</td>
+              <td class="py-2 px-3">24.0 kVA Max</td>
+              <td class="py-2 px-3">34.4A Avg / 54.6A Peak</td>
+              <td class="py-2 px-3">3#3 + #6 GND (1-1/4" EMT)</td>
+              <td class="py-2 px-3 font-sans">22 kAIC thermal-magnetic + Type 1 SPD (50 kA)</td>
+            </tr>
+            <tr>
+              <td class="py-2 px-3 font-bold">CB-1 (1,3)</td>
+              <td class="py-2 px-3">30A / 2P</td>
+              <td class="py-2 px-3 font-sans font-semibold"><code>P-101</code> Raw Water Intake Pump (Stage 2)</td>
+              <td class="py-2 px-3">3.0 HP (2.2 kW)</td>
+              <td class="py-2 px-3">16.6A (1Φ In) → 9.6A (3Φ Out)</td>
+              <td class="py-2 px-3">2#10 + #10G (3/4" LFMC)</td>
+              <td class="py-2 px-3 font-sans"><code>VFD-101</code>: 5 HP 240V 1Φ-in / 230V 3Φ-out (derated 50%) + 3% reactor</td>
+            </tr>
+            <tr>
+              <td class="py-2 px-3 font-bold">CB-2 (2,4)</td>
+              <td class="py-2 px-3">20A / 2P</td>
+              <td class="py-2 px-3 font-sans font-semibold"><code>P-401</code> Contact Tank Transfer Pump (Stage 5)</td>
+              <td class="py-2 px-3">1.5 HP (1.1 kW)</td>
+              <td class="py-2 px-3">9.0A (1Φ In) → 5.2A (3Φ Out)</td>
+              <td class="py-2 px-3">2#12 + #12G (3/4" LFMC)</td>
+              <td class="py-2 px-3 font-sans"><code>VFD-401</code>: 2 HP 240V 1Φ-in / 230V 3Φ-out + 3% line reactor</td>
+            </tr>
+            <tr>
+              <td class="py-2 px-3 font-bold">CB-3 (5,7)</td>
+              <td class="py-2 px-3">30A / 2P</td>
+              <td class="py-2 px-3 font-sans font-semibold"><code>P-601A</code> Kitchen Booster Pump Lead (Stage 6)</td>
+              <td class="py-2 px-3">3.0 HP (2.2 kW)</td>
+              <td class="py-2 px-3">16.6A (1Φ In) → 9.6A (3Φ Out)</td>
+              <td class="py-2 px-3">2#10 + #10G (3/4" LFMC)</td>
+              <td class="py-2 px-3 font-sans"><code>VFD-601A</code>: 5 HP 240V 1Φ-in / 230V 3Φ-out; PID on <code>PT-603</code></td>
+            </tr>
+            <tr>
+              <td class="py-2 px-3 font-bold">CB-4 (6,8)</td>
+              <td class="py-2 px-3">30A / 2P</td>
+              <td class="py-2 px-3 font-sans font-semibold"><code>P-601B</code> Kitchen Booster Lag &amp; UF Backwash Supply</td>
+              <td class="py-2 px-3">3.0 HP (2.2 kW)</td>
+              <td class="py-2 px-3">16.6A (1Φ In) → 9.6A (3Φ Out)</td>
+              <td class="py-2 px-3">2#10 + #10G (3/4" LFMC)</td>
+              <td class="py-2 px-3 font-sans"><code>VFD-601B</code>: 5 HP 240V 1Φ-in / 230V 3Φ-out; Lag booster + 40s UF BW</td>
+            </tr>
+            <tr>
+              <td class="py-2 px-3 font-bold">CB-5 (9,11)</td>
+              <td class="py-2 px-3">20A / 2P</td>
+              <td class="py-2 px-3 font-sans font-semibold"><code>CMP-801A/B</code> Duplex Oil-Less Air Compressors</td>
+              <td class="py-2 px-3">2 × 1.5 HP</td>
+              <td class="py-2 px-3">6.8A (Lead) / 13.6A (Both)</td>
+              <td class="py-2 px-3">2#12 + #12G (3/4" EMT)</td>
+              <td class="py-2 px-3 font-sans">Duplex magnetic starter w/ alternator; lag starts if air &lt; 65 PSI</td>
+            </tr>
+            <tr>
+              <td class="py-2 px-3 font-bold">CB-6 (10,12)</td>
+              <td class="py-2 px-3">20A / 2P</td>
+              <td class="py-2 px-3 font-sans font-semibold"><code>HVAC-901</code> Roof Heat Pump &amp; Enclosure Freeze Heater</td>
+              <td class="py-2 px-3">2.4–3.1 kW</td>
+              <td class="py-2 px-3">10.0A – 12.9A @ 240V</td>
+              <td class="py-2 px-3">2#12 + #12G (3/4" EMT)</td>
+              <td class="py-2 px-3 font-sans">Wired through load-shed contactor <code>CR-SHED</code> (pauses during 50A Shore BW)</td>
+            </tr>
+            <tr>
+              <td class="py-2 px-3 font-bold">CB-7 (13)</td>
+              <td class="py-2 px-3">15A / 1P</td>
+              <td class="py-2 px-3 font-sans font-semibold"><code>UV-401A</code> Amalgam UV Reactor Ballast (Duty — L1)</td>
+              <td class="py-2 px-3">450 W (120V)</td>
+              <td class="py-2 px-3">3.8A @ 120V (L1-N)</td>
+              <td class="py-2 px-3">2#12 + #12G (1/2" EMT)</td>
+              <td class="py-2 px-3 font-sans">Dedicated surge-filtered ballast circuit; 4–20mA UV intensity to PLC</td>
+            </tr>
+            <tr>
+              <td class="py-2 px-3 font-bold">CB-8 (14)</td>
+              <td class="py-2 px-3">15A / 1P</td>
+              <td class="py-2 px-3 font-sans font-semibold"><code>UV-401B</code> Amalgam UV Reactor Ballast (Standby — L2)</td>
+              <td class="py-2 px-3">450 W (120V)</td>
+              <td class="py-2 px-3">3.8A @ 120V (L2-N)</td>
+              <td class="py-2 px-3">2#12 + #12G (1/2" EMT)</td>
+              <td class="py-2 px-3 font-sans">On opposite phase leg (L2) for redundancy; auto-start on UV-A fault</td>
+            </tr>
+            <tr>
+              <td class="py-2 px-3 font-bold">CB-9 (15)</td>
+              <td class="py-2 px-3">15A / 1P</td>
+              <td class="py-2 px-3 font-sans font-semibold"><code>CP-701</code> Dual 24VDC Power Supplies, PLC, HMI &amp; Analyzers</td>
+              <td class="py-2 px-3">380 W (120V)</td>
+              <td class="py-2 px-3">3.2A @ 120V (L1-N)</td>
+              <td class="py-2 px-3">2#12 + #12G (Internal)</td>
+              <td class="py-2 px-3 font-sans">Redundant 24VDC 10A PSUs (diode auctioneered) + 30-min 24VDC UPS battery</td>
+            </tr>
+            <tr>
+              <td class="py-2 px-3 font-bold">CB-10 (16)</td>
+              <td class="py-2 px-3">15A / 1P</td>
+              <td class="py-2 px-3 font-sans font-semibold"><code>P-501/502A,B/503</code> Chemical Metering Pumps &amp; <code>STR-101</code> Motor</td>
+              <td class="py-2 px-3">320 W (120V)</td>
+              <td class="py-2 px-3">2.7A @ 120V (L2-N)</td>
+              <td class="py-2 px-3">2#12 + #12G (1/2" EMT)</td>
+              <td class="py-2 px-3 font-sans">24VDC relay enable from PLC + 4–20mA speed pacing signal</td>
+            </tr>
+            <tr>
+              <td class="py-2 px-3 font-bold">CB-11 (17)</td>
+              <td class="py-2 px-3">15A / 1P</td>
+              <td class="py-2 px-3 font-sans font-semibold"><code>EF-901</code> Chemical Exhaust Fan (150 CFM) &amp; Interior/Scene LEDs</td>
+              <td class="py-2 px-3">260 W (120V)</td>
+              <td class="py-2 px-3">2.2A @ 120V (L1-N)</td>
+              <td class="py-2 px-3">2#12 + #12G (1/2" EMT)</td>
+              <td class="py-2 px-3 font-sans">Exhaust fan runs continuously; forced high-speed on <code>AIT-901</code> Cl₂ alarm</td>
+            </tr>
+            <tr>
+              <td class="py-2 px-3 font-bold">CB-12 (18)</td>
+              <td class="py-2 px-3">20A / 1P GFCI</td>
+              <td class="py-2 px-3 font-sans font-semibold">Wet Lab Bench GFCI Receptacles &amp; Exterior Service Outlet</td>
+              <td class="py-2 px-3">180 W Nom</td>
+              <td class="py-2 px-3">1.5A @ 120V (L2-N)</td>
+              <td class="py-2 px-3">2#12 + #12G (1/2" EMT)</td>
+              <td class="py-2 px-3 font-sans">Class A (5mA) GFCI breaker per NEC 210.8(B) for wet lab sink proximity</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </section>
+
+  <!-- ========================================================================= -->
+  <!-- SHEET E-102: MWTP-250 (480V / 208V THREE-PHASE) ONE-LINE & MCC SCHEDULE   -->
+  <!-- ========================================================================= -->
+  <section id="sheet-e2" class="sheet-section hidden bg-[var(--card)] border border-[var(--border)] rounded-2xl overflow-hidden shadow-lg space-y-6 p-5 md:p-6">
+    <div class="flex flex-col md:flex-row md:items-center md:justify-between border-b border-[var(--border)] pb-4 gap-3">
+      <div>
+        <div class="flex items-center gap-2">
+          <span class="px-2 py-0.5 rounded text-xs font-mono font-bold bg-blue-500/20 text-blue-400">DWG E-102</span>
+          <span class="text-xs font-mono text-[var(--muted-foreground)]">SYSTEM: MWTP-250 (HOSPITAL / MUNICIPAL) • 36-FT TRIPLE-AXLE GOOSENECK</span>
+        </div>
+        <h2 class="text-lg font-bold mt-1">480V / 277V Three-Phase Main Distribution, MCC VFD Lineup &amp; 45 kVA Step-Down Subpanel</h2>
+        <p class="text-xs text-[var(--muted-foreground)]">Powered by the onboard 80 kW Tier-4 diesel generator OR 480V 3-phase 200A Series-16 Cam-Lok shore power via 200A 4-pole ATS.</p>
+      </div>
+      <div class="bg-[var(--secondary)] border border-[var(--border)] rounded-lg px-3 py-2 text-xs font-mono shrink-0">
+        <div><strong>MAIN BUS:</strong> 480Y/277V, 3-Phase, 4-Wire + GND (200A Bus, 35 kAIC)</div>
+        <div><strong>AUX SUBPANEL LP-208:</strong> 208Y/120V, 3-Phase (via 45 kVA Dry Transformer)</div>
+        <div><strong>PEAK / AVG DEMAND:</strong> 37.8 kW Avg (45.0 kW Peak / 51.0 kW w/ CIP Interlock)</div>
+      </div>
+    </div>
+
+    <!-- SVG One-Line Diagram for MWTP-250 -->
+    <div class="blueprint-canvas border border-[var(--border)] rounded-xl p-3 overflow-x-auto">
+      <svg viewBox="0 0 1150 630" class="w-full min-w-[920px] h-auto" xmlns="http://www.w3.org/2000/svg">
+        <rect x="10" y="10" width="1130" height="36" rx="6" fill="#0f172a" stroke="#334155" stroke-width="1.5"/>
+        <text x="24" y="33" fill="#60a5fa" font-family="monospace" font-size="13" font-weight="bold">E-102: MWTP-250 THREE-PHASE SINGLE-LINE DIAGRAM (480Y/277V MCC BUS + 45 kVA 208Y/120V AUXILIARY BUS)</text>
+        <text x="1125" y="33" text-anchor="end" fill="#94a3b8" font-family="monospace" font-size="11">SCALE: NTS • REV B</text>
+
+        <!-- SOURCE 1: 80 kW DIESEL GENERATOR -->
+        <rect x="35" y="60" width="290" height="105" rx="8" fill="#111827" stroke="#f59e0b" stroke-width="2"/>
+        <circle cx="77" cy="112" r="24" fill="#1e293b" stroke="#f59e0b" stroke-width="2.5"/>
+        <text x="77" y="109" text-anchor="middle" fill="#fbbf24" font-family="monospace" font-size="14" font-weight="bold">GEN</text>
+        <text x="77" y="124" text-anchor="middle" fill="#fbbf24" font-family="monospace" font-size="10">80 kW</text>
+        <text x="115" y="83" fill="#f8fafc" font-family="monospace" font-size="12" font-weight="bold">GEN-801 (80 kW / 100 kVA PRIME)</text>
+        <text x="115" y="101" fill="#cbd5e1" font-family="monospace" font-size="10">480Y/277V 3Φ, 4-Wire, 120.3A Rated</text>
+        <text x="115" y="116" fill="#cbd5e1" font-family="monospace" font-size="10">PMG Alternator (for VFD Harmonics)</text>
+        <text x="115" y="131" fill="#fbbf24" font-family="monospace" font-size="10">Main Gen Breaker CB-G250: 150A / 3P</text>
+        <text x="115" y="146" fill="#94a3b8" font-family="monospace" font-size="10">Feeder: 4#1/0 + #6 GND (2" Rigid/EMT)</text>
+
+        <!-- SOURCE 2: 480V 200A CAM-LOK SHORE POWER -->
+        <rect x="360" y="60" width="305" height="105" rx="8" fill="#111827" stroke="#38bdf8" stroke-width="2"/>
+        <rect x="378" y="86" width="52" height="52" rx="6" fill="#1e293b" stroke="#38bdf8" stroke-width="2"/>
+        <text x="404" y="108" text-anchor="middle" fill="#38bdf8" font-family="monospace" font-size="10" font-weight="bold">E1016</text>
+        <text x="404" y="123" text-anchor="middle" fill="#38bdf8" font-family="monospace" font-size="9">CAM-LOK</text>
+        <text x="442" y="83" fill="#f8fafc" font-family="monospace" font-size="12" font-weight="bold">SHORE INLET (SERIES 16 CAM-LOK)</text>
+        <text x="442" y="101" fill="#cbd5e1" font-family="monospace" font-size="10">480Y/277V 3Φ, 200A Color-Coded</text>
+        <text x="442" y="116" fill="#cbd5e1" font-family="monospace" font-size="10">(Brn / Org / Yel / Wht / Grn Snap-Covers)</text>
+        <text x="442" y="131" fill="#38bdf8" font-family="monospace" font-size="10">Phase-Rotation Monitor Relay (47-PR)</text>
+        <text x="442" y="146" fill="#94a3b8" font-family="monospace" font-size="10">Shore Breaker CB-S250: 150A / 3P</text>
+
+        <!-- HARMONIC & CIP INTERLOCK NOTE -->
+        <rect x="700" y="60" width="420" height="105" rx="8" fill="#111827" stroke="#10b981" stroke-width="1.5" stroke-dasharray="5,3"/>
+        <text x="716" y="83" fill="#34d399" font-family="monospace" font-size="12" font-weight="bold">IEEE 519 VFD HARMONICS &amp; CIP HEATER INTERLOCK</text>
+        <text x="716" y="101" fill="#cbd5e1" font-family="monospace" font-size="10">1. Every VFD on 480V Bus includes a 5% AC Input Line Reactor to limit</text>
+        <text x="716" y="116" fill="#cbd5e1" font-family="monospace" font-size="10">   total harmonic current distortion (TDD) on the 80 kW PMG generator.</text>
+        <text x="716" y="132" fill="#cbd5e1" font-family="monospace" font-size="10">2. CIP Immersion Heater HTR-201 (6 kW) is hardware-interlocked via</text>
+        <text x="716" y="147" fill="#cbd5e1" font-family="monospace" font-size="10">   contactor aux contacts so it CANNOT energize while Booster P-601 runs.</text>
+
+        <!-- Feeders into ATS-250 -->
+        <line x1="180" y1="165" x2="180" y2="195" stroke="#f59e0b" stroke-width="3"/>
+        <line x1="180" y1="195" x2="315" y2="195" stroke="#f59e0b" stroke-width="3"/>
+        <line x1="315" y1="195" x2="315" y2="215" stroke="#f59e0b" stroke-width="3"/>
+
+        <line x1="510" y1="165" x2="510" y2="195" stroke="#38bdf8" stroke-width="3"/>
+        <line x1="510" y1="195" x2="375" y2="195" stroke="#38bdf8" stroke-width="3"/>
+        <line x1="375" y1="195" x2="375" y2="215" stroke="#38bdf8" stroke-width="3"/>
+
+        <!-- ATS-801 (200A 4-POLE) -->
+        <rect x="235" y="215" width="220" height="62" rx="8" fill="#1e293b" stroke="#a855f7" stroke-width="2.5"/>
+        <text x="345" y="236" text-anchor="middle" fill="#e9d5ff" font-family="monospace" font-size="12" font-weight="bold">ATS-801 (200A, 4-POLE SWITCHED N)</text>
+        <text x="345" y="252" text-anchor="middle" fill="#cbd5e1" font-family="monospace" font-size="10">480Y/277V Open-Transition w/ In-Phase Mon</text>
+        <text x="345" y="267" text-anchor="middle" fill="#a855f7" font-family="monospace" font-size="10">Separately Derived System N-G at Gen</text>
+
+        <line x1="345" y1="277" x2="345" y2="315" stroke="#f8fafc" stroke-width="4"/>
+        <text x="358" y="302" fill="#f8fafc" font-family="monospace" font-size="10" font-weight="bold">MB-480: 150A / 3P MAIN BREAKER (35 kAIC) + 480V SPD (100 kA)</text>
+
+        <!-- 480V 3-PHASE MCC BUS -->
+        <line x1="30" y1="315" x2="1120" y2="315" stroke="#3b82f6" stroke-width="6"/>
+        <text x="35" y="305" fill="#60a5fa" font-family="monospace" font-size="12" font-weight="bold">MCC-480 MAIN BUS: 480Y/277V 3-PHASE, 4-WIRE, 200A COPPER BUS</text>
+
+        <!-- 480V FEEDER 1: P-101 (15 HP VFD) -->
+        <line x1="85" y1="315" x2="85" y2="355" stroke="#3b82f6" stroke-width="2.5"/>
+        <rect x="25" y="355" width="120" height="175" rx="6" fill="#111827" stroke="#38bdf8" stroke-width="1.5"/>
+        <text x="85" y="374" text-anchor="middle" fill="#38bdf8" font-family="monospace" font-size="10" font-weight="bold">CB-101: 30A/3P</text>
+        <text x="85" y="388" text-anchor="middle" fill="#94a3b8" font-family="monospace" font-size="8.5">3#10 + #10G VFD Cbl</text>
+        <rect x="35" y="396" width="100" height="44" rx="4" fill="#1e293b" stroke="#06b6d4" stroke-width="1.5"/>
+        <text x="85" y="413" text-anchor="middle" fill="#22d3ee" font-family="monospace" font-size="9.5" font-weight="bold">VFD-101 (15 HP)</text>
+        <text x="85" y="428" text-anchor="middle" fill="#cbd5e1" font-family="monospace" font-size="8.5">+5% Line Reactor</text>
+        <line x1="85" y1="440" x2="85" y2="465" stroke="#22d3ee" stroke-width="2"/>
+        <circle cx="85" cy="485" r="20" fill="#0f172a" stroke="#22d3ee" stroke-width="2"/>
+        <text x="85" y="483" text-anchor="middle" fill="#f8fafc" font-family="monospace" font-size="9.5" font-weight="bold">P-101</text>
+        <text x="85" y="495" text-anchor="middle" fill="#22d3ee" font-family="monospace" font-size="8.5">15 HP</text>
+        <text x="85" y="520" text-anchor="middle" fill="#cbd5e1" font-family="monospace" font-size="8.5">Intake (21.0A)</text>
+
+        <!-- 480V FEEDER 2: P-601A/B/C TRIPLEX BOOSTERS (3 x 15 HP VFD) -->
+        <line x1="255" y1="315" x2="255" y2="355" stroke="#3b82f6" stroke-width="2.5"/>
+        <rect x="155" y="355" width="200" height="175" rx="6" fill="#111827" stroke="#3b82f6" stroke-width="1.5"/>
+        <text x="255" y="374" text-anchor="middle" fill="#60a5fa" font-family="monospace" font-size="10" font-weight="bold">CB-601A/B/C: 3 × 30A/3P</text>
+        <text x="255" y="388" text-anchor="middle" fill="#94a3b8" font-family="monospace" font-size="8.5">Each: 3#10 + #10G VFD Cable</text>
+        <rect x="167" y="396" width="176" height="44" rx="4" fill="#1e293b" stroke="#3b82f6" stroke-width="1.5"/>
+        <text x="255" y="413" text-anchor="middle" fill="#60a5fa" font-family="monospace" font-size="9.5" font-weight="bold">VFD-601A / B / C (3×15 HP)</text>
+        <text x="255" y="428" text-anchor="middle" fill="#cbd5e1" font-family="monospace" font-size="8.5">2 Duty + 1 Standby + 5% Reactors</text>
+        <line x1="195" y1="440" x2="195" y2="465" stroke="#60a5fa" stroke-width="2"/>
+        <line x1="255" y1="440" x2="255" y2="465" stroke="#60a5fa" stroke-width="2"/>
+        <line x1="315" y1="440" x2="315" y2="465" stroke="#60a5fa" stroke-width="2"/>
+        <circle cx="195" cy="485" r="19" fill="#0f172a" stroke="#60a5fa" stroke-width="2"/>
+        <text x="195" y="488" text-anchor="middle" fill="#f8fafc" font-family="monospace" font-size="8.5" font-weight="bold">601A</text>
+        <circle cx="255" cy="485" r="19" fill="#0f172a" stroke="#60a5fa" stroke-width="2"/>
+        <text x="255" y="488" text-anchor="middle" fill="#f8fafc" font-family="monospace" font-size="8.5" font-weight="bold">601B</text>
+        <circle cx="315" cy="485" r="19" fill="#0f172a" stroke="#60a5fa" stroke-width="2"/>
+        <text x="315" y="488" text-anchor="middle" fill="#f8fafc" font-family="monospace" font-size="8.5" font-weight="bold">601C</text>
+        <text x="255" y="520" text-anchor="middle" fill="#cbd5e1" font-family="monospace" font-size="8.5">3 × 15 HP Booster (21A ea)</text>
+
+        <!-- 480V FEEDER 3: P-401 (5 HP VFD) -->
+        <line x1="425" y1="315" x2="425" y2="355" stroke="#3b82f6" stroke-width="2.5"/>
+        <rect x="365" y="355" width="120" height="175" rx="6" fill="#111827" stroke="#10b981" stroke-width="1.5"/>
+        <text x="425" y="374" text-anchor="middle" fill="#34d399" font-family="monospace" font-size="10" font-weight="bold">CB-401: 15A/3P</text>
+        <text x="425" y="388" text-anchor="middle" fill="#94a3b8" font-family="monospace" font-size="8.5">3#12 + #12G VFD Cbl</text>
+        <rect x="375" y="396" width="100" height="44" rx="4" fill="#1e293b" stroke="#10b981" stroke-width="1.5"/>
+        <text x="425" y="413" text-anchor="middle" fill="#34d399" font-family="monospace" font-size="9.5" font-weight="bold">VFD-401 (5 HP)</text>
+        <text x="425" y="428" text-anchor="middle" fill="#cbd5e1" font-family="monospace" font-size="8.5">CT Transfer Pump</text>
+        <line x1="425" y1="440" x2="425" y2="465" stroke="#34d399" stroke-width="2"/>
+        <circle cx="425" cy="485" r="20" fill="#0f172a" stroke="#34d399" stroke-width="2"/>
+        <text x="425" y="483" text-anchor="middle" fill="#f8fafc" font-family="monospace" font-size="9.5" font-weight="bold">P-401</text>
+        <text x="425" y="495" text-anchor="middle" fill="#34d399" font-family="monospace" font-size="8.5">5.0 HP</text>
+        <text x="425" y="520" text-anchor="middle" fill="#cbd5e1" font-family="monospace" font-size="8.5">CT Return (7.6A)</text>
+
+        <!-- 480V FEEDER 4: P-202 (5 HP BW) + BL-201 (2 HP SCOUR) -->
+        <line x1="560" y1="315" x2="560" y2="355" stroke="#3b82f6" stroke-width="2.5"/>
+        <rect x="495" y="355" width="130" height="175" rx="6" fill="#111827" stroke="#06b6d4" stroke-width="1.5"/>
+        <text x="560" y="374" text-anchor="middle" fill="#22d3ee" font-family="monospace" font-size="10" font-weight="bold">CB-202/201: 15A/3P</text>
+        <text x="560" y="388" text-anchor="middle" fill="#94a3b8" font-family="monospace" font-size="8.5">3#12 + #12G THWN-2</text>
+        <rect x="505" y="396" width="110" height="44" rx="4" fill="#1e293b" stroke="#06b6d4" stroke-width="1.5"/>
+        <text x="560" y="413" text-anchor="middle" fill="#22d3ee" font-family="monospace" font-size="9.5" font-weight="bold">VFD-202 &amp; MS-201</text>
+        <text x="560" y="428" text-anchor="middle" fill="#cbd5e1" font-family="monospace" font-size="8.5">UF Backwash + Air</text>
+        <line x1="560" y1="440" x2="560" y2="465" stroke="#22d3ee" stroke-width="2"/>
+        <circle cx="560" cy="485" r="20" fill="#0f172a" stroke="#22d3ee" stroke-width="2"/>
+        <text x="560" y="483" text-anchor="middle" fill="#f8fafc" font-family="monospace" font-size="9" font-weight="bold">P-202/BL</text>
+        <text x="560" y="495" text-anchor="middle" fill="#22d3ee" font-family="monospace" font-size="8.5">5+2 HP</text>
+        <text x="560" y="520" text-anchor="middle" fill="#cbd5e1" font-family="monospace" font-size="8.5">7.6A + 3.4A (5% Duty)</text>
+
+        <!-- 480V FEEDER 5: DUPLEX AIR AC-802A/B + CIP HEATER HTR-201 -->
+        <line x1="700" y1="315" x2="700" y2="355" stroke="#3b82f6" stroke-width="2.5"/>
+        <rect x="635" y="355" width="130" height="175" rx="6" fill="#111827" stroke="#f59e0b" stroke-width="1.5"/>
+        <text x="700" y="374" text-anchor="middle" fill="#fbbf24" font-family="monospace" font-size="10" font-weight="bold">CB-802 &amp; CB-CIP</text>
+        <text x="700" y="388" text-anchor="middle" fill="#94a3b8" font-family="monospace" font-size="8.5">15A/3P Air • 15A/3P CIP</text>
+        <rect x="645" y="396" width="110" height="44" rx="4" fill="#1e293b" stroke="#f59e0b" stroke-width="1.5"/>
+        <text x="700" y="413" text-anchor="middle" fill="#fbbf24" font-family="monospace" font-size="9.5" font-weight="bold">AC-802A/B (2×2HP)</text>
+        <text x="700" y="428" text-anchor="middle" fill="#cbd5e1" font-family="monospace" font-size="8.5">HTR-201 (6kW CIP)</text>
+        <line x1="700" y1="440" x2="700" y2="465" stroke="#fbbf24" stroke-width="2"/>
+        <circle cx="700" cy="485" r="20" fill="#0f172a" stroke="#fbbf24" stroke-width="2"/>
+        <text x="700" y="483" text-anchor="middle" fill="#f8fafc" font-family="monospace" font-size="9" font-weight="bold">AIR/CIP</text>
+        <text x="700" y="495" text-anchor="middle" fill="#fbbf24" font-family="monospace" font-size="8.5">480V 3Φ</text>
+        <text x="700" y="520" text-anchor="middle" fill="#cbd5e1" font-family="monospace" font-size="8.5">Air 3.4A / CIP 7.2A</text>
+
+        <!-- 480V FEEDER 6: 45 kVA STEP-DOWN TRANSFORMER XFMR-1 TO 208Y/120V SUBPANEL -->
+        <line x1="945" y1="315" x2="945" y2="355" stroke="#a855f7" stroke-width="3.5"/>
+        <text x="955" y="340" fill="#c084fc" font-family="monospace" font-size="9.5" font-weight="bold">CB-XFMR: 70A/3P (480V Pri)</text>
+        <rect x="830" y="355" width="230" height="58" rx="6" fill="#1e293b" stroke="#a855f7" stroke-width="2"/>
+        <text x="945" y="375" text-anchor="middle" fill="#e9d5ff" font-family="monospace" font-size="10.5" font-weight="bold">XFMR-1: 45 kVA DRY-TYPE</text>
+        <text x="945" y="390" text-anchor="middle" fill="#cbd5e1" font-family="monospace" font-size="9.5">480V Δ Primary → 208Y/120V 3Φ Sec</text>
+        <text x="945" y="404" text-anchor="middle" fill="#34d399" font-family="monospace" font-size="9">Bonded X0 to Trailer Ground Bar + Rod</text>
+
+        <line x1="945" y1="413" x2="945" y2="440" stroke="#c084fc" stroke-width="3.5"/>
+        <rect x="780" y="440" width="340" height="170" rx="8" fill="#111827" stroke="#a855f7" stroke-width="2"/>
+        <text x="950" y="460" text-anchor="middle" fill="#c084fc" font-family="monospace" font-size="11" font-weight="bold">SUBPANEL LP-208 (208Y/120V 3Φ, 150A MAIN)</text>
+        <text x="795" y="480" fill="#e2e8f0" font-family="monospace" font-size="9.5">• LP-1..3 (3×20A/2P 208V): UV-401A/B/C (3 × 1.2 kW)</text>
+        <text x="795" y="497" fill="#e2e8f0" font-family="monospace" font-size="9.5">• LP-4 (30A/3P 208V): HVAC-901 Heat Pump + Chem Fan</text>
+        <text x="795" y="514" fill="#e2e8f0" font-family="monospace" font-size="9.5">• LP-5 (20A/2P 208V): Hyd. Outrigger Power Pack</text>
+        <text x="795" y="531" fill="#e2e8f0" font-family="monospace" font-size="9.5">• LP-6 (15A/1P 120V): CP-701 Dual 24VDC PSUs + UPS</text>
+        <text x="795" y="548" fill="#e2e8f0" font-family="monospace" font-size="9.5">• LP-7 (15A/1P 120V): AIT-101/201/401/402/601/901</text>
+        <text x="795" y="565" fill="#e2e8f0" font-family="monospace" font-size="9.5">• LP-8 (15A/1P 120V): P-501/502A,B/503/504 Dosing</text>
+        <text x="795" y="582" fill="#e2e8f0" font-family="monospace" font-size="9.5">• LP-9 (15A/1P 120V): STR-101 Brush Motor + Air Dryer</text>
+        <text x="795" y="599" fill="#e2e8f0" font-family="monospace" font-size="9.5">• LP-10..12 (20A/1P GFCI): Wet Lab, Pipe Heat Trace</text>
+      </svg>
+    </div>
+
+    <!-- MCC-480 & LP-208 Schedule Table -->
+    <div class="space-y-2">
+      <h3 class="text-sm font-bold uppercase tracking-wider text-blue-400 font-mono">Motor Control Center (MCC-480) &amp; Auxiliary Subpanel (LP-208) Schedule — MWTP-250</h3>
+      <div class="overflow-x-auto border border-[var(--border)] rounded-xl">
+        <table class="w-full text-left text-xs">
+          <thead class="bg-[var(--secondary)] text-[var(--secondary-foreground)] font-mono uppercase border-b border-[var(--border)]">
+            <tr>
+              <th class="py-2.5 px-3">Panel / Bucket</th>
+              <th class="py-2.5 px-3">Breaker / Fuse</th>
+              <th class="py-2.5 px-3">Equipment Tag &amp; Service</th>
+              <th class="py-2.5 px-3">Voltage / Phase</th>
+              <th class="py-2.5 px-3">HP / kW</th>
+              <th class="py-2.5 px-3">NEC FLA</th>
+              <th class="py-2.5 px-3">Feeder Wire &amp; Conduit</th>
+              <th class="py-2.5 px-3">Drive / Control Details</th>
+            </tr>
+          </thead>
+          <tbody class="divide-y divide-[var(--border)] font-mono">
+            <tr>
+              <td class="py-2 px-3 font-bold text-blue-400">MCC-101</td>
+              <td class="py-2 px-3">30A / 3P MCP</td>
+              <td class="py-2 px-3 font-sans font-semibold"><code>P-101</code> Raw Water Intake Pump</td>
+              <td class="py-2 px-3">480V 3Φ</td>
+              <td class="py-2 px-3">15.0 HP</td>
+              <td class="py-2 px-3">21.0 A</td>
+              <td class="py-2 px-3">3#10 + #10G VFD Shielded (3/4" LFMC)</td>
+              <td class="py-2 px-3 font-sans"><code>VFD-101</code> (15 HP) + 5% Line Reactor; dry-run trip on <code>LIT-100</code></td>
+            </tr>
+            <tr>
+              <td class="py-2 px-3 font-bold text-blue-400">MCC-601A</td>
+              <td class="py-2 px-3">30A / 3P MCP</td>
+              <td class="py-2 px-3 font-sans font-semibold"><code>P-601A</code> Building Booster Pump #1 (Lead)</td>
+              <td class="py-2 px-3">480V 3Φ</td>
+              <td class="py-2 px-3">15.0 HP</td>
+              <td class="py-2 px-3">21.0 A</td>
+              <td class="py-2 px-3">3#10 + #10G VFD Shielded (3/4" LFMC)</td>
+              <td class="py-2 px-3 font-sans"><code>VFD-601A</code> (15 HP) + 5% Reactor; PID on <code>PT-603</code>; STO wired to Safety Relay</td>
+            </tr>
+            <tr>
+              <td class="py-2 px-3 font-bold text-blue-400">MCC-601B</td>
+              <td class="py-2 px-3">30A / 3P MCP</td>
+              <td class="py-2 px-3 font-sans font-semibold"><code>P-601B</code> Building Booster Pump #2 (Duty 2)</td>
+              <td class="py-2 px-3">480V 3Φ</td>
+              <td class="py-2 px-3">15.0 HP</td>
+              <td class="py-2 px-3">21.0 A</td>
+              <td class="py-2 px-3">3#10 + #10G VFD Shielded (3/4" LFMC)</td>
+              <td class="py-2 px-3 font-sans"><code>VFD-601B</code> (15 HP) + 5% Reactor; stages in &gt;125 GPM; STO wired to Safety Relay</td>
+            </tr>
+            <tr>
+              <td class="py-2 px-3 font-bold text-blue-400">MCC-601C</td>
+              <td class="py-2 px-3">30A / 3P MCP</td>
+              <td class="py-2 px-3 font-sans font-semibold"><code>P-601C</code> Building Booster Pump #3 (100% Standby)</td>
+              <td class="py-2 px-3">480V 3Φ</td>
+              <td class="py-2 px-3">15.0 HP</td>
+              <td class="py-2 px-3">21.0 A</td>
+              <td class="py-2 px-3">3#10 + #10G VFD Shielded (3/4" LFMC)</td>
+              <td class="py-2 px-3 font-sans"><code>VFD-601C</code> (15 HP) + 5% Reactor; auto-rotates lead/lag/standby every 24h</td>
+            </tr>
+            <tr>
+              <td class="py-2 px-3 font-bold text-blue-400">MCC-401</td>
+              <td class="py-2 px-3">15A / 3P MCP</td>
+              <td class="py-2 px-3 font-sans font-semibold"><code>P-401</code> Contact Tank Transfer Pump</td>
+              <td class="py-2 px-3">480V 3Φ</td>
+              <td class="py-2 px-3">5.0 HP</td>
+              <td class="py-2 px-3">7.6 A</td>
+              <td class="py-2 px-3">3#12 + #12G VFD Shielded (3/4" LFMC)</td>
+              <td class="py-2 px-3 font-sans"><code>VFD-401</code> (5 HP) + 5% Reactor; level-paced from Clearwell <code>LIT-601</code></td>
+            </tr>
+            <tr>
+              <td class="py-2 px-3 font-bold text-blue-400">MCC-202</td>
+              <td class="py-2 px-3">15A / 3P MCP</td>
+              <td class="py-2 px-3 font-sans font-semibold"><code>P-202</code> UF Backwash Supply Pump</td>
+              <td class="py-2 px-3">480V 3Φ</td>
+              <td class="py-2 px-3">5.0 HP</td>
+              <td class="py-2 px-3">7.6 A</td>
+              <td class="py-2 px-3">3#12 + #12G VFD Shielded (3/4" LFMC)</td>
+              <td class="py-2 px-3 font-sans"><code>VFD-202</code> (5 HP); runs 45s per UF backwash cycle (180 GPM @ 40 PSI)</td>
+            </tr>
+            <tr>
+              <td class="py-2 px-3 font-bold text-blue-400">MCC-201</td>
+              <td class="py-2 px-3">15A / 3P MCP</td>
+              <td class="py-2 px-3 font-sans font-semibold"><code>BL-201</code> Oil-Free UF Air Scour Blower</td>
+              <td class="py-2 px-3">480V 3Φ</td>
+              <td class="py-2 px-3">2.0 HP</td>
+              <td class="py-2 px-3">3.4 A</td>
+              <td class="py-2 px-3">3#12 + #12G THWN-2 (1/2" LFMC)</td>
+              <td class="py-2 px-3 font-sans">NEMA Size 0 Across-the-Line Starter w/ solid-state overload</td>
+            </tr>
+            <tr>
+              <td class="py-2 px-3 font-bold text-blue-400">MCC-802A/B</td>
+              <td class="py-2 px-3">2 × 15A / 3P</td>
+              <td class="py-2 px-3 font-sans font-semibold"><code>AC-802A/B</code> Duplex Oil-Free Instrument Air Compressors</td>
+              <td class="py-2 px-3">480V 3Φ</td>
+              <td class="py-2 px-3">2 × 2.0 HP</td>
+              <td class="py-2 px-3">3.4 A ea</td>
+              <td class="py-2 px-3">3#12 + #12G THWN-2 (3/4" EMT)</td>
+              <td class="py-2 px-3 font-sans">Duplex lead/lag starter in gooseneck compartment; lag starts &lt; 65 PSI</td>
+            </tr>
+            <tr>
+              <td class="py-2 px-3 font-bold text-blue-400">MCC-CIP</td>
+              <td class="py-2 px-3">15A / 3P</td>
+              <td class="py-2 px-3 font-sans font-semibold"><code>HTR-201</code> UF CIP Tank Immersion Heater</td>
+              <td class="py-2 px-3">480V 3Φ</td>
+              <td class="py-2 px-3">6.0 kW</td>
+              <td class="py-2 px-3">7.2 A</td>
+              <td class="py-2 px-3">3#12 + #12G THWN-2 (1/2" LFMC)</td>
+              <td class="py-2 px-3 font-sans">Hardware interlocked off during Mode 2 production + low-level cutout switch</td>
+            </tr>
+            <tr>
+              <td class="py-2 px-3 font-bold text-purple-400">MCC-XFMR</td>
+              <td class="py-2 px-3">70A / 3P</td>
+              <td class="py-2 px-3 font-sans font-semibold"><code>XFMR-1</code> 45 kVA Dry Transformer → Subpanel <code>LP-208</code></td>
+              <td class="py-2 px-3">480V → 208Y/120V</td>
+              <td class="py-2 px-3">45 kVA</td>
+              <td class="py-2 px-3">54.1A Pri / 125A Sec</td>
+              <td class="py-2 px-3">Pri: 3#6 + #8G • Sec: 4#1 + #6G</td>
+              <td class="py-2 px-3 font-sans">Feeds 3×UV (3.6kW), HVAC (2.8kW), PLC/Analyzers (1.5kW), Hydraulic Jacks</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </section>
+
+  <!-- ========================================================================= -->
+  <!-- SHEET E-103: UL-508A CONTROL PANEL, SAFETY INTERLOCK LADDER & PLC I/O     -->
+  <!-- ========================================================================= -->
+  <section id="sheet-e3" class="sheet-section hidden bg-[var(--card)] border border-[var(--border)] rounded-2xl overflow-hidden shadow-lg space-y-6 p-5 md:p-6">
+    <div class="flex flex-col md:flex-row md:items-center md:justify-between border-b border-[var(--border)] pb-4 gap-3">
+      <div>
+        <div class="flex items-center gap-2">
+          <span class="px-2 py-0.5 rounded text-xs font-mono font-bold bg-purple-500/20 text-purple-400">DWG E-103</span>
+          <span class="text-xs font-mono text-[var(--muted-foreground)]">APPLIES TO BOTH MWTP-50 &amp; MWTP-250 • UL-508A PANEL CP-701</span>
+        </div>
+        <h2 class="text-lg font-bold mt-1">24VDC Control Distribution, Hardwired Safety Interlock Ladder &amp; PLC I/O Wiring Map</h2>
+        <p class="text-xs text-[var(--muted-foreground)]">Hardwired electromechanical safety relay (<code>K-SAFE</code>) guarantees fail-safe closure of Potable Block Valve <code>XV-602</code> and Off-Spec Divert opening (<code>XV-300</code>) even on PLC CPU fault.</p>
+      </div>
+      <div class="bg-[var(--secondary)] border border-[var(--border)] rounded-lg px-3 py-2 text-xs font-mono shrink-0">
+        <div><strong>PLC PLATFORM:</strong> Allen-Bradley CompactLogix 5380 (<code>5069-L320ER</code>)</div>
+        <div><strong>CONTROL VOLTAGE:</strong> 24VDC Class 2 Redundant Auctioneered + UPS</div>
+        <div><strong>SAFETY RELAY:</strong> Dual-Channel Safety Relay <code>K-SAFE</code> (Cat 3 / PLd)</div>
+      </div>
+    </div>
+
+    <!-- SVG 24VDC Control & Hardwired Safety Ladder Schematic -->
+    <div class="blueprint-canvas border border-[var(--border)] rounded-xl p-3 overflow-x-auto">
+      <svg viewBox="0 0 1150 560" class="w-full min-w-[920px] h-auto" xmlns="http://www.w3.org/2000/svg">
+        <rect x="10" y="10" width="1130" height="36" rx="6" fill="#0f172a" stroke="#334155" stroke-width="1.5"/>
+        <text x="24" y="33" fill="#c084fc" font-family="monospace" font-size="13" font-weight="bold">E-103: CP-701 24VDC HARDWIRED POTABLE SAFETY INTERLOCK LADDER DIAGRAM (FAIL-SAFE SANITARY BARRIER)</text>
+        <text x="1125" y="33" text-anchor="end" fill="#94a3b8" font-family="monospace" font-size="11">24VDC BUS • REV B</text>
+
+        <!-- Vertical 24VDC Hot Rail (+24VDC) and Return Rail (0VDC COM) -->
+        <line x1="70" y1="65" x2="70" y2="525" stroke="#ef4444" stroke-width="4"/>
+        <text x="70" y="58" text-anchor="middle" fill="#f87171" font-family="monospace" font-size="11" font-weight="bold">+24VDC (FU-1: 10A)</text>
+
+        <line x1="1070" y1="65" x2="1070" y2="525" stroke="#38bdf8" stroke-width="4"/>
+        <text x="1070" y="58" text-anchor="middle" fill="#38bdf8" font-family="monospace" font-size="11" font-weight="bold">0VDC (COM)</text>
+
+        <!-- RUNG 01: REDUNDANT POWER SUPPLY & UPS HEALTH -->
+        <text x="22" y="100" fill="#94a3b8" font-family="monospace" font-size="10">01</text>
+        <line x1="70" y1="95" x2="1070" y2="95" stroke="#64748b" stroke-width="1.5" stroke-dasharray="4,4"/>
+        <rect x="110" y="73" width="250" height="44" rx="5" fill="#111827" stroke="#10b981" stroke-width="1.5"/>
+        <text x="235" y="92" text-anchor="middle" fill="#34d399" font-family="monospace" font-size="10" font-weight="bold">PSU-1 (10A) + PSU-2 (10A) + DIODE</text>
+        <text x="235" y="107" text-anchor="middle" fill="#cbd5e1" font-family="monospace" font-size="9">+ 24VDC Battery UPS (30-Min Hold)</text>
+        <rect x="420" y="73" width="320" height="44" rx="5" fill="#111827" stroke="#38bdf8" stroke-width="1.5"/>
+        <text x="580" y="92" text-anchor="middle" fill="#38bdf8" font-family="monospace" font-size="10" font-weight="bold">WHY 24VDC UPS IS MANDATORY:</text>
+        <text x="580" y="107" text-anchor="middle" fill="#cbd5e1" font-family="monospace" font-size="9">Keeps PLC, AIT analyzers &amp; CT log alive during ATS transfer</text>
+
+        <!-- RUNG 02: MASTER POTABLE RELEASE SAFETY RELAY (K-SAFE) -->
+        <text x="22" y="175" fill="#f87171" font-family="monospace" font-size="10" font-weight="bold">02</text>
+        <line x1="70" y1="170" x2="920" y2="170" stroke="#f59e0b" stroke-width="2.5"/>
+        <line x1="990" y1="170" x2="1070" y2="170" stroke="#38bdf8" stroke-width="2.5"/>
+
+        <!-- Contact 1: E-Stop Chain -->
+        <rect x="105" y="148" width="120" height="44" rx="4" fill="#1e293b" stroke="#ef4444" stroke-width="2"/>
+        <text x="165" y="166" text-anchor="middle" fill="#fca5a5" font-family="monospace" font-size="10" font-weight="bold">ESTOP-1 &amp; 2 (NC)</text>
+        <text x="165" y="181" text-anchor="middle" fill="#cbd5e1" font-family="monospace" font-size="9">Panel + Rear Door</text>
+
+        <!-- Contact 2: AIT-901 Cl2 Gas Detector -->
+        <rect x="245" y="148" width="125" height="44" rx="4" fill="#1e293b" stroke="#f59e0b" stroke-width="2"/>
+        <text x="307" y="166" text-anchor="middle" fill="#fde047" font-family="monospace" font-size="10" font-weight="bold">AIT-901 HH (NC)</text>
+        <text x="307" y="181" text-anchor="middle" fill="#cbd5e1" font-family="monospace" font-size="9">Cl₂ Gas &lt; 1.0 ppm</text>
+
+        <!-- Contact 3: AIT-201 Turbidity Hardware Relay -->
+        <rect x="390" y="148" width="135" height="44" rx="4" fill="#1e293b" stroke="#22d3ee" stroke-width="2"/>
+        <text x="457" y="166" text-anchor="middle" fill="#67e8f9" font-family="monospace" font-size="10" font-weight="bold">AIT-201 ALARM (NO)</text>
+        <text x="457" y="181" text-anchor="middle" fill="#cbd5e1" font-family="monospace" font-size="9">UF Turb &lt; 0.15 NTU</text>
+
+        <!-- Contact 4: UV-401 Validated Dose Relay -->
+        <rect x="545" y="148" width="135" height="44" rx="4" fill="#1e293b" stroke="#a855f7" stroke-width="2"/>
+        <text x="612" y="166" text-anchor="middle" fill="#e9d5ff" font-family="monospace" font-size="10" font-weight="bold">UV-401 OK (NO)</text>
+        <text x="612" y="181" text-anchor="middle" fill="#cbd5e1" font-family="monospace" font-size="9">Duty Dose ≥ 40 mJ</text>
+
+        <!-- Contact 5: PLC Potable Prove Permit (CT & DIT Passed) -->
+        <rect x="700" y="148" width="155" height="44" rx="4" fill="#1e293b" stroke="#10b981" stroke-width="2"/>
+        <text x="777" y="166" text-anchor="middle" fill="#6ee7b7" font-family="monospace" font-size="10" font-weight="bold">PLC DO_00 PERMIT</text>
+        <text x="777" y="181" text-anchor="middle" fill="#cbd5e1" font-family="monospace" font-size="9">CT ≥ 1.0 &amp; 24h DIT OK</text>
+
+        <!-- Coil: K-SAFE -->
+        <circle cx="955" cy="170" r="28" fill="#0f172a" stroke="#10b981" stroke-width="3"/>
+        <text x="955" y="167" text-anchor="middle" fill="#34d399" font-family="monospace" font-size="11" font-weight="bold">K-SAFE</text>
+        <text x="955" y="181" text-anchor="middle" fill="#cbd5e1" font-family="monospace" font-size="8.5">POTABLE OK</text>
+
+        <!-- RUNG 03: XV-602 FINAL POTABLE ISOLATION SOLENOID (FAIL-CLOSED) -->
+        <text x="22" y="255" fill="#34d399" font-family="monospace" font-size="10" font-weight="bold">03</text>
+        <line x1="70" y1="250" x2="920" y2="250" stroke="#10b981" stroke-width="2.5"/>
+        <line x1="990" y1="250" x2="1070" y2="250" stroke="#38bdf8" stroke-width="2.5"/>
+        <rect x="160" y="228" width="150" height="44" rx="4" fill="#1e293b" stroke="#10b981" stroke-width="2"/>
+        <text x="235" y="246" text-anchor="middle" fill="#34d399" font-family="monospace" font-size="10" font-weight="bold">K-SAFE-1 (NO)</text>
+        <text x="235" y="261" text-anchor="middle" fill="#cbd5e1" font-family="monospace" font-size="9">Force-Guided Safety</text>
+        <rect x="370" y="228" width="160" height="44" rx="4" fill="#1e293b" stroke="#10b981" stroke-width="2"/>
+        <text x="450" y="246" text-anchor="middle" fill="#34d399" font-family="monospace" font-size="10" font-weight="bold">PLC DO_12 (XV-602)</text>
+        <text x="450" y="261" text-anchor="middle" fill="#cbd5e1" font-family="monospace" font-size="9">Mode 2 Building Feed</text>
+        <rect x="590" y="228" width="160" height="44" rx="4" fill="#1e293b" stroke="#38bdf8" stroke-width="2"/>
+        <text x="670" y="246" text-anchor="middle" fill="#38bdf8" font-family="monospace" font-size="10" font-weight="bold">PSH-602 (NC)</text>
+        <text x="670" y="261" text-anchor="middle" fill="#cbd5e1" font-family="monospace" font-size="9">Disch &lt; 95 PSI Cutout</text>
+        <circle cx="955" cy="250" r="28" fill="#0f172a" stroke="#34d399" stroke-width="2.5"/>
+        <text x="955" y="247" text-anchor="middle" fill="#34d399" font-family="monospace" font-size="11" font-weight="bold">SOL-602</text>
+        <text x="955" y="261" text-anchor="middle" fill="#cbd5e1" font-family="monospace" font-size="8.5">XV-602 (FC)</text>
+
+        <!-- RUNG 04: XV-300 OFF-SPEC DIVERT TO WASTE (FAIL-OPEN SPRING RETURN) -->
+        <text x="22" y="335" fill="#fb7185" font-family="monospace" font-size="10" font-weight="bold">04</text>
+        <line x1="70" y1="330" x2="920" y2="330" stroke="#f43f5e" stroke-width="2.5"/>
+        <line x1="990" y1="330" x2="1070" y2="330" stroke="#38bdf8" stroke-width="2.5"/>
+        <rect x="160" y="308" width="150" height="44" rx="4" fill="#1e293b" stroke="#10b981" stroke-width="2"/>
+        <text x="235" y="326" text-anchor="middle" fill="#34d399" font-family="monospace" font-size="10" font-weight="bold">K-SAFE-2 (NO)</text>
+        <text x="235" y="341" text-anchor="middle" fill="#cbd5e1" font-family="monospace" font-size="9">Energizes to Close</text>
+        <rect x="370" y="308" width="380" height="44" rx="4" fill="#111827" stroke="#f43f5e" stroke-width="1.5"/>
+        <text x="560" y="326" text-anchor="middle" fill="#fda4af" font-family="monospace" font-size="10" font-weight="bold">FAIL-OPEN (FO) SPRING ACTUATOR LOGIC:</text>
+        <text x="560" y="341" text-anchor="middle" fill="#cbd5e1" font-family="monospace" font-size="9">Loss of K-SAFE or 24VDC de-energizes SOL-300 → Spring OPENS XV-300 to Waste</text>
+        <circle cx="955" cy="330" r="28" fill="#0f172a" stroke="#f43f5e" stroke-width="2.5"/>
+        <text x="955" y="327" text-anchor="middle" fill="#fb7185" font-family="monospace" font-size="11" font-weight="bold">SOL-300</text>
+        <text x="955" y="341" text-anchor="middle" fill="#cbd5e1" font-family="monospace" font-size="8.5">XV-300 (FO)</text>
+
+        <!-- RUNG 05: BOOSTER VFD SAFE TORQUE OFF (STO) & DRY-RUN LOCKOUT -->
+        <text x="22" y="415" fill="#60a5fa" font-family="monospace" font-size="10" font-weight="bold">05</text>
+        <line x1="70" y1="410" x2="920" y2="410" stroke="#3b82f6" stroke-width="2.5"/>
+        <line x1="990" y1="410" x2="1070" y2="410" stroke="#38bdf8" stroke-width="2.5"/>
+        <rect x="160" y="388" width="150" height="44" rx="4" fill="#1e293b" stroke="#10b981" stroke-width="2"/>
+        <text x="235" y="406" text-anchor="middle" fill="#34d399" font-family="monospace" font-size="10" font-weight="bold">K-SAFE-3 (NO)</text>
+        <text x="235" y="421" text-anchor="middle" fill="#cbd5e1" font-family="monospace" font-size="9">Potable Release OK</text>
+        <rect x="370" y="388" width="160" height="44" rx="4" fill="#1e293b" stroke="#38bdf8" stroke-width="2"/>
+        <text x="450" y="406" text-anchor="middle" fill="#38bdf8" font-family="monospace" font-size="10" font-weight="bold">LSL-601 (NO Held)</text>
+        <text x="450" y="421" text-anchor="middle" fill="#cbd5e1" font-family="monospace" font-size="9">Clearwell &gt; 15% Level</text>
+        <rect x="590" y="388" width="160" height="44" rx="4" fill="#1e293b" stroke="#34d399" stroke-width="2"/>
+        <text x="670" y="406" text-anchor="middle" fill="#34d399" font-family="monospace" font-size="10" font-weight="bold">ZSO-602 (NO)</text>
+        <text x="670" y="421" text-anchor="middle" fill="#cbd5e1" font-family="monospace" font-size="9">XV-602 Limit Open</text>
+        <circle cx="955" cy="410" r="28" fill="#0f172a" stroke="#3b82f6" stroke-width="2.5"/>
+        <text x="955" y="407" text-anchor="middle" fill="#60a5fa" font-family="monospace" font-size="11" font-weight="bold">VFD-STO</text>
+        <text x="955" y="421" text-anchor="middle" fill="#cbd5e1" font-family="monospace" font-size="8.5">P-601A/B/C</text>
+
+        <!-- RUNG 06: CHLORINE GAS LEAK HARDWIRED OVERRIDE (AIT-901 > 1.0 PPM) -->
+        <text x="22" y="495" fill="#fbbf24" font-family="monospace" font-size="10" font-weight="bold">06</text>
+        <line x1="70" y1="490" x2="920" y2="490" stroke="#f59e0b" stroke-width="2.5"/>
+        <line x1="990" y1="490" x2="1070" y2="490" stroke="#38bdf8" stroke-width="2.5"/>
+        <rect x="160" y="468" width="150" height="44" rx="4" fill="#1e293b" stroke="#f59e0b" stroke-width="2"/>
+        <text x="235" y="486" text-anchor="middle" fill="#fde047" font-family="monospace" font-size="10" font-weight="bold">AIT-901 ALARM (NO)</text>
+        <text x="235" y="501" text-anchor="middle" fill="#cbd5e1" font-family="monospace" font-size="9">Cl₂ Gas ≥ 1.0 ppm</text>
+        <rect x="370" y="468" width="380" height="44" rx="4" fill="#111827" stroke="#f59e0b" stroke-width="1.5"/>
+        <text x="560" y="486" text-anchor="middle" fill="#fde047" font-family="monospace" font-size="10" font-weight="bold">CHEMICAL SAFETY INTERLOCK:</text>
+        <text x="560" y="501" text-anchor="middle" fill="#cbd5e1" font-family="monospace" font-size="9">Drops out P-502A/B NaOCl &amp; P-504 Acid Pumps + Forces EF-901 High Speed + Strobe</text>
+        <circle cx="955" cy="490" r="28" fill="#0f172a" stroke="#f59e0b" stroke-width="2.5"/>
+        <text x="955" y="487" text-anchor="middle" fill="#fbbf24" font-family="monospace" font-size="11" font-weight="bold">CR-CL2</text>
+        <text x="955" y="501" text-anchor="middle" fill="#cbd5e1" font-family="monospace" font-size="8.5">CHEM TRIP</text>
+      </svg>
+    </div>
+
+    <!-- PLC I/O Module Rack Assignment Table -->
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-4">
+      <div class="space-y-2">
+        <h3 class="text-sm font-bold uppercase tracking-wider text-purple-400 font-mono">PLC Rack Slot 1 &amp; 2: Analog Inputs (4–20 mA / HART) &amp; Analog Outputs</h3>
+        <div class="overflow-x-auto border border-[var(--border)] rounded-xl">
+          <table class="w-full text-left text-xs font-mono">
+            <thead class="bg-[var(--secondary)] text-[var(--secondary-foreground)] uppercase border-b border-[var(--border)]">
+              <tr>
+                <th class="py-2 px-2.5">PLC Point</th>
+                <th class="py-2 px-2.5">Instrument Tag</th>
+                <th class="py-2 px-2.5">Range / Engineering Units</th>
+                <th class="py-2 px-2.5">Trip / Control Function</th>
+              </tr>
+            </thead>
+            <tbody class="divide-y divide-[var(--border)]">
+              <tr><td class="py-1.5 px-2.5 text-purple-400">AI1_00</td><td class="py-1.5 px-2.5">PT-100</td><td class="py-1.5 px-2.5">0–150 PSI (Hydrant/Tap)</td><td class="py-1.5 px-2.5 font-sans">Closes <code>XV-100</code> if street &lt; 20 PSI</td></tr>
+              <tr><td class="py-1.5 px-2.5 text-purple-400">AI1_01</td><td class="py-1.5 px-2.5">LIT-100</td><td class="py-1.5 px-2.5">0–100% (TK-100 Level)</td><td class="py-1.5 px-2.5 font-sans">Modulates <code>XV-100</code>; trips <code>P-101</code> &lt; 10%</td></tr>
+              <tr><td class="py-1.5 px-2.5 text-purple-400">AI1_02</td><td class="py-1.5 px-2.5">AIT-101</td><td class="py-1.5 px-2.5">0–100 NTU (Raw Turbidity)</td><td class="py-1.5 px-2.5 font-sans">Enables <code>P-501</code> PACl dosing &gt; 5 NTU</td></tr>
+              <tr><td class="py-1.5 px-2.5 text-purple-400">AI1_03</td><td class="py-1.5 px-2.5">FIT-200</td><td class="py-1.5 px-2.5">0–60 / 0–300 GPM (UF Feed)</td><td class="py-1.5 px-2.5 font-sans">Paces <code>P-101</code> VFD &amp; chemical feed</td></tr>
+              <tr><td class="py-1.5 px-2.5 text-purple-400">AI1_04</td><td class="py-1.5 px-2.5">PDIT-201A/B</td><td class="py-1.5 px-2.5">0–35 PSI (UF TMP &amp; DIT)</td><td class="py-1.5 px-2.5 font-sans">Triggers BW &gt; 22 PSI; measures daily DIT decay</td></tr>
+              <tr><td class="py-1.5 px-2.5 text-purple-400">AI1_05</td><td class="py-1.5 px-2.5">AIT-201</td><td class="py-1.5 px-2.5">0–1.000 NTU (UF Permeate)</td><td class="py-1.5 px-2.5 font-sans">Diverts (<code>XV-300</code>) &amp; closes <code>XV-602</code> &gt; 0.15 NTU</td></tr>
+              <tr><td class="py-1.5 px-2.5 text-purple-400">AI1_06</td><td class="py-1.5 px-2.5">AIT-401</td><td class="py-1.5 px-2.5">0–100% UVT / mJ/cm²</td><td class="py-1.5 px-2.5 font-sans">Starts standby UV reactor &lt; 40 mJ/cm²</td></tr>
+              <tr><td class="py-1.5 px-2.5 text-purple-400">AI1_07</td><td class="py-1.5 px-2.5">LIT-401</td><td class="py-1.5 px-2.5">0–100% (TK-401 Contact Tank)</td><td class="py-1.5 px-2.5 font-sans">Live effective volume V for CT calculation</td></tr>
+              <tr><td class="py-1.5 px-2.5 text-purple-400">AI2_00..02</td><td class="py-1.5 px-2.5">AIT-402 / 601</td><td class="py-1.5 px-2.5">0–5 mg/L Cl₂, pH 4–10, °C</td><td class="py-1.5 px-2.5 font-sans">Trims <code>P-502</code>; verifies 4-log virus CT ≥ 1.0</td></tr>
+              <tr><td class="py-1.5 px-2.5 text-purple-400">AI2_03</td><td class="py-1.5 px-2.5">LIT-601</td><td class="py-1.5 px-2.5">0–100% (TK-601 Clearwell)</td><td class="py-1.5 px-2.5 font-sans">Paces <code>P-401</code>; dry-run trip &lt; 15%</td></tr>
+              <tr><td class="py-1.5 px-2.5 text-purple-400">AI2_04..05</td><td class="py-1.5 px-2.5">PT-602 / PT-603</td><td class="py-1.5 px-2.5">0–150 PSI (Booster &amp; Bldg)</td><td class="py-1.5 px-2.5 font-sans">PID speed control for <code>P-601</code> VFDs (65 PSI)</td></tr>
+              <tr><td class="py-1.5 px-2.5 text-purple-400">AI2_06</td><td class="py-1.5 px-2.5">FIT-602</td><td class="py-1.5 px-2.5">0–60 / 0–350 GPM (Potable Out)</td><td class="py-1.5 px-2.5 font-sans">Totalizes potable gallons delivered to client</td></tr>
+              <tr><td class="py-1.5 px-2.5 text-purple-400">AI2_07</td><td class="py-1.5 px-2.5">AIT-901</td><td class="py-1.5 px-2.5">0–10.0 ppm (Cl₂ Ambient Gas)</td><td class="py-1.5 px-2.5 font-sans">Alarm @ 0.5 ppm; hardwired shutdown @ 1.0 ppm</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <div class="space-y-2">
+        <h3 class="text-sm font-bold uppercase tracking-wider text-cyan-400 font-mono">PLC Rack Slot 3, 4 &amp; 5: 24VDC Discrete Inputs &amp; Solenoid / Relay Outputs</h3>
+        <div class="overflow-x-auto border border-[var(--border)] rounded-xl">
+          <table class="w-full text-left text-xs font-mono">
+            <thead class="bg-[var(--secondary)] text-[var(--secondary-foreground)] uppercase border-b border-[var(--border)]">
+              <tr>
+                <th class="py-2 px-2.5">Slot / Ch</th>
+                <th class="py-2 px-2.5">Tag / Device</th>
+                <th class="py-2 px-2.5">Signal Type</th>
+                <th class="py-2 px-2.5">Description</th>
+              </tr>
+            </thead>
+            <tbody class="divide-y divide-[var(--border)]">
+              <tr><td class="py-1.5 px-2.5 text-cyan-400">DI3_00..01</td><td class="py-1.5 px-2.5">K-SAFE / ESTOP</td><td class="py-1.5 px-2.5">24VDC Sink</td><td class="py-1.5 px-2.5 font-sans">Safety Relay Auxiliary Feedback &amp; E-Stop Status</td></tr>
+              <tr><td class="py-1.5 px-2.5 text-cyan-400">DI3_02..06</td><td class="py-1.5 px-2.5">VFD Fault/Run</td><td class="py-1.5 px-2.5">24VDC Sink</td><td class="py-1.5 px-2.5 font-sans">Run &amp; Fault contacts from <code>VFD-101, 401, 601A/B/C</code></td></tr>
+              <tr><td class="py-1.5 px-2.5 text-cyan-400">DI3_07</td><td class="py-1.5 px-2.5">ATS-SHORE-AUX</td><td class="py-1.5 px-2.5">24VDC Sink</td><td class="py-1.5 px-2.5 font-sans">Shore Power Active → Enables 40A Load-Shed Mode on MWTP-50</td></tr>
+              <tr><td class="py-1.5 px-2.5 text-cyan-400">DI3_08..15</td><td class="py-1.5 px-2.5">ZSO / ZSC Valves</td><td class="py-1.5 px-2.5">24VDC Sink</td><td class="py-1.5 px-2.5 font-sans">Open/Closed limit switches on critical valves (<code>XV-300, 401, 602</code>)</td></tr>
+              <tr><td class="py-1.5 px-2.5 text-emerald-400">DO4_00</td><td class="py-1.5 px-2.5">PERMIT-K-SAFE</td><td class="py-1.5 px-2.5">24VDC Relay</td><td class="py-1.5 px-2.5 font-sans">PLC Potable Permit (closes only when DIT + CT + UV + Turb pass)</td></tr>
+              <tr><td class="py-1.5 px-2.5 text-emerald-400">DO4_01..02</td><td class="py-1.5 px-2.5">SOL-100 / 101</td><td class="py-1.5 px-2.5">24VDC 0.5A</td><td class="py-1.5 px-2.5 font-sans">Break Tank Fill <code>XV-100</code> &amp; Auto-Strainer Flush <code>XV-101</code></td></tr>
+              <tr><td class="py-1.5 px-2.5 text-emerald-400">DO4_03..09</td><td class="py-1.5 px-2.5">SOL-201A..207A</td><td class="py-1.5 px-2.5">24VDC 0.5A</td><td class="py-1.5 px-2.5 font-sans">UF Train A Namur Solenoid Manifold (Feed, Perm, BW, Drain, Air, DIT)</td></tr>
+              <tr><td class="py-1.5 px-2.5 text-emerald-400">DO4_10..15</td><td class="py-1.5 px-2.5">SOL-201B..207B</td><td class="py-1.5 px-2.5">24VDC 0.5A</td><td class="py-1.5 px-2.5 font-sans">UF Train B Namur Solenoid Manifold (Feed, Perm, BW, Drain, Air, DIT)</td></tr>
+              <tr><td class="py-1.5 px-2.5 text-emerald-400">DO5_00..03</td><td class="py-1.5 px-2.5">SOL-300/401/601/602</td><td class="py-1.5 px-2.5">24VDC 0.5A</td><td class="py-1.5 px-2.5 font-sans">Divert <code>XV-300</code>, CT Feed <code>XV-401</code>, CW Drain <code>XV-601</code>, Bldg Out <code>XV-602</code></td></tr>
+              <tr><td class="py-1.5 px-2.5 text-emerald-400">DO5_04..08</td><td class="py-1.5 px-2.5">VFD-START-CMD</td><td class="py-1.5 px-2.5">24VDC Relay</td><td class="py-1.5 px-2.5 font-sans">Hardwired Run Enable to <code>VFD-101, 401, 601A/B/C, 202</code></td></tr>
+              <tr><td class="py-1.5 px-2.5 text-emerald-400">DO5_09..12</td><td class="py-1.5 px-2.5">CHEM-RUN-CMD</td><td class="py-1.5 px-2.5">24VDC Relay</td><td class="py-1.5 px-2.5 font-sans">Run Enable to <code>P-501</code> (PACl), <code>P-502A/B</code> (NaOCl), <code>P-503</code> (NaHSO₃)</td></tr>
+              <tr><td class="py-1.5 px-2.5 text-emerald-400">DO5_15</td><td class="py-1.5 px-2.5">CR-SHED</td><td class="py-1.5 px-2.5">24VDC Relay</td><td class="py-1.5 px-2.5 font-sans">MWTP-50 50A Shore Mode HVAC Pause during 40s UF Backwash</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ========================================================================= -->
+  <!-- SHEET E-104: ELECTRICIAN FIELD NOTES, WIRE SCHEDULE & NEC CHECKLIST       -->
+  <!-- ========================================================================= -->
+  <section id="sheet-e4" class="sheet-section hidden bg-[var(--card)] border border-[var(--border)] rounded-2xl overflow-hidden shadow-lg space-y-6 p-5 md:p-6">
+    <div class="flex flex-col md:flex-row md:items-center md:justify-between border-b border-[var(--border)] pb-4 gap-3">
+      <div>
+        <div class="flex items-center gap-2">
+          <span class="px-2 py-0.5 rounded text-xs font-mono font-bold bg-amber-500/20 text-amber-400">DWG E-104</span>
+          <span class="text-xs font-mono text-[var(--muted-foreground)]">ELECTRICIAN &amp; PANEL BUILDER SPECIFICATION SHEET</span>
+        </div>
+        <h2 class="text-lg font-bold mt-1">Conduit, Cable &amp; Segregation Rules, VFD Phase-Derating Spec &amp; Commissioning Megger Test</h2>
+        <p class="text-xs text-[var(--muted-foreground)]">Mandatory fabrication and field wiring instructions for trailer vibration, wet-location washdown, and EMI/RFI noise immunity.</p>
+      </div>
+    </div>
+
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+      <div class="bg-[var(--secondary)]/60 border border-[var(--border)] rounded-xl p-4 space-y-2">
+        <div class="text-xs font-mono font-bold text-emerald-400 uppercase">1. Three-Raceway Separation Rule (UL-508A / IEEE 518)</div>
+        <p class="text-xs text-[var(--muted-foreground)] leading-relaxed">
+          Never pull VFD motor leads and 4–20 mA analyzer signals in the same conduit or wireway trough! Divide all trailer wiring into three physically separated raceways:
+        </p>
+        <ul class="text-xs space-y-1 text-[var(--secondary-foreground)] list-disc pl-4">
+          <li><strong>Raceway Group A (Power &amp; VFD PWM):</strong> 1000V XLPE braided-shield VFD cable (Belden 2950x or Lapp ÖLFLEX VFD) in dedicated EMT / PVC-coated Liquidtight Flexible Metal Conduit (<code>LFMC</code>). Ground shield 360° at both VFD gland and motor peckerhead.</li>
+          <li><strong>Raceway Group B (120VAC &amp; 24VDC Solenoids):</strong> THWN-2 stranded copper (<code>#14</code> min for power, <code>#16</code> min for 24VDC solenoids) with flyback suppression diodes across every Namur solenoid coil.</li>
+          <li><strong>Raceway Group C (4–20mA / Ethernet Instrumentation):</strong> Belden 8760 <code>#18 AWG</code> twisted shielded pair (<code>TSP</code>). Ground drain wire at the <code>CP-701</code> analog ground bar ONLY (float and tape at field transmitter end to prevent ground loops).</li>
+        </ul>
+      </div>
+
+      <div class="bg-[var(--secondary)]/60 border border-[var(--border)] rounded-xl p-4 space-y-2">
+        <div class="text-xs font-mono font-bold text-blue-400 uppercase">2. Single-Phase Input VFD Sizing Rule (MWTP-50 Only)</div>
+        <p class="text-xs text-[var(--muted-foreground)] leading-relaxed">
+          On the <code>MWTP-50-GN22</code>, standard 230V 3-phase NEMA Premium Efficient washdown motors (<code>P-101</code>, <code>P-401</code>, <code>P-601A/B</code>) are driven from the 240V single-phase bus using VFDs as phase converters:
+        </p>
+        <ul class="text-xs space-y-1 text-[var(--secondary-foreground)] list-disc pl-4">
+          <li><strong>50% Frame Derating:</strong> Feeding single-phase AC into a 3-phase VFD rectifier bridge increases DC bus ripple and diode current by <code>√3</code>. Therefore, all <strong>3.0 HP motors (<code>9.6A</code> 3Φ) MUST use a 5.0 HP-rated 230V VFD frame</strong> (e.g., Allen-Bradley PowerFlex 525 <code>25B-B017N104</code>, rated <code>17A</code> 3Φ / <code>9.6A</code> 1Φ-in), and the <strong>1.5 HP motor (<code>P-401</code>) uses a 3.0 HP VFD frame</strong>.</li>
+          <li><strong>Mandatory 3% Input Line Reactor:</strong> Install a 3% impedance AC line reactor ahead of each single-phase VFD input (<code>L1, L2</code>) to smooth DC bus ripple and protect the 20 kW generator voltage regulator.</li>
+        </ul>
+      </div>
+
+      <div class="bg-[var(--secondary)]/60 border border-[var(--border)] rounded-xl p-4 space-y-2">
+        <div class="text-xs font-mono font-bold text-amber-400 uppercase">3. Trailer Chassis Bonding &amp; Wet-Location Code (NEC 551 &amp; 250)</div>
+        <p class="text-xs text-[var(--muted-foreground)] leading-relaxed">
+          Mobile water treatment trailers combine high-vibration highway transport with wet-process piping and chemical fumes:
+        </p>
+        <ul class="text-xs space-y-1 text-[var(--secondary-foreground)] list-disc pl-4">
+          <li><strong>Stranded Conductors Only:</strong> Solid building wire is prohibited on mobile trailers due to vibration fatigue. Use 100% Class B or Class C stranded copper with ferrules on all screw/spring terminals.</li>
+          <li><strong>316L SS Piping Equipotential Bond:</strong> Bond the 316L stainless process piping manifold, UF skid frame, and gooseneck chassis I-beams to the main ground busbar using <code>#4 AWG</code> braided tinned copper straps.</li>
+          <li><strong>Exterior Grounding Lugs:</strong> Provide a heavy-duty bronze ground lug on the rear bumper (<code>#4 AWG</code> to <code>8-ft</code> copper-clad ground rod when running on onboard generator).</li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- Pre-Power & FAT Electrical Checkout Table -->
+    <div class="space-y-2">
+      <h3 class="text-sm font-bold uppercase tracking-wider text-amber-400 font-mono">Electrician Pre-Energization &amp; Factory Acceptance Test (FAT) Sign-Off Checklist</h3>
+      <div class="overflow-x-auto border border-[var(--border)] rounded-xl">
+        <table class="w-full text-left text-xs font-mono">
+          <thead class="bg-[var(--secondary)] text-[var(--secondary-foreground)] uppercase border-b border-[var(--border)]">
+            <tr>
+              <th class="py-2 px-3">Step</th>
+              <th class="py-2 px-3">Test / Inspection Item</th>
+              <th class="py-2 px-3">Acceptance Criterion</th>
+              <th class="py-2 px-3">Measured Value</th>
+              <th class="py-2 px-3">Electrician Initials</th>
+            </tr>
+          </thead>
+          <tbody class="divide-y divide-[var(--border)]">
+            <tr>
+              <td class="py-2 px-3 font-bold">E-FAT-01</td>
+              <td class="py-2 px-3 font-sans font-semibold">Insulation Resistance (Megger) Test on Motor Leads (Disconnected from VFD Output!)</td>
+              <td class="py-2 px-3">≥ 100 MΩ @ 500V DC (240V) / 1000V DC (480V)</td>
+              <td class="py-2 px-3">_______ MΩ</td>
+              <td class="py-2 px-3">_______</td>
+            </tr>
+            <tr>
+              <td class="py-2 px-3 font-bold">E-FAT-02</td>
+              <td class="py-2 px-3 font-sans font-semibold">Neutral-to-Ground Isolation Test at Main Panel (Shore Inlet Disconnected, ATS in Shore Pos)</td>
+              <td class="py-2 px-3">∞ Ω (Open) between N Bus and Trailer Chassis PE</td>
+              <td class="py-2 px-3">_______ MΩ</td>
+              <td class="py-2 px-3">_______</td>
+            </tr>
+            <tr>
+              <td class="py-2 px-3 font-bold">E-FAT-03</td>
+              <td class="py-2 px-3 font-sans font-semibold">Equipotential Continuity Test (316L SS Piping, UF Frame, Clearwell Skid to Chassis Ground Lug)</td>
+              <td class="py-2 px-3">≤ 0.10 Ω via digital low-resistance ohmmeter</td>
+              <td class="py-2 px-3">_______ Ω</td>
+              <td class="py-2 px-3">_______</td>
+            </tr>
+            <tr>
+              <td class="py-2 px-3 font-bold">E-FAT-04</td>
+              <td class="py-2 px-3 font-sans font-semibold">Hardwired Safety Relay (<code>K-SAFE</code>) Trip Test (Simulate E-Stop, High Turbidity &amp; Cl₂ Gas ≥ 1.0 ppm)</td>
+              <td class="py-2 px-3"><code>XV-602</code> closes &lt; 2s, <code>XV-300</code> opens, Booster STO drops</td>
+              <td class="py-2 px-3">PASS / FAIL</td>
+              <td class="py-2 px-3">_______</td>
+            </tr>
+            <tr>
+              <td class="py-2 px-3 font-bold">E-FAT-05</td>
+              <td class="py-2 px-3 font-sans font-semibold">MWTP-50 50A Shore Load-Shed Verification (Simulate 50 GPM Burst + UF Backwash on 50A Shore)</td>
+              <td class="py-2 px-3"><code>CR-SHED</code> pauses HVAC; total 240V current ≤ 39.5 Amps</td>
+              <td class="py-2 px-3">_______ Amps</td>
+              <td class="py-2 px-3">_______</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </section>
+
+  <script>
+    function showSheet(id) {
+      const sheets = ['e1', 'e2', 'e3', 'e4'];
+      sheets.forEach(s => {
+        const el = document.getElementById('sheet-' + s);
+        const tab = document.getElementById('tab-' + s);
+        if (id === 'all' || id === s) {
+          el.classList.remove('hidden');
+        } else {
+          el.classList.add('hidden');
+        }
+        if (tab) {
+          tab.classList.toggle('active', id === s);
+        }
+      });
+      const allTab = document.getElementById('tab-all');
+      if (allTab) allTab.classList.toggle('active', id === 'all');
+    }
+
+    function toggleTheme() {
+      const root = document.documentElement;
+      const isLight = root.classList.toggle('light');
+      document.getElementById('theme-btn').textContent = isLight ? 'Theme: Light' : 'Theme: Dark';
+    }
+  </script>
+</body>
+</html>
