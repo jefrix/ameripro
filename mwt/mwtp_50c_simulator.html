@@ -1,0 +1,761 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>MWTP-50C ("KitchenShield-50C") — Split-Power Restaurant System Simulator</title>
+  <script src="https://www.gstatic.com/antigravity/web/dev/tailwindcss.min.js"></script>
+  <style>:root { --background: #0b1120; --foreground: #f1f5f9; --card: #111827; --secondary: #1e293b; --secondary-foreground: #e2e8f0; --muted-foreground: #94a3b8; --border: #1e293b; --primary: #8b5cf6; --primary-foreground: #ffffff; } html.light { --background: #f8fafc; --foreground: #0f172a; --card: #ffffff; --secondary: #f1f5f9; --secondary-foreground: #1e293b; --muted-foreground: #64748b; --border: #e2e8f0; --primary: #7c3aed; --primary-foreground: #ffffff; }
+    body { background: var(--background); color: var(--foreground); }
+    .skid-box { transition: all 0.2s ease; cursor: pointer; }
+    .skid-box:hover { transform: translateY(-2px); filter: brightness(1.1); }
+    .skid-active { box-shadow: 0 0 0 2px #8b5cf6; }
+    .stage { transition: background-color 0.2s, border-color 0.2s, color 0.2s; }
+    .st-ok { background: rgba(16,185,129,0.12); border-color: rgba(16,185,129,0.45); color: #6ee7b7; }
+    .st-warn { background: rgba(245,158,11,0.12); border-color: rgba(245,158,11,0.5); color: #fcd34d; }
+    .st-bad { background: rgba(244,63,94,0.14); border-color: rgba(244,63,94,0.55); color: #fda4af; }
+    .st-off { background: rgba(100,116,139,0.10); border-color: rgba(100,116,139,0.35); color: #94a3b8; }
+    .preset { transition: all 0.15s ease; }
+    .preset-on { background: #7c3aed !important; color: #fff !important; border-color: #8b5cf6 !important; }
+  </style>
+</head>
+<body class="bg-[var(--background)] text-[var(--foreground)] antialiased p-4 md:p-6 max-w-7xl mx-auto space-y-6">
+
+  <!-- Header Banner -->
+  <div class="bg-[var(--card)] border border-[var(--border)] rounded-2xl p-6 shadow-sm">
+    <div class="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4">
+      <div>
+        <div class="flex flex-wrap items-center gap-2 mb-2">
+          <span class="px-2.5 py-0.5 rounded-full text-xs font-semibold bg-violet-500/15 text-violet-400 border border-violet-500/30">MWTP-50C REV C ("KITCHENSHIELD-50C")</span>
+          <span class="px-2.5 py-0.5 rounded-full text-xs font-semibold bg-blue-500/15 text-blue-400 border border-blue-500/30">TWO TRAILERS • BOTH UNDER 10,000 LB • NO CDL</span>
+          <span class="px-2.5 py-0.5 rounded-full text-xs font-semibold bg-amber-500/15 text-amber-400 border border-amber-500/30">35 GPM CONTINUOUS / 50 GPM PEAK</span>
+        </div>
+        <h1 class="text-2xl md:text-3xl font-bold tracking-tight">Split-Power Restaurant Water System Simulator</h1>
+        <p class="text-sm text-[var(--muted-foreground)] mt-1">
+          20-ft Water Trailer (14-ft Main Deck + 6-ft Gooseneck) on 240V 50A Shore Power • UF + 186 mJ/cm² Virus-Rated UV • No Ground Tanks on Boil Water Jobs • PWR-25 Generator Trailer for Outages
+        </p>
+      </div>
+
+      <div class="grid grid-cols-2 sm:grid-cols-4 gap-2.5 shrink-0">
+        <div class="bg-[var(--secondary)] border border-[var(--border)] rounded-xl px-3.5 py-2 text-center">
+          <div class="text-[11px] text-[var(--muted-foreground)] uppercase">Road / On-Site</div>
+          <div class="text-base font-bold font-mono text-violet-400">7,310 / 8,660 lb</div>
+          <div class="text-[10px] text-[var(--muted-foreground)]">9,990 lb GVWR</div>
+        </div>
+        <div class="bg-[var(--secondary)] border border-[var(--border)] rounded-xl px-3.5 py-2 text-center">
+          <div class="text-[11px] text-[var(--muted-foreground)] uppercase">Arrival to Water</div>
+          <div class="text-base font-bold font-mono text-emerald-400">~1.5 hr</div>
+          <div class="text-[10px] text-[var(--muted-foreground)]">BWA job, shore power</div>
+        </div>
+        <div class="bg-[var(--secondary)] border border-[var(--border)] rounded-xl px-3.5 py-2 text-center">
+          <div class="text-[11px] text-[var(--muted-foreground)] uppercase">System Cost</div>
+          <div class="text-base font-bold font-mono text-amber-400">$253,920</div>
+          <div class="text-[10px] text-[var(--muted-foreground)]">$219,420 + $34,500 PWR-25</div>
+        </div>
+        <div class="bg-[var(--secondary)] border border-[var(--border)] rounded-xl px-3.5 py-2 text-center">
+          <div class="text-[11px] text-[var(--muted-foreground)] uppercase">Restaurant Rate</div>
+          <div class="text-base font-bold font-mono text-purple-400">$3,200/day</div>
+          <div class="text-[10px] text-[var(--muted-foreground)]">+ $400/day generator add-on</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Layout + Inspector -->
+  <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
+    <div class="lg:col-span-8 bg-[var(--card)] border border-[var(--border)] rounded-2xl p-5 space-y-4 min-w-0">
+      <div class="flex flex-wrap items-center justify-between gap-2">
+        <div>
+          <h2 class="text-base font-bold">Interactive 20-ft Water Trailer Layout (Click Any Section to Inspect)</h2>
+          <p class="text-xs text-[var(--muted-foreground)]">14-ft Main Deck + 6-ft Gooseneck Deck × 8-ft Wide × 7.5-ft Ceiling • No Generator, No Fuel On Board</p>
+        </div>
+        <span class="text-xs font-mono text-violet-300 bg-violet-500/10 px-2.5 py-1 rounded border border-violet-500/30">~1,170 lb Pin (16%) Over Truck Axle</span>
+      </div>
+
+      <div class="bg-slate-950 border border-slate-800 rounded-xl p-4 space-y-4 overflow-x-auto">
+        <div class="min-w-[660px] space-y-3">
+          <div class="flex justify-between text-[10px] font-mono text-slate-400 px-2 border-b border-slate-800 pb-1">
+            <span>0 ft (Gooseneck Coupler)</span>
+            <span>6 ft (Weatherproof Bulkhead)</span>
+            <span>11 ft</span>
+            <span>16 ft (Tandem 5.2k Axles)</span>
+            <span>20 ft (Rear Bulkhead)</span>
+          </div>
+
+          <div class="grid grid-cols-12 gap-2 bg-slate-900/90 border-2 border-slate-700 rounded-xl p-3">
+            <!-- Gooseneck -->
+            <div onclick="selectSkid('nose')" id="skid-nose" class="skid-box skid-active col-span-3 bg-purple-500/10 border-2 border-purple-500/40 rounded-lg p-2.5 flex flex-col justify-between">
+              <div>
+                <div class="flex items-center justify-between">
+                  <span class="text-[10px] font-mono font-bold text-purple-400 uppercase">Gooseneck (0–6 ft)</span>
+                  <span class="text-[9px] font-mono bg-slate-700/60 text-slate-300 px-1 rounded">Exterior Doors</span>
+                </div>
+                <div class="text-xs font-bold text-white mt-0.5">PLC, Air &amp; Chem Cabinets</div>
+                <p class="text-[11px] text-slate-300 mt-1">CP-701 PLC/HMI + UPS • Duplex oil-less air • Segregated NaOCl vs. citric/bisulfite + exhaust + AIT-901</p>
+              </div>
+              <div class="text-[10px] font-mono text-purple-300 mt-2 pt-1 border-t border-purple-500/20">870 lb • Outside operator space</div>
+            </div>
+
+            <!-- Main deck -->
+            <div class="col-span-9 grid grid-rows-3 gap-2">
+              <div class="grid grid-cols-10 gap-2">
+                <div onclick="selectSkid('uf')" id="skid-uf" class="skid-box col-span-4 bg-teal-500/10 border border-teal-500/40 rounded-lg p-2">
+                  <div class="text-[10px] font-mono font-bold text-teal-400">ROADSIDE FRONT (6–11 ft)</div>
+                  <div class="text-xs font-bold text-white">UF-201A/B (4 × 60" PVDF)</div>
+                  <div class="text-[10px] text-slate-300">0.02 μm • 2,200 ft² • Automated DIT-201</div>
+                </div>
+                <div onclick="selectSkid('bench')" id="skid-bench" class="skid-box col-span-3 bg-sky-500/10 border border-sky-500/40 rounded-lg p-2">
+                  <div class="text-[10px] font-mono font-bold text-sky-400">ROADSIDE AXLES (11–16 ft)</div>
+                  <div class="text-xs font-bold text-white">Test Bench &amp; Eyewash</div>
+                  <div class="text-[10px] text-slate-300">Turbidity • Cl2/pH • ANSI Z358.1</div>
+                </div>
+                <div onclick="selectSkid('uv')" id="skid-uv" class="skid-box col-span-3 bg-fuchsia-500/10 border border-fuchsia-500/40 rounded-lg p-2">
+                  <div class="text-[10px] font-mono font-bold text-fuchsia-400">REAR (16–20 ft)</div>
+                  <div class="text-xs font-bold text-white">UV-401A/B 186 mJ</div>
+                  <div class="text-[10px] text-slate-300">Duty + standby • AIT-401 UVT</div>
+                </div>
+              </div>
+
+              <div class="bg-slate-950/80 border border-dashed border-slate-700 rounded px-3 py-1 flex items-center justify-between text-[11px] font-mono text-slate-400">
+                <span>BULKHEAD ← 30" WALKWAY</span>
+                <span class="text-violet-400 font-bold">[ 2 × 5,200 LB AXLES @ 11–16 FT ]</span>
+                <span>REAR DOORS →</span>
+              </div>
+
+              <div class="grid grid-cols-10 gap-2">
+                <div onclick="selectSkid('inlet')" id="skid-inlet" class="skid-box col-span-4 bg-cyan-500/10 border border-cyan-500/40 rounded-lg p-2">
+                  <div class="text-[10px] font-mono font-bold text-cyan-400">CURBSIDE FRONT (6–11 ft)</div>
+                  <div class="text-xs font-bold text-white">PSV-100 • RPZ-100 • P-101</div>
+                  <div class="text-[10px] text-slate-300">1.5" ASSE 1013 • 3 HP boost pump • Strainer + bags</div>
+                </div>
+                <div onclick="selectSkid('clearwell')" id="skid-clearwell" class="skid-box col-span-3 bg-emerald-500/10 border border-emerald-500/40 rounded-lg p-2">
+                  <div class="text-[10px] font-mono font-bold text-emerald-400">CURBSIDE AXLES (11–16 ft)</div>
+                  <div class="text-xs font-bold text-white">TK-601 + Booster</div>
+                  <div class="text-[10px] text-slate-300">150 gal • Duplex 3 HP VFD</div>
+                </div>
+                <div onclick="selectSkid('bulkhead')" id="skid-bulkhead" class="skid-box col-span-3 bg-blue-500/10 border border-blue-500/40 rounded-lg p-2">
+                  <div class="text-[10px] font-mono font-bold text-blue-400">REAR BULKHEAD</div>
+                  <div class="text-xs font-bold text-white">RPZ-602 &amp; 5 Ports</div>
+                  <div class="text-[10px] text-slate-300">Port A/B • Potable • Waste • 50A</div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Hookups beside trailer -->
+          <div class="grid grid-cols-1 sm:grid-cols-3 gap-2.5 pt-1">
+            <div onclick="selectSkid('porta')" id="skid-porta" class="skid-box bg-sky-500/10 border border-sky-500/40 rounded-lg p-2.5">
+              <div class="text-[10px] font-mono font-bold text-sky-400 uppercase">Port A • Boil Water Jobs</div>
+              <div class="text-xs font-bold text-white">Direct Feed from Service-Line Tee</div>
+              <div class="text-[11px] text-slate-300">Pressurized supply → PSV-100 → RPZ-100. No break tank on the ground.</div>
+            </div>
+            <div onclick="selectSkid('portb')" id="skid-portb" class="skid-box bg-amber-500/10 border border-amber-500/40 rounded-lg p-2.5">
+              <div class="text-[10px] font-mono font-bold text-amber-400 uppercase">Port B • Zero Pressure</div>
+              <div class="text-xs font-bold text-white">Draft from Tanker or Folding Tank</div>
+              <div class="text-[11px] text-slate-300">2" suction. The tanker is the break tank; 550-gal folding tank rides on PWR-25.</div>
+            </div>
+            <div onclick="selectSkid('pwr')" id="skid-pwr" class="skid-box bg-yellow-500/10 border border-yellow-500/40 rounded-lg p-2.5">
+              <div class="text-[10px] font-mono font-bold text-yellow-400 uppercase">Second Trailer • Outages Only</div>
+              <div class="text-xs font-bold text-white">PWR-25 Generator &amp; Kit</div>
+              <div class="text-[11px] text-slate-300">25 kVA Tier 4 Final • 50A cord to shore inlet • ~3,540 lb</div>
+            </div>
+          </div>
+
+          <div class="bg-slate-900 border border-slate-700 rounded-lg p-2.5 text-[11px] text-slate-300">
+            <span class="font-mono font-bold text-amber-400 uppercase mr-1">Grease Trap Rule:</span>
+            The gray waste hose connects to the <strong class="text-white">downstream sanitary cleanout</strong> — never upstream of the kitchen grease interceptor.
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Inspector -->
+    <div class="lg:col-span-4 bg-[var(--card)] border border-[var(--border)] rounded-2xl p-5 flex flex-col justify-between min-w-0">
+      <div class="space-y-3">
+        <div class="flex items-center justify-between gap-2">
+          <span id="detail-badge" class="px-2.5 py-0.5 rounded text-xs font-mono font-bold bg-violet-500/20 text-violet-300"></span>
+          <span id="detail-weight" class="text-xs font-mono text-[var(--muted-foreground)] text-right"></span>
+        </div>
+        <h3 id="detail-title" class="text-lg font-bold"></h3>
+        <p id="detail-desc" class="text-xs text-[var(--muted-foreground)] leading-relaxed"></p>
+        <div class="border-t border-[var(--border)] pt-3">
+          <div class="text-xs font-semibold mb-2">Engineering Specifications:</div>
+          <ul id="detail-specs" class="text-xs space-y-1.5 text-[var(--secondary-foreground)]"></ul>
+        </div>
+      </div>
+      <div class="mt-4 pt-3 border-t border-[var(--border)] bg-[var(--secondary)]/50 rounded-xl p-3 text-xs space-y-1">
+        <div class="font-bold text-violet-400">Why Split the Power:</div>
+        <p class="text-[11px] text-[var(--muted-foreground)]">
+          Most restaurant calls are Boil Water Advisories, where the kitchen still has power. Taking the generator off the water trailer saves 1,160 lb, removes diesel from the alley, and lets one PWR-25 back up the whole fleet on the few outage jobs.
+        </p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Simulator -->
+  <div class="bg-[var(--card)] border border-[var(--border)] rounded-2xl p-6 space-y-5">
+    <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2 border-b border-[var(--border)] pb-4">
+      <div>
+        <h2 class="text-lg font-bold">Live Supply, UV Dose, Power &amp; Margin Simulator</h2>
+        <p class="text-xs text-[var(--muted-foreground)]">Set the job type, supply pressure, water quality and kitchen demand. The PLC logic below mirrors the Rev C interlocks: PT-100, UV dose, chlorine residual and the 50A shore-current shed.</p>
+      </div>
+      <div id="sim-status-pill" class="px-3 py-1 rounded-full text-xs font-mono font-bold border shrink-0"></div>
+    </div>
+
+    <!-- Presets -->
+    <div class="flex flex-wrap gap-2">
+      <span class="text-[11px] font-semibold text-[var(--muted-foreground)] self-center mr-1">Scenarios:</span>
+      <button class="preset px-3 py-1.5 rounded-lg text-xs font-semibold border border-[var(--border)] bg-[var(--secondary)]" data-p="bwa" onclick="applyPreset('bwa')">Boil Water Advisory (Shore)</button>
+      <button class="preset px-3 py-1.5 rounded-lg text-xs font-semibold border border-[var(--border)] bg-[var(--secondary)]" data-p="outage" onclick="applyPreset('outage')">Power Outage + Main Down</button>
+      <button class="preset px-3 py-1.5 rounded-lg text-xs font-semibold border border-[var(--border)] bg-[var(--secondary)]" data-p="rush" onclick="applyPreset('rush')">Summer Dinner Rush</button>
+      <button class="preset px-3 py-1.5 rounded-lg text-xs font-semibold border border-[var(--border)] bg-[var(--secondary)]" data-p="turbid" onclick="applyPreset('turbid')">Main Break: Low UVT</button>
+      <button class="preset px-3 py-1.5 rounded-lg text-xs font-semibold border border-[var(--border)] bg-[var(--secondary)]" data-p="pressure" onclick="applyPreset('pressure')">City Pressure Collapsing</button>
+    </div>
+
+    <!-- Barrier strip -->
+    <div class="overflow-x-auto">
+      <div class="min-w-[720px] grid grid-cols-8 gap-1.5 text-center">
+        <div id="st-supply" class="stage border rounded-lg px-1.5 py-2"><div class="text-[10px] font-mono font-bold">SUPPLY</div><div class="text-[11px] mt-0.5" data-s></div></div>
+        <div id="st-rpz" class="stage border rounded-lg px-1.5 py-2"><div class="text-[10px] font-mono font-bold">RPZ / PORT</div><div class="text-[11px] mt-0.5" data-s></div></div>
+        <div id="st-uf" class="stage border rounded-lg px-1.5 py-2"><div class="text-[10px] font-mono font-bold">UF</div><div class="text-[11px] mt-0.5" data-s></div></div>
+        <div id="st-uv" class="stage border rounded-lg px-1.5 py-2"><div class="text-[10px] font-mono font-bold">UV DOSE</div><div class="text-[11px] mt-0.5" data-s></div></div>
+        <div id="st-cl2" class="stage border rounded-lg px-1.5 py-2"><div class="text-[10px] font-mono font-bold">CL2 RESIDUAL</div><div class="text-[11px] mt-0.5" data-s></div></div>
+        <div id="st-cw" class="stage border rounded-lg px-1.5 py-2"><div class="text-[10px] font-mono font-bold">CLEARWELL</div><div class="text-[11px] mt-0.5" data-s></div></div>
+        <div id="st-pwr" class="stage border rounded-lg px-1.5 py-2"><div class="text-[10px] font-mono font-bold">POWER</div><div class="text-[11px] mt-0.5" data-s></div></div>
+        <div id="st-out" class="stage border rounded-lg px-1.5 py-2"><div class="text-[10px] font-mono font-bold">XV-602 → KITCHEN</div><div class="text-[11px] mt-0.5" data-s></div></div>
+      </div>
+    </div>
+
+    <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
+      <!-- Controls -->
+      <div class="lg:col-span-5 space-y-4 bg-[var(--secondary)]/40 border border-[var(--border)] rounded-xl p-4">
+        <div class="grid grid-cols-2 gap-3">
+          <div>
+            <label class="block text-[11px] font-semibold text-[var(--muted-foreground)] mb-1">Raw Water Supply:</label>
+            <select id="inp-source" onchange="updateSim()" class="w-full bg-[var(--card)] border border-[var(--border)] rounded-lg px-2.5 py-1.5 text-xs font-semibold">
+              <option value="porta">Port A: Service-Line Tee / Hydrant</option>
+              <option value="portb">Port B: Tanker / Folding Tank</option>
+            </select>
+          </div>
+          <div>
+            <label class="block text-[11px] font-semibold text-[var(--muted-foreground)] mb-1">Power Source:</label>
+            <select id="inp-power" onchange="updateSim()" class="w-full bg-[var(--card)] border border-[var(--border)] rounded-lg px-2.5 py-1.5 text-xs font-semibold">
+              <option value="shore">Restaurant 50A Receptacle</option>
+              <option value="gen">PWR-25 Generator Trailer</option>
+            </select>
+          </div>
+        </div>
+
+        <div id="wrap-pressure">
+          <div class="flex justify-between text-xs font-semibold mb-1">
+            <span>City Supply Pressure (PT-100):</span>
+            <span id="lbl-pressure" class="font-mono text-sky-400 font-bold"></span>
+          </div>
+          <input id="inp-pressure" type="range" min="0" max="80" step="1" value="55" oninput="updateSim()" class="w-full accent-sky-500">
+          <div class="flex justify-between text-[10px] text-[var(--muted-foreground)]"><span>0 (Main Down)</span><span>20 (PSV Floor)</span><span>55 (Typical)</span><span>80</span></div>
+        </div>
+
+        <div>
+          <div class="flex justify-between text-xs font-semibold mb-1">
+            <span>UF Treatment Flow (FIT-200):</span>
+            <span id="lbl-uf-flow" class="font-mono text-violet-400 font-bold"></span>
+          </div>
+          <input id="inp-uf-flow" type="range" min="10" max="40" step="1" value="35" oninput="updateSim()" class="w-full accent-violet-500">
+          <div class="flex justify-between text-[10px] text-[var(--muted-foreground)]"><span>10 GPM</span><span>25 (One Sub-Train)</span><span>35 (Rated)</span><span>40 (UV Validated)</span></div>
+        </div>
+
+        <div>
+          <div class="flex justify-between text-xs font-semibold mb-1">
+            <span>Kitchen Peak Demand (P-601A/B):</span>
+            <span id="lbl-peak-flow" class="font-mono text-blue-400 font-bold"></span>
+          </div>
+          <input id="inp-peak-flow" type="range" min="5" max="50" step="1" value="30" oninput="updateSim()" class="w-full accent-blue-500">
+          <div class="flex justify-between text-[10px] text-[var(--muted-foreground)]"><span>5 (Prep)</span><span>25 (Dish Cycle)</span><span>50 (Dish + Flush + Sinks)</span></div>
+        </div>
+
+        <div class="grid grid-cols-2 gap-3">
+          <div>
+            <div class="flex justify-between text-xs font-semibold mb-1">
+              <span>UVT (AIT-401):</span>
+              <span id="lbl-uvt" class="font-mono text-fuchsia-400 font-bold"></span>
+            </div>
+            <input id="inp-uvt" type="range" min="75" max="98" step="1" value="94" oninput="updateSim()" class="w-full accent-fuchsia-500">
+          </div>
+          <div>
+            <div class="flex justify-between text-xs font-semibold mb-1">
+              <span>Lamp Output:</span>
+              <span id="lbl-lamp" class="font-mono text-fuchsia-400 font-bold"></span>
+            </div>
+            <input id="inp-lamp" type="range" min="50" max="100" step="1" value="90" oninput="updateSim()" class="w-full accent-fuchsia-500">
+          </div>
+        </div>
+
+        <div class="grid grid-cols-2 gap-3">
+          <div>
+            <div class="flex justify-between text-xs font-semibold mb-1">
+              <span>Free Cl2 (AIT-601):</span>
+              <span id="lbl-cl2" class="font-mono text-amber-400 font-bold"></span>
+            </div>
+            <input id="inp-cl2" type="range" min="0.2" max="4.5" step="0.1" value="1.7" oninput="updateSim()" class="w-full accent-amber-500">
+          </div>
+          <div>
+            <label class="block text-[11px] font-semibold text-[var(--muted-foreground)] mb-1">Weather (HVAC Load):</label>
+            <select id="inp-season" onchange="updateSim()" class="w-full bg-[var(--card)] border border-[var(--border)] rounded-lg px-2.5 py-1.5 text-xs font-semibold">
+              <option value="mild">Mild (fan only)</option>
+              <option value="hot">Georgia Summer (A/C)</option>
+              <option value="cold">Freezing Night (heat)</option>
+            </select>
+          </div>
+        </div>
+
+        <label class="flex items-center gap-2 text-xs font-semibold cursor-pointer select-none">
+          <input id="inp-bw" type="checkbox" onchange="updateSim()" class="accent-violet-500 w-4 h-4">
+          UF backwash + air scour running now (P-601B supplies backwash, compressors loaded)
+        </label>
+      </div>
+
+      <!-- Readouts -->
+      <div class="lg:col-span-7 grid grid-cols-2 sm:grid-cols-3 gap-3 content-start">
+        <div class="bg-[var(--secondary)]/60 border border-[var(--border)] rounded-xl p-3.5">
+          <div class="text-[11px] text-[var(--muted-foreground)] uppercase">Delivered UV Dose</div>
+          <div id="out-dose" class="text-xl font-bold font-mono mt-1"></div>
+          <div id="out-dose-sub" class="text-[11px] mt-1"></div>
+        </div>
+        <div class="bg-[var(--secondary)]/60 border border-[var(--border)] rounded-xl p-3.5">
+          <div class="text-[11px] text-[var(--muted-foreground)] uppercase">Plant Output</div>
+          <div id="out-flow" class="text-xl font-bold font-mono text-violet-400 mt-1"></div>
+          <div id="out-flow-sub" class="text-[11px] text-[var(--muted-foreground)] mt-1"></div>
+        </div>
+        <div class="bg-[var(--secondary)]/60 border border-[var(--border)] rounded-xl p-3.5">
+          <div class="text-[11px] text-[var(--muted-foreground)] uppercase">UF Membrane Flux</div>
+          <div id="out-flux" class="text-xl font-bold font-mono text-teal-400 mt-1"></div>
+          <div id="out-flux-sub" class="text-[11px] text-[var(--muted-foreground)] mt-1">4 × 60" PVDF (2,200 ft²) • DIT Pass</div>
+        </div>
+        <div class="bg-[var(--secondary)]/60 border border-[var(--border)] rounded-xl p-3.5">
+          <div class="text-[11px] text-[var(--muted-foreground)] uppercase">150-Gal Clearwell</div>
+          <div id="out-buffer" class="text-xl font-bold font-mono mt-1"></div>
+          <div id="out-buffer-sub" class="text-[11px] text-[var(--muted-foreground)] mt-1"></div>
+        </div>
+        <div class="bg-[var(--secondary)]/60 border border-[var(--border)] rounded-xl p-3.5">
+          <div class="text-[11px] text-[var(--muted-foreground)] uppercase">Electrical Load @ 240V</div>
+          <div id="out-kw" class="text-xl font-bold font-mono mt-1"></div>
+          <div id="out-power-sub" class="text-[11px] mt-1"></div>
+        </div>
+        <div class="bg-[var(--secondary)]/60 border border-[var(--border)] rounded-xl p-3.5">
+          <div class="text-[11px] text-[var(--muted-foreground)] uppercase">AmeriPro Net Margin / Day</div>
+          <div id="out-margin" class="text-xl font-bold font-mono text-purple-400 mt-1"></div>
+          <div id="out-margin-sub" class="text-[11px] text-[var(--muted-foreground)] mt-1"></div>
+        </div>
+
+        <!-- Load breakdown -->
+        <div class="col-span-2 sm:col-span-3 bg-[var(--secondary)]/60 border border-[var(--border)] rounded-xl p-3.5">
+          <div class="flex items-center justify-between mb-2">
+            <div class="text-[11px] text-[var(--muted-foreground)] uppercase">Load vs. 50A Continuous Limit (40 A / 9.6 kW)</div>
+            <div id="out-amps" class="text-[11px] font-mono font-bold"></div>
+          </div>
+          <div class="relative h-5 bg-slate-800 rounded overflow-hidden flex" id="load-bar"></div>
+          <div class="relative h-0"><div id="load-limit" class="absolute -top-5 h-5 border-r-2 border-dashed border-rose-400"></div></div>
+          <div id="load-legend" class="flex flex-wrap gap-x-3 gap-y-1 mt-2 text-[10px] text-[var(--muted-foreground)]"></div>
+        </div>
+
+        <!-- Event log -->
+        <div class="col-span-2 sm:col-span-3 bg-slate-950 border border-slate-800 rounded-xl p-3.5">
+          <div class="text-[11px] text-slate-400 uppercase mb-1.5">PLC Interlock Log (CP-701)</div>
+          <ul id="out-log" class="text-[11px] font-mono space-y-1"></ul>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const skidData = {
+      nose: {
+        badge: 'GOOSENECK DECK (0–6 FT)', weight: 'Road: 870 lb',
+        title: 'Controls, Air & Segregated Chemical Cabinets',
+        desc: 'With the generator gone, the gooseneck nose holds the PLC panel, compressors and chemical cabinets behind exterior-access doors. Chemicals stay outside the operator space, and the weight over the hitch keeps pin weight at about 16%.',
+        specs: [
+          '• <strong>CP-701 PLC/HMI:</strong> UL-508A panel with UPS and cellular telemetry; logs integrity tests, turbidity, UV dose and chlorine for the health inspector',
+          '• <strong>Duplex Oil-Less Air:</strong> Valve actuation, UF air scour and the DIT-201 pressure-decay test',
+          '• <strong>Segregated Cabinets:</strong> 12.5% NaOCl in one; citric acid and sodium bisulfite in the other',
+          '• <strong>AIT-901:</strong> Cl₂ gas ≥ 0.5 ppm drives the exhaust fan to high and stops chemical transfers'
+        ]
+      },
+      inlet: {
+        badge: 'STAGE 1 • CURBSIDE FRONT (6–11 FT)', weight: 'Road: 450 lb | On-site: 520 lb',
+        title: 'Direct-Feed Inlet: PSV-100, RPZ-100 & P-101 Boost Pump',
+        desc: 'Rev C replaces the ground break tank with containment backflow on the trailer. PSV-100 keeps the city main and the restaurant service at 20 PSI or more; RPZ-100 provides the backflow protection the air gap used to.',
+        specs: [
+          '• <strong>PSV-100:</strong> Pressure-sustaining valve holds upstream ≥ 20 PSI; PT-100 alarms at 22 PSI and closes XV-100 at 20 PSI',
+          '• <strong>RPZ-100:</strong> 1.5" ASSE 1013; relief drains through the floor past flow switch FS-100',
+          '• <strong>P-101:</strong> 3 HP VFD pump — boost mode on Port A (draws less power), draft mode on Port B',
+          '• <strong>Pre-Filtration:</strong> 200 μm auto-strainer + duplex bag/carbon housings'
+        ]
+      },
+      uf: {
+        badge: 'STAGE 2 • ROADSIDE FRONT (6–11 FT)', weight: 'Road: 890 lb | On-site: 1,020 lb',
+        title: 'Hollow-Fiber UF Skid (4 × 60" PVDF Modules)',
+        desc: 'Two sub-trains of two modules give 2,200 ft² of 0.02-micron membrane. UF is the particle and protozoa barrier and keeps the water clean enough for UV to work.',
+        specs: [
+          '• <strong>Protozoa Credit:</strong> From the modules\' NSF/ANSI 419 challenge test',
+          '• <strong>DIT-201:</strong> Daily automated pressure-decay integrity test',
+          '• <strong>Backwash:</strong> One sub-train keeps ~25 GPM online while the other backwashes',
+          '• <strong>AIT-201:</strong> Permeate > 0.15 NTU for 5 s opens XV-300 to waste and closes XV-602'
+        ]
+      },
+      uv: {
+        badge: 'STAGE 3 • REAR (16–20 FT)', weight: 'Road: 360 lb | On-site: 420 lb',
+        title: 'UV-401A/B — Virus-Rated UV at 186 mJ/cm²',
+        desc: 'EPA\'s LT2 UV dose table credits 4-log virus inactivation at 186 mJ/cm² (adenovirus basis). That replaces the 600-gal chlorine contact tank, so no ground tanks are needed on Boil Water jobs.',
+        specs: [
+          '• <strong>Validated Point:</strong> ≥ 186 mJ/cm² at 40 GPM and 85% UVT (UVDGM third-party validation)',
+          '• <strong>Duty + Standby:</strong> Each reactor carries full flow alone; standby starts automatically on low dose',
+          '• <strong>Live Dose:</strong> PLC calculates dose from lamp intensity (UIT-401A/B), UVT (AIT-401) and flow (FIT-200)',
+          '• <strong>Interlock:</strong> Low dose → start standby → cut flow → close XV-602'
+        ]
+      },
+      clearwell: {
+        badge: 'STAGE 4 • CURBSIDE OVER AXLES (11–16 FT)', weight: 'Road: 590 lb | On-site: 1,650 lb',
+        title: '150-Gal Clearwell (TK-601) + Duplex Booster',
+        desc: 'Mounted over the axles so the water weight sits on the suspension. Chlorine is dosed for residual only, protecting the building plumbing; the clearwell buffers kitchen bursts above the plant\'s treatment rate.',
+        specs: [
+          '• <strong>Residual Target:</strong> 1.5–2.0 mg/L free chlorine leaving the clearwell; ≥ 1.0 mg/L at the farthest tap',
+          '• <strong>P-601A/B:</strong> 2 × 3 HP VFD vertical multistage pumps, 60–75 PSI to the kitchen header',
+          '• <strong>LIT-601:</strong> Low-low at 20% trips boosters and backwash',
+          '• <strong>PT-603:</strong> Building pressure > 90 PSI trips the lead booster'
+        ]
+      },
+      bench: {
+        badge: 'ROADSIDE OVER AXLES (11–16 FT)', weight: 'Road: 250 lb | On-site: 280 lb',
+        title: 'Fold-Down Test Bench, Analyzers & Eyewash',
+        desc: 'Beside the side door so the operator can pull grab samples and verify the online analyzers without crossing the treatment equipment.',
+        specs: [
+          '• <strong>Bench Instruments:</strong> Turbidity, free chlorine and pH grab checks; Bac-T sample kit',
+          '• <strong>Eyewash:</strong> ANSI Z358.1 plumbed eyewash/drench hose',
+          '• <strong>Records:</strong> Daily logs exported for the state emergency approval'
+        ]
+      },
+      bulkhead: {
+        badge: 'REAR BULKHEAD (20 FT)', weight: 'Included in piping (600 lb)',
+        title: 'RPZ-602 & 5-Port Camlock Bulkhead',
+        desc: 'Every outside connection is a color-coded camlock at the rear wall, with the treated-water RPZ and the shore-power inlet.',
+        specs: [
+          '• <strong>Port A (1.5" blue):</strong> Pressurized raw supply → PT-100 → PSV-100 → RPZ-100',
+          '• <strong>Port B (2" blue):</strong> Outage suction from tanker or folding tank (XV-103)',
+          '• <strong>Potable Out (2" & 1.5" white NSF-61):</strong> After RPZ-602 and XV-602',
+          '• <strong>Waste (2" gray):</strong> To the downstream sanitary cleanout',
+          '• <strong>Shore 50A:</strong> CS6375 / NEMA 14-50 inlet for the restaurant receptacle or the PWR-25 cord'
+        ]
+      },
+      porta: {
+        badge: 'PORT A • BOIL WATER ADVISORY', weight: 'No ground equipment',
+        title: 'Direct Feed from the Service-Line Tee',
+        desc: 'The restaurant\'s plumber installs a tee during the site survey. On a Boil Water job the operator connects one hose to Port A — the city pressure does most of the pumping.',
+        specs: [
+          '• <strong>Double Isolation:</strong> Two closed building valves between the supply tee and the treated-water tie-in',
+          '• <strong>Hydrant Option:</strong> Through the utility\'s meter and backflow device',
+          '• <strong>Main Protection:</strong> PSV-100 never lets the plant pull the main below 20 PSI'
+        ]
+      },
+      portb: {
+        badge: 'PORT B • ZERO MAIN PRESSURE', weight: 'Folding tank: carried on PWR-25',
+        title: 'Draft from a Tanker or the Folding Break Tank',
+        desc: 'When the main is down there is nothing to feed Port A. P-101 drafts straight from a potable tanker, which acts as the break tank. If the tanker can\'t stay, the 550-gal folding tank from the PWR-25 kit box is set up and filled by tanker drops.',
+        specs: [
+          '• <strong>Typical Use:</strong> 4,000–8,000 gal/day per restaurant; one 4,000-gal drop covers most of a service day',
+          '• <strong>XV-103:</strong> 2" fail-closed suction valve; Port A stays capped',
+          '• <strong>Tanker Water:</strong> Billed through to the customer at cost'
+        ]
+      },
+      pwr: {
+        badge: 'PWR-25 • SECOND TRAILER', weight: '~3,540 lb (no CDL)',
+        title: 'PWR-25 Generator & Outage-Kit Trailer',
+        desc: 'Goes out only on power-outage or zero-pressure jobs. A second pickup delivers it and leaves; one PWR-25 backs up every water trailer in the fleet.',
+        specs: [
+          '• <strong>Generator:</strong> 25 kVA Tier 4 Final, sound-attenuated, integrated fuel tank and 110% spill base',
+          '• <strong>Fuel:</strong> ~0.8 gal/hr at average load (~19 gal/day) — more than two days between refuelings',
+          '• <strong>Hookup:</strong> 50A panel, 2 × 50 ft SOOW cords, ground rod; neutral bonded at the generator',
+          '• <strong>Placement:</strong> ≥ 10 ft from building openings and dining areas, downwind where possible',
+          '• <strong>Pricing:</strong> $750 delivery + $400/day add-on'
+        ]
+      }
+    };
+
+    function selectSkid(id) {
+      document.querySelectorAll('.skid-box').forEach(el => el.classList.remove('skid-active'));
+      const t = document.getElementById('skid-' + id);
+      if (t) t.classList.add('skid-active');
+      const d = skidData[id]; if (!d) return;
+      document.getElementById('detail-badge').textContent = d.badge;
+      document.getElementById('detail-weight').textContent = d.weight;
+      document.getElementById('detail-title').textContent = d.title;
+      document.getElementById('detail-desc').textContent = d.desc;
+      document.getElementById('detail-specs').innerHTML = d.specs.map(s => `<li>${s}</li>`).join('');
+    }
+
+    const presets = {
+      bwa:      { source: 'porta', power: 'shore', pressure: 55, uf: 35, peak: 30, uvt: 94, lamp: 90, cl2: 1.7, season: 'mild', bw: false },
+      outage:   { source: 'portb', power: 'gen',   pressure: 0,  uf: 35, peak: 35, uvt: 95, lamp: 90, cl2: 1.7, season: 'hot', bw: false },
+      rush:     { source: 'porta', power: 'shore', pressure: 50, uf: 35, peak: 48, uvt: 93, lamp: 85, cl2: 1.8, season: 'hot', bw: true },
+      turbid:   { source: 'porta', power: 'shore', pressure: 45, uf: 38, peak: 30, uvt: 86, lamp: 70, cl2: 1.6, season: 'mild', bw: false },
+      pressure: { source: 'porta', power: 'shore', pressure: 18, uf: 35, peak: 30, uvt: 94, lamp: 90, cl2: 1.7, season: 'mild', bw: false }
+    };
+
+    function applyPreset(k) {
+      const p = presets[k];
+      const set = (id, v) => { document.getElementById(id).value = v; };
+      set('inp-source', p.source); set('inp-power', p.power); set('inp-pressure', p.pressure);
+      set('inp-uf-flow', p.uf); set('inp-peak-flow', p.peak); set('inp-uvt', p.uvt);
+      set('inp-lamp', p.lamp); set('inp-cl2', p.cl2); set('inp-season', p.season);
+      document.getElementById('inp-bw').checked = p.bw;
+      updateSim(k);
+    }
+
+    // Average fluence factor across a reactor for a given UVT (5 cm effective path)
+    function uvtFactor(uvt) {
+      const aL = -Math.log10(uvt / 100) * 5;
+      return (1 - Math.pow(10, -aL)) / (aL * Math.LN10);
+    }
+    const UVT_REF = uvtFactor(85);
+
+    function setStage(id, cls, text) {
+      const el = document.getElementById(id);
+      el.className = 'stage border rounded-lg px-1.5 py-2 ' + cls;
+      el.querySelector('[data-s]').textContent = text;
+    }
+
+    function updateSim(presetKey) {
+      document.querySelectorAll('.preset').forEach(b => b.classList.toggle('preset-on', b.dataset.p === presetKey));
+
+      const source = document.getElementById('inp-source').value;
+      const power = document.getElementById('inp-power').value;
+      const pressure = +document.getElementById('inp-pressure').value;
+      let ufSet = +document.getElementById('inp-uf-flow').value;
+      const peak = +document.getElementById('inp-peak-flow').value;
+      const uvt = +document.getElementById('inp-uvt').value;
+      const lamp = +document.getElementById('inp-lamp').value;
+      const cl2 = +document.getElementById('inp-cl2').value;
+      const season = document.getElementById('inp-season').value;
+      const bw = document.getElementById('inp-bw').checked;
+
+      document.getElementById('lbl-pressure').textContent = source === 'porta' ? `${pressure} PSI` : 'N/A (Port A capped)';
+      document.getElementById('wrap-pressure').style.opacity = source === 'porta' ? '1' : '0.45';
+      document.getElementById('lbl-uf-flow').textContent = `${ufSet} GPM (${(ufSet * 1440).toLocaleString()} GPD)`;
+      document.getElementById('lbl-peak-flow').textContent = `${peak} GPM`;
+      document.getElementById('lbl-uvt').textContent = `${uvt}%`;
+      document.getElementById('lbl-lamp').textContent = `${lamp}%`;
+      document.getElementById('lbl-cl2').textContent = `${cl2.toFixed(1)} mg/L`;
+
+      const log = [];
+      let outletOpen = true;
+      let reason = '';
+
+      // ---- Supply ----
+      let supplyOk = true;
+      if (source === 'porta') {
+        if (pressure < 20) {
+          supplyOk = false; outletOpen = false; reason = 'SUPPLY LOST';
+          setStage('st-supply', 'st-bad', `${pressure} PSI LOW-LOW`);
+          setStage('st-rpz', 'st-bad', 'XV-100 CLOSED');
+          log.push(['bad', `PT-100 ${pressure} PSI < 20 → XV-100 closed. HMI: "SWITCH TO PORT B — TANKER / OUTAGE KIT."`]);
+        } else if (pressure < 22) {
+          setStage('st-supply', 'st-warn', `${pressure} PSI ALARM`);
+          setStage('st-rpz', 'st-ok', 'RPZ-100 OK');
+          log.push(['warn', `PT-100 ${pressure} PSI < 22 alarm. PSV-100 throttling to hold the main at 20 PSI.`]);
+        } else {
+          setStage('st-supply', 'st-ok', `${pressure} PSI CITY`);
+          setStage('st-rpz', 'st-ok', 'RPZ-100 OK');
+        }
+      } else {
+        setStage('st-supply', 'st-ok', 'TANKER DRAFT');
+        setStage('st-rpz', 'st-ok', 'PORT B / XV-103');
+        log.push(['ok', 'Port B selected: P-101 in draft mode from tanker or folding tank; Port A capped.']);
+      }
+
+      // ---- UV dose with PLC response ----
+      const doseAt = (q, n) => 186 * (40 / q) * (lamp / 100) / 0.85 * (uvtFactor(uvt) / UVT_REF) * n;
+      // Lamp output normalized so 85% lamp at 40 GPM / 85% UVT = 186 (end-of-life validated point)
+      let q = ufSet, reactors = 1, uvState = 'ok';
+      let dose = doseAt(q, 1);
+      if (uvt < 85) {
+        uvState = 'bad';
+        log.push(['bad', `AIT-401 UVT ${uvt}% is below the 85% validated range → virus credit lost.`]);
+      } else if (dose < 186) {
+        reactors = 2; dose = doseAt(q, 2);
+        log.push(['warn', `Duty dose ${doseAt(q, 1).toFixed(0)} mJ/cm² < 186 → standby UV-401B started.`]);
+        if (dose < 186) {
+          const qLim = Math.floor(q * dose / 186);
+          if (qLim >= 10) {
+            log.push(['warn', `Dose still ${dose.toFixed(0)} → FIT-200 flow cut from ${q} to ${qLim} GPM.`]);
+            q = qLim; dose = doseAt(q, 2); uvState = 'warn';
+          } else {
+            uvState = 'bad';
+            log.push(['bad', `Dose ${dose.toFixed(0)} mJ/cm² cannot be recovered by flow cut → XV-602 closed.`]);
+          }
+        } else uvState = 'warn';
+      }
+      if (!supplyOk) q = 0;
+
+      const doseEl = document.getElementById('out-dose');
+      const doseSub = document.getElementById('out-dose-sub');
+      if (uvState === 'bad') {
+        outletOpen = false; reason = reason || 'UV DOSE LOW';
+        doseEl.textContent = uvt < 85 ? 'Out of Range' : `${dose.toFixed(0)} mJ/cm²`;
+        doseEl.className = 'text-xl font-bold font-mono text-rose-400 mt-1';
+        doseSub.textContent = uvt < 85 ? `UVT ${uvt}% < 85% validated` : 'Below 186 — virus credit lost';
+        doseSub.className = 'text-[11px] text-rose-400 font-bold mt-1';
+        setStage('st-uv', 'st-bad', 'CREDIT LOST');
+      } else {
+        doseEl.textContent = `${Math.min(dose, 999).toFixed(0)} mJ/cm²`;
+        doseEl.className = `text-xl font-bold font-mono ${uvState === 'ok' ? 'text-fuchsia-400' : 'text-amber-400'} mt-1`;
+        doseSub.textContent = `${(dose / 186).toFixed(2)}× of 186 • ${reactors === 1 ? 'Duty only' : 'Duty + standby'} (4-log virus)`;
+        doseSub.className = `text-[11px] ${uvState === 'ok' ? 'text-emerald-400' : 'text-amber-400'} mt-1`;
+        setStage('st-uv', uvState === 'ok' ? 'st-ok' : 'st-warn', `${dose.toFixed(0)} mJ ${reactors === 2 ? '(A+B)' : ''}`);
+      }
+
+      // ---- UF ----
+      if (q > 0) {
+        const flux = (q * 1.05 * 1440) / 2200;
+        document.getElementById('out-flux').textContent = `${flux.toFixed(1)} GFD`;
+        setStage('st-uf', 'st-ok', `${flux.toFixed(0)} GFD`);
+      } else {
+        document.getElementById('out-flux').textContent = '0 GFD';
+        setStage('st-uf', 'st-off', 'STANDBY');
+      }
+
+      // ---- Chlorine residual ----
+      if (cl2 < 0.5 || cl2 > 4.0) {
+        outletOpen = false; reason = reason || 'CL2 RESIDUAL';
+        setStage('st-cl2', 'st-bad', `${cl2.toFixed(1)} mg/L`);
+        log.push(['bad', `AIT-601 ${cl2.toFixed(1)} mg/L outside 0.5–4.0 → P-502B started; XV-602 closed after 30 s.`]);
+      } else if (cl2 < 1.5 || cl2 > 2.0) {
+        setStage('st-cl2', 'st-warn', `${cl2.toFixed(1)} mg/L`);
+        log.push(['warn', `Free chlorine ${cl2.toFixed(1)} mg/L is off the 1.5–2.0 target; dosing pump trimming.`]);
+      } else {
+        setStage('st-cl2', 'st-ok', `${cl2.toFixed(1)} mg/L`);
+      }
+
+      // ---- Clearwell (85% normal level to 20% low-low = 97.5 gal usable) ----
+      const usable = 150 * (0.85 - 0.20);
+      const net = peak - q;
+      const bufEl = document.getElementById('out-buffer'), bufSub = document.getElementById('out-buffer-sub');
+      if (q === 0) {
+        bufEl.textContent = `${(usable / peak).toFixed(1)} min left`;
+        bufEl.className = 'text-xl font-bold font-mono text-rose-400 mt-1';
+        bufSub.textContent = 'No inflow — draining to low-low';
+        setStage('st-cw', 'st-bad', 'DRAINING');
+      } else if (net <= 0) {
+        bufEl.textContent = 'Steady 85%';
+        bufEl.className = 'text-xl font-bold font-mono text-blue-400 mt-1';
+        bufSub.textContent = `Refilling at +${-net} GPM • 60–75 PSI header`;
+        setStage('st-cw', 'st-ok', 'STEADY');
+      } else {
+        const mins = usable / net;
+        bufEl.textContent = `${mins.toFixed(1)} min burst`;
+        bufEl.className = `text-xl font-bold font-mono ${mins >= 5 ? 'text-amber-400' : 'text-rose-400'} mt-1`;
+        bufSub.textContent = `Covers +${net} GPM above plant output`;
+        setStage('st-cw', mins >= 5 ? 'st-warn' : 'st-bad', `${mins.toFixed(1)} min`);
+        if (mins < 5) log.push(['warn', `Kitchen peak exceeds plant output by ${net} GPM; clearwell hits low-low in ${mins.toFixed(1)} min.`]);
+      }
+
+      if (bw && q > 0) log.push(['ok', 'UF sub-train in backwash: ~25 GPM continues on the other sub-train.']);
+
+      // ---- Electrical ----
+      const running = q > 0;
+      const p101 = !running ? 0 : source === 'porta'
+        ? Math.max(0.3, 1.2 * (q / 35) * (1 - Math.min(Math.max(pressure - 40, 0), 30) / 60))
+        : 2.2 * (q / 40);
+      const booster = (peak <= 35 ? 2.1 * (peak / 35) : 2.1 + (peak - 35) * (2.3 / 15)) + (bw && running ? 1.0 : 0);
+      const uvKw = running ? 1.1 * reactors : 0;
+      const air = bw && running ? 1.2 : 0.35, plc = 0.5;
+      let hvac = season === 'mild' ? 0.4 : (season === 'hot' ? 2.2 : 2.5);
+      const base = p101 + booster + uvKw + air + plc;
+      let total = base + hvac;
+      let shed = false;
+      if (power === 'shore' && total > 9.6 && hvac > 0.4) {
+        shed = true; hvac = 0.15; total = base + hvac;
+        log.push(['warn', `CT-SHORE > 38.5 A → HVAC compressor shed; fan only until load drops.`]);
+      }
+      const amps = total * 1000 / 240;
+      const kwEl = document.getElementById('out-kw'), pSub = document.getElementById('out-power-sub');
+      kwEl.textContent = `${total.toFixed(2)} kW`;
+      let gph = 0;
+      if (power === 'shore') {
+        if (total > 9.6) {
+          kwEl.className = 'text-xl font-bold font-mono text-rose-400 mt-1';
+          pSub.textContent = `${amps.toFixed(1)} A — over 40 A continuous`;
+          pSub.className = 'text-[11px] text-rose-400 font-bold mt-1';
+          setStage('st-pwr', 'st-bad', `${amps.toFixed(0)} A SHORE`);
+          log.push(['bad', `Shore load ${amps.toFixed(1)} A exceeds the 50A circuit's 40 A continuous rating — bring PWR-25 or cut peak demand.`]);
+        } else {
+          kwEl.className = `text-xl font-bold font-mono ${shed ? 'text-amber-400' : 'text-emerald-400'} mt-1`;
+          pSub.textContent = `${amps.toFixed(1)} A of 40 A • ${shed ? 'HVAC shed' : 'restaurant power'}`;
+          pSub.className = `text-[11px] ${shed ? 'text-amber-400' : 'text-emerald-400'} mt-1`;
+          setStage('st-pwr', shed ? 'st-warn' : 'st-ok', `${amps.toFixed(0)} A SHORE`);
+        }
+      } else {
+        gph = 0.35 + total * 0.06;
+        const loadPct = total / 20 * 100;
+        kwEl.className = 'text-xl font-bold font-mono text-yellow-400 mt-1';
+        pSub.textContent = `PWR-25 at ${loadPct.toFixed(0)}% load • ${gph.toFixed(2)} gal/hr (${Math.round(gph * 24)} gal/day)`;
+        pSub.className = 'text-[11px] text-yellow-400 mt-1';
+        setStage('st-pwr', 'st-ok', `PWR-25 ${loadPct.toFixed(0)}%`);
+      }
+
+      // Load bar
+      const parts = [
+        ['P-101', p101, '#22d3ee'], ['Booster', booster, '#3b82f6'], ['UV', uvKw, '#d946ef'],
+        ['Air', air, '#a78bfa'], ['PLC', plc, '#94a3b8'], [shed ? 'HVAC (shed)' : 'HVAC', hvac, '#f59e0b']
+      ];
+      const scale = 13;
+      document.getElementById('load-bar').innerHTML = parts.map(([n, v, c]) =>
+        `<div title="${n}: ${v.toFixed(2)} kW" style="width:${(v / scale * 100).toFixed(2)}%;background:${c}"></div>`).join('');
+      document.getElementById('load-limit').style.left = `${(9.6 / scale * 100).toFixed(2)}%`;
+      document.getElementById('load-limit').style.display = power === 'shore' ? 'block' : 'none';
+      document.getElementById('load-legend').innerHTML = parts.map(([n, v, c]) =>
+        `<span><span style="display:inline-block;width:8px;height:8px;border-radius:2px;background:${c};margin-right:4px"></span>${n} ${v.toFixed(2)}</span>`).join('');
+      const ampsEl = document.getElementById('out-amps');
+      ampsEl.textContent = `${amps.toFixed(1)} A`;
+      ampsEl.style.color = power === 'shore' && total > 9.6 ? '#fb7185' : (shed ? '#fbbf24' : '#34d399');
+
+      // Plant output
+      document.getElementById('out-flow').textContent = `${q} GPM`;
+      document.getElementById('out-flow-sub').textContent = q > 0
+        ? `${(q * 1440).toLocaleString()} gal/day${q < ufSet ? ` • cut from ${ufSet} by UV` : ''}`
+        : 'Plant in standby';
+
+      // Outlet
+      if (outletOpen && q > 0) {
+        setStage('st-out', 'st-ok', 'OPEN • 60–75 PSI');
+      } else {
+        outletOpen = false;
+        setStage('st-out', 'st-bad', 'CLOSED');
+      }
+      const pill = document.getElementById('sim-status-pill');
+      const anyWarn = log.some(l => l[0] === 'warn');
+      if (outletOpen) {
+        pill.textContent = anyWarn ? 'RUNNING WITH ALARMS • XV-602 OPEN' : 'ALL BARRIERS GREEN • XV-602 OPEN';
+        pill.className = `px-3 py-1 rounded-full text-xs font-mono font-bold border shrink-0 ${anyWarn ? 'bg-amber-500/20 text-amber-400 border-amber-500/30' : 'bg-emerald-500/20 text-emerald-400 border-emerald-500/30'}`;
+      } else {
+        pill.textContent = `INTERLOCK: ${reason || 'TRIPPED'} • XV-602 CLOSED`;
+        pill.className = 'px-3 py-1 rounded-full text-xs font-mono font-bold border shrink-0 bg-rose-500/20 text-rose-400 border-rose-500/30';
+      }
+      if (!log.length) log.push(['ok', 'UF integrity, UV dose, chlorine residual and shore current all within limits.']);
+      const col = { ok: 'text-emerald-400', warn: 'text-amber-400', bad: 'text-rose-400' };
+      document.getElementById('out-log').innerHTML = log.map(([t, m]) =>
+        `<li class="${col[t]}">${t === 'ok' ? '●' : t === 'warn' ? '▲' : '■'} ${m}</li>`).join('');
+
+      // ---- Daily margin ----
+      const rev = 3200 + (power === 'gen' ? 400 : 0);
+      const diesel = power === 'gen' ? Math.round(gph * 24 * 3.75) : 0;
+      const direct = 580 + 89 + diesel;
+      document.getElementById('out-margin').textContent = `$${(rev - direct).toLocaleString()} / day`;
+      document.getElementById('out-margin-sub').textContent = power === 'gen'
+        ? `$${rev.toLocaleString()} incl. gen add-on vs $${direct} direct (diesel $${diesel})`
+        : `$3,200 rev vs $${direct} direct (labor + chem)`;
+    }
+
+    selectSkid('nose');
+    applyPreset('bwa');
+  </script>
+</body>
+</html>
