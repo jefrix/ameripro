@@ -1,0 +1,1118 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>MWTP-50C ("KitchenShield-50C") 3D Explodable View — Split-Power System</title>
+  <script src="https://www.gstatic.com/antigravity/web/dev/tailwindcss.min.js"></script>
+  <script type="importmap">
+  {
+    "imports": {
+      "three": "https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js",
+      "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/"
+    }
+  }
+  </script>
+  <style>
+    #viewport-container canvas { display: block; }
+    #viewport-container { cursor: grab; }
+    #viewport-container.dragging { cursor: grabbing; }
+    #viewport-container.hovering { cursor: pointer; }
+    .label-wrap { pointer-events: none; }
+    .label-pill {
+      pointer-events: auto;
+      transform: translateY(-70%);
+      transition: box-shadow 0.15s ease, transform 0.15s ease;
+    }
+    .label-pill:hover { transform: translateY(-70%) scale(1.06); }
+    .label-pill.selected { transform: translateY(-70%) scale(1.08); }
+  </style>
+<style>:root { --background: #0b1120; --foreground: #f1f5f9; --card: #111827; --secondary: #1e293b; --secondary-foreground: #e2e8f0; --muted-foreground: #94a3b8; --border: #1e293b; --primary: #8b5cf6; --primary-foreground: #ffffff; } html.light { --background: #f8fafc; --foreground: #0f172a; --card: #ffffff; --secondary: #f1f5f9; --secondary-foreground: #1e293b; --muted-foreground: #64748b; --border: #e2e8f0; --primary: #7c3aed; --primary-foreground: #ffffff; }</style>
+</head>
+<body class="bg-[var(--background)] text-[var(--foreground)] antialiased p-4 md:p-6 space-y-4 select-none">
+
+  <!-- Top Control Bar -->
+  <div class="bg-[var(--card)] border border-[var(--border)] rounded-xl p-4 shadow-sm flex flex-col xl:flex-row xl:items-center xl:justify-between gap-4">
+    <div>
+      <div class="flex flex-wrap items-center gap-2">
+        <span class="px-2.5 py-0.5 rounded-full text-xs font-semibold bg-violet-500/15 text-violet-400 border border-violet-500/30">MWTP-50C REV C 3D DIGITAL TWIN</span>
+        <span class="text-xs font-mono text-[var(--muted-foreground)]">20-FT WATER TRAILER + PWR-25 • BOTH UNDER 10,000 LB • 35/50 GPM</span>
+        <a href="mwtp_50_3d_explodable_view.html" class="px-2 py-0.5 rounded text-xs font-semibold bg-emerald-500/15 text-emerald-400 border border-emerald-500/30 hover:bg-emerald-500/25 transition">Switch to MWTP-50 (22-ft Rev B) ↗</a>
+      </div>
+      <h1 class="text-lg font-bold mt-1">MWTP-50C ("KitchenShield-50C") Split-Power 3D Explodable View &amp; Water Flow</h1>
+      <p class="text-xs text-[var(--muted-foreground)]">Drag to orbit • Scroll / pinch to zoom • Right-drag or Shift+drag to pan • Click equipment or a label to inspect • Double-click to focus</p>
+    </div>
+
+    <div class="flex flex-wrap items-center gap-2.5">
+      <div class="bg-[var(--secondary)]/60 border border-[var(--border)] rounded-lg px-3.5 py-2 flex items-center gap-3">
+        <label class="text-xs font-semibold whitespace-nowrap" for="explode-slider">Explode:</label>
+        <input id="explode-slider" type="range" min="0" max="100" value="0" class="w-28 sm:w-36 accent-violet-500 cursor-pointer" oninput="onExplodeSlider(this.value)">
+        <span id="explode-pct" class="text-xs font-mono font-bold text-violet-400 w-9 text-right">0%</span>
+      </div>
+      <button onclick="toggleExplodePreset()" id="btn-explode" class="px-3 py-2 rounded-lg text-xs font-semibold bg-violet-600 text-white shadow-sm hover:bg-violet-500 transition">Explode Assembly</button>
+      <button onclick="toggleLabels()" id="btn-labels" class="px-3 py-2 rounded-lg text-xs font-semibold bg-violet-600 text-white shadow-sm transition">Labels: ON</button>
+      <button onclick="toggleFlow()" id="btn-flow" class="px-3 py-2 rounded-lg text-xs font-semibold bg-cyan-600 text-white shadow-sm transition">Water Flow: ON</button>
+      <button onclick="toggleShell()" id="btn-shell" class="px-3 py-2 rounded-lg text-xs font-semibold bg-[var(--secondary)] text-[var(--secondary-foreground)] border border-[var(--border)] transition">Walls: Glass</button>
+      <button onclick="toggleTruck()" id="btn-truck" class="px-3 py-2 rounded-lg text-xs font-semibold bg-slate-600 text-white shadow-sm transition">1-Ton Pickup: ON</button>
+      <button onclick="toggleSpin()" id="btn-spin" class="px-3 py-2 rounded-lg text-xs font-semibold bg-[var(--secondary)] text-[var(--secondary-foreground)] border border-[var(--border)] transition">Auto-Rotate: OFF</button>
+    </div>
+  </div>
+
+  <div class="grid grid-cols-1 lg:grid-cols-12 gap-4">
+
+    <div class="lg:col-span-8 bg-[var(--card)] border border-[var(--border)] rounded-xl overflow-hidden relative shadow-sm" style="height: 620px; position: relative;" id="viewport-container">
+
+      <div id="loading" class="absolute inset-0 flex items-center justify-center text-sm text-[var(--muted-foreground)] z-10 px-6 text-center">Loading MWTP-50C 3D model…</div>
+
+      <div class="absolute top-3 left-3 right-3 flex flex-wrap gap-1.5 z-20">
+        <button onclick="setCameraPreset('iso')" class="px-2.5 py-1 rounded text-xs font-semibold bg-[var(--card)]/90 border border-[var(--border)] hover:border-violet-500 backdrop-blur transition">Isometric 3D</button>
+        <button onclick="setCameraPreset('side')" class="px-2.5 py-1 rounded text-xs font-semibold bg-[var(--card)]/90 border border-[var(--border)] hover:border-violet-500 backdrop-blur transition">Side Profile</button>
+        <button onclick="setCameraPreset('top')" class="px-2.5 py-1 rounded text-xs font-semibold bg-[var(--card)]/90 border border-[var(--border)] hover:border-violet-500 backdrop-blur transition">Site Plan</button>
+        <button onclick="setCameraPreset('rear')" class="px-2.5 py-1 rounded text-xs font-semibold bg-[var(--card)]/90 border border-[var(--border)] hover:border-violet-500 backdrop-blur transition">Rear Hookups</button>
+        <button onclick="setCameraPreset('nose')" class="px-2.5 py-1 rounded text-xs font-semibold bg-[var(--card)]/90 border border-[var(--border)] hover:border-violet-500 backdrop-blur transition">Gooseneck Nose</button>
+        <button onclick="setCameraPreset('inside')" class="px-2.5 py-1 rounded text-xs font-semibold bg-[var(--card)]/90 border border-[var(--border)] hover:border-violet-500 backdrop-blur transition">Walk the Aisle</button>
+      </div>
+
+      <div class="absolute bottom-3 left-3 right-3 bg-[var(--card)]/90 border border-[var(--border)] backdrop-blur rounded-lg px-3 py-2 flex flex-wrap items-center gap-x-3 gap-y-1 text-xs z-20" style="width: fit-content;">
+        <span class="font-semibold text-[var(--muted-foreground)]">Flow:</span>
+        <span class="flex items-center gap-1.5"><span class="w-2.5 h-2.5 rounded-full bg-amber-500 inline-block"></span> Raw (Port A tee or Port B tank → UF)</span>
+        <span class="flex items-center gap-1.5"><span class="w-2.5 h-2.5 rounded-full bg-cyan-400 inline-block"></span> UF permeate</span>
+        <span class="flex items-center gap-1.5"><span class="w-2.5 h-2.5 rounded-full bg-fuchsia-500 inline-block"></span> 186 mJ/cm² UV → Cl₂ residual → clearwell</span>
+        <span class="flex items-center gap-1.5"><span class="w-2.5 h-2.5 rounded-full bg-blue-500 inline-block"></span> Booster to kitchen (60–75 PSI)</span>
+        <span class="flex items-center gap-1.5"><span class="w-2.5 h-2.5 rounded-full bg-rose-500 inline-block"></span> Waste (downstream cleanout)</span>
+        <span class="flex items-center gap-1.5"><span class="w-2.5 h-2.5 rounded-full bg-yellow-400 inline-block"></span> 240V 50A power</span>
+      </div>
+    </div>
+
+    <div class="lg:col-span-4 flex flex-col gap-4">
+      <div class="bg-[var(--card)] border border-[var(--border)] rounded-xl p-4 shadow-sm space-y-2">
+        <div class="flex items-center justify-between">
+          <span class="text-xs font-bold uppercase tracking-wider text-[var(--muted-foreground)]">Job Type</span>
+          <span class="text-xs font-mono text-violet-400" id="job-label">Restaurant power • Port A</span>
+        </div>
+        <div class="grid grid-cols-2 gap-1.5">
+          <button onclick="setJobMode('bwa')" id="job-bwa" class="px-2 py-2 rounded text-xs font-semibold transition">Boil Water Advisory</button>
+          <button onclick="setJobMode('outage')" id="job-outage" class="px-2 py-2 rounded text-xs font-semibold transition">Power Outage + Main Down</button>
+        </div>
+        <p id="job-desc" class="text-[11px] text-[var(--muted-foreground)] leading-relaxed"></p>
+      </div>
+
+      <div class="bg-[var(--card)] border border-[var(--border)] rounded-xl p-4 shadow-sm flex-1 flex flex-col justify-between">
+        <div>
+          <div class="flex items-center justify-between border-b border-[var(--border)] pb-2.5 gap-2">
+            <div>
+              <span id="detail-tag" class="text-xs font-mono font-bold text-violet-400 uppercase"></span>
+              <h2 id="detail-title" class="text-base font-bold mt-0.5"></h2>
+            </div>
+            <span id="detail-badge" class="px-2 py-0.5 rounded text-xs font-mono bg-[var(--secondary)] text-[var(--secondary-foreground)] shrink-0 text-right"></span>
+          </div>
+          <p id="detail-desc" class="text-xs text-[var(--muted-foreground)] mt-2.5 leading-relaxed"></p>
+          <div id="detail-specs" class="mt-3 space-y-1.5"></div>
+        </div>
+        <div class="mt-4 pt-3 border-t border-[var(--border)]">
+          <div class="text-xs font-semibold text-[var(--muted-foreground)] mb-2">Click to highlight &amp; focus in 3D:</div>
+          <div class="grid grid-cols-2 gap-1.5" id="stage-buttons"></div>
+        </div>
+      </div>
+
+      <div class="bg-[var(--card)] border border-[var(--border)] rounded-xl p-4 shadow-sm space-y-2">
+        <div class="flex items-center justify-between">
+          <span class="text-xs font-bold uppercase tracking-wider text-[var(--muted-foreground)]">Flow Path Filter</span>
+          <span class="text-xs font-mono text-violet-400" id="flow-speed-label">35 GPM Cont. / 50 GPM Peak</span>
+        </div>
+        <div class="grid grid-cols-4 gap-1.5">
+          <button onclick="setFlowHighlight('all')" id="fl-all" class="px-2 py-1.5 rounded text-xs font-semibold transition">All</button>
+          <button onclick="setFlowHighlight('raw')" id="fl-raw" class="px-2 py-1.5 rounded text-xs font-semibold transition">Raw &amp; UF</button>
+          <button onclick="setFlowHighlight('potable')" id="fl-potable" class="px-2 py-1.5 rounded text-xs font-semibold transition">UV &amp; Out</button>
+          <button onclick="setFlowHighlight('power')" id="fl-power" class="px-2 py-1.5 rounded text-xs font-semibold transition">Power</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script type="module">
+    import * as THREE from 'three';
+    import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
+    import { CSS2DRenderer, CSS2DObject } from 'three/addons/renderers/CSS2DRenderer.js';
+    import { RoomEnvironment } from 'three/addons/environments/RoomEnvironment.js';
+
+    // Units: feet.
+    // MWTP-50C: 20-ft gooseneck — 14-ft main deck [X = -5 to +9] + 6-ft gooseneck deck [X = -11 to -5]
+    // Width 8.0 ft (W = 4.0); clear interior height 7.5 ft (about 10 ft 3 in overall road height)
+    // Roadside = -Z, curbside = +Z. Restaurant back wall at X ≈ 19.5; PWR-25 parks curbside.
+    const G = -1.75;      // ground plane
+    const D = 0.55;       // main deck top
+    const GD = 2.85;      // gooseneck deck top
+    const ROOF = D + 7.5; // 7.5 ft clear interior height
+    const W = 4.0;        // half exterior width (8.0 ft total)
+    const REAR = 9.0;     // rear bulkhead
+    const WALL = 19.5;    // restaurant back wall
+
+    // ---------------- Skid metadata (inspector text) ----------------
+    const skids = {
+      chassis: {
+        short: '20-ft Non-CDL Gooseneck', color: '#64748b',
+        tag: 'MWTP-50C • 9,990 LB GVWR WATER TRAILER', title: '20-ft Aluminum Gooseneck & 1-Ton SRW Pickup', weight: '7,310 lb road / 8,660 lb on site',
+        desc: '14-ft main treatment deck plus a 6-ft gooseneck deck with exterior-access doors. No generator, no fuel tank and no transfer switch on board, so certified tare is 3,300 lb or less and the on-site weight leaves a 1,330 lb margin under the 9,990 lb plate. Towed by a standard 1-ton single-rear-wheel pickup with no CDL.',
+        specs: [['Dimensions', '20 ft × 8.0 ft (14 ft main + 6 ft neck)'], ['Axles & GVWR', '2 × 5,200 lb torsion (plated 9,990 lb)'], ['Pin Weight', '~1,170 lb (16%) on the road'], ['Margins', '2,680 lb road • 1,330 lb on site'], ['Driver License', 'Standard license + DOT med card']],
+        explode: [0, -5.0, 0], label: [2.0, D + 0.2, W + 0.5]
+      },
+      nose: {
+        short: 'Nose: PLC, Air & Chem', color: '#a855f7',
+        tag: 'CP-701 / CMP-801A/B / CHEM-501 • GOOSENECK DECK', title: 'Controls, Instrument Air & Segregated Chemical Cabinets', weight: '870 lb',
+        desc: 'With the generator off the trailer, the gooseneck nose holds the PLC panel, duplex compressors and the chemical cabinets behind weatherproof exterior doors. Chemicals stay outside the operator space, and the weight over the hitch keeps pin weight in the 15–25% range a gooseneck needs.',
+        specs: [['PLC / HMI', 'UL-508A CP-701 + UPS + cellular telemetry'], ['Instrument Air', 'Duplex 1.5 HP oil-less + receiver'], ['Oxidizer Cabinet', '12.5% NaOCl day tank + P-502A/B'], ['Acid / Reducer Cabinet', 'Citric acid (CIP) + sodium bisulfite'], ['Gas Interlock', 'AIT-901 Cl₂ ≥ 0.5 ppm → exhaust fan high']],
+        explode: [-5.5, 5.0, 0], label: [-9.8, GD + 4.4, W + 0.6]
+      },
+      inlet: {
+        short: '1. PSV-100, RPZ-100 & P-101', color: '#d97706',
+        tag: 'PSV-100 / RPZ-100 / P-101 / STR-101 • CURBSIDE FRONT', title: 'Direct-Feed Inlet: Pressure-Sustaining Valve, RPZ & Boost Pump', weight: '450 lb road / 520 lb on site',
+        desc: 'Rev C replaces the ground break tank with containment backflow on the trailer. PSV-100 holds the city main and the restaurant service at 20 PSI or more; RPZ-100 provides the backflow protection the air gap used to, with its relief drained through the floor past flow switch FS-100. P-101 only boosts what city pressure does not supply.',
+        specs: [['PSV-100', 'Holds upstream ≥ 20 PSI (PT-100 alarm 22)'], ['RPZ-100', '1.5" ASSE 1013 + FS-100 relief alarm'], ['P-101', '3 HP 316SS VFD — boost (Port A) / draft (Port B)'], ['Pre-Filtration', '200 µm auto-strainer + duplex bag/carbon']],
+        explode: [-1.5, 1.5, 7.5], label: [-2.4, D + 2.6, W + 0.8]
+      },
+      uf: {
+        short: '2. UF (4 × 60" PVDF)', color: '#06b6d4',
+        tag: 'UF-201A/B / DIT-201 • ROADSIDE FRONT', title: 'Hollow-Fiber UF Skid (4 × 60" Modules) & Daily Integrity Test', weight: '890 lb road / 1,020 lb on site',
+        desc: 'Four 60-inch vertical 0.02-micron PVDF modules in two sub-trains (2,200 ft²) stand 6.5 ft tall under the 7.5-ft roof. UF is the particle and protozoa barrier and keeps permeate clear enough for UV to deliver its full dose. One sub-train keeps about 25 GPM online while the other backwashes or runs its integrity test.',
+        specs: [['Membrane Array', '4 × 60" PVDF 0.02 µm (2,200 ft²)'], ['Flux @ 35 GPM', '24.1 GFD'], ['Integrity Test', 'Daily automated pressure decay (DIT-201)'], ['Turbidity Trip', 'AIT-201 > 0.15 NTU → waste, close XV-602']],
+        explode: [-1.5, 5.5, -7.5], label: [-2.6, ROOF + 0.9, -2.6]
+      },
+      bench: {
+        short: 'Test Bench & Eyewash', color: '#0ea5e9',
+        tag: 'AIT-201 / AIT-601 • ROADSIDE OVER AXLES', title: 'Fold-Down Test Bench, Online Analyzers & Eyewash', weight: '250 lb road / 280 lb on site',
+        desc: 'Beside the roadside door so the operator can pull grab samples and check the online analyzers without crossing the treatment equipment. Logs export for the health inspector and the state emergency approval.',
+        specs: [['Turbidimeter', 'Hach TU5300sc (< 0.05 NTU normal)'], ['Cl₂ / pH', 'AIT-601 at clearwell outlet'], ['Eyewash', 'ANSI Z358.1 plumbed eyewash/drench'], ['Records', 'PDF / USB / cellular export']],
+        explode: [2.0, 4.0, -8.0], label: [2.0, ROOF + 2.4, -2.8]
+      },
+      uv: {
+        short: '3. UV-401A/B 186 mJ/cm²', color: '#d946ef',
+        tag: 'UV-401A/B / AIT-401 / P-502 • ROADSIDE REAR', title: 'Virus-Rated UV (186 mJ/cm²) & NaOCl Residual Dosing', weight: '360 lb road / 420 lb on site',
+        desc: 'EPA\'s LT2 UV dose table credits 4-log virus inactivation at 186 mJ/cm² (adenovirus basis). That replaces the 600-gal chlorine contact tank, so a Boil Water job needs no ground tanks. Chlorine is dosed after UV for residual only, to protect the building plumbing.',
+        specs: [['Validated Dose', '≥ 186 mJ/cm² @ 40 GPM, 85% UVT'], ['Reactors', 'Duty + 100% standby (each full flow)'], ['Live Dose', 'Intensity + UVT (AIT-401) + flow (FIT-200)'], ['Low Dose', 'Start standby → cut flow → close XV-602'], ['Residual Target', '1.5–2.0 mg/L free Cl₂']],
+        explode: [5.0, 3.0, -7.5], label: [7.0, ROOF + 0.9, -2.8]
+      },
+      clearwell: {
+        short: '4. 150-Gal Clearwell & Booster', color: '#3b82f6',
+        tag: 'TK-601 / P-601A/B • CURBSIDE OVER AXLES', title: '150-Gallon Clearwell & Duplex 3 HP Kitchen Booster', weight: '590 lb road / 1,650 lb on site',
+        desc: 'Over the axles so the water weight sits on the suspension. The clearwell buffers kitchen bursts above the plant\'s 35 GPM treatment rate, and two 3 HP VFD vertical multistage pumps deliver up to 50 GPM at 60–75 PSI. P-601B also supplies UF backwash water.',
+        specs: [['Clearwell', '150 gal NSF-61, 85% normal level'], ['Boosters', '2 × 3 HP VFD (50 GPM @ 60–75 PSI)'], ['Low-Low Level', 'LIT-601 < 20% trips boosters & backwash'], ['High Pressure', 'PT-603 > 90 PSI trips lead booster']],
+        explode: [2.0, 4.5, 7.5], label: [2.2, D + 4.6, W + 0.8]
+      },
+      bulkhead: {
+        short: '5. RPZ-602 & Rear Ports', color: '#2563eb',
+        tag: 'RPZ-602 / XV-602 / SHORE 50A • REAR BULKHEAD', title: 'Treated-Water RPZ, Outlet Valve & 5-Port Rear Bulkhead', weight: 'Part of 600 lb piping & reels',
+        desc: 'Every outside connection is a color-coded camlock or twist-lock at the rear wall. Treated water leaves through the 2" ASSE 1013 RPZ-602 and fail-closed XV-602. Hose and cord reels ride on the curbside rear wall.',
+        specs: [['Port A (1.5" blue)', 'Pressurized raw from tee or hydrant'], ['Port B (2" blue)', 'Outage suction from tanker or folding tank'], ['Potable Out (white)', '2" & 1.5" NSF-61 after RPZ-602'], ['Waste (gray)', 'To downstream sanitary cleanout'], ['Shore 50A', 'CS6375 / NEMA 14-50 inlet + 50 ft cord reel']],
+        explode: [6.5, 1.5, 4.5], label: [REAR + 1.0, D + 3.4, 1.0]
+      },
+      site: {
+        short: 'Restaurant Tie-In Points', color: '#a8a29e',
+        tag: 'SITE SURVEY HOOKUPS • RESTAURANT BACK WALL', title: 'Service-Line Tee, 50A Receptacle, Domestic Tie-In & Cleanout', weight: 'Installed at site survey',
+        desc: 'Everything the trailer connects to is installed during the pre-deployment site survey: a valved 1.5" tee on the service line between the meter and the double-isolated building valves, a 240V 50A receptacle by the restaurant\'s electrician, the domestic tie-in, and the sanitary cleanout downstream of the grease interceptor.',
+        specs: [['Service-Line Tee', '1.5" valved tee (feeds Port A)'], ['Building Isolation', 'Two closed building valves (double block)'], ['50A Receptacle', '240V, typically $800–$2,000 installed'], ['Waste', 'Downstream cleanout — never the grease trap']],
+        explode: [5.5, -4.8, 0], label: [WALL - 0.6, G + 10.6, 0]
+      },
+      pwr: {
+        short: 'PWR-25 Generator Trailer', color: '#eab308',
+        tag: 'PWR-25 • SECOND TRAILER (OUTAGE JOBS ONLY)', title: 'PWR-25 25 kVA Generator & Outage-Kit Trailer', weight: '~3,540 lb (no CDL)',
+        desc: 'Goes out only on power-outage or zero-pressure jobs. A second pickup delivers it and leaves. It parks at least 10 ft from building openings and the dining area, drives its own ground rod, and runs a 50A cord to the water trailer\'s shore inlet. One PWR-25 backs up the whole restaurant fleet.',
+        specs: [['Generator', '25 kVA Tier 4 Final, sound-attenuated'], ['Fuel', '~0.8 gal/hr (~19 gal/day), 2+ days per tank'], ['Containment', 'Integrated tank + 110% spill base'], ['Outage Kit', '550-gal folding tank, 2" suction hoses'], ['Pricing', '$750 delivery + $400/day add-on']],
+        explode: [0, -4.8, 6.5], label: [5.0, G + 6.3, 14.6]
+      },
+      foldtank: {
+        short: 'Folding Break Tank (Port B)', color: '#fbbf24',
+        tag: 'OUTAGE KIT • GROUND DEPLOYED', title: '550-Gallon Folding Break Tank (Carried on PWR-25)', weight: '~120 lb dry / ~4,700 lb full',
+        desc: 'When the main is down, P-101 drafts through Port B. If the potable tanker can stay on site, it is the break tank; if it can\'t, this folding NSF-61 tank from the PWR-25 kit box is set up and filled by tanker drops. Port A stays capped.',
+        specs: [['Footprint', '5 ft × 5 ft, 550 gal NSF-61'], ['Connection', '2" suction hose to Port B (XV-103)'], ['Typical Use', '4,000–8,000 gal/day per restaurant'], ['Refill', 'One 4,000-gal tanker covers most of a day']],
+        explode: [3.0, -4.8, -5.5], label: [13.0, G + 4.4, -9.8]
+      }
+    };
+    const OUTAGE_ONLY = ['pwr', 'foldtank'];
+
+    // ---------------- Renderer, scene, camera ----------------
+    const container = document.getElementById('viewport-container');
+    const loadingEl = document.getElementById('loading');
+    let renderer;
+    try {
+      renderer = new THREE.WebGLRenderer({ antialias: true });
+    } catch (e) {
+      loadingEl.textContent = 'WebGL is not available in this browser, so the 3D model cannot be shown.';
+      throw e;
+    }
+    renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 2));
+    renderer.shadowMap.enabled = true;
+    renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+    renderer.toneMapping = THREE.ACESFilmicToneMapping;
+    renderer.toneMappingExposure = 1.05;
+    renderer.outputColorSpace = THREE.SRGBColorSpace;
+    container.appendChild(renderer.domElement);
+
+    const labelRenderer = new CSS2DRenderer();
+    labelRenderer.domElement.style.position = 'absolute';
+    labelRenderer.domElement.style.inset = '0';
+    labelRenderer.domElement.style.pointerEvents = 'none';
+    container.appendChild(labelRenderer.domElement);
+
+    const scene = new THREE.Scene();
+    const BG = new THREE.Color('#0b1120');
+    scene.background = BG;
+    scene.fog = new THREE.Fog(BG, 110, 230);
+    const pmrem = new THREE.PMREMGenerator(renderer);
+    scene.environment = pmrem.fromScene(new RoomEnvironment(), 0.04).texture;
+
+    const camera = new THREE.PerspectiveCamera(38, 1, 0.5, 500);
+    const controls = new OrbitControls(camera, renderer.domElement);
+    controls.enableDamping = true;
+    controls.dampingFactor = 0.08;
+    controls.minDistance = 4;
+    controls.maxDistance = 140;
+    controls.maxPolarAngle = Math.PI * 0.495;
+    controls.screenSpacePanning = true;
+
+    scene.add(new THREE.HemisphereLight('#cbd5e1', '#1e293b', 0.55));
+    const sun = new THREE.DirectionalLight('#ffffff', 1.6);
+    sun.position.set(-25, 50, 35);
+    sun.castShadow = true;
+    sun.shadow.mapSize.set(2048, 2048);
+    Object.assign(sun.shadow.camera, { left: -45, right: 35, top: 35, bottom: -35, near: 1, far: 180 });
+    sun.shadow.bias = -0.0005;
+    scene.add(sun);
+    const fill = new THREE.DirectionalLight('#c4b5fd', 0.35);
+    fill.position.set(35, 18, -35);
+    scene.add(fill);
+
+    const groundGroup = new THREE.Group();
+    scene.add(groundGroup);
+    const ground = new THREE.Mesh(new THREE.PlaneGeometry(220, 140), new THREE.MeshStandardMaterial({ color: '#111827', roughness: 0.95, metalness: 0 }));
+    ground.rotation.x = -Math.PI / 2;
+    ground.position.y = G;
+    ground.receiveShadow = true;
+    groundGroup.add(ground);
+    const grid = new THREE.GridHelper(140, 35, '#334155', '#1f2937');
+    grid.position.y = G + 0.01;
+    grid.material.transparent = true;
+    grid.material.opacity = 0.5;
+    groundGroup.add(grid);
+
+    // ---------------- Geometry helpers ----------------
+    const pickables = [];
+    function mat(color, o = {}) {
+      return new THREE.MeshStandardMaterial({
+        color, metalness: o.m ?? 0.15, roughness: o.r ?? 0.55,
+        transparent: o.t != null, opacity: o.t ?? 1, depthWrite: o.t == null || o.t > 0.6,
+        emissive: new THREE.Color(o.e || '#000000'), emissiveIntensity: o.ei ?? 1,
+        side: o.ds ? THREE.DoubleSide : THREE.FrontSide
+      });
+    }
+    const SS = () => mat('#cfd5dc', { m: 0.85, r: 0.28 });
+    const DARK = () => mat('#334155', { m: 0.5, r: 0.5 });
+    function add(g, mesh, pick = true) {
+      mesh.castShadow = !mesh.material.transparent;
+      mesh.receiveShadow = true;
+      g.add(mesh);
+      const skid = g.userData.skid;
+      if (skid) mesh.userData.skid = skid;
+      if (pick && skid) pickables.push(mesh);
+      return mesh;
+    }
+    function box(g, w, h, d, x, yb, z, m, pick) {
+      const mesh = new THREE.Mesh(new THREE.BoxGeometry(w, h, d), m);
+      mesh.position.set(x, yb + h / 2, z);
+      return add(g, mesh, pick);
+    }
+    function cylV(g, r, h, x, yb, z, m, seg = 28, pick) {
+      const mesh = new THREE.Mesh(new THREE.CylinderGeometry(r, r, h, seg), m);
+      mesh.position.set(x, yb + h / 2, z);
+      return add(g, mesh, pick);
+    }
+    function cylH(g, r, len, x, y, z, m, axis = 'x', seg = 24, pick) {
+      const mesh = new THREE.Mesh(new THREE.CylinderGeometry(r, r, len, seg), m);
+      if (axis === 'x') mesh.rotation.z = Math.PI / 2; else mesh.rotation.x = Math.PI / 2;
+      mesh.position.set(x, y, z);
+      return add(g, mesh, pick);
+    }
+    function dome(g, r, x, y, z, m) {
+      const mesh = new THREE.Mesh(new THREE.SphereGeometry(r, 24, 12, 0, Math.PI * 2, 0, Math.PI / 2), m);
+      mesh.position.set(x, y, z);
+      return add(g, mesh);
+    }
+    function pipe(g, a, b, r, m, pick = true) {
+      const A = new THREE.Vector3(...a), B = new THREE.Vector3(...b);
+      const mesh = new THREE.Mesh(new THREE.CylinderGeometry(r, r, A.distanceTo(B), 12), m);
+      mesh.position.copy(A).add(B).multiplyScalar(0.5);
+      mesh.quaternion.setFromUnitVectors(new THREE.Vector3(0, 1, 0), B.clone().sub(A).normalize());
+      return add(g, mesh, pick);
+    }
+    function cage(g, w, h, d, x, yb, z, t, m) {
+      const hx = w / 2, hz = d / 2;
+      [[-hx, -hz], [hx, -hz], [-hx, hz], [hx, hz]].forEach(([dx, dz]) => box(g, t, h, t, x + dx, yb, z + dz, m));
+      [yb, yb + h - t].forEach(y => {
+        box(g, w + t, t, t, x, y, z - hz, m); box(g, w + t, t, t, x, y, z + hz, m);
+        box(g, t, t, d + t, x - hx, y, z, m); box(g, t, t, d + t, x + hx, y, z, m);
+      });
+    }
+    function motorPump(g, x, y, z, axis, motorColor, pumpColor, s = 1) {
+      if (axis === 'x') {
+        const motor = mat(motorColor, { m: 0.35, r: 0.45 });
+        cylH(g, 0.38 * s, 1.25 * s, x, y, z, motor, 'x');
+        cylH(g, 0.42 * s, 0.4 * s, x + 0.85 * s, y - 0.04, z, mat(pumpColor, { m: 0.6, r: 0.35 }), 'z');
+        box(g, 1.8 * s, 0.1, 0.75 * s, x + 0.25 * s, y - 0.42 * s - 0.1, z, DARK());
+      } else {
+        cylV(g, 0.3 * s, 1.9 * s, x, y, z, SS());
+        cylV(g, 0.42 * s, 0.22, x, y + 1.9 * s, z, DARK());
+        cylV(g, 0.4 * s, 1.05 * s, x, y + 2.12 * s, z, mat(motorColor, { m: 0.35, r: 0.45 }));
+      }
+    }
+
+    // ---------------- Skid groups ----------------
+    const groups = {};
+    Object.keys(skids).forEach(id => {
+      const g = new THREE.Group();
+      g.userData.skid = id;
+      groups[id] = g;
+      scene.add(g);
+    });
+
+    // 1. CHASSIS: 20-ft gooseneck (14-ft main deck X = -5..9, 6-ft neck X = -11..-5)
+    (function buildChassis() {
+      const g = groups.chassis;
+      const deck = mat('#9ca3af', { m: 0.7, r: 0.4 });
+      const frame = mat('#1f2937', { m: 0.6, r: 0.45 });
+      box(g, 14, 0.22, 2 * W, 2.0, D - 0.22, 0, deck);
+      box(g, 6, 0.22, 2 * W, -8.0, GD - 0.22, 0, deck);
+      box(g, 0.28, GD - D, 2 * W, -5.0, D, 0, frame);
+      [-1.5, 1.5].forEach(z => {
+        box(g, 14, 0.6, 0.3, 2.0, D - 0.82, z, frame);
+        box(g, 6.4, 0.6, 0.3, -8.0, GD - 0.82, z, frame);
+      });
+      for (let x = -4; x <= 8; x += 2) box(g, 0.2, 0.35, 2 * W - 0.4, x, D - 0.55, 0, frame);
+      box(g, 1.8, GD - 1.3, 1.6, -11.4, 1.3, 0, frame);
+      cylV(g, 0.22, 0.65, -11.6, 0.7, 0, mat('#111827', { m: 0.6 }));
+
+      const tire = mat('#0b0f14', { m: 0, r: 0.9 });
+      const rim = mat('#d1d5db', { m: 0.9, r: 0.25 });
+      [1.6, 4.2].forEach(ax => {
+        cylH(g, 0.11, 2 * W - 0.5, ax, -0.68, 0, frame, 'z');
+        [-1, 1].forEach(sd => {
+          cylH(g, 1.08, 0.68, ax, -0.68, sd * (W - 0.65), tire, 'z', 32);
+          cylH(g, 0.56, 0.71, ax, -0.68, sd * (W - 0.65), rim, 'z', 24);
+        });
+      });
+      [-1, 1].forEach(sd => box(g, 5.6, 0.12, 0.82, 2.9, D - 0.18, sd * (W - 0.5), mat('#475569', { m: 0.7, r: 0.35 })));
+
+      [[-4.5, -1], [-4.5, 1], [8.4, -1], [8.4, 1]].forEach(([x, sd]) => {
+        box(g, 0.5, 0.45, 0.5, x, D - 0.65, sd * (W + 0.12), mat('#8b5cf6', { m: 0.4 }));
+        cylV(g, 0.15, D - 0.65 - G - 0.12, x, G + 0.12, sd * (W + 0.12), mat('#8b5cf6', { m: 0.5, r: 0.35 }));
+        box(g, 0.9, 0.12, 0.9, x, G, sd * (W + 0.12), frame);
+      });
+    })();
+
+    // 1B. 1-TON SRW PICKUP
+    const truck = new THREE.Group();
+    truck.userData.skid = 'chassis';
+    groups.chassis.add(truck);
+    (function buildTruck() {
+      const g = truck;
+      const paint = mat('#0f172a', { m: 0.6, r: 0.25 });
+      const stripe = mat('#8b5cf6', { m: 0.4, r: 0.3, e: '#7c3aed', ei: 0.2 });
+      const glass = mat('#1e293b', { m: 0.9, r: 0.08 });
+      const tire = mat('#0b0f14', { m: 0, r: 0.9 });
+      const rim = mat('#cbd5e1', { m: 0.9, r: 0.25 });
+      const dark = mat('#1f2937', { m: 0.5, r: 0.5 });
+      const RA = -12.0, FA = -24.5, wr = 1.25, wy = G + wr;
+      box(g, 19.0, 0.6, 2.4, -18.0, wy - 0.25, 0, dark);
+      box(g, 8.0, 0.35, 6.6, -12.2, wy + 0.55, 0, dark);
+      [-3.15, 3.15].forEach(z => {
+        box(g, 8.0, 1.8, 0.3, -12.2, wy + 0.55, z, paint);
+        box(g, 8.0, 0.18, 0.32, -12.2, wy + 1.5, z, stripe);
+      });
+      dome(g, 0.2, -11.6, wy + 0.92, 0, mat('#9ca3af', { m: 0.9, r: 0.2 }));
+      box(g, 6.8, 4.5, 6.6, -19.8, wy + 0.2, 0, paint);
+      box(g, 6.82, 0.2, 6.64, -19.8, wy + 1.5, 0, stripe);
+      box(g, 4.0, 2.3, 6.4, -25.2, wy + 0.2, 0, paint);
+      box(g, 0.22, 2.0, 5.6, -27.25, wy + 0.25, 0, mat('#94a3b8', { m: 0.8, r: 0.3 }));
+      [-2.3, 2.3].forEach(z => box(g, 0.18, 0.45, 0.9, -27.3, wy + 1.7, z, mat('#fef3c7', { e: '#fde68a', ei: 0.6 })));
+      box(g, 0.1, 1.8, 5.8, -23.22, wy + 2.5, 0, glass);
+      [-1, 1].forEach(sd => {
+        box(g, 2.6, 1.5, 0.1, -21.4, wy + 2.7, sd * 3.32, glass);
+        box(g, 2.6, 1.5, 0.1, -18.2, wy + 2.7, sd * 3.32, glass);
+      });
+      [FA, RA].forEach(ax => {
+        [-1, 1].forEach(sd => {
+          const z = sd * 2.95;
+          cylH(g, wr, 0.72, ax, wy, z, tire, 'z', 32);
+          cylH(g, 0.65, 0.75, ax, wy, z, rim, 'z', 24);
+        });
+      });
+    })();
+
+    // 2. GOOSENECK NOSE (X = -11..-5): PLC roadside, air center, chemical cabinets curbside
+    (function buildNose() {
+      const g = groups.nose;
+      // CP-701 PLC/HMI panel facing the roadside exterior door
+      box(g, 2.0, 4.0, 1.1, -9.4, GD, -3.2, mat('#9ca3af', { m: 0.55, r: 0.4 }));
+      box(g, 1.1, 0.75, 0.05, -9.4, GD + 2.6, -3.78, mat('#0f172a', { e: '#a855f7', ei: 0.9 }));
+      box(g, 0.5, 0.7, 0.4, -7.9, GD, -3.4, mat('#334155', { m: 0.4 })); // UPS
+      // Duplex oil-less compressors + receiver (center)
+      [-9.6, -8.2].forEach(x => {
+        box(g, 1.2, 0.95, 1.1, x, GD, -0.4, mat('#f59e0b', { m: 0.3, r: 0.45 }));
+        cylH(g, 0.26, 0.7, x + 0.3, GD + 0.5, -0.4, mat('#1e40af', { m: 0.35 }), 'x');
+      });
+      cylV(g, 0.5, 2.4, -6.6, GD, -0.6, mat('#ea580c', { m: 0.45, r: 0.4 }));
+      dome(g, 0.5, -6.6, GD + 2.4, -0.6, mat('#ea580c', { m: 0.45, r: 0.4 }));
+      // Segregated chemical cabinets (curbside): A = NaOCl, B = citric / bisulfite
+      [['#f472b6', -9.5], ['#f59e0b', -7.5]].forEach(([c, x]) => {
+        box(g, 1.6, 3.2, 1.4, x, GD, 3.05, mat(c, { m: 0.25, r: 0.5 }));
+        box(g, 0.5, 0.5, 0.02, x, GD + 2.3, 2.34, mat('#ffffff', { e: '#ffffff', ei: 0.15 }));
+      });
+      box(g, 0.08, 3.2, 1.4, -8.5, GD, 3.05, mat('#e2e8f0', { m: 0.2 })); // divider
+      // Exhaust fan + AIT-901 gas sensor on curbside wall
+      cylH(g, 0.42, 0.25, -8.5, GD + 4.2, W - 0.16, mat('#475569', { m: 0.6 }), 'z');
+      box(g, 0.35, 0.45, 0.15, -6.6, GD + 3.4, W - 0.2, mat('#fde047', { e: '#facc15', ei: 0.4 }));
+    })();
+
+    // 3. INLET (curbside front, X = -4.6..-0.2)
+    (function buildInlet() {
+      const g = groups.inlet;
+      box(g, 4.4, 0.25, 2.2, -2.4, D, 2.6, mat('#78350f', { m: 0.4, r: 0.5 }));
+      // PSV-100 pressure-sustaining valve (high on the curbside wall)
+      box(g, 0.75, 0.6, 0.55, -4.1, D + 4.3, 3.35, mat('#0ea5e9', { m: 0.4 }));
+      cylV(g, 0.24, 0.6, -4.1, D + 4.9, 3.35, mat('#0369a1', { m: 0.5 }));
+      // RPZ-100 1.5" ASSE 1013 (bronze body + test cocks) + relief drain & FS-100
+      cylH(g, 0.21, 1.5, -2.8, D + 4.6, 3.35, mat('#a16207', { m: 0.75, r: 0.35 }), 'x');
+      [-3.3, -2.3].forEach(x => cylV(g, 0.13, 0.42, x, D + 4.75, 3.35, mat('#ca8a04', { m: 0.7 })));
+      cylV(g, 0.16, 0.35, -2.8, D + 4.05, 3.35, mat('#ca8a04', { m: 0.7 }));
+      pipe(g, [-2.8, D + 4.05, 3.35], [-2.8, D + 0.25, 3.35], 0.08, mat('#94a3b8', { m: 0.6 }));
+      box(g, 0.3, 0.35, 0.3, -2.8, D + 1.5, 3.35, mat('#22c55e', { e: '#22c55e', ei: 0.3 }));
+      // P-101 3 HP VFD pump
+      motorPump(g, -1.3, D + 0.75, 2.2, 'x', '#1e3a8a', '#d97706', 0.85);
+      // STR-101 auto-strainer
+      cylV(g, 0.42, 2.3, -2.4, D + 0.25, 2.0, SS());
+      cylV(g, 0.26, 0.65, -2.4, D + 2.55, 2.0, mat('#d97706', { m: 0.35 }));
+      // BF-101A/B duplex bag / carbon housings
+      [[-3.9, 1.8], [-3.9, 2.85]].forEach(([x, z]) => {
+        cylV(g, 0.38, 2.3, x, D + 0.25, z, SS());
+        dome(g, 0.38, x, D + 2.55, z, SS());
+      });
+      pipe(g, [-3.9, D + 3.1, 1.8], [-0.4, D + 3.1, 1.8], 0.13, SS());
+    })();
+
+    // 4. UF SKID (roadside front, X = -4.6..-0.2)
+    (function buildUf() {
+      const g = groups.uf;
+      const frame = mat('#0e7490', { m: 0.5, r: 0.45 });
+      box(g, 4.4, 0.25, 2.2, -2.4, D, -2.6, frame);
+      cage(g, 4.4, 6.2, 2.0, -2.4, D + 0.25, -2.6, 0.15, frame);
+      const hA = mat('#f1f5f9', { m: 0.05, r: 0.35 }), hB = mat('#e0f2fe', { m: 0.05, r: 0.35 });
+      const cap = mat('#64748b', { m: 0.5, r: 0.4 });
+      [-4.0, -3.0, -1.8, -0.8].forEach((x, i) => {
+        cylV(g, 0.38, 4.8, x, D + 0.85, -2.6, i < 2 ? hA : hB, 24);
+        cylV(g, 0.43, 0.24, x, D + 0.62, -2.6, cap, 24);
+        cylV(g, 0.43, 0.24, x, D + 5.65, -2.6, cap, 24);
+      });
+      cylH(g, 0.16, 3.9, -2.4, D + 0.5, -2.6, SS(), 'x');
+      cylH(g, 0.16, 3.9, -2.4, D + 6.05, -2.6, SS(), 'x');
+      box(g, 0.85, 1.4, 0.25, -2.4, D + 2.6, -1.5, mat('#e2e8f0', { m: 0.2 }));
+      [0, 1].forEach(i => cylH(g, 0.15, 0.06, -2.4, D + 3.5 - i * 0.5, -1.36, mat('#22c55e', { e: '#22c55e', ei: 0.4 }), 'z'));
+    })();
+
+    // 5. TEST BENCH, ANALYZERS & EYEWASH (roadside over axles, X = 0.2..4.8)
+    (function buildBench() {
+      const g = groups.bench;
+      box(g, 2.6, 2.6, 1.5, 1.6, D, -3.0, mat('#0c4a6e', { m: 0.2, r: 0.6 }));
+      box(g, 2.7, 0.1, 1.6, 1.6, D + 2.6, -3.0, SS());
+      box(g, 2.4, 2.2, 0.3, 1.6, D + 3.0, -3.65, mat('#f8fafc', { m: 0.1, r: 0.6 }));
+      [['#22c55e', 0.9], ['#3b82f6', 1.6], ['#f59e0b', 2.3]].forEach(([c, x]) => box(g, 0.45, 0.55, 0.2, x, D + 4.2, -3.42, mat(c, { e: c, ei: 0.25 })));
+      cylV(g, 0.18, 0.5, 1.0, D + 2.7, -2.9, mat('#e0f2fe', { t: 0.7 }));
+      // Eyewash
+      cylV(g, 0.06, 3.2, 3.9, D, -3.5, mat('#facc15', { m: 0.4 }));
+      cylV(g, 0.34, 0.1, 3.9, D + 3.2, -3.3, mat('#16a34a', { m: 0.3, r: 0.4 }));
+      box(g, 0.65, 0.65, 0.04, 3.9, D + 4.4, -3.9, mat('#16a34a', { e: '#16a34a', ei: 0.4 }));
+    })();
+
+    // 6. UV-401A/B + RESIDUAL DOSING (roadside rear, X = 5.2..8.8)
+    (function buildUv() {
+      const g = groups.uv;
+      const frame = mat('#701a75', { m: 0.5, r: 0.45 });
+      box(g, 3.6, 0.25, 1.8, 7.0, D, -2.9, frame);
+      [[D + 0.25, -3.4], [D + 0.25, -2.4]].forEach(([y, z]) => box(g, 0.15, 3.6, 0.15, 5.3, y, z, frame));
+      [[D + 0.25, -3.4], [D + 0.25, -2.4]].forEach(([y, z]) => box(g, 0.15, 3.6, 0.15, 8.7, y, z, frame));
+      [[D + 3.4, 0], [D + 2.0, 1]].forEach(([y, i]) => {
+        cylH(g, 0.3, 3.0, 7.0, y, -2.9, SS(), 'x');
+        [-1.55, 1.55].forEach(dx => cylH(g, 0.33, 0.14, 7.0 + dx, y, -2.9, mat(i ? '#64748b' : '#a21caf', { e: i ? '#000000' : '#d946ef', ei: 0.9 }), 'x'));
+        box(g, 0.5, 0.3, 0.3, 6.0, y + 0.25, -2.6, mat('#e2e8f0', { m: 0.3 })); // intensity sensor
+      });
+      // AIT-401 UVT analyzer on wall
+      box(g, 0.9, 1.2, 0.3, 6.0, D + 4.6, -3.7, mat('#f8fafc', { m: 0.1 }));
+      box(g, 0.5, 0.3, 0.05, 6.0, D + 5.2, -3.53, mat('#0f172a', { e: '#d946ef', ei: 0.6 }));
+      // NaOCl residual dosing pumps P-502A/B + injection quill
+      [7.7, 8.3].forEach(x => box(g, 0.45, 0.6, 0.45, x, D + 0.25, -2.0, mat('#f472b6', { m: 0.2 })));
+      cylV(g, 0.1, 0.6, 8.6, D + 3.4, -2.9, mat('#be185d', { m: 0.4 }));
+    })();
+
+    // 7. CLEARWELL TK-601 + DUPLEX BOOSTER (curbside over axles, X = 0.2..4.8)
+    (function buildClearwell() {
+      const g = groups.clearwell;
+      box(g, 3.0, 4.4, 2.1, 1.8, D + 0.25, 2.7, mat('#e2e8f0', { t: 0.34, r: 0.3, ds: true }));
+      box(g, 2.85, 4.4 * 0.85, 1.95, 1.8, D + 0.3, 2.7, mat('#2563eb', { t: 0.58, r: 0.15 }), false);
+      [-0.65, 0.65].forEach(dx => box(g, 0.05, 3.5, 1.85, 1.8 + dx, D + 0.35, 2.7, mat('#93c5fd', { t: 0.5 }), false));
+      cage(g, 3.2, 4.7, 2.25, 1.8, D, 2.7, 0.12, mat('#475569', { m: 0.6, r: 0.4 }));
+      [2.1, 3.3].forEach(z => motorPump(g, 4.1, D + 0.25, z, 'v', '#1d4ed8', '#cbd5e1', 0.9));
+      cylH(g, 0.16, 1.9, 3.7, D + 0.6, 3.6, SS(), 'x');
+      cylH(g, 0.16, 1.6, 4.1, D + 2.4, 2.7, SS(), 'z');
+    })();
+
+    // 8. REAR BULKHEAD: RPZ-602, XV-602, ports, reels (rear wall + curbside rear)
+    (function buildBulkhead() {
+      const g = groups.bulkhead;
+      box(g, 0.18, 3.2, 6.2, REAR + 0.05, D + 0.3, 0, mat('#475569', { m: 0.7, r: 0.35 }));
+      [[-2.0, '#0ea5e9', 0.16], [-1.0, '#0369a1', 0.2], [0.0, '#f8fafc', 0.2], [1.0, '#9ca3af', 0.2]].forEach(([z, c, r]) => {
+        cylH(g, r, 0.45, REAR + 0.25, D + 1.8, z, mat(c, { m: 0.5, r: 0.35 }), 'x');
+      });
+      box(g, 0.3, 0.7, 0.7, REAR + 0.25, D + 1.45, 2.2, mat('#facc15', { m: 0.3, e: '#ca8a04', ei: 0.25 }));
+      // RPZ-602 2" ASSE 1013 + XV-602 actuator
+      cylH(g, 0.24, 1.9, 6.6, D + 3.0, 3.3, mat('#a16207', { m: 0.75, r: 0.35 }), 'x');
+      [6.0, 7.2].forEach(x => cylV(g, 0.14, 0.45, x, D + 3.18, 3.3, mat('#ca8a04', { m: 0.7 })));
+      box(g, 0.5, 0.5, 0.5, 7.9, D + 2.75, 3.3, mat('#16a34a', { m: 0.3, e: '#16a34a', ei: 0.2 }));
+      // Hose reels (blue raw, white potable) and 50A cord reel
+      [[D + 1.0, '#2563eb'], [D + 4.7, '#e5e7eb']].forEach(([y, c]) => cylH(g, 0.8, 0.9, 8.1, y, 2.7, mat(c, { m: 0.1, r: 0.8 }), 'z'));
+      cylH(g, 0.6, 0.7, 6.0, D + 0.85, 2.9, mat('#facc15', { m: 0.2, r: 0.6 }), 'z');
+    })();
+
+    // 9. RESTAURANT BACK WALL & SITE-SURVEY HOOKUPS
+    (function buildSite() {
+      const g = groups.site;
+      box(g, 0.8, 11, 20, WALL + 0.4, G, 0, mat('#57534e', { m: 0.05, r: 0.9 }));
+      box(g, 0.1, 7.0, 3.6, WALL - 0.02, G, -7.2, mat('#334155', { m: 0.4 })); // back door
+      box(g, 0.12, 0.6, 20, WALL - 0.02, G + 10.4, 0, mat('#44403c', { m: 0.1 })); // parapet trim
+      // 1.5" service-line tee with two isolation valves (Port A source)
+      const blue = mat('#1d4ed8', { m: 0.4, r: 0.4 });
+      pipe(g, [WALL - 0.3, G, -3.5], [WALL - 0.3, G + 2.4, -3.5], 0.14, blue);
+      pipe(g, [WALL - 0.3, G + 1.6, -3.5], [WALL - 1.2, G + 1.6, -3.5], 0.12, blue);
+      [G + 0.9, G + 2.1].forEach(y => box(g, 0.12, 0.08, 0.6, WALL - 0.3, y, -3.5, mat('#dc2626', { m: 0.3 })));
+      box(g, 0.4, 0.5, 0.4, WALL - 0.3, G + 0.2, -3.5, mat('#0f172a', { m: 0.4 })); // meter box
+      // Domestic tie-in (potable return to building)
+      pipe(g, [WALL - 0.3, G + 2.5, 0.5], [WALL - 1.1, G + 2.5, 0.5], 0.13, mat('#f8fafc', { m: 0.2 }));
+      box(g, 0.12, 0.08, 0.55, WALL - 0.7, G + 2.62, 0.5, mat('#16a34a', { m: 0.3 }));
+      // 240V 50A receptacle
+      box(g, 0.25, 0.9, 0.7, WALL - 0.1, G + 3.6, 4.0, mat('#64748b', { m: 0.5 }));
+      box(g, 0.05, 0.45, 0.45, WALL - 0.25, G + 3.8, 4.0, mat('#facc15', { e: '#ca8a04', ei: 0.3 }));
+      // Sanitary cleanout (downstream of grease interceptor) + interceptor lid
+      cylV(g, 0.3, 0.35, 15.5, G, 6.5, mat('#9ca3af', { m: 0.6 }));
+      cylV(g, 1.0, 0.06, 16.6, G, 8.6, mat('#3f3f46', { m: 0.6, r: 0.5 }));
+      cylV(g, 0.85, 0.08, 16.6, G, 8.6, mat('#57534e', { m: 0.5 }));
+    })();
+
+    // 10. PWR-25 GENERATOR & OUTAGE-KIT TRAILER (parked curbside, tongue forward)
+    (function buildPwr() {
+      const g = groups.pwr;
+      const Z = 12.0, frame = mat('#1f2937', { m: 0.6, r: 0.45 });
+      const yb = G + 1.3;
+      box(g, 10.5, 0.3, 5.0, 4.6, yb, Z, frame);
+      pipe(g, [-0.6, yb + 0.15, Z - 2.2], [-3.4, yb + 0.15, Z], 0.12, frame);
+      pipe(g, [-0.6, yb + 0.15, Z + 2.2], [-3.4, yb + 0.15, Z], 0.12, frame);
+      cylV(g, 0.2, 0.3, -3.5, yb, Z, mat('#111827', { m: 0.6 }));
+      cylV(g, 0.09, yb - G, -2.4, G, Z, mat('#64748b', { m: 0.6 }));
+      box(g, 0.5, 0.08, 0.5, -2.4, G, Z, frame);
+      const tire = mat('#0b0f14', { m: 0, r: 0.9 }), rim = mat('#d1d5db', { m: 0.9, r: 0.25 });
+      [4.0, 5.6].forEach(ax => [-1, 1].forEach(sd => {
+        cylH(g, 0.75, 0.5, ax, G + 0.75, Z + sd * 2.75, tire, 'z', 28);
+        cylH(g, 0.4, 0.52, ax, G + 0.75, Z + sd * 2.75, rim, 'z', 20);
+      }));
+      [-1, 1].forEach(sd => box(g, 3.2, 0.1, 0.7, 4.8, G + 1.65, Z + sd * 2.75, mat('#475569', { m: 0.7 })));
+      // 110% spill base + sound-attenuated 25 kVA enclosure
+      box(g, 7.6, 0.45, 4.6, 5.4, yb + 0.3, Z, mat('#3f3f46', { m: 0.4 }));
+      box(g, 7.2, 4.0, 4.2, 5.4, yb + 0.75, Z, mat('#eab308', { m: 0.35, r: 0.4 }));
+      for (let i = 0; i < 8; i++) box(g, 0.06, 2.6, 0.04, 2.6 + i * 0.35, yb + 1.3, Z - 2.12, mat('#713f12'));
+      box(g, 1.6, 1.8, 0.04, 7.6, yb + 1.5, Z - 2.12, mat('#ca8a04', { m: 0.3 }));
+      cylV(g, 0.16, 1.1, 7.8, yb + 4.75, Z + 1.2, mat('#57534e', { m: 0.8, r: 0.4 }));
+      // 50A distribution panel on rear end
+      box(g, 0.3, 1.2, 1.2, 9.15, yb + 1.6, Z, mat('#64748b', { m: 0.5 }));
+      box(g, 0.05, 0.4, 0.4, 9.32, yb + 2.0, Z, mat('#facc15', { e: '#ca8a04', ei: 0.3 }));
+      // Lockable outage-kit box at the front
+      box(g, 1.6, 1.6, 4.0, 0.8, yb + 0.3, Z, mat('#94a3b8', { m: 0.6, r: 0.4 }));
+      // Ground rod
+      cylV(g, 0.05, 1.3, 9.8, G, Z + 1.8, mat('#b45309', { m: 0.8, r: 0.3 }));
+      pipe(g, [9.8, G + 1.2, Z + 1.8], [9.15, yb + 1.2, Z + 0.6], 0.03, mat('#16a34a', { m: 0.3 }));
+    })();
+
+    // 11. FOLDING BREAK TANK (outage kit, roadside behind trailer)
+    (function buildFoldTank() {
+      const g = groups.foldtank;
+      const cx = 13.0, cz = -7.0, w = 5.2, d = 5.2, h = 3.0;
+      const post = mat('#334155', { m: 0.6, r: 0.4 });
+      box(g, w, h, d, cx, G, cz, mat('#fbbf24', { t: 0.28, r: 0.4, ds: true }));
+      box(g, w - 0.1, h * 0.8, d - 0.1, cx, G + 0.02, cz, mat('#1d4ed8', { t: 0.5, r: 0.1 }), false);
+      const water = new THREE.Mesh(new THREE.PlaneGeometry(w - 0.12, d - 0.12), mat('#38bdf8', { t: 0.7, r: 0.05, m: 0.1 }));
+      water.rotation.x = -Math.PI / 2;
+      water.position.set(cx, G + h * 0.8 + 0.03, cz);
+      add(g, water);
+      [[-w/2, -d/2], [w/2, -d/2], [-w/2, d/2], [w/2, d/2]].forEach(([dx, dz]) => box(g, 0.16, h + 0.15, 0.16, cx + dx, G, cz + dz, post));
+      box(g, w + 0.16, 0.12, 0.16, cx, G + h + 0.04, cz - d / 2, post);
+      box(g, w + 0.16, 0.12, 0.16, cx, G + h + 0.04, cz + d / 2, post);
+      box(g, 0.16, 0.12, d + 0.16, cx - w / 2, G + h + 0.04, cz, post);
+      box(g, 0.16, 0.12, d + 0.16, cx + w / 2, G + h + 0.04, cz, post);
+      cylH(g, 0.2, 0.5, cx - w / 2 - 0.2, G + 0.4, cz + 1.6, mat('#0369a1', { m: 0.5 }), 'x');
+    })();
+
+    // ---------------- Trailer shell (20-ft gooseneck) ----------------
+    const shell = new THREE.Group();
+    scene.add(shell);
+    const glassMat = new THREE.MeshPhysicalMaterial({ color: '#c4b5fd', transparent: true, opacity: 0.08, roughness: 0.1, metalness: 0, side: THREE.DoubleSide, depthWrite: false });
+    const doorMat = new THREE.MeshStandardMaterial({ color: '#a855f7', transparent: true, opacity: 0.18, side: THREE.DoubleSide, depthWrite: false });
+    const edgeMat = new THREE.LineBasicMaterial({ color: '#94a3b8', transparent: true, opacity: 0.55 });
+    function withEdges(mesh, parent) {
+      parent.add(mesh);
+      const e = new THREE.LineSegments(new THREE.EdgesGeometry(mesh.geometry), edgeMat);
+      e.position.copy(mesh.position); e.rotation.copy(mesh.rotation);
+      parent.add(e);
+      return mesh;
+    }
+    function panel(w, h, x, y, z, ry = 0, m = glassMat) {
+      const mesh = new THREE.Mesh(new THREE.PlaneGeometry(w, h), m);
+      mesh.position.set(x, y, z); mesh.rotation.y = ry;
+      return withEdges(mesh, shell);
+    }
+    [-W, W].forEach(z => {
+      panel(14, ROOF - D, 2.0, (ROOF + D) / 2, z);
+      panel(6, ROOF - GD, -8.0, (ROOF + GD) / 2, z);
+      // Exterior-access nose doors
+      panel(4.6, 3.8, -8.2, GD + 2.1, z + Math.sign(z) * 0.03, 0, doorMat);
+    });
+    // Roadside personnel door beside the test bench
+    panel(2.6, 6.4, 2.4, D + 3.3, -W - 0.03, 0, doorMat);
+    panel(2 * W, ROOF - GD, -11.0, (ROOF + GD) / 2, 0, Math.PI / 2);
+    const roof = new THREE.Mesh(new THREE.PlaneGeometry(20, 2 * W), glassMat);
+    roof.rotation.x = -Math.PI / 2; roof.position.set(-1.0, ROOF, 0);
+    withEdges(roof, shell);
+    // Weatherproof bulkhead between nose and treatment deck
+    panel(2 * W, ROOF - GD, -5.0, (ROOF + GD) / 2, 0, Math.PI / 2,
+      new THREE.MeshStandardMaterial({ color: '#94a3b8', transparent: true, opacity: 0.2, side: THREE.DoubleSide, depthWrite: false }));
+    // Open rear barn doors
+    [-1, 1].forEach(sd => {
+      const hinge = new THREE.Group();
+      hinge.position.set(REAR, 0, sd * W);
+      hinge.rotation.y = -sd * 1.4;
+      const door = new THREE.Mesh(new THREE.PlaneGeometry(W, ROOF - D), glassMat);
+      door.position.set(W / 2, (ROOF + D) / 2, 0);
+      withEdges(door, hinge);
+      shell.add(hinge);
+    });
+
+    // ---------------- Animated flow routes (mode: null = both jobs) ----------------
+    const HY = G + 0.25; // hose height on the pavement
+    const flowRoutes = [
+      // BWA: service-line tee → Port A
+      { stream: 'raw', mode: 'bwa', color: '#f59e0b', nodes: [
+        ['site', WALL - 1.2, G + 1.6, -3.5], ['site', WALL - 1.6, HY, -3.5], ['chassis', REAR + 1.6, HY, -2.0], ['bulkhead', REAR + 0.25, D + 1.8, -2.0] ] },
+      // BWA inside: Port A → overhead → PSV-100 → RPZ-100 → P-101 → strainer → bags → header
+      { stream: 'raw', mode: 'bwa', color: '#f59e0b', nodes: [
+        ['bulkhead', REAR - 0.3, D + 1.8, -2.0], ['bulkhead', REAR - 0.3, D + 7.0, -2.0], ['bulkhead', REAR - 0.6, D + 7.0, 3.6],
+        ['inlet', -4.1, D + 7.0, 3.6], ['inlet', -4.1, D + 4.6, 3.35], ['inlet', -2.05, D + 4.6, 3.35], ['inlet', -1.3, D + 4.6, 2.6],
+        ['inlet', -1.3, D + 0.75, 2.2], ['inlet', -2.4, D + 1.4, 2.0], ['inlet', -3.9, D + 1.4, 1.8], ['inlet', -3.9, D + 3.1, 1.8], ['inlet', -0.4, D + 3.1, 1.8] ] },
+      // Outage: folding tank → Port B
+      { stream: 'raw', mode: 'outage', color: '#f59e0b', nodes: [
+        ['foldtank', 10.2, G + 0.4, -5.4], ['chassis', REAR + 1.6, HY, -1.0], ['bulkhead', REAR + 0.25, D + 1.8, -1.0] ] },
+      // Outage inside: Port B (XV-103) → overhead → P-101 suction (bypasses PSV/RPZ) → strainer → bags → header
+      { stream: 'raw', mode: 'outage', color: '#f59e0b', nodes: [
+        ['bulkhead', REAR - 0.3, D + 1.8, -1.0], ['bulkhead', REAR - 0.3, D + 6.6, -1.0], ['bulkhead', REAR - 0.6, D + 6.6, 3.0],
+        ['inlet', -0.6, D + 6.6, 3.0], ['inlet', -0.6, D + 0.75, 2.6], ['inlet', -1.3, D + 0.75, 2.2],
+        ['inlet', -2.4, D + 1.4, 2.0], ['inlet', -3.9, D + 1.4, 1.8], ['inlet', -3.9, D + 3.1, 1.8], ['inlet', -0.4, D + 3.1, 1.8] ] },
+      // Header → floor trench across aisle → UF feed manifold
+      { stream: 'raw', mode: null, color: '#f59e0b', nodes: [
+        ['inlet', -0.4, D + 3.1, 1.8], ['inlet', -0.3, D + 0.35, 1.2], ['uf', -0.3, D + 0.35, -2.6], ['uf', -4.3, D + 0.5, -2.6] ] },
+      // UF permeate → overhead → UV-401A (duty)
+      { stream: 'raw', mode: null, color: '#22d3ee', nodes: [
+        ['uf', -4.0, D + 6.05, -2.6], ['uf', -0.4, D + 6.05, -2.6], ['uv', 5.3, D + 6.4, -3.2], ['uv', 5.5, D + 3.4, -2.9], ['uv', 8.5, D + 3.4, -2.9] ] },
+      // UV → NaOCl residual quill → overhead across rear → clearwell
+      { stream: 'potable', mode: null, color: '#d946ef', nodes: [
+        ['uv', 8.6, D + 3.4, -2.9], ['uv', 8.6, D + 7.0, -2.9], ['clearwell', 4.6, D + 7.0, 1.4], ['clearwell', 1.8, D + 7.0, 2.7], ['clearwell', 1.8, D + 4.5, 2.7] ] },
+      // Clearwell → booster → RPZ-602 → XV-602 → potable port → restaurant tie-in
+      { stream: 'potable', mode: null, color: '#3b82f6', nodes: [
+        ['clearwell', 2.6, D + 0.6, 3.6], ['clearwell', 4.1, D + 0.6, 3.6], ['clearwell', 4.1, D + 2.4, 3.3], ['bulkhead', 5.6, D + 3.0, 3.3],
+        ['bulkhead', 8.2, D + 3.0, 3.3], ['bulkhead', REAR - 0.3, D + 1.8, 0.0], ['bulkhead', REAR + 0.3, D + 1.8, 0.0],
+        ['chassis', REAR + 1.6, HY, 0.5], ['site', WALL - 1.6, HY, 0.5], ['site', WALL - 1.1, G + 2.5, 0.5] ] },
+      // UF backwash waste → roadside floor → waste port → downstream cleanout
+      { stream: 'waste', mode: null, color: '#f43f5e', nodes: [
+        ['uf', -0.6, D + 0.3, -3.6], ['uv', 5.2, D + 0.3, -3.7], ['uv', 8.6, D + 0.3, -3.6], ['bulkhead', REAR - 0.3, D + 1.8, 1.0],
+        ['bulkhead', REAR + 0.3, D + 1.8, 1.0], ['chassis', REAR + 1.6, HY, 1.5], ['site', 15.5, G + 0.4, 6.5] ] },
+      // Power BWA: restaurant 50A receptacle → shore inlet
+      { stream: 'power', mode: 'bwa', color: '#facc15', nodes: [
+        ['site', WALL - 0.3, G + 3.8, 4.0], ['site', WALL - 1.2, G + 0.15, 4.0], ['chassis', REAR + 1.6, G + 0.15, 2.2], ['bulkhead', REAR + 0.4, D + 1.8, 2.2] ] },
+      // Power outage: PWR-25 panel → shore inlet
+      { stream: 'power', mode: 'outage', color: '#facc15', nodes: [
+        ['pwr', 9.35, G + 3.3, 12.0], ['pwr', 10.2, G + 0.15, 12.0], ['chassis', REAR + 1.6, G + 0.15, 2.2], ['bulkhead', REAR + 0.4, D + 1.8, 2.2] ] },
+      // Inside: shore inlet → ceiling run → nose panel CP-701
+      { stream: 'power', mode: null, color: '#facc15', nodes: [
+        ['bulkhead', REAR - 0.3, D + 1.8, 2.2], ['bulkhead', REAR - 0.3, ROOF - 0.35, 3.5], ['nose', -5.5, ROOF - 0.35, 3.5], ['nose', -9.4, ROOF - 0.35, -3.2], ['nose', -9.4, GD + 4.0, -3.2] ] }
+    ];
+
+
+    const flowGroup = new THREE.Group();
+    scene.add(flowGroup);
+    const dropGeo = new THREE.SphereGeometry(0.14, 12, 8);
+    flowRoutes.forEach(r => {
+      r.tube = new THREE.Mesh(new THREE.BufferGeometry(), new THREE.MeshStandardMaterial({ color: r.color, transparent: true, opacity: 0.55, roughness: 0.3, emissive: r.color, emissiveIntensity: 0.25, depthWrite: false }));
+      flowGroup.add(r.tube);
+      r.dropMat = new THREE.MeshStandardMaterial({ color: '#ffffff', emissive: r.color, emissiveIntensity: 1.2 });
+      r.count = 0; r.drops = null;
+    });
+
+    // ---------------- State ----------------
+    let explodeFactor = 0, explodeGoal = 0;
+    let showLabels = true, showFlow = true, shellMode = 'glass', showTruck = true, spin = false;
+    let flowFilter = 'all', selectedId = 'uv', hoverId = null, jobMode = 'bwa';
+    function groupVisible(id) { let o = groups[id]; while (o) { if (!o.visible) return false; o = o.parent; } return true; }
+    function meshVisible(m) { let o = m; while (o) { if (!o.visible) return false; o = o.parent; } return true; }
+
+    function skidBox(id) {
+      const b = new THREE.Box3();
+      groups[id].traverse(o => { if (o.isMesh && o.userData.skid === id && !(id === 'chassis' && !showTruck && isTruck(o))) b.expandByObject(o); });
+      return b;
+    }
+    function isTruck(m) { let o = m; while (o) { if (o === truck) return true; o = o.parent; } return false; }
+
+    const baseCenters = {};
+    Object.keys(groups).forEach(id => { baseCenters[id] = skidBox(id).getCenter(new THREE.Vector3()); });
+
+    const leaders = {};
+    Object.keys(skids).forEach(id => {
+      if (id === 'chassis') return;
+      const line = new THREE.Line(new THREE.BufferGeometry().setFromPoints([new THREE.Vector3(), new THREE.Vector3()]),
+        new THREE.LineDashedMaterial({ color: skids[id].color, dashSize: 0.45, gapSize: 0.3, transparent: true, opacity: 0.7 }));
+      line.visible = false;
+      scene.add(line);
+      leaders[id] = line;
+    });
+
+    const labelEls = {};
+    Object.entries(skids).forEach(([id, s]) => {
+      const wrap = document.createElement('div');
+      wrap.className = 'label-wrap';
+      const pill = document.createElement('div');
+      pill.className = 'label-pill px-2.5 py-1 rounded-md text-xs font-semibold shadow-md border cursor-pointer whitespace-nowrap flex items-center gap-1.5';
+      pill.style.backgroundColor = 'rgba(15, 23, 42, 0.88)';
+      pill.style.color = '#f8fafc';
+      pill.style.borderColor = s.color;
+      pill.innerHTML = `<span class="w-2 h-2 rounded-full" style="background:${s.color}"></span><span>${s.short}</span>`;
+      pill.addEventListener('pointerdown', e => e.stopPropagation());
+      pill.addEventListener('click', e => { e.stopPropagation(); selectSkid3D(id, true); });
+      pill.addEventListener('mouseenter', () => setHover(id));
+      pill.addEventListener('mouseleave', () => setHover(null));
+      wrap.appendChild(pill);
+      const obj = new CSS2DObject(wrap);
+      obj.position.set(...s.label);
+      groups[id].add(obj);
+      labelEls[id] = { obj, pill };
+    });
+
+    function applyExplode() {
+      Object.entries(skids).forEach(([id, s]) => {
+        groups[id].position.set(s.explode[0] * explodeFactor, s.explode[1] * explodeFactor, s.explode[2] * explodeFactor);
+        const l = leaders[id];
+        if (l) {
+          const a = baseCenters[id], b = a.clone().add(groups[id].position);
+          l.geometry.setFromPoints([a, b]);
+          l.computeLineDistances();
+          l.visible = explodeFactor > 0.03 && groupVisible(id);
+        }
+      });
+      groundGroup.position.y = -5.0 * explodeFactor;
+      shell.position.y = 13.0 * explodeFactor;
+      rebuildFlows();
+    }
+
+    function rebuildFlows() {
+      flowRoutes.forEach(r => {
+        const pts = r.nodes.map(([skid, x, y, z]) => new THREE.Vector3(x, y, z).add(groups[skid].position));
+        const path = new THREE.CurvePath();
+        for (let i = 0; i < pts.length - 1; i++) path.add(new THREE.LineCurve3(pts[i], pts[i + 1]));
+        r.path = path;
+        r.length = path.getLength();
+        r.tube.geometry.dispose();
+        r.tube.geometry = new THREE.TubeGeometry(path, Math.max(20, pts.length * 12), 0.11, 8, false);
+        const n = Math.max(3, Math.round(r.length / 1.5));
+        if (n !== r.count) {
+          if (r.drops) { flowGroup.remove(r.drops); r.drops.dispose(); }
+          r.drops = new THREE.InstancedMesh(dropGeo, r.dropMat, n);
+          r.drops.frustumCulled = false;
+          flowGroup.add(r.drops);
+          r.count = n;
+        }
+      });
+      updateFlowVisibility();
+    }
+
+    function updateFlowVisibility() {
+      flowRoutes.forEach(r => {
+        const on = showFlow && (flowFilter === 'all' || r.stream === flowFilter || (flowFilter === 'raw' && r.stream === 'waste')) && (!r.mode || r.mode === jobMode);
+        r.tube.visible = on;
+        if (r.drops) r.drops.visible = on;
+      });
+    }
+
+    const tmpM = new THREE.Matrix4(), tmpV = new THREE.Vector3();
+    function animateDrops(t) {
+      flowRoutes.forEach(r => {
+        if (!r.drops || !r.drops.visible) return;
+        const speed = 3.8 / r.length;
+        for (let i = 0; i < r.count; i++) {
+          r.path.getPointAt(((t * speed) + i / r.count) % 1, tmpV);
+          tmpM.makeTranslation(tmpV.x, tmpV.y, tmpV.z);
+          r.drops.setMatrixAt(i, tmpM);
+        }
+        r.drops.instanceMatrix.needsUpdate = true;
+      });
+    }
+
+    // ---------------- Selection & hover ----------------
+    const selBox = new THREE.Box3Helper(new THREE.Box3(), new THREE.Color('#8b5cf6'));
+    selBox.material.transparent = true;
+    selBox.material.opacity = 0.65;
+    scene.add(selBox);
+
+    function tint(id, intensity) {
+      const c = new THREE.Color(skids[id].color);
+      groups[id].traverse(o => {
+        if (!(o.isMesh && o.userData.skid === id && o.material && o.material.emissive)) return;
+        const m = o.material;
+        if (m.userData.baseE === undefined) { m.userData.baseE = m.emissive.clone(); m.userData.baseI = m.emissiveIntensity; }
+        if (intensity > 0) { m.emissive.copy(c); m.emissiveIntensity = intensity; }
+        else { m.emissive.copy(m.userData.baseE); m.emissiveIntensity = m.userData.baseI; }
+      });
+    }
+    function refreshTints() {
+      Object.keys(groups).forEach(id => tint(id, id === selectedId ? 0.22 : (id === hoverId ? 0.12 : 0)));
+      Object.entries(labelEls).forEach(([id, { pill }]) => {
+        const on = id === selectedId;
+        pill.classList.toggle('selected', on);
+        pill.style.boxShadow = on ? `0 0 12px ${skids[id].color}` : 'none';
+      });
+    }
+    function setHover(id) {
+      if (id === hoverId) return;
+      hoverId = id;
+      container.classList.toggle('hovering', !!id);
+      refreshTints();
+    }
+    function updateSelBox() {
+      if (!selectedId || selectedId === 'chassis' || !groupVisible(selectedId)) { selBox.visible = false; return; }
+      selBox.box.copy(skidBox(selectedId).expandByScalar(0.22));
+      selBox.visible = true;
+    }
+
+    // ---------------- Inspector ----------------
+    const stageBtnContainer = document.getElementById('stage-buttons');
+    Object.entries(skids).forEach(([id, s]) => {
+      const btn = document.createElement('button');
+      btn.id = 'stbtn-' + id;
+      btn.innerHTML = `<span class="w-2 h-2 rounded-full shrink-0" style="background:${s.color}"></span><span class="truncate">${s.short}</span>`;
+      btn.onclick = () => selectSkid3D(id, true);
+      stageBtnContainer.appendChild(btn);
+    });
+
+    function selectSkid3D(id, focus = false) {
+      if (OUTAGE_ONLY.includes(id) && jobMode !== 'outage') setJobMode('outage');
+      selectedId = id;
+      const s = skids[id];
+      document.getElementById('detail-tag').textContent = s.tag;
+      document.getElementById('detail-title').textContent = s.title;
+      document.getElementById('detail-badge').textContent = s.weight;
+      document.getElementById('detail-desc').textContent = s.desc;
+      document.getElementById('detail-specs').innerHTML = s.specs.map(([k, v]) => `
+        <div class="flex justify-between items-center gap-3 text-xs py-1 px-2 rounded bg-[var(--secondary)]/60 border border-[var(--border)]">
+          <span class="text-[var(--muted-foreground)]">${k}</span>
+          <span class="font-mono font-semibold text-right">${v}</span>
+        </div>`).join('');
+      Object.keys(skids).forEach(k => {
+        document.getElementById('stbtn-' + k).className = k === id
+          ? 'px-2.5 py-1.5 rounded text-xs font-semibold text-left truncate border border-violet-500 bg-violet-500/15 text-violet-300 transition flex items-center gap-1.5'
+          : 'px-2.5 py-1.5 rounded text-xs font-medium text-left truncate border border-[var(--border)] bg-[var(--secondary)]/40 hover:bg-[var(--secondary)] transition flex items-center gap-1.5';
+      });
+      refreshTints();
+      updateSelBox();
+      if (focus) focusOn(id);
+    }
+
+    // ---------------- Camera ----------------
+    let camGoal = null;
+    function flyTo(pos, target) { camGoal = { pos: new THREE.Vector3(...pos), target: new THREE.Vector3(...target) }; }
+    controls.addEventListener('start', () => { camGoal = null; container.classList.add('dragging'); });
+    controls.addEventListener('end', () => container.classList.remove('dragging'));
+
+    function focusOn(id) {
+      const b = skidBox(id);
+      const c = b.getCenter(new THREE.Vector3());
+      const size = b.getSize(new THREE.Vector3()).length();
+      const dir = camera.position.clone().sub(controls.target).normalize();
+      if (dir.y < 0.25) { dir.y = 0.35; dir.normalize(); }
+      const dist = Math.max(10, Math.min(55, size * 1.7));
+      flyTo(c.clone().add(dir.multiplyScalar(dist)).toArray(), c.toArray());
+    }
+
+    const PRESETS = {
+      iso:    () => explodeGoal > 0.3 ? [[32, 34, 62], [2, 1, 3]] : [[26, 22, 50], [2, 1, 3]],
+      side:   () => [[-2, 3, 54], [-2, 2, 0]],
+      top:    () => [[0, 68, 3.5], [0, 0, 3]],
+      rear:   () => [[18.5, 9, -14], [8.5, 1.0, 1]],
+      nose:   () => [[-19, 11, 19], [-7.5, GD + 2, 0]],
+      inside: () => [[8.6, D + 4.5, 0], [-4, D + 3.8, 0]]
+    };
+    function setCameraPreset(p) {
+      const [pos, tgt] = PRESETS[p]();
+      flyTo(pos, tgt);
+    }
+
+    // ---------------- Picking ----------------
+    const raycaster = new THREE.Raycaster();
+    const ndc = new THREE.Vector2();
+    let down = null, hoverQueued = null;
+    function pick(e) {
+      const r = renderer.domElement.getBoundingClientRect();
+      ndc.set(((e.clientX - r.left) / r.width) * 2 - 1, -((e.clientY - r.top) / r.height) * 2 + 1);
+      raycaster.setFromCamera(ndc, camera);
+      const hits = raycaster.intersectObjects(pickables.filter(m => meshVisible(m)), false);
+      return hits.length ? hits[0].object.userData.skid : null;
+    }
+    renderer.domElement.addEventListener('pointerdown', e => { down = { x: e.clientX, y: e.clientY }; });
+    renderer.domElement.addEventListener('pointerup', e => {
+      if (down && Math.hypot(e.clientX - down.x, e.clientY - down.y) < 5) {
+        const id = pick(e);
+        if (id) selectSkid3D(id, false);
+      }
+      down = null;
+    });
+    renderer.domElement.addEventListener('dblclick', e => { const id = pick(e); if (id) selectSkid3D(id, true); });
+    renderer.domElement.addEventListener('pointermove', e => { if (!e.buttons) hoverQueued = e; });
+    renderer.domElement.addEventListener('pointerleave', () => { hoverQueued = null; setHover(null); });
+
+    // ---------------- Resize ----------------
+    function resize() {
+      const w = container.clientWidth, h = container.clientHeight;
+      if (!w || !h) return;
+      renderer.setSize(w, h);
+      labelRenderer.setSize(w, h);
+      camera.aspect = w / h;
+      camera.updateProjectionMatrix();
+    }
+    new ResizeObserver(resize).observe(container);
+    resize();
+
+    // ---------------- UI callbacks ----------------
+    const OFF_CLASS = 'px-3 py-2 rounded-lg text-xs font-semibold bg-[var(--secondary)] text-[var(--secondary-foreground)] border border-[var(--border)] transition';
+    function btnStyle(id, on, onClass) {
+      document.getElementById(id).className = on ? `px-3 py-2 rounded-lg text-xs font-semibold ${onClass} text-white shadow-sm transition` : OFF_CLASS;
+    }
+    function onExplodeSlider(val) {
+      explodeGoal = parseInt(val, 10) / 100;
+      document.getElementById('explode-pct').textContent = val + '%';
+      document.getElementById('btn-explode').textContent = explodeGoal > 0.5 ? 'Collapse Assembly' : 'Explode Assembly';
+    }
+    function toggleExplodePreset() {
+      const v = explodeGoal > 0.3 ? 0 : 85;
+      document.getElementById('explode-slider').value = v;
+      onExplodeSlider(v);
+      setCameraPreset('iso');
+    }
+    function toggleLabels() {
+      showLabels = !showLabels;
+      document.getElementById('btn-labels').textContent = showLabels ? 'Labels: ON' : 'Labels: OFF';
+      btnStyle('btn-labels', showLabels, 'bg-violet-600');
+    }
+    function toggleFlow() {
+      showFlow = !showFlow;
+      document.getElementById('btn-flow').textContent = showFlow ? 'Water Flow: ON' : 'Water Flow: OFF';
+      btnStyle('btn-flow', showFlow, 'bg-cyan-600');
+      document.getElementById('flow-speed-label').textContent = showFlow ? '35 GPM Cont. / 50 GPM Peak' : 'Flow hidden';
+      updateFlowVisibility();
+    }
+    function toggleShell() {
+      shellMode = { glass: 'wire', wire: 'hidden', hidden: 'glass' }[shellMode];
+      document.getElementById('btn-shell').textContent = 'Walls: ' + { glass: 'Glass', wire: 'Wireframe', hidden: 'Hidden' }[shellMode];
+      shell.visible = shellMode !== 'hidden';
+      shell.traverse(o => { if (o.isMesh) o.visible = shellMode === 'glass'; });
+    }
+    function toggleTruck() {
+      showTruck = !showTruck;
+      truck.visible = showTruck;
+      document.getElementById('btn-truck').textContent = showTruck ? '1-Ton Pickup: ON' : '1-Ton Pickup: OFF';
+      btnStyle('btn-truck', showTruck, 'bg-slate-600');
+    }
+    function toggleSpin() {
+      spin = !spin;
+      controls.autoRotate = spin;
+      controls.autoRotateSpeed = 0.8;
+      document.getElementById('btn-spin').textContent = spin ? 'Auto-Rotate: ON' : 'Auto-Rotate: OFF';
+      btnStyle('btn-spin', spin, 'bg-violet-600');
+    }
+    const SEG_ON = 'bg-violet-600 text-white border border-violet-500';
+    const SEG_OFF = 'bg-[var(--secondary)] text-[var(--secondary-foreground)] border border-[var(--border)]';
+    function setFlowHighlight(mode) {
+      flowFilter = mode;
+      ['all', 'raw', 'potable', 'power'].forEach(m => {
+        document.getElementById('fl-' + m).className = `px-2 py-1.5 rounded text-xs font-semibold transition ${m === mode ? SEG_ON : SEG_OFF}`;
+      });
+      updateFlowVisibility();
+    }
+    const JOBS = {
+      bwa: { label: 'Restaurant power • Port A', desc: 'Boil Water Advisory: the kitchen still has power and city pressure. One hose from the service-line tee to Port A, the 50A cord to the restaurant receptacle, and no ground tanks — about 1.5 hours from arrival to building water.' },
+      outage: { label: 'PWR-25 power • Port B', desc: 'Power outage with the main down: a second pickup drops the PWR-25 and leaves. The 50A cord runs from its panel, and P-101 drafts through Port B from a tanker or the folding break tank from the kit box. Port A stays capped — about 2 hours to water.' }
+    };
+    function setJobMode(m) {
+      jobMode = m;
+      OUTAGE_ONLY.forEach(id => { groups[id].visible = m === 'outage'; });
+      ['bwa', 'outage'].forEach(k => {
+        document.getElementById('job-' + k).className = `px-2 py-2 rounded text-xs font-semibold transition ${k === m ? (k === 'bwa' ? 'bg-sky-600 text-white border border-sky-500' : 'bg-yellow-500 text-slate-900 border border-yellow-400') : SEG_OFF}`;
+      });
+      document.getElementById('job-label').textContent = JOBS[m].label;
+      document.getElementById('job-desc').textContent = JOBS[m].desc;
+      if (m !== 'outage' && OUTAGE_ONLY.includes(selectedId)) selectSkid3D('bulkhead', false);
+      applyExplode();
+      updateSelBox();
+    }
+    Object.assign(window, { setJobMode, onExplodeSlider, toggleExplodePreset, toggleLabels, toggleFlow, toggleShell, toggleTruck, toggleSpin, setFlowHighlight, setCameraPreset, selectSkid3D });
+
+    // ---------------- Init & loop ----------------
+    const [p0, t0] = PRESETS.iso();
+    camera.position.set(...p0);
+    controls.target.set(...t0);
+    applyExplode();
+    setJobMode('bwa');
+    setFlowHighlight('all');
+    selectSkid3D('uv', false);
+    loadingEl.remove();
+
+    const clock = new THREE.Clock();
+    function loop() {
+      requestAnimationFrame(loop);
+      const dt = Math.min(clock.getDelta(), 0.05);
+      const t = clock.elapsedTime;
+
+      if (explodeFactor !== explodeGoal) {
+        explodeFactor += (explodeGoal - explodeFactor) * Math.min(1, dt * 7);
+        if (Math.abs(explodeGoal - explodeFactor) < 0.0005) explodeFactor = explodeGoal;
+        applyExplode();
+        updateSelBox();
+      }
+      if (camGoal) {
+        const k = Math.min(1, dt * 4);
+        camera.position.lerp(camGoal.pos, k);
+        controls.target.lerp(camGoal.target, k);
+        if (camera.position.distanceTo(camGoal.pos) < 0.05 && controls.target.distanceTo(camGoal.target) < 0.05) camGoal = null;
+      }
+      controls.update();
+
+      if (hoverQueued) { setHover(pick(hoverQueued)); hoverQueued = null; }
+      if (showFlow) animateDrops(t);
+      Object.entries(labelEls).forEach(([id, { obj }]) => {
+        obj.visible = showLabels && groupVisible(id) && !(id === 'chassis' && explodeFactor < 0.25);
+      });
+
+      renderer.render(scene, camera);
+      labelRenderer.render(scene, camera);
+    }
+    loop();
+  </script>
+</body>
+</html>
