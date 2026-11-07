@@ -1,0 +1,534 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>MWTP-50 ("KitchenShield-50") — Compact Gooseneck Restaurant Unit Simulator</title>
+  <script src="https://www.gstatic.com/antigravity/web/dev/tailwindcss.min.js"></script>
+  <style>:root { --background: #0b1120; --foreground: #f1f5f9; --card: #111827; --secondary: #1e293b; --secondary-foreground: #e2e8f0; --muted-foreground: #94a3b8; --border: #1e293b; --primary: #10b981; --primary-foreground: #ffffff; } html.light { --background: #f8fafc; --foreground: #0f172a; --card: #ffffff; --secondary: #f1f5f9; --secondary-foreground: #1e293b; --muted-foreground: #64748b; --border: #e2e8f0; --primary: #059669; --primary-foreground: #ffffff; }
+    .skid-box { transition: all 0.2s ease; cursor: pointer; }
+    .skid-box:hover { transform: translateY(-2px); filter: brightness(1.1); }
+    .skid-active { ring: 2px solid #10b981; box-shadow: 0 0 0 2px #10b981; }
+  </style>
+</head>
+<body class="bg-[var(--background)] text-[var(--foreground)] antialiased p-4 md:p-6 max-w-7xl mx-auto space-y-6">
+
+  <!-- Header Banner -->
+  <div class="bg-[var(--card)] border border-[var(--border)] rounded-2xl p-6 shadow-sm">
+    <div class="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4">
+      <div>
+        <div class="flex flex-wrap items-center gap-2 mb-2">
+          <span class="px-2.5 py-0.5 rounded-full text-xs font-semibold bg-emerald-500/15 text-emerald-400 border border-emerald-500/30">MWTP-50-GN22 ("KITCHENSHIELD-50")</span>
+          <span class="px-2.5 py-0.5 rounded-full text-xs font-semibold bg-blue-500/15 text-blue-400 border border-blue-500/30">9,990 LB GVWRGOOSENECK • NO CLASS A CDL</span>
+          <span class="px-2.5 py-0.5 rounded-full text-xs font-semibold bg-amber-500/15 text-amber-400 border border-amber-500/30">35 GPM CONTINUOUS / 50 GPM PEAK</span>
+        </div>
+        <h1 class="text-2xl md:text-3xl font-bold tracking-tight">Compact Gooseneck Restaurant Emergency Water Plant</h1>
+        <p class="text-sm text-[var(--muted-foreground)] mt-1">
+          22-ft Tandem-Axle Compact Gooseneck (16-ft Main Deck + 6-ft Gooseneck Deck) • Towed by 1-Ton SRW Pickup • Dual Power (240V 50A Shore Plug or 20 kW Diesel Gen)
+        </p>
+      </div>
+
+      <!-- Compare vs MWTP-250 Mini-Pills -->
+      <div class="grid grid-cols-2 sm:grid-cols-4 gap-2.5 shrink-0">
+        <div class="bg-[var(--secondary)] border border-[var(--border)] rounded-xl px-3.5 py-2 text-center">
+          <div class="text-[11px] text-[var(--muted-foreground)] uppercase">Road / Wet Weight</div>
+          <div class="text-base font-bold font-mono text-emerald-400">8,350 / 9,550 lb</div>
+          <div class="text-[10px] text-[var(--muted-foreground)]">9,990 lb Max GVWR</div>
+        </div>
+        <div class="bg-[var(--secondary)] border border-[var(--border)] rounded-xl px-3.5 py-2 text-center">
+          <div class="text-[11px] text-[var(--muted-foreground)] uppercase">Driver License</div>
+          <div class="text-base font-bold font-mono text-blue-400">Non-CDL</div>
+          <div class="text-[10px] text-[var(--muted-foreground)]">Std License + Med Card</div>
+        </div>
+        <div class="bg-[var(--secondary)] border border-[var(--border)] rounded-xl px-3.5 py-2 text-center">
+          <div class="text-[11px] text-[var(--muted-foreground)] uppercase">Turnkey Build</div>
+          <div class="text-base font-bold font-mono text-amber-400">$238,625</div>
+          <div class="text-[10px] text-[var(--muted-foreground)]">vs. $601k MWTP-250</div>
+        </div>
+        <div class="bg-[var(--secondary)] border border-[var(--border)] rounded-xl px-3.5 py-2 text-center">
+          <div class="text-[11px] text-[var(--muted-foreground)] uppercase">Restaurant Rate</div>
+          <div class="text-base font-bold font-mono text-purple-400">$3,200/day</div>
+          <div class="text-[10px] text-[var(--muted-foreground)]">+ $2,500 Mobilization</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Interactive Top-Down Floorplan + Inspector -->
+  <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
+    <!-- Left 8 Cols: 22-ft Compact Gooseneck Floorplan + Ground Tanks -->
+    <div class="lg:col-span-8 bg-[var(--card)] border border-[var(--border)] rounded-2xl p-5 space-y-4">
+      <div class="flex flex-wrap items-center justify-between gap-2">
+        <div>
+          <h2 class="text-base font-bold">Interactive 22-ft Compact Gooseneck Layout (Click Any Skid to Inspect)</h2>
+          <p class="text-xs text-[var(--muted-foreground)]">16-ft Main Treatment Deck + 6-ft Elevated Gooseneck Deck × 8-ft Wide × 7.5-ft Ceiling • Tight 90° Alley Turning Radius</p>
+        </div>
+        <span class="text-xs font-mono text-emerald-400 bg-emerald-500/10 px-2.5 py-1 rounded border border-emerald-500/30">20% Pin Weight (1,670 lbs) Over Truck Axle</span>
+      </div>
+
+      <!-- Trailer Schematic Container -->
+      <div class="bg-slate-950 border border-slate-800 rounded-xl p-4 space-y-4 overflow-x-auto">
+        <div class="min-w-[660px] space-y-3">
+          <!-- Ruler -->
+          <div class="flex justify-between text-[10px] font-mono text-slate-400 px-2 border-b border-slate-800 pb-1">
+            <span>0 ft (Gooseneck Coupler)</span>
+            <span>6 ft (1-Hr Firewall)</span>
+            <span>11 ft</span>
+            <span>16 ft (Tandem 5.2k Axles)</span>
+            <span>22 ft (Rear Bulkhead)</span>
+          </div>
+
+          <!-- Trailer Body Grid -->
+          <div class="grid grid-cols-12 gap-2 bg-slate-900/90 border-2 border-slate-700 rounded-xl p-3 relative">
+            <!-- Gooseneck Power Deck (Cols 1-3) -->
+            <div onclick="selectSkid('power')" id="skid-power" class="skid-box skid-active col-span-3 bg-amber-500/10 border-2 border-amber-500/40 rounded-lg p-2.5 flex flex-col justify-between">
+              <div>
+                <div class="flex items-center justify-between">
+                  <span class="text-[10px] font-mono font-bold text-amber-400 uppercase">Gooseneck (0–6 ft)</span>
+                  <span class="text-[9px] font-mono bg-rose-500/20 text-rose-300 px-1 rounded">1-Hr Wall</span>
+                </div>
+                <div class="text-xs font-bold text-white mt-0.5">20 kW Gen + 50A Shore</div>
+                <p class="text-[11px] text-slate-300 mt-1">Elevated over truck bed • 40-gal diesel tank • 240V 50A shore plug &amp; ATS • Duplex oil-less air</p>
+              </div>
+              <div class="text-[10px] font-mono text-amber-300 mt-2 pt-1 border-t border-amber-500/20">1,420 lbs • 62 dBA</div>
+            </div>
+
+            <!-- Main Cabin (Cols 4-12) -->
+            <div class="col-span-9 grid grid-rows-3 gap-2">
+              <!-- Top Row: Roadside (Left Side) -->
+              <div class="grid grid-cols-9 gap-2">
+                <div onclick="selectSkid('plc')" id="skid-plc" class="skid-box col-span-3 bg-purple-500/10 border border-purple-500/40 rounded-lg p-2">
+                  <div class="text-[10px] font-mono font-bold text-purple-400">ROADSIDE (6–11 ft)</div>
+                  <div class="text-xs font-bold text-white">CP-701 PLC, Lab &amp; Eyewash</div>
+                  <div class="text-[10px] text-slate-300">12" HMI • TU5300sc • Cl2/pH • ANSI Eyewash</div>
+                </div>
+                <div onclick="selectSkid('booster')" id="skid-booster" class="skid-box col-span-4 bg-emerald-500/10 border border-emerald-500/40 rounded-lg p-2">
+                  <div class="text-[10px] font-mono font-bold text-emerald-400">OVER AXLES (11–17 ft)</div>
+                  <div class="text-xs font-bold text-white">TK-601 (150-Gal) + UV + Booster</div>
+                  <div class="text-[10px] text-slate-300">2×40 GPM UV (1+1) • Duplex 3 HP VFD (50 GPM)</div>
+                </div>
+                <div onclick="selectSkid('bulkhead')" id="skid-bulkhead" class="skid-box col-span-2 bg-blue-500/10 border border-blue-500/40 rounded-lg p-2">
+                  <div class="text-[10px] font-mono font-bold text-blue-400">REAR (17–22 ft)</div>
+                  <div class="text-xs font-bold text-white">2" RPZ-602 &amp; Reels</div>
+                  <div class="text-[10px] text-slate-300">ASSE 1013 + 5 Ports</div>
+                </div>
+              </div>
+
+              <!-- Middle Row: 30-Inch Center Operator Walkthrough + Axle Line -->
+              <div class="bg-slate-950/80 border border-dashed border-slate-700 rounded px-3 py-1 flex items-center justify-between text-[11px] font-mono text-slate-400">
+                <span>1-HR FIRE/ACOUSTIC WALL ← 30" WALKWAY</span>
+                <span class="text-emerald-400 font-bold">[ DUAL 5,200 LB AXLES @ 12–17 FT — PLATED AT 9,990 LB GVWR ]</span>
+                <span>REAR BARN DOORS →</span>
+              </div>
+
+              <!-- Bottom Row: Curbside (Right Side) -->
+              <div class="grid grid-cols-9 gap-2">
+                <div onclick="selectSkid('intake')" id="skid-intake" class="skid-box col-span-3 bg-cyan-500/10 border border-cyan-500/40 rounded-lg p-2">
+                  <div class="text-[10px] font-mono font-bold text-cyan-400">CURBSIDE (6–11 ft)</div>
+                  <div class="text-xs font-bold text-white">P-101 Intake &amp; Pre-Filter</div>
+                  <div class="text-[10px] text-slate-300">3 HP VFD • 200 μm Auto-Strainer • Duplex #2 Bags</div>
+                </div>
+                <div onclick="selectSkid('uf')" id="skid-uf" class="skid-box col-span-4 bg-teal-500/10 border border-teal-500/40 rounded-lg p-2">
+                  <div class="text-[10px] font-mono font-bold text-teal-400">CURBSIDE OVER AXLES (11–17 ft)</div>
+                  <div class="text-xs font-bold text-white">UF-201A/B (4 × 60" PVDF)</div>
+                  <div class="text-[10px] text-slate-300">0.02 μm • 2,200 ft² • Automated DIT-201 • P-401</div>
+                </div>
+                <div onclick="selectSkid('chem')" id="skid-chem" class="skid-box col-span-2 bg-rose-500/10 border border-rose-500/40 rounded-lg p-2">
+                  <div class="text-[10px] font-mono font-bold text-rose-400">REAR (17–22 ft)</div>
+                  <div class="text-xs font-bold text-white">Vented Chem Bay</div>
+                  <div class="text-[10px] text-slate-300">Segregated NaOCl/Acid + Cl2 Gas Sensor</div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Ground-Deployed Collapsible Tanks Beside Trailer -->
+          <div class="grid grid-cols-1 sm:grid-cols-3 gap-2.5 pt-1">
+            <div onclick="selectSkid('tk100')" id="skid-tk100" class="skid-box bg-sky-500/10 border border-sky-500/40 rounded-lg p-2.5 flex items-center justify-between">
+              <div>
+                <div class="text-[10px] font-mono font-bold text-sky-400 uppercase">GROUND DEPLOYED (BLUE HOSE)</div>
+                <div class="text-xs font-bold text-white">TK-100: 550-Gal Break Tank</div>
+                <div class="text-[11px] text-slate-300">Air-gap intake + PSV-100 (holds ≥20 PSI main)</div>
+              </div>
+              <span class="text-xs font-mono font-bold text-sky-300">5×5 ft</span>
+            </div>
+
+            <div onclick="selectSkid('tk401')" id="skid-tk401" class="skid-box bg-emerald-500/10 border border-emerald-500/40 rounded-lg p-2.5 flex items-center justify-between">
+              <div>
+                <div class="text-[10px] font-mono font-bold text-emerald-400 uppercase">GROUND DEPLOYED (WHITE HOSE)</div>
+                <div class="text-xs font-bold text-white">TK-401: 600-Gal Contact Tank</div>
+                <div class="text-[11px] text-slate-300">Serpentine baffles (0.50 factor) • T10 = 8.57 min</div>
+              </div>
+              <span class="text-xs font-mono font-bold text-emerald-300">5.5×5.5 ft</span>
+            </div>
+
+            <div class="bg-slate-900 border border-slate-700 rounded-lg p-2.5 flex flex-col justify-center">
+              <div class="text-[10px] font-mono font-bold text-amber-400 uppercase">F.O.G. GREASE TRAP RULE</div>
+              <div class="text-[11px] text-slate-300 mt-0.5">
+                2" Gray backwash hose connects to <strong class="text-white">downstream sanitary cleanout</strong> — never through the kitchen grease interceptor!
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Right 4 Cols: Selected Skid Detail Card -->
+    <div class="lg:col-span-4 bg-[var(--card)] border border-[var(--border)] rounded-2xl p-5 flex flex-col justify-between">
+      <div class="space-y-3">
+        <div class="flex items-center justify-between">
+          <span id="detail-badge" class="px-2.5 py-0.5 rounded text-xs font-mono font-bold bg-amber-500/20 text-amber-400">GOOSENECK POWER DECK (0–6 FT)</span>
+          <span id="detail-weight" class="text-xs font-mono text-[var(--muted-foreground)]">Road: 1,420 lbs</span>
+        </div>
+        <h3 id="detail-title" class="text-lg font-bold">Dual-Mode Power: 240V 50A Shore Plug or 20 kW Diesel Gen</h3>
+        <p id="detail-desc" class="text-xs text-[var(--muted-foreground)] leading-relaxed">
+          Elevated over the 1-ton pickup bed behind a 1-hour fire-rated and acoustic bulkhead wall. Every motor on the MWTP-50 is ≤ 3 HP with a single-phase-in / 3-phase-out VFD, so the entire plant runs on standard 240V single-phase power (8.25 kW average = 34.4 Amps).
+        </p>
+        <div class="border-t border-[var(--border)] pt-3">
+          <div class="text-xs font-semibold mb-2">Engineering Specifications:</div>
+          <ul id="detail-specs" class="text-xs space-y-1.5 text-[var(--secondary-foreground)]">
+            <li>• <strong>Gooseneck Advantage:</strong> Places 1,670 lbs (20%) over the pickup's rear axle and enables 90° turns in tight restaurant alleys</li>
+            <li>• <strong>Shore Power Mode (BWA):</strong> 240V 50A CS6365 / NEMA 14-50 cord ($0 diesel burn, 0 exhaust next to patio)</li>
+            <li>• <strong>Generator Mode (Outage):</strong> 20 kW Tier-4 Final 1,800 RPM sound-attenuated diesel (62 dBA @ 23 ft)</li>
+            <li>• <strong>Fuel Autonomy:</strong> 40-gal belly tank = 47 hours runtime @ 0.85 gal/hr</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="mt-4 pt-3 border-t border-[var(--border)] bg-[var(--secondary)]/50 rounded-xl p-3 text-xs space-y-1">
+        <div class="font-bold text-emerald-400">Why Compact Gooseneck Beats Bumper-Pull in Alleys:</div>
+        <p class="text-[11px] text-[var(--muted-foreground)]">
+          Restaurant grease traps and water shutoffs are usually tucked behind dumpsters in narrow service lanes. A 22-ft gooseneck pivots over the truck bed so a 1-ton pickup can jackknife it into a 2-parking-space footprint without a Class A CDL.
+        </p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Live Restaurant Hydraulic, Power & 4-Log Virus CT Simulator -->
+  <div class="bg-[var(--card)] border border-[var(--border)] rounded-2xl p-6 space-y-5">
+    <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2 border-b border-[var(--border)] pb-4">
+      <div>
+        <h2 class="text-lg font-bold">Live Kitchen Demand, 4-Log Virus CT &amp; Operating Cost Simulator</h2>
+        <p class="text-xs text-[var(--muted-foreground)]">Adjust continuous UF treatment rate, peak dish-pit bursts, water temperature, and power source to verify regulatory CT and daily restaurant margin.</p>
+      </div>
+      <div id="sim-status-pill" class="px-3 py-1 rounded-full text-xs font-mono font-bold bg-emerald-500/20 text-emerald-400 border border-emerald-500/30">
+        ALL BARRIERS GREEN • POTABLE VALVE XV-602 OPEN
+      </div>
+    </div>
+
+    <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
+      <!-- Sliders (5 Cols) -->
+      <div class="lg:col-span-5 space-y-4 bg-[var(--secondary)]/40 border border-[var(--border)] rounded-xl p-4">
+        <div>
+          <div class="flex justify-between text-xs font-semibold mb-1">
+            <span>Continuous UF Treatment Flow (into TK-401):</span>
+            <span id="lbl-uf-flow" class="font-mono text-emerald-400 font-bold">35 GPM (50,400 GPD)</span>
+          </div>
+          <input id="inp-uf-flow" type="range" min="10" max="40" step="1" value="35" oninput="updateSim()" class="w-full accent-emerald-500">
+          <div class="flex justify-between text-[10px] text-[var(--muted-foreground)]">
+            <span>10 GPM (Off-Peak)</span>
+            <span>25 GPM (Typical)</span>
+            <span>35 GPM (Rated)</span>
+            <span>40 GPM (Max)</span>
+          </div>
+        </div>
+
+        <div>
+          <div class="flex justify-between text-xs font-semibold mb-1">
+            <span>Instantaneous Kitchen Peak Demand (Booster P-601A/B):</span>
+            <span id="lbl-peak-flow" class="font-mono text-blue-400 font-bold">35 GPM</span>
+          </div>
+          <input id="inp-peak-flow" type="range" min="5" max="50" step="1" value="35" oninput="updateSim()" class="w-full accent-blue-500">
+          <div class="flex justify-between text-[10px] text-[var(--muted-foreground)]">
+            <span>5 GPM (Prep)</span>
+            <span>25 GPM (Dish Cycle)</span>
+            <span>50 GPM (Dish + Flush + Sinks)</span>
+          </div>
+        </div>
+
+        <div class="grid grid-cols-2 gap-3">
+          <div>
+            <div class="flex justify-between text-xs font-semibold mb-1">
+              <span>Water Temp:</span>
+              <span id="lbl-temp" class="font-mono text-cyan-400 font-bold">15 °C</span>
+            </div>
+            <input id="inp-temp" type="range" min="1" max="25" step="1" value="15" oninput="updateSim()" class="w-full accent-cyan-500">
+          </div>
+          <div>
+            <div class="flex justify-between text-xs font-semibold mb-1">
+              <span>Free Cl2 Residual:</span>
+              <span id="lbl-cl2" class="font-mono text-amber-400 font-bold">1.6 mg/L</span>
+            </div>
+            <input id="inp-cl2" type="range" min="0.5" max="3.0" step="0.1" value="1.6" oninput="updateSim()" class="w-full accent-amber-500">
+          </div>
+        </div>
+
+        <div class="grid grid-cols-2 gap-3 pt-1">
+          <div>
+            <label class="block text-[11px] font-semibold text-[var(--muted-foreground)] mb-1">Power Source:</label>
+            <select id="inp-power" onchange="updateSim()" class="w-full bg-[var(--card)] border border-[var(--border)] rounded-lg px-2.5 py-1.5 text-xs font-semibold">
+              <option value="shore">240V 50A Kitchen Shore Plug ($0 Fuel)</option>
+              <option value="gen">20 kW Gooseneck Diesel Generator</option>
+            </select>
+          </div>
+          <div>
+            <label class="block text-[11px] font-semibold text-[var(--muted-foreground)] mb-1">Raw Water Source:</label>
+            <select id="inp-source" onchange="updateSim()" class="w-full bg-[var(--card)] border border-[var(--border)] rounded-lg px-2.5 py-1.5 text-xs font-semibold">
+              <option value="tap">BWA: Restaurant Upstream Tap (≥20 PSI)</option>
+              <option value="hydrant">BWA: Fire Hydrant via PSV-100</option>
+              <option value="tanker">Outage: 4,000-Gal Potable Tanker Drops</option>
+            </select>
+          </div>
+        </div>
+      </div>
+
+      <!-- Readouts (7 Cols) -->
+      <div class="lg:col-span-7 grid grid-cols-2 sm:grid-cols-3 gap-3">
+        <div class="bg-[var(--secondary)]/60 border border-[var(--border)] rounded-xl p-3.5">
+          <div class="text-[11px] text-[var(--muted-foreground)] uppercase">UF Membrane Flux</div>
+          <div id="out-flux" class="text-xl font-bold font-mono text-teal-400 mt-1">24.2 GFD</div>
+          <div id="out-flux-sub" class="text-[11px] text-[var(--muted-foreground)] mt-1">4 × 60" PVDF (2,200 ft²) • DIT Pass</div>
+        </div>
+
+        <div class="bg-[var(--secondary)]/60 border border-[var(--border)] rounded-xl p-3.5">
+          <div class="text-[11px] text-[var(--muted-foreground)] uppercase">600-Gal Contact Tank T10</div>
+          <div id="out-t10" class="text-xl font-bold font-mono text-emerald-400 mt-1">8.57 min</div>
+          <div id="out-hdt" class="text-[11px] text-[var(--muted-foreground)] mt-1">HDT: 17.1 min (0.50 Baffle)</div>
+        </div>
+
+        <div class="bg-[var(--secondary)]/60 border border-[var(--border)] rounded-xl p-3.5">
+          <div class="text-[11px] text-[var(--muted-foreground)] uppercase">4-Log Virus CT Margin</div>
+          <div id="out-ct" class="text-xl font-bold font-mono text-emerald-400 mt-1">13.7 vs 4.0</div>
+          <div id="out-ct-sub" class="text-[11px] text-emerald-400 mt-1">3.43× Required CT (PASS)</div>
+        </div>
+
+        <div class="bg-[var(--secondary)]/60 border border-[var(--border)] rounded-xl p-3.5">
+          <div class="text-[11px] text-[var(--muted-foreground)] uppercase">150-Gal Clearwell Buffer</div>
+          <div id="out-buffer" class="text-xl font-bold font-mono text-blue-400 mt-1">Steady 100%</div>
+          <div id="out-buffer-sub" class="text-[11px] text-[var(--muted-foreground)] mt-1">68 PSI Kitchen Header</div>
+        </div>
+
+        <div class="bg-[var(--secondary)]/60 border border-[var(--border)] rounded-xl p-3.5">
+          <div class="text-[11px] text-[var(--muted-foreground)] uppercase">Electrical Draw @ 240V</div>
+          <div id="out-kw" class="text-xl font-bold font-mono text-amber-400 mt-1">7.8 kW (32.5 A)</div>
+          <div id="out-power-sub" class="text-[11px] text-emerald-400 mt-1">Fits 50A Shore Plug ($0 Diesel)</div>
+        </div>
+
+        <div class="bg-[var(--secondary)]/60 border border-[var(--border)] rounded-xl p-3.5">
+          <div class="text-[11px] text-[var(--muted-foreground)] uppercase">AmeriPro Net Margin / Day</div>
+          <div id="out-margin" class="text-xl font-bold font-mono text-purple-400 mt-1">$2,591 / day</div>
+          <div id="out-margin-sub" class="text-[11px] text-[var(--muted-foreground)] mt-1">$3,200 Rev vs $609 Direct Cost</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const skidData = {
+      power: {
+        badge: 'GOOSENECK POWER DECK (0–6 FT)',
+        weight: 'Road: 1,420 lbs',
+        title: 'Dual-Mode Power: 240V 50A Shore Plug or 20 kW Diesel Gen',
+        desc: 'Elevated over the 1-ton pickup bed behind a 1-hour fire-rated and acoustic bulkhead wall. Every motor on the MWTP-50 is ≤ 3 HP with a single-phase-in / 3-phase-out VFD, so the entire plant runs on standard 240V single-phase power (8.25 kW average = 34.4 Amps).',
+        specs: [
+          '• <strong>Gooseneck Advantage:</strong> Places 1,670 lbs (20%) over the pickup rear axle and enables 90° turns in tight restaurant alleys',
+          '• <strong>Shore Power Mode (BWA):</strong> 240V 50A CS6365 / NEMA 14-50 cord ($0 diesel burn, 0 exhaust next to patio)',
+          '• <strong>Generator Mode (Outage):</strong> 20 kW Tier-4 Final 1,800 RPM sound-attenuated diesel (62 dBA @ 23 ft)',
+          '• <strong>Fuel Autonomy:</strong> 40-gal belly tank = 47 hours runtime @ 0.85 gal/hr'
+        ]
+      },
+      intake: {
+        badge: 'STAGE 1 & 2 • CURBSIDE (6–11 FT)',
+        weight: 'Road: 380 lbs | Wet: 450 lbs',
+        title: 'Raw Water Intake Pump (P-101) & Pre-Filtration Skid',
+        desc: 'Draws raw water from the 550-gal air-gap break tank (TK-100) through a 200-micron automatic brush strainer and duplex #2 bag/carbon housings before UF membrane filtration.',
+        specs: [
+          '• <strong>Raw Intake Pump (P-101):</strong> 3 HP 316SS VFD end-suction pump (40 GPM @ 55 PSI)',
+          '• <strong>Auto-Strainer (STR-101):</strong> 1.5" motorized 200 μm 316SS brush strainer with auto-flush valve',
+          '• <strong>Duplex #2 Housings (BF-101A/B):</strong> 25 μm bags OR radial-flow activated carbon block cartridges for BWA taste/odor polishing',
+          '• <strong>Coagulant Dosing (P-501):</strong> Peristaltic PACl injection downstream of bags into 1.5" static mixer (SM-101)'
+        ]
+      },
+      uf: {
+        badge: 'STAGE 3 • CURBSIDE OVER AXLES (11–17 FT)',
+        weight: 'Road (Wet Preserved): 890 lbs | Operating: 1,020 lbs',
+        title: 'Compact Hollow-Fiber UF Skid (4 × 60" PVDF Modules)',
+        desc: 'Four 60-inch vertical 0.02-micron PVDF hollow-fiber modules (2 sub-trains of 2 modules) provide 2,200 ft² of membrane area while standing just 6.5 ft tall to fit comfortably inside the 7.5-ft ceiling.',
+        specs: [
+          '• <strong>4-Log Protozoa Barrier:</strong> 0.02 μm pores block Cryptosporidium, Giardia, and bacteria (NSF/ANSI 61 & 419)',
+          '• <strong>Daily Direct Integrity Test (DIT-201):</strong> Automated 20 PSI air pressure-decay test verifies fiber integrity in 5 minutes',
+          '• <strong>Continuous Backwash:</strong> One 2-module sub-train maintains 25 GPM while the other backwashes for 40 seconds',
+          '• <strong>Wet Storage:</strong> Shipped and stored in food-grade sodium bisulfite / propylene glycol preservative'
+        ]
+      },
+      plc: {
+        badge: 'CONTROLS & LAB • ROADSIDE (6–11 FT)',
+        weight: 'Road: 420 lbs',
+        title: 'UL-508A PLC/HMI (CP-701), Analyzers & Eyewash Station',
+        desc: 'Automated fail-safe monitoring of every compliance barrier, paired with a fold-down stainless wet-test bench and ANSI Z358.1 plumbed eyewash/drench hose.',
+        specs: [
+          '• <strong>Laser Turbidimeter (AIT-201):</strong> Hach TU5300sc (< 0.05 NTU normal; auto-diverts to waste at > 0.15 NTU)',
+          '• <strong>Free Chlorine & pH (AIT-402 / AIT-601):</strong> Continuous CT calculation at the contact tank exit and clearwell',
+          '• <strong>Health Inspector Packet:</strong> Prints or exports USB/cellular PDF logs of DIT, turbidity, UV dose, and chlorine CT'
+        ]
+      },
+      booster: {
+        badge: 'STAGE 4 & 6 • OVER AXLES (11–17 FT)',
+        weight: 'Road: 590 lbs | Wet (Full 150-Gal Clearwell): 1,840 lbs',
+        title: 'Duty/Standby UV + 150-Gal Clearwell + 50 GPM Duplex Booster',
+        desc: 'Mounted directly over the dual 5,200 lb torsion axles so the 1,250 lb water weight in the 150-gal surge clearwell stays centered on the suspension during on-site operation.',
+        specs: [
+          '• <strong>Redundant UV (UV-401A/B):</strong> 2 × 40 GPM LPHO amalgam reactors (1 Duty + 100% Standby, ≥ 40 mJ/cm² UVDGM)',
+          '• <strong>150-Gal Surge Clearwell (TK-601):</strong> Buffers 50 GPM peak kitchen dish/flush bursts without over-pulling the contact tank',
+          '• <strong>Duplex Booster (P-601A/B):</strong> 2 × 3 HP 316SS VFD vertical multi-stage pumps delivering 60–75 PSI via remote sensor PT-603'
+        ]
+      },
+      chem: {
+        badge: 'STAGE 5 • REAR CURBSIDE (17–22 FT)',
+        weight: 'Road: 420 lbs (with Materials-of-Trade Chemicals)',
+        title: 'Segregated Vented Chemical Cabinets & Gas Interlock',
+        desc: 'Separate bunded polyethylene enclosures prevent sodium hypochlorite from ever mixing with citric acid or sodium bisulfite.',
+        specs: [
+          '• <strong>Oxidizer Cabinet:</strong> 15-gal 12.5% NaOCl day tank + dual duty/standby dosing pumps (P-502A/B)',
+          '• <strong>Acid / Reductant Cabinet:</strong> 5-gal citric acid (CIP) + 5-gal sodium bisulfite (P-503 waste dechlorination)',
+          '• <strong>Safety Interlocks:</strong> AIT-901 Cl2 gas sensor + 150 CFM exterior exhaust fan + exterior amber strobe'
+        ]
+      },
+      bulkhead: {
+        badge: 'REAR BULKHEAD (17–22 FT)',
+        weight: 'Road: 360 lbs',
+        title: '2" ASSE 1013 RPZ Backflow & 5-Port Camlock Manifold',
+        desc: 'All external connections pass through color-coded camlock bulkhead ports with automated fail-safe isolation valves inside the heated cabin.',
+        specs: [
+          '• <strong>Potable Backflow (RPZ-602):</strong> 2" ASSE 1013 lead-free bronze/316SS RPZ prevents building back-siphonage',
+          '• <strong>Potable Discharge (OUTLET A):</strong> 2" & 1.5" white NSF-61 camlocks with 150 ft of sanitized potable hose',
+          '• <strong>Hose Sanitization Kit:</strong> Dedicated 50 mg/L batch chlorination loop for disinfecting hoses prior to tie-in'
+        ]
+      },
+      tk100: {
+        badge: 'GROUND DEPLOYED • BLUE HOSE',
+        weight: 'Dry Stowed: 75 lbs | Wet on Ground: 4,660 lbs',
+        title: 'TK-100: 550-Gallon Collapsible Air-Gap Raw Break Tank',
+        desc: 'Deployed on the pavement beside the trailer (5 ft × 5 ft footprint). Provides a physical air gap and buffers raw water from a restaurant upstream tap, fire hydrant, or potable tanker.',
+        specs: [
+          '• <strong>3 Raw Feed Options:</strong> (1) Restaurant upstream hose bibb/test cock during BWA, (2) Hydrant via PSV-100, or (3) Single 4,000-gal tanker drop/day',
+          '• <strong>Main Collapse Guard:</strong> 1.5" PSV-100 pressure-sustaining valve holds upstream city line ≥ 20 PSI'
+        ]
+      },
+      tk401: {
+        badge: 'GROUND DEPLOYED • WHITE HOSE',
+        weight: 'Dry Stowed: 85 lbs | Wet on Ground: 5,090 lbs',
+        title: 'TK-401: 600-Gallon Baffled Chlorine Contact Tank',
+        desc: 'Deployed on the pavement beside the trailer (5.5 ft × 5.5 ft footprint). Serpentine internal baffles achieve a 0.50 baffling factor so 4-log virus CT is physically verified before water enters the clearwell.',
+        specs: [
+          '• <strong>Measured Residence Time:</strong> 17.1 min HDT and T10 = 8.57 min at 35 GPM continuous treatment flow',
+          '• <strong>Transfer Pump (P-401):</strong> 1.5 HP 316SS VFD pump transfers CT-verified water into onboard clearwell TK-601'
+        ]
+      }
+    };
+
+    function selectSkid(id) {
+      document.querySelectorAll('.skid-box').forEach(el => el.classList.remove('skid-active'));
+      const target = document.getElementById('skid-' + id);
+      if (target) target.classList.add('skid-active');
+      const d = skidData[id];
+      if (!d) return;
+      document.getElementById('detail-badge').textContent = d.badge;
+      document.getElementById('detail-weight').textContent = d.weight;
+      document.getElementById('detail-title').textContent = d.title;
+      document.getElementById('detail-desc').textContent = d.desc;
+      document.getElementById('detail-specs').innerHTML = d.specs.map(s => `<li>${s}</li>`).join('');
+    }
+
+    function updateSim() {
+      const ufFlow = parseFloat(document.getElementById('inp-uf-flow').value);
+      const peakFlow = parseFloat(document.getElementById('inp-peak-flow').value);
+      const temp = parseFloat(document.getElementById('inp-temp').value);
+      const cl2 = parseFloat(document.getElementById('inp-cl2').value);
+      const powerMode = document.getElementById('inp-power').value;
+      const sourceMode = document.getElementById('inp-source').value;
+
+      document.getElementById('lbl-uf-flow').textContent = `${ufFlow} GPM (${(ufFlow * 1440).toLocaleString()} GPD)`;
+      document.getElementById('lbl-peak-flow').textContent = `${peakFlow} GPM`;
+      document.getElementById('lbl-temp').textContent = `${temp} °C`;
+      document.getElementById('lbl-cl2').textContent = `${cl2.toFixed(1)} mg/L`;
+
+      // Flux across 2,200 sq ft (gross flow = 1.05 * net flow)
+      const flux = ((ufFlow * 1.05 * 1440) / 2200).toFixed(1);
+      document.getElementById('out-flux').textContent = `${flux} GFD`;
+
+      // 600-gal contact tank CT math (baffling factor 0.50)
+      const hdt = 600 / ufFlow;
+      const t10 = hdt * 0.50;
+      const ctAchieved = cl2 * t10;
+
+      // EPA SWTR 4-log virus free chlorine CT requirement (pH 6-9)
+      let ctReq = 12.0;
+      if (temp >= 20) ctReq = 3.0;
+      else if (temp >= 15) ctReq = 4.0;
+      else if (temp >= 10) ctReq = 6.0;
+      else if (temp >= 5) ctReq = 8.0;
+
+      const ctRatio = ctAchieved / ctReq;
+      document.getElementById('out-t10').textContent = `${t10.toFixed(2)} min`;
+      document.getElementById('out-hdt').textContent = `HDT: ${hdt.toFixed(1)} min (0.50 Baffle)`;
+      document.getElementById('out-ct').textContent = `${ctAchieved.toFixed(1)} vs ${ctReq.toFixed(1)}`;
+
+      const ctSub = document.getElementById('out-ct-sub');
+      const statusPill = document.getElementById('sim-status-pill');
+      const ctPass = ctRatio >= 1.0 && cl2 >= 0.8;
+
+      if (ctPass) {
+        ctSub.textContent = `${ctRatio.toFixed(2)}× Required CT (PASS)`;
+        ctSub.className = 'text-[11px] text-emerald-400 mt-1';
+        statusPill.textContent = 'ALL BARRIERS GREEN • POTABLE VALVE XV-602 OPEN';
+        statusPill.className = 'px-3 py-1 rounded-full text-xs font-mono font-bold bg-emerald-500/20 text-emerald-400 border border-emerald-500/30';
+      } else {
+        ctSub.textContent = `LOW CT (${ctRatio.toFixed(2)}×) — XV-602 DIVERTED`;
+        ctSub.className = 'text-[11px] text-rose-400 font-bold mt-1';
+        statusPill.textContent = 'INTERLOCK TRIPPED • XV-602 CLOSED (RECIRC TO CT)';
+        statusPill.className = 'px-3 py-1 rounded-full text-xs font-mono font-bold bg-rose-500/20 text-rose-400 border border-rose-500/30';
+      }
+
+      // 150-Gal Clearwell Buffer
+      const netDrawdown = peakFlow - ufFlow;
+      const bufEl = document.getElementById('out-buffer');
+      const bufSub = document.getElementById('out-buffer-sub');
+      if (netDrawdown <= 0) {
+        bufEl.textContent = 'Steady 100%';
+        bufEl.className = 'text-xl font-bold font-mono text-blue-400 mt-1';
+        bufSub.textContent = 'Recharging / Full (68 PSI Header)';
+      } else {
+        const burstMins = (120 / netDrawdown).toFixed(1);
+        bufEl.textContent = `${burstMins} min burst`;
+        bufEl.className = 'text-xl font-bold font-mono text-amber-400 mt-1';
+        bufSub.textContent = `150-gal clearwell absorbs +${netDrawdown} GPM peak`;
+      }
+
+      // Electrical demand
+      const kw = (3.4 + (ufFlow / 35) * 2.1 + (peakFlow / 50) * 2.8).toFixed(1);
+      const amps = ((kw * 1000) / 240).toFixed(1);
+      document.getElementById('out-kw').textContent = `${kw} kW (${amps} A)`;
+      const pwrSub = document.getElementById('out-power-sub');
+      if (powerMode === 'shore') {
+        pwrSub.textContent = '240V 50A Shore Plug ($0 Diesel)';
+        pwrSub.className = 'text-[11px] text-emerald-400 mt-1';
+      } else {
+        const gph = (0.35 + (kw / 20) * 1.1).toFixed(2);
+        pwrSub.textContent = `20 kW Gen: ${gph} gal/hr (${Math.round(40 / gph)} hr tank)`;
+        pwrSub.className = 'text-[11px] text-amber-400 mt-1';
+      }
+
+      // Daily Operating Cost & Margin ($3,200/day rate)
+      const fuelCost = powerMode === 'shore' ? 0 : 80;
+      const tankerCost = sourceMode === 'tanker' ? 350 : 0;
+      const directCost = 520 + 89 + fuelCost + tankerCost;
+      const netMargin = 3200 - directCost;
+      document.getElementById('out-margin').textContent = `$${netMargin.toLocaleString()} / day`;
+      document.getElementById('out-margin-sub').textContent = `$3,200 Rev vs $${directCost} Direct Cost`;
+    }
+
+    updateSim();
+  </script>
+</body>
+</html>
