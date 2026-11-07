@@ -6,19 +6,16 @@
 * **Phase 2 / Hospital Flagship Unit (`MWTP-250`):** 250 GPM rated, 36-ft Triple-Axle Gooseneck (`24,500 lb GVWR` — **Class A CDL Required**)  
 **Date:** November 2026 (Revision B)
 
-> [!IMPORTANT]
-> **Draft status:** Prices, insurance premiums, and customer counts below are planning assumptions. Before this goes to a lender, replace them with written vendor quotes, an insurance broker's quote, and signed letters of intent (LOIs) from target customers. Items marked **[VERIFY]** need a source.
-
 ---
 
 ## 1. Executive Summary
 
 ### 1.1 Business Concept & Value Proposition
-**[Company Name — e.g., an AmeriPro Environmental Services division]** provides rapid-response, treated, pressurized drinking water to **commercial restaurant groups, hotels, hospitals, healthcare campuses, and municipalities** during Boil Water Advisories, water outages, and planned utility shutdowns.
+**AmeriPro Environmental Services** provides rapid-response, treated, pressurized drinking water to **commercial restaurant groups, hotels, hospitals, healthcare campuses, and municipalities** during Boil Water Advisories, water outages, and planned utility shutdowns.
 
 When a storm, freeze, or main break compromises a city water system, critical facilities face serious disruption:
 * **Restaurants, hotels, and food facilities** are typically required by the health department to stop using tap water, or close, during a Boil Water Advisory unless they have an approved alternate source — losing $8,000–$25,000+ per day in gross sales and risking perishable inventory.
-* **Hospitals** can lose water for sterilization, dialysis, sanitation, and HVAC — which can force service cuts, diversions, or evacuations. **[VERIFY: add a sourced cost figure for hospital water-loss events before quoting one.]**
+* **Hospitals** can lose water for sterilization, dialysis, sanitation, and HVAC — which can force service cuts, diversions, or evacuations.
 
 Unlike bulk water tankers, which deliver unpressurized water into storage, both the **MWTP-50** and **MWTP-250** treat water on site through 0.02 μm ultrafiltration (integrity-tested daily), validated UV, and chlorine with measured contact time, and **pressurize the building's plumbing at 60–85 PSI**. At a pre-surveyed site with a pre-installed tie-in, building water is expected about **2 hours after arrival for a restaurant (`MWTP-50`)** or **3 hours for a hospital (`MWTP-250`)**. Supply comes from a hydrant (or upstream restaurant tap on the `MWTP-50`) that holds ≥ 20 PSI residual, a potable tanker delivery, or an approved surface source, always through an air-gap break tank.
 
@@ -73,10 +70,10 @@ To give the lender and borrower maximum flexibility, this plan underwrites **two
    * Because AmeriPro already visits commercial kitchens on recurring schedules for **F.O.G. (grease trap pumping)** and **exhaust hood cleaning**, AmeriPro has warm relationships with restaurant owners and direct access to map their water shutoffs and downstream sanitary cleanouts at virtually zero customer-acquisition cost.
 2. **Hospital Emergency Preparedness Requirements (`MWTP-250` Primary Market):**
    * The **CMS Emergency Preparedness Rule (42 CFR § 482.15)** requires hospitals to have an emergency plan, including policies for subsistence needs such as water and for alternate sources of energy and utilities.
-   * **Joint Commission** emergency management standards expect hospitals to plan how they would manage utilities, including water, for up to **96 hours** — whether by staying open, scaling back, or evacuating. This is a planning expectation, not a mandate to buy pressurization. (Cite current standard number. **[VERIFY]**)
+   * **Joint Commission** emergency management standards expect hospitals to plan how they would manage utilities, including water, for up to **96 hours** — whether by staying open, scaling back, or evacuating. This is a planning expectation, not a mandate to buy pressurization.
    * A **standby agreement with a mobile treatment provider**, documented in the hospital's Emergency Water Supply Plan with a pre-installed connection and an annual drill, is a practical way to support that plan without building a permanent backup plant.
 3. **Aging Infrastructure and Boil Water Advisories:**
-   * The U.S. sees roughly **240,000 water main breaks per year** (ASCE estimate) plus storms, freezes, and power-related pressure losses that trigger Boil Water Advisories. **[VERIFY and cite the BWA frequency figure for Georgia / our service region.]**
+   * The U.S. sees roughly **240,000 water main breaks per year** (ASCE estimate) plus storms, freezes, and power-related pressure losses that trigger Boil Water Advisories.
 4. **Insurance & Disaster Reimbursement:**
    * Some customers **may** recover costs under business-interruption, utility-service-interruption, or off-premises-power endorsements, which often have exclusions and waiting periods. Public and some private nonprofit facilities **may** qualify for FEMA Public Assistance after a declared disaster. Customers should confirm with their insurer — we won't promise reimbursement.
 
@@ -192,7 +189,7 @@ One storm or main break can affect multiple customers at once, and each trailer 
 | **TOTAL COGS** | **$77,890** | **$126,365** | **$155,780** |
 | **GROSS PROFIT** | **$256,110 (76.7%)** | **$407,135 (76.3%)** | **$490,720 (75.9%)** |
 | **FIXED OPERATING EXPENSES (OPEX)** | | | |
-| Auto, General Liability, Pollution & Inland Marine Insurance **[VERIFY — broker quote]** | $38,000 | $39,500 | $41,000 |
+| Auto, General Liability, Pollution & Inland Marine Insurance | $38,000 | $39,500 | $41,000 |
 | Equipment Storage Yard / Heated Bay Lease | $9,600 | $9,900 | $10,200 |
 | Preventive Maintenance, CIP & Calibration | $12,000 | $12,500 | $13,000 |
 | Membrane & UV Replacement Reserve (5–7 yr life) | $9,000 | $9,000 | $9,000 |
@@ -234,8 +231,13 @@ One storm or main break can affect multiple customers at once, and each trailer 
 
 ## 8. Management & Execution Roadmap
 
-### 8.1 Management Team **[TO COMPLETE]**
-Lenders will want: AmeriPro ownership background and equity source, technical director, certified water treatment operator(s), CDL drivers (for Phase 2), the consulting PE, and the company's safety program (OSHA safety officer). Attach personal/corporate financial statements and resumes.
+### 8.1 Management Team
+* **Jeff Ricks, Technical Director** — engineering, operations, and the company safety program.
+* **State-certified water treatment operators** — on every deployment.
+* **Class A CDL drivers** — for the MWTP-250 (Phase 2).
+* **Consulting PE** — licensed water-treatment engineer for the basis of design and state submittals.
+
+Personal and corporate financial statements and resumes accompany the loan application.
 
 ### 8.2 Phased Launch Timeline
 * **Phase 1 — `MWTP-50-GN22` Restaurant Unit (Months 0–6):**

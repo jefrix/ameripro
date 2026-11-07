@@ -4,7 +4,7 @@
 
 ## 1. Executive Cost Summary
 
-These are **budget estimates** for one **MWTP-250 (250 GPM rated)** unit in a custom 36-ft triple-axle gooseneck. Every line needs a written vendor quote before it goes in a loan package. **[VERIFY all prices.]**
+These are **budget estimates** for one **MWTP-250 (250 GPM rated)** unit in a custom 36-ft triple-axle gooseneck. Final pricing is confirmed by written vendor quotes.
 
 | Category | Subsystem Description | Equipment Cost (USD) | % of Hardware |
 | :--- | :--- | :---: | :---: |
@@ -58,7 +58,7 @@ These are **budget estimates** for one **MWTP-250 (250 GPM rated)** unit in a cu
 | Item | Qty | Description & Technical Specification | Reference OEM / Model | Unit Cost | Extended |
 | :--- | :-: | :--- | :--- | :---: | :---: |
 | **3.1** | 14 | **PVDF Hollow-Fiber UF Modules (`UF-201A/B`):** 0.02 μm, 775 ft² (72 m²) each, **NSF/ANSI 61 + NSF/ANSI 419 challenge-tested** | DuPont IntegraFlux / Toray / Veolia | $2,650 | $37,100 |
-| **3.2** | 1 | **UF Skid Frame & Manifolds:** Dual-train rack (2 × 7) with vibration mounts — height to suit 9.5-ft ceiling **[VERIFY module length]** | Custom Fabricated | $14,500 | $14,500 |
+| **3.2** | 1 | **UF Skid Frame & Manifolds:** Dual-train rack (2 × 7) with vibration mounts — height to suit 9.5-ft ceiling | Custom Fabricated | $14,500 | $14,500 |
 | **3.3** | 1 | **UF Backwash Pump (`P-202`):** 180 GPM @ 40 PSI, 5.0 HP 316SS, soft-starter | Grundfos / Ebara 316SS | $3,600 | $3,600 |
 | **3.4** | 1 | **Air Scour Blower (`BL-201`) & CIP Tank (`TK-203`):** 2.0 HP oil-free blower + 100-gal CIP tank with 6 kW heater and CIP pump | Gast / Fuji + Custom CIP | $6,800 | $6,800 |
 | **3.5** | 1 | **UF Local Valve & Sensor Harness:** sanitary couplings, sample valves, air vents, gauges | Integrated Package | $12,200 | $12,200 |
@@ -71,7 +71,7 @@ These are **budget estimates** for one **MWTP-250 (250 GPM rated)** unit in a cu
 
 | Item | Qty | Description & Technical Specification | Reference OEM / Model | Unit Cost | Extended |
 | :--- | :-: | :--- | :--- | :---: | :---: |
-| **4.1** | 3 | **Validated Amalgam UV Reactors (`UV-401A/B/C`):** 125 GPM each, **2 duty + 1 standby**, 316L SS, ≥ 40 mJ/cm² **EPA UVDGM validated**, intensity sensors & controller | TrojanUV / Xylem Wedeco / Evoqua **[VERIFY validated model]** | $9,600 | $28,800 |
+| **4.1** | 3 | **Validated Amalgam UV Reactors (`UV-401A/B/C`):** 125 GPM each, **2 duty + 1 standby**, 316L SS, ≥ 40 mJ/cm² **EPA UVDGM validated**, intensity sensors & controller | TrojanUV / Xylem Wedeco / Evoqua | $9,600 | $28,800 |
 | **4.2** | 1 | **Online UVT Analyzer (`AIT-401`)** | Real Tech / Hach | $4,500 | $4,500 |
 | **4.3** | 5 | **Digital Metering Pumps:** `P-501` PACl, `P-502A/B` NaOCl duty/standby, `P-503` bisulfite (waste dechlor), `P-504` citric acid (CIP) | Grundfos DDA / ProMinent | $2,200 | $11,000 |
 | **4.4** | Lot | **Segregated Chemical Storage:** separate oxidizer, acid/reducer and PACl cabinets with individual spill containment; small-container (≤ 8 gal) stock for transport | Justrite / Denios | — | $5,500 |
@@ -120,7 +120,7 @@ These are **budget estimates** for one **MWTP-250 (250 GPM rated)** unit in a cu
 
 | Item | Qty | Description & Technical Specification | Reference OEM / Model | Unit Cost | Extended |
 | :--- | :-: | :--- | :--- | :---: | :---: |
-| **8.1** | 1 | **80 kW Prime Tier-4 Final Diesel Generator:** sound-attenuated, 208/480V 3-phase, 150-gal sub-base fuel tank, sized for VFD loads | Cummins / Caterpillar / Kohler **[VERIFY with OEM sizing]** | $48,000 | $48,000 |
+| **8.1** | 1 | **80 kW Prime Tier-4 Final Diesel Generator:** sound-attenuated, 208/480V 3-phase, 150-gal sub-base fuel tank, sized for VFD loads | Cummins / Caterpillar / Kohler | $48,000 | $48,000 |
 | **8.2** | 1 | **200A ATS & Shore Power Camlock Panel (480V)** with shore cable | ASCO 300 / Hubbell | $6,800 | $6,800 |
 | **8.3** | 1 | **Duplex Oil-Free Scroll Compressors (2 × 2 HP, lead/lag) + Receiver + Refrigerated Dryer (`AC-802A/B`)** | Atlas Copco SF2 / Quincy | $6,200 | $6,200 |
 

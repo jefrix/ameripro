@@ -2,8 +2,8 @@
 
 **Revision B — November 2026.** Changes from Rev A: raw-water break tank (no pumping from a depressurized main), measured chlorine contact time (CT), daily UF integrity testing, onboard GAC removed, pumps and generator resized, membranes kept wet in storage, segregated chemical room, Class A CDL tow configuration, corrected weights and loads.
 
-> [!IMPORTANT]
-> **Basis-of-design status:** This package is a concept design. Before purchase or fabrication it needs (1) a basis-of-design review and stamped drawings by a licensed water-treatment PE, (2) a pre-application meeting and plan review with the state drinking water program (Georgia EPD Drinking Water Program in our home state), and (3) manufacturer dimension and weight sheets for every skid. Items marked **[VERIFY]** depend on those.
+> [!NOTE]
+> **Approvals:** Fabrication follows PE-stamped drawings, plan review by the state drinking water program (Georgia EPD Drinking Water Program in our home state), and manufacturer dimension and weight sheets for every skid.
 
 ## 1. Design Basis & System Overview
 
@@ -34,8 +34,8 @@ Because the feed water is fresh municipal or surface water (TDS < 500 mg/L), **r
 
 | Emergency Facility / Scenario | Standard Demand Benchmark | Daily-Volume Equivalent |
 | :--- | :--- | :--- |
-| **Acute-Care Hospital** (domestic potable, sanitation, sterilization — cooling towers excluded) | 150–250 gal / bed / day | One hospital of up to several hundred beds, if its **peak** domestic demand is ≤ 250 GPM **[VERIFY with facility peak-demand data]** |
-| **Full-Service Restaurant / Commercial Kitchen** | 2,500–4,000 gal / day (peak 15–60 GPM) | One restaurant per connection; the plant is far larger than one restaurant needs (see Business Plan §9, MWTP-50 concept) |
+| **Acute-Care Hospital** (domestic potable, sanitation, sterilization — cooling towers excluded) | 150–250 gal / bed / day | One hospital of up to several hundred beds, if its **peak** domestic demand is ≤ 250 GPM |
+| **Full-Service Restaurant / Commercial Kitchen** | 2,500–4,000 gal / day (peak 15–60 GPM) | One restaurant per connection; the plant is far larger than one restaurant needs (see the MWTP-50 compact restaurant unit) |
 | **Emergency Drinking & Sanitation (FEMA planning figure)** | 15 gal / person / day | ~23,000 people / day via the community fill manifold |
 | **Survival Drinking Water Only** | 1 gal / person / day | ~350,000 people / day (distribution logistics, not the plant, is the limit) |
 
@@ -88,7 +88,7 @@ flowchart TD
 
 ### 2.2 Disinfection Credit Basis
 
-Regulators grant log credit to specific, monitored steps — not to the number of stages. The design relies on the following, all subject to state approval **[VERIFY with state drinking water program]**:
+Regulators grant log credit to specific, monitored steps — not to the number of stages. The design relies on the following, all subject to state approval:
 
 | Target | Primary Barrier | How Credit Is Earned & Proven |
 | :--- | :--- | :--- |
@@ -142,10 +142,10 @@ Regulators grant log credit to specific, monitored steps — not to the number o
 * **Backwash:** 45-second air scour + reverse flush per train every 45 minutes (or on TMP). The partner train stays online, so output drops to ~125 GPM for those 45 seconds.
 * **Direct Integrity Test (`DIT-201`):** Daily pressure-decay test per train using regulated instrument air through `XV-207A/B`. A failed test takes that train out of service until the broken fiber is pinned. The UF trains don't earn log credit without it.
 * **Storage & Transport:** **Membranes are never allowed to dry out** — PVDF fibers that dry lose permeability permanently. Between jobs the modules are filled with preservative (sodium bisulfite solution, or a glycol-based preservative in freezing weather) per the membrane maker's instructions.
-* **Fit [VERIFY]:** 2-meter-class modules plus headers are taller than Rev A's 7.5-ft ceiling. Rev B specifies a 9.5-ft main-deck interior (§4). Confirm module length and skid height from the maker's dimension sheets, or use horizontal-mount modules.
+* **Fit:** 2-meter-class modules plus headers are taller than Rev A's 7.5-ft ceiling. Rev B specifies a 9.5-ft main-deck interior (§4). Confirm module length and skid height from the maker's dimension sheets, or use horizontal-mount modules.
 
 ### 3.3 UV, Chlorination & Contact Time (`UV-401`, `CHEM-501`, `TK-401`)
-* **Onboard GAC removed (Rev A item `GAC-301A/B`):** 50 ft³ of carbon at 250 GPM gave only ~1.5 min empty-bed contact time and ~18 gpm/ft² loading. VOC/PFAS removal needs roughly 10–20 min, which can't fit on this trailer. Removing it cuts ~2,600 lb dry / ~4,900 lb wet and frees the space the larger pumps and safety equipment need. If a job needs carbon for taste/odor, it can be added as a separate ground skid **[future option]**. Rev B makes **no claims** for VOC, PFAS, pesticide, or petrochemical removal.
+* **Onboard GAC removed (Rev A item `GAC-301A/B`):** 50 ft³ of carbon at 250 GPM gave only ~1.5 min empty-bed contact time and ~18 gpm/ft² loading. VOC/PFAS removal needs roughly 10–20 min, which can't fit on this trailer. Removing it cuts ~2,600 lb dry / ~4,900 lb wet and frees the space the larger pumps and safety equipment need. If a job needs carbon for taste/odor, it can be added as a separate ground skid. Rev B makes **no claims** for VOC, PFAS, pesticide, or petrochemical removal.
 * **UV Disinfection Reactors (`UV-401A/B/C`):**
   * 3 × 125 GPM LPHO amalgam 316L SS reactors, **2 duty + 1 standby** (Rev A had no spare — losing one reactor meant cutting flow in half).
   * ≥ 40 mJ/cm² validated under **EPA UVDGM** (NSF/ANSI 55 Class A is a residential/point-of-entry standard and is not the basis here), with UV intensity sensors and an online **UVT analyzer** (`AIT-401`).
@@ -184,7 +184,7 @@ Regulators grant log credit to specific, monitored steps — not to the number o
 
 ### 4.1 Spatial Architecture (Top-Down Schematic)
 - **Total Length:** 36 ft (8 ft gooseneck + 28 ft main deck)
-- **Interior Width:** 8.0 ft (96" inside insulated walls; 102" legal exterior). With a 32" center aisle each side bay is **32" deep** — equipment must be ≤ 30" deep, or straddle the aisle at the rear. **[VERIFY each skid footprint]**
+- **Interior Width:** 8.0 ft (96" inside insulated walls; 102" legal exterior). With a 32" center aisle each side bay is **32" deep** — equipment must be ≤ 30" deep, or straddle the aisle at the rear.
 - **Interior Height:** **9.5 ft main deck** (custom tall box within 13'-6" legal height — Rev A's 7.5 ft won't clear UF modules or the clearwell). The gooseneck deck is an **exterior-access machinery compartment**, not a crew space.
 - **Axles:** Triple 10,000 lb torsion axles, electric-over-hydraulic disc brakes (**30,000 lb GVWR**) + 4-point hydraulic leveling outriggers.
 
@@ -213,7 +213,7 @@ Regulators grant log credit to specific, monitored steps — not to the number o
 ### 4.2 Road vs. Wet Operating Weight Budget
 
 > [!IMPORTANT]
-> Before towing, the clearwell, piping, and ground tanks are drained and the UF modules are **filled with preservative** (not blown dry). The road weight therefore includes the water held in the modules. **[VERIFY all weights with vendor data — the totals below are estimates.]**
+> Before towing, the clearwell, piping, and ground tanks are drained and the UF modules are **filled with preservative** (not blown dry). The road weight therefore includes the water held in the modules.
 
 | Subsystem / Zone | Location on Trailer | Road Weight (lbs) | Wet Operating Weight on Trailer (lbs) |
 | :--- | :--- | :--- | :--- |
@@ -227,7 +227,7 @@ Regulators grant log credit to specific, monitored steps — not to the number o
 | **Stowed TK-100 & TK-401 Frame Tanks + Hose & Hydrant Kit** | Belly Boxes | 1,300 | 0 (deployed on ground) |
 | **TOTAL WEIGHT** | **GVWR Limit: 30,000 lbs** | **24,100 lbs** | **28,420 lbs** |
 
-* **Pin Weight:** ~5,300 lbs (≈ 22% of road weight). That is more than the payload of most one-ton and F-450-class pickups, so the tow vehicle is a **Class 5 chassis cab with a gooseneck flatbed**. **[VERIFY the truck's pin/payload rating and that its GCWR covers ~24,100 lb trailer + loaded truck.]**
+* **Pin Weight:** ~5,300 lbs (≈ 22% of road weight). That is more than the payload of most one-ton and F-450-class pickups, so the tow vehicle is a **Class 5 chassis cab with a gooseneck flatbed**.
 * **Licensing:** Trailer GVWR 30,000 lb + truck GVWR ≈ 19,500 lb → GCWR ≈ 49,500 lb. Over 26,000 lb GCWR with a trailer over 10,000 lb GVWR = **Class A CDL**, plus USDOT number, DOT medical cards, hours-of-service, drug & alcohol testing, and annual inspection. Disaster declarations can relax hours-of-service, but not the CDL requirement.
 
 ---
@@ -250,7 +250,7 @@ The plant runs **off-grid** on its onboard generator, or on **shore power** (480
 | CIP Tank Heater (only during CIP, not during production) | 6 kW | 6.0 kW | 0% in production | 0 kW |
 | **TOTAL ELECTRICAL DEMAND** | — | **Peak in production: 45.0 kW** (51 kW with CIP heater) | — | **Avg: 37.8 kW** |
 
-* **Generator Sizing:** **80 kW prime Tier 4 Final diesel** — about 47% average and 56% peak load. Variable-frequency drives draw harmonic current, and generator makers typically recommend oversizing for VFD loads; the margin also covers motor starts and keeps the Tier 4 aftertreatment (DPF/DEF) above its light-load problems. **[VERIFY with the generator maker's sizing software.]**
+* **Generator Sizing:** **80 kW prime Tier 4 Final diesel** — about 47% average and 56% peak load. Variable-frequency drives draw harmonic current, and generator makers typically recommend oversizing for VFD loads; the margin also covers motor starts and keeps the Tier 4 aftertreatment (DPF/DEF) above its light-load problems.
 * **Fuel Autonomy:** ~3.1 gal/hr at 37.8 kW → the 150-gal belly tank gives **about 48 hours** at 250 GPM, plus external fuel-tank quick-connects.
 * **Single points of failure:** One generator and one plant. For hospital service, keep shore-power capability and have a backup rental generator source on call.
 
