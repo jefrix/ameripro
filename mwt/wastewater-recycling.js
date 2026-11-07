@@ -1,0 +1,38 @@
+'use strict';
+const reclaimDefaults={feed:25,availability:80,hours:8,recovery:80,demand:7000,inflow:18,eqCapacity:2000,eqInitial:1000,productCapacity:1000,residualCapacity:2000};
+const treatmentStages={capture:'Capture and screen known washwater, remove grit and equalize flow in a separate ground tank. Screen aperture, mixing and containment depend on the selected feed and equipment.',oil:'Separate free oil where applicable. Emulsified oil and detergent mixtures need treatability testing; a gravity separator alone is not assumed to resolve them. Conditioning chemistry is selected from testing, with no universal recipe.',daf:'Candidate dissolved-air flotation removes tested separable / conditioned material. Hydraulic loading, recycle ratio, air system, sludge production and chemical demand require vendor data and trials.',uf:'Candidate UF provides a suspended-solids / dispersed-material barrier within its feed envelope. Flux, membrane compatibility, fouling, backwash and cleaning must be established. No blanket dissolved-salt or dissolved-organic removal is claimed.',release:'Use a feed / end-use-specific polishing and disinfection strategy where required. Product is held pending qualification. The release path remains inhibited until the approved site criteria and monitoring are satisfied; the planner cannot approve release.',residual:'Keep screenings, recovered oil, flotation sludge, membrane waste and rejected product in identified containment. Characterize each stream and establish receiving arrangements. The calculator tracks a net liquid waste allowance, not solids mass or hazard classification.'};
+function calculateReclaim(v,release='hold'){
+  if(!Object.keys(reclaimDefaults).every(key=>Number.isFinite(v[key])))return {error:'Enter a number in every field.'};
+  if(v.feed<0||v.availability<0||v.availability>100||v.hours<=0||v.hours>24||v.recovery<0||v.recovery>100||v.demand<0||v.inflow<0||v.eqCapacity<=0||v.eqInitial<0||v.eqInitial>v.eqCapacity||v.productCapacity<=0||v.residualCapacity<=0||!['hold','assumed'].includes(release))return {error:'Check the input limits. Initial equalization inventory must not exceed its working capacity.'};
+  const feedGpm=v.feed*v.availability/100,productGpm=feedGpm*v.recovery/100,residualGpm=feedGpm-productGpm;
+  const scheduledFeed=feedGpm*60*v.hours,scheduledProduct=productGpm*60*v.hours,scheduledResidual=residualGpm*60*v.hours;
+  const demandGpm=release==='assumed'?v.demand/(60*v.hours):0;
+  const productNetGpm=productGpm-Math.min(productGpm,demandGpm); // Empty product tank cannot supply unmet demand.
+  const eqNetGpm=v.inflow-feedGpm,events=[];
+  if(eqNetGpm>0)events.push({name:'Equalization full',hours:(v.eqCapacity-v.eqInitial)/(eqNetGpm*60)});
+  if(eqNetGpm<0)events.push({name:'Equalization depleted',hours:v.eqInitial/(-eqNetGpm*60)});
+  if(productNetGpm>0)events.push({name:'Product hold full',hours:v.productCapacity/(productNetGpm*60)});
+  if(residualGpm>0)events.push({name:'Residual holding full',hours:v.residualCapacity/(residualGpm*60)});
+  events.sort((a,b)=>a.hours-b.hours);
+  const first=events[0]||null,windowHours=Math.min(v.hours,first?first.hours:v.hours);
+  return {feedGpm,productGpm,residualGpm,scheduledFeed,scheduledProduct,scheduledResidual,eqNetGpm,productNetGpm,first,windowHours,feedBeforeIntervention:feedGpm*60*windowHours,potentialReuse:release==='assumed'?Math.min(scheduledProduct,v.demand):0,unmetReuse:release==='assumed'?Math.max(0,v.demand-scheduledProduct):v.demand,release,events};
+}
+if(typeof module!=='undefined'&&module.exports)module.exports={reclaimDefaults,treatmentStages,calculateReclaim};
+if(typeof document!=='undefined'){
+  const el=id=>document.getElementById(id),form=el('reclaim-form'),keys=Object.keys(reclaimDefaults),outputs=['feed-out','product-out','residual-out','constraint-out','window-out'];
+  const n=value=>new Intl.NumberFormat('en-US',{maximumFractionDigits:2}).format(value);
+  const hours=value=>value>0&&value<0.01?'< 0.01 h':n(value)+' h';
+  const read=()=>Object.fromEntries(keys.map(key=>[key,el(key).valueAsNumber]));
+  function update(){const v=read();let r=calculateReclaim(v,el('release-mode').value);if(!form.checkValidity())r={error:'Enter valid values within the indicated limits.'};if(r.error){outputs.forEach(id=>el(id).textContent='—');el('reclaim-status').textContent=r.error;return;}
+    el('feed-out').textContent=n(r.scheduledFeed)+' gal';el('product-out').textContent=n(r.scheduledProduct)+' gal';el('residual-out').textContent=n(r.scheduledResidual)+' gal';
+    el('constraint-out').textContent=r.first?r.first.name+' at '+hours(r.first.hours):'No tank constraint modeled';el('window-out').textContent=hours(r.windowHours);
+    const notes=[r.release==='hold'?'Reuse release is inhibited. Potential product is held, not delivered for use.':'Release qualification is assumed for this scenario only; the planner does not approve reuse.'];
+    if(r.first&&r.first.hours<v.hours)notes.push('The full schedule is not feasible unchanged. Feed before the first intervention: '+n(r.feedBeforeIntervention)+' gal at the averaged rates.');
+    else notes.push('The scheduled period fits the modeled average tank balances; surges and quality remain unverified.');
+    if(r.release==='assumed')notes.push('Full-schedule potential reuse: '+n(r.potentialReuse)+' gal; unmet demand: '+n(r.unmetReuse)+' gal, before storage / feed interventions.');
+    notes.push('No solids-mass or contaminant-removal prediction.');el('reclaim-status').textContent=notes.join(' ');
+  }
+  function stage(){el('stage-detail').textContent=treatmentStages[el('treatment-stage').value];}el('treatment-stage').addEventListener('change',stage);stage();
+  form.addEventListener('input',update);form.addEventListener('change',update);form.addEventListener('submit',event=>event.preventDefault());el('reclaim-reset').addEventListener('click',()=>{form.reset();update();el('reclaim-export-status').textContent='Default assumptions restored.';});
+  el('reclaim-export').addEventListener('click',()=>{if(!form.reportValidity())return;const inputs=read(),release=el('release-mode').value,results=calculateReclaim(inputs,release);if(results.error){update();return;}const scenario={project:'AmeriPro Reclaim-25',revision:'Concept A',createdAt:new Date().toISOString(),status:'Volume planning only; no treatment or reuse approval',inputs,release,results,units:{feed:'US gal/min nominal',availability:'percent',hours:'scheduled elapsed h',recovery:'percent net product',demand:'US gal/scheduled period',inflow:'US gal/min elapsed average',eqCapacity:'US gal working capacity',eqInitial:'US gal initial',productCapacity:'US gal working capacity',residualCapacity:'US gal working capacity',feedGpm:'US gal/min average',productGpm:'US gal/min average',residualGpm:'US gal/min average',eqNetGpm:'US gal/min',productNetGpm:'US gal/min',scheduledFeed:'US gal',scheduledProduct:'US gal',scheduledResidual:'US gal',windowHours:'h',feedBeforeIntervention:'US gal',potentialReuse:'US gal full schedule',unmetReuse:'US gal full schedule',eventTime:'hours; events[].hours and first.hours'},limits:'Constant averaged rates. Full-schedule volumes are not achieved production if a tank/feed intervention occurs. No solids mass, chemical additions, contaminant removal, quality or disposal approval is modeled.'};const url=URL.createObjectURL(new Blob([JSON.stringify(scenario,null,2)],{type:'application/json'})),link=document.createElement('a');link.href=url;link.download='AmeriPro_Reclaim_25_Scenario.json';document.body.appendChild(link);link.click();link.remove();setTimeout(()=>URL.revokeObjectURL(url),1000);el('reclaim-export-status').textContent='Scenario downloaded with assumptions and units.';});update();
+}

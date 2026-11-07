@@ -1,6 +1,7 @@
 {
   "scripts": {
     "start": "node server.js",
+    "build:concept-docs": "node scripts/build-concept-docs.js",
     "publish-state": "node scripts/publish-state.js"
   },
   "private": true

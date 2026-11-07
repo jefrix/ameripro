@@ -138,7 +138,7 @@ body.auth-locked #root {
 }
 .tb-left { flex: 1 1 auto; display: flex; align-items: center; gap: 14px; min-width: 0; }
 .tb-center { flex: 1; display: flex; justify-content: center; }
-.tb-right { flex: 1; display: flex; justify-content: flex-end; align-items: center; gap: 12px; }
+.tb-right { flex: 0 1 auto; min-width: 0; display: flex; justify-content: flex-end; align-items: center; gap: 12px; }
 
 .logo { display: flex; align-items: center; gap: 10px; flex-shrink: 0; }
 .logo-t {
@@ -227,9 +227,20 @@ body.auth-locked #root {
 
 .tb-actions {
   display: flex;
+  flex-wrap: nowrap;
   align-items: center;
   gap: 6px;
+  min-width: 0;
+  overflow-x: auto;
+  flex: 0 1 auto;
+}
+.tb-actions > * {
+  flex: 0 0 auto;
+}
+.tb-right .dtg,
+.tb-right .op-badge {
   flex-shrink: 0;
+  white-space: nowrap;
 }
 .tb-link {
   display: inline-flex;

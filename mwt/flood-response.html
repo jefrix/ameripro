@@ -1,0 +1,87 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="icon" href="../favicon.ico">
+  <title>Flood Response Team | AmeriPro Concept Fleet</title>
+  <link rel="stylesheet" href="flood-response.css">
+  <script src="flood-response.js" defer></script>
+</head>
+<body>
+  <header class="topbar">
+    <a href="index.html" class="brand"><img src="ameripro_logo.jpg" alt="AmeriPro Environmental Services"><span>MODULAR INFRASTRUCTURE / CONCEPT DEVELOPMENT</span></a>
+    <nav aria-label="Page navigation"><a href="../future-concepts.html">Future Concepts</a><a href="index.html">Water treatment fleet</a><a href="#systems">Systems</a><a href="#planner">Mission planner</a><a href="#economics">Economics</a><a href="#package">Design package</a></nav>
+  </header>
+  <main>
+    <section class="hero">
+      <div class="eyebrow">FLOOD RESPONSE TEAM · REV A / NOVEMBER 2026</div>
+      <h1>Pump.<br>Dry.<br><span>Restore.</span></h1>
+      <div class="hero-copy"><p>Two purpose-built trailer concepts. One coordinated response, from standing-water removal to controlled structural drying.</p><a class="button" href="#planner">Plan a response <span aria-hidden="true">↗</span></a></div>
+      <div class="status"><span class="dot"></span> Proposed equipment · Engineering validation pending</div>
+      <div class="mission-strip"><div><b>01 / MFP-500</b><span>Remove bulk water</span></div><div><b>02 / DRYFORCE</b><span>Control the drying environment</span></div><div><b>03 / RESTORATION HANDOFF</b><span>Verify moisture conditions</span></div></div>
+    </section>
+
+    <figure class="fleet-figure"><a href="assets/ameripro-modular-fleet.webp" target="_blank" rel="noopener"><img src="assets/ameripro-modular-fleet.webp" width="1672" height="941" alt="Proposed AmeriPro modular fleet: potable water treatment, wastewater recycling, hybrid microgrid, flood pumping trailer, DryForce drying plant and prefabricated pump skid." fetchpriority="high"></a><figcaption><b>The modular infrastructure fleet.</b> The flood pumping trailer and DryForce form the Flood Response Team.</figcaption></figure>
+    <section aria-labelledby="studio-title"><div class="handoff"><div><div class="eyebrow">REV B / EQUIPMENT ARRANGEMENTS</div><h2 id="studio-title">Explore the equipment arrangements.</h2><p>Interactive trailer zoning, component details, loaded mass allocations and a DryForce power study.</p></div><a class="button" href="flood-design-studio.html">Open design studio →</a></div><div class="handoff"><div><div class="eyebrow">NEW / REV C DEPLOYMENT &amp; CONTROLS</div><h2>Connect the response.</h2><p>Site arrangement, proposed connection schedule and a controls-response review for the two-trailer team.</p></div><a class="button" href="flood-deployment.html">Explore deployment →</a></div></section>
+    <aside class="handoff" style="margin-top:24px"><b>New fleet concept</b><p>HybridForce-60 explores generator-and-battery power, including a future external-power DryForce option. Electrical compatibility remains to be validated.</p><a href="hybrid-power.html">Explore hybrid power →</a></aside>
+    <section id="systems">
+      <div class="section-heading"><div><div class="eyebrow">A COORDINATED PAIR</div><h2>One team. Two distinct jobs.</h2></div><p>500 GPM is the planning starting point; the final rating follows pump selection.</p></div>
+      <div class="system-grid">
+        <article class="system pump"><div class="eyebrow">01 / MOBILE FLOOD PUMPING STATION</div><h3>MFP-500</h3><p>High-volume water removal with a serviceable pump package, screened intake, hose storage and local controls.</p>
+          <div class="layout" role="img" aria-label="Conceptual top-down pumping trailer zones, front to rear: drive and fuel, pump and controls, hose storage. Not to scale."><span class="hitch">TOW END</span><div class="zones"><div>DRIVE<br><small>Fuel / exhaust zone</small></div><div>PUMP<br><small>Local controls</small></div><div>HOSES<br><small>Rear deployment</small></div></div><span class="layout-caption">CONCEPT ZONING / TOP VIEW / NOT TO SCALE</span></div>
+          <ul><li>Debris screening and intake access</li><li>Dry-run protection and level-based control concept</li><li>Pressure / vacuum indication and optional telemetry</li><li>Contained leaks and accessible service points</li></ul><p class="boundary">Discharge destination and water classification must be resolved for each site. Bulk pumping does not treat the water.</p>
+        </article>
+        <article class="system dry"><div class="eyebrow">02 / MOBILE INDUSTRIAL DRYING PLANT</div><h3>DryForce</h3><p>Ducted dehumidification and distributed air movement, with moisture records to support the restoration handoff.</p>
+          <div class="layout" role="img" aria-label="Conceptual top-down DryForce trailer zones, front to rear: separate power and service bay, dehumidification module, duct and air mover storage. Not to scale."><span class="hitch">TOW END</span><div class="zones"><div>POWER<br><small>Separated bay</small></div><div>DRYING<br><small>Dehumidification</small></div><div>DUCTS<br><small>Air movers / kit</small></div></div><span class="layout-caption">CONCEPT ZONING / TOP VIEW / NOT TO SCALE</span></div>
+          <ul><li>Dehumidifier technology selected after load study</li><li>Supply / return ducts with measured airflow</li><li>Temperature, humidity and material-moisture records</li><li>Condensate or desiccant regeneration exhaust management</li></ul><p class="boundary">No drying time, remediation outcome, trailer size, power rating or towing classification is certified at this stage.</p>
+        </article>
+      </div>
+      <div class="handoff"><b>Fleet connection</b><p>MWTP-50, MWTP-50C and MWTP-250 remain separate water-treatment systems. No connection from floodwater to a potable-water system is proposed here.</p><a href="index.html">Explore water treatment →</a></div>
+    </section>
+
+    <section id="planner">
+      <div class="section-heading"><div><div class="eyebrow">INTERACTIVE / SCENARIO ESTIMATE</div><h2>Size the mission.</h2></div><p>Explore the effect of volume, inflow and effective drying capacity. These are simplified planning calculations, not field operating instructions.</p></div>
+      <form id="mission-form" class="planner-grid">
+        <fieldset><legend>Bulk water removal</legend>
+          <label for="area">Flooded floor area <span>ft²</span></label><input id="area" type="number" min="0" max="10000000" step="any" value="10000" required>
+          <label for="depth">Average standing-water depth <span>inches</span></label><input id="depth" type="number" min="0" max="240" step="any" value="6" required>
+          <label for="flow">Assumed pump flow at duty point <span>GPM</span></label><input id="flow" type="number" min="0" max="100000" step="any" value="500" required>
+          <label for="availability">Effective pumping time <span>% of elapsed time</span></label><input id="availability" type="number" min="0" max="100" step="any" value="75" required>
+          <label for="inflow">Continuing inflow <span>GPM, averaged over elapsed time</span></label><input id="inflow" type="number" min="0" max="100000" step="any" value="25" required>
+        </fieldset>
+        <fieldset><legend>Residual moisture removal</legend>
+          <label for="moisture">Assumed removable moisture burden <span>gallons of water equivalent</span></label><input id="moisture" type="number" min="0" max="1000000" step="any" value="300" required>
+          <label for="dryrate">Effective removal per drying module <span>gallons / day at site conditions</span></label><input id="dryrate" type="number" min="0" max="100000" step="any" value="50" required>
+          <label for="modules">Drying modules <span>quantity</span></label><input id="modules" type="number" min="1" max="100" step="1" value="2" required>
+          <p class="note">Enter an effective site rate, not a catalog maximum. Moisture burden is an independent assumption; it is not calculated from flood depth. Drying slows as materials approach equilibrium.</p>
+        </fieldset>
+        <div class="results" aria-live="polite" aria-atomic="true"><div class="eyebrow">PLANNING OUTPUT</div><div class="metric"><span>Initial standing water</span><strong id="volume-out">—</strong></div><div class="metric"><span>Net removal after inflow</span><strong id="net-out">—</strong></div><div class="metric"><span>Estimated bulk pumping time</span><strong id="pump-out">—</strong></div><div class="metric"><span>Idealized moisture removal time</span><strong id="dry-out">—</strong></div><p id="mission-message"></p></div>
+      </form>
+      <details><summary>Calculation basis and limits</summary><p>Standing water = area × depth ÷ 12 × 7.48052 US gallons/ft³. Average net removal = duty-point flow × effective-time fraction − continuing inflow. Pump time = initial gallons ÷ net GPM ÷ 60. Idealized drying days = moisture gallons ÷ (effective gallons/day/module × module count).</p><p>Pump flow must come from a selected pump curve at the actual total dynamic head, with suction conditions, hose losses and solids considered. The model does not calculate head, NPSH, evaporation, psychrometrics, electrical load or a material-specific dry standard. The two durations are not added: work may be staged or overlap only where site conditions allow. Measured moisture conditions govern completion.</p></details>
+    </section>
+
+    <section id="economics">
+      <div class="section-heading"><div><div class="eyebrow">COMMERCIAL / PLANNING ALLOWANCES</div><h2>Test the business case.</h2></div><p>Editable planning costs and pricing, to be replaced with supplier quotes.</p></div>
+      <form id="finance-form" class="finance-grid">
+        <fieldset><legend>Capital and utilization assumptions</legend>
+          <label for="capital">Pair capital cost, including contingency <span>$</span></label><input id="capital" type="number" min="0" max="100000000" step="any" value="288000" required>
+          <label for="rate">Pair revenue per billable day <span>$/day</span></label><input id="rate" type="number" min="0" max="1000000" step="any" value="3500" required>
+          <label for="variable">Variable cost per billable day <span>$/day</span></label><input id="variable" type="number" min="0" max="1000000" step="any" value="1600" required>
+          <label for="days">Billable pair days per year <span>days</span></label><input id="days" type="number" min="0" max="365" step="any" value="45" required>
+          <label for="fixed">Annual fixed operating costs <span>$/year</span></label><input id="fixed" type="number" min="0" max="100000000" step="any" value="36000" required>
+        </fieldset>
+        <div class="results" aria-live="polite" aria-atomic="true"><div class="eyebrow">UNLEVERED SCENARIO</div><div class="metric"><span>Annual gross revenue</span><strong id="revenue-out">—</strong></div><div class="metric"><span>Annual operating surplus</span><strong id="surplus-out">—</strong></div><div class="metric"><span>Operating break-even utilization</span><strong id="break-out">—</strong></div><div class="metric"><span>Simple capital payback</span><strong id="payback-out">—</strong></div><p id="finance-message"></p></div>
+      </form>
+      <p class="note">Operating surplus = (daily revenue − daily variable cost) × billable days − annual fixed costs. Payback excludes financing, taxes, depreciation, residual value and replacement capital. Mobilization, disposal, labor, fuel and insurance must be allocated explicitly before quoting jobs.</p>
+      <div class="actions"><button id="reset" type="button">Reset assumptions</button><button id="export" type="button">Download scenario JSON</button><button id="print" type="button">Print / save PDF</button><span id="export-status" role="status"></span></div>
+    </section>
+
+    <section id="package">
+      <div class="section-heading"><div><div class="eyebrow">ENGINEERING / NEXT DESIGN GATE</div><h2>From concept to a build decision.</h2></div><p>Jeff Ricks · AmeriPro concept development</p></div>
+      <div class="package-grid"><article><span class="step">01</span><h3>Design basis & layouts</h3><p>System boundaries, component tags, preliminary zoning and vendor selection requirements.</p><a href="Flood_Response_Concept_Design.html">Read concept design →</a></article><article><span class="step">02</span><h3>Preliminary BOM & costs</h3><p>Separate pump and drying allowances, contingency, exclusions and a quote checklist.</p><a href="Flood_Response_BOM_and_Cost_Basis.html">Read preliminary BOM →</a></article><article><span class="step">03</span><h3>Validate the pair</h3><p>Select duty point and drying load, obtain vendor data, close weight and power budgets, then test the assembled units.</p><a href="Flood_Response_Concept_Design.html#validation-before-procurement">View validation gates →</a></article></div>
+    </section>
+  </main>
+  <footer><b>AMERIPRO / FLOOD RESPONSE TEAM</b><span>Rev A · Proposed concepts · No equipment performance certification</span><a href="index.html">Return to fleet portal ↑</a></footer>
+</body>
+</html>
