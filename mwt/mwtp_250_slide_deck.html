@@ -1,0 +1,590 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>MWTP-250 Executive Slide Deck Presentation</title>
+  <script src="https://www.gstatic.com/antigravity/web/dev/tailwindcss.min.js"></script>
+  <style>
+    .slide-frame {
+      display: none;
+      animation: fadeIn 0.25s ease-out;
+    }
+    .slide-frame.active {
+      display: flex;
+    }
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(6px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+  </style>
+<style>:root { --background: #0b1120; --foreground: #f1f5f9; --card: #111827; --secondary: #1e293b; --secondary-foreground: #e2e8f0; --muted-foreground: #94a3b8; --border: #1e293b; --primary: #3b82f6; --primary-foreground: #ffffff; } html.light { --background: #f8fafc; --foreground: #0f172a; --card: #ffffff; --secondary: #f1f5f9; --secondary-foreground: #1e293b; --muted-foreground: #64748b; --border: #e2e8f0; --primary: #2563eb; --primary-foreground: #ffffff; }</style>
+</head>
+<body class="bg-[var(--background)] text-[var(--foreground)] antialiased p-4 md:p-6 flex flex-col gap-4 select-none">
+
+  <!-- Top Presentation Control Header -->
+  <div class="bg-[var(--card)] border border-[var(--border)] rounded-xl px-5 py-3 shadow-sm flex flex-wrap items-center justify-between gap-3">
+    <div class="flex items-center gap-3">
+      <span class="px-2.5 py-0.5 rounded-full text-xs font-bold bg-blue-500/15 text-blue-500 border border-blue-500/30">EXECUTIVE PITCH DECK</span>
+      <span class="text-sm font-semibold">MWTP-250: Mobile Emergency Water Treatment Facility</span>
+    </div>
+
+    <!-- Slide Navigation Controls -->
+    <div class="flex items-center gap-2">
+      <button onclick="prevSlide()" class="px-3 py-1.5 rounded-lg text-xs font-semibold bg-[var(--secondary)] text-[var(--secondary-foreground)] border border-[var(--border)] hover:border-blue-500 transition">
+        â† Prev
+      </button>
+      <span id="slide-counter" class="text-xs font-mono font-bold px-3">Slide 1 / 10</span>
+      <button onclick="nextSlide()" class="px-3 py-1.5 rounded-lg text-xs font-semibold bg-blue-600 text-white shadow-sm hover:bg-blue-500 transition">
+        Next â†’
+      </button>
+    </div>
+  </div>
+
+  <!-- Progress Bar -->
+  <div class="w-full h-1.5 bg-[var(--border)] rounded-full overflow-hidden">
+    <div id="slide-progress" class="h-full bg-blue-500 transition-all duration-300" style="width: 10%;"></div>
+  </div>
+
+  <!-- SLIDE CONTAINER (16:9 Presentation Stage) -->
+  <div class="bg-[var(--card)] border border-[var(--border)] rounded-2xl shadow-md p-6 md:p-10 min-h-[540px] flex flex-col justify-between relative overflow-hidden">
+
+    <!-- ================= SLIDE 1: TITLE SLIDE ================= -->
+    <div class="slide-frame active flex-col justify-between h-full gap-8" data-slide="1">
+      <div class="space-y-4 max-w-3xl">
+        <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full text-xs font-semibold bg-emerald-500/15 text-emerald-500 border border-emerald-500/30">
+          MUNICIPAL-GRADE POTABLE WATER & BUILDING PRESSURIZATION
+        </div>
+        <h1 class="text-3xl md:text-5xl font-extrabold tracking-tight leading-tight">
+          MWTP-250 Mobile Water Treatment Facility
+        </h1>
+        <p class="text-base md:text-lg text-[var(--muted-foreground)] leading-relaxed">
+          A rapid-deployment, 36-ft gooseneck water treatment plant engineered to keep <strong class="text-[var(--foreground)]">hospitals, commercial kitchens, and communities</strong> fully pressurized with EPA-compliant potable water during severe storms, grid blackouts, and water main breaks.
+        </p>
+      </div>
+
+      <div class="grid grid-cols-2 md:grid-cols-4 gap-4 pt-4">
+        <div class="bg-[var(--secondary)]/50 border border-[var(--border)] rounded-xl p-4">
+          <div class="text-xs text-[var(--muted-foreground)]">Potable Output</div>
+          <div class="text-2xl font-bold font-mono text-blue-500 mt-1">250 GPM</div>
+          <div class="text-xs text-[var(--muted-foreground)]">360,000 Gallons / Day</div>
+        </div>
+        <div class="bg-[var(--secondary)]/50 border border-[var(--border)] rounded-xl p-4">
+          <div class="text-xs text-[var(--muted-foreground)]">Pathogen Barrier</div>
+          <div class="text-2xl font-bold font-mono text-emerald-500 mt-1">0.02 Micron</div>
+          <div class="text-xs text-[var(--muted-foreground)]">6-Log Bacteria / 4-Log Virus</div>
+        </div>
+        <div class="bg-[var(--secondary)]/50 border border-[var(--border)] rounded-xl p-4">
+          <div class="text-xs text-[var(--muted-foreground)]">Building Line Pressure</div>
+          <div class="text-2xl font-bold font-mono text-sky-500 mt-1">65â€“85 PSI</div>
+          <div class="text-xs text-[var(--muted-foreground)]">Triplex VFD Direct Tie-In</div>
+        </div>
+        <div class="bg-[var(--secondary)]/50 border border-[var(--border)] rounded-xl p-4">
+          <div class="text-xs text-[var(--muted-foreground)]">Time to Potable Water</div>
+          <div class="text-2xl font-bold font-mono text-amber-500 mt-1">30 Mins</div>
+          <div class="text-xs text-[var(--muted-foreground)]">No CDL Semi-Truck Required</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ================= SLIDE 2: THE PROBLEM ================= -->
+    <div class="slide-frame flex-col justify-between h-full gap-6" data-slide="2">
+      <div>
+        <span class="text-xs font-mono uppercase text-rose-500 font-bold">01 â€¢ THE EMERGENCY CHALLENGE</span>
+        <h2 class="text-2xl md:text-3xl font-bold mt-1">When Storms Knock Out Power or Water Mains, Critical Facilities Shut Down</h2>
+        <p class="text-sm text-[var(--muted-foreground)] mt-1">Over 240,000 water main breaks and 7,000+ Boil Water Advisories hit U.S. municipalities every year.</p>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-5 my-auto">
+        <div class="bg-[var(--secondary)]/40 border border-rose-500/30 rounded-xl p-5 space-y-2.5">
+          <div class="text-sm font-bold text-rose-500">1. Hospitals Face Mandatory Evacuation</div>
+          <p class="text-xs text-[var(--muted-foreground)] leading-relaxed">
+            Without 65â€“80 PSI water pressure, hospitals lose surgical sterilization, renal dialysis, sanitation, and HVAC cooling towers. Evacuating a regional hospital costs <strong class="text-[var(--foreground)]">$1,000,000+ per day</strong>.
+          </p>
+        </div>
+
+        <div class="bg-[var(--secondary)]/40 border border-amber-500/30 rounded-xl p-5 space-y-2.5">
+          <div class="text-sm font-bold text-amber-500">2. Restaurants & Kitchens Must Close by Law</div>
+          <p class="text-xs text-[var(--muted-foreground)] leading-relaxed">
+            During a Boil Water Advisory or low-pressure event, health codes require restaurants, hotels, and food processors to halt operations immediatelyâ€”costing <strong class="text-[var(--foreground)]">$10,000 to $50,000+ per day</strong>.
+          </p>
+        </div>
+
+        <div class="bg-[var(--secondary)]/40 border border-blue-500/30 rounded-xl p-5 space-y-2.5">
+          <div class="text-sm font-bold text-blue-500">3. Bulk Water Tankers Cannot Pressurize Pipes</div>
+          <p class="text-xs text-[var(--muted-foreground)] leading-relaxed">
+            Hauling water by tanker truck costs <strong class="text-[var(--foreground)]">$0.50â€“$1.50/gal</strong>, holds only 6,000 gallons per load, and dumps unpressurized water that cannot flush upper-floor hospital toilets or run commercial dishwashers.
+          </p>
+        </div>
+      </div>
+
+      <div class="bg-blue-500/10 border border-blue-500/30 rounded-xl p-3.5 text-xs flex items-center justify-between">
+        <span><strong>The Solution:</strong> Tap the compromised fire hydrant on-site, purify 360,000 gallons/day to municipal standards, and pressurize the building directly.</span>
+        <span class="font-mono font-bold text-blue-500 shrink-0 ml-4">$0.0007 / Gal OpEx</span>
+      </div>
+    </div>
+
+    <!-- ================= SLIDE 3: WHY ULTRAFILTRATION BEATS RO ================= -->
+    <div class="slide-frame flex-col justify-between h-full gap-6" data-slide="3">
+      <div>
+        <span class="text-xs font-mono uppercase text-blue-500 font-bold">02 â€¢ CORE ENGINEERING INSIGHT</span>
+        <h2 class="text-2xl md:text-3xl font-bold mt-1">Why Hollow-Fiber Ultrafiltration (UF) Triples Output in a 36-ft Trailer</h2>
+        <p class="text-sm text-[var(--muted-foreground)] mt-1">Compromised city mains and lakes are freshwater (low TDS)â€”meaning biological pathogens, sediment, and organics are the target, not seawater salt.</p>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-6 my-auto">
+        <div class="bg-[var(--secondary)]/30 border border-[var(--border)] rounded-xl p-5 space-y-3">
+          <div class="flex items-center justify-between">
+            <span class="text-sm font-bold text-[var(--muted-foreground)]">Conventional Reverse Osmosis (RO) Trailer</span>
+            <span class="px-2 py-0.5 rounded text-xs bg-rose-500/15 text-rose-500 font-semibold">Low Flow / High Waste</span>
+          </div>
+          <ul class="text-xs text-[var(--muted-foreground)] space-y-2 list-disc pl-4">
+            <li><strong>Output:</strong> Only 50â€“75 GPM (72,000â€“108,000 GPD) in a 36-ft trailer.</li>
+            <li><strong>Brine Waste:</strong> Rejects 25%â€“40% of feed water to drain (starves low-pressure hydrants).</li>
+            <li><strong>Power Hungry:</strong> Requires 200â€“400 PSI pumps & a massive 100+ kW generator.</li>
+            <li><strong>Corrosive Permeate:</strong> Strips minerals, requiring heavy post-remineralization.</li>
+          </ul>
+        </div>
+
+        <div class="bg-emerald-500/10 border border-emerald-500/40 rounded-xl p-5 space-y-3">
+          <div class="flex items-center justify-between">
+            <span class="text-sm font-bold text-emerald-500">MWTP-250 (0.02 um UF + GAC + UV + Cl2)</span>
+            <span class="px-2 py-0.5 rounded text-xs bg-emerald-500/20 text-emerald-400 font-semibold">3.5x Higher Capacity</span>
+          </div>
+          <ul class="text-xs space-y-2 list-disc pl-4">
+            <li><strong>Output:</strong> <strong class="text-emerald-400">250 GPM (360,000 GPD)</strong> in the exact same 36-ft footprint.</li>
+            <li><strong>96% Water Recovery:</strong> Only 4% used for periodic 45-second air-scour backwashes.</li>
+            <li><strong>Low Power Demand:</strong> Operates at 30â€“55 PSI; entire trailer runs on a <strong class="text-emerald-400">21.7 kW avg load</strong>.</li>
+            <li><strong>Absolute Pathogen Barrier:</strong> 0.02-micron pores block 99.9999% of bacteria, protozoa & viruses.</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="grid grid-cols-4 gap-3 text-center">
+        <div class="bg-[var(--secondary)]/50 rounded-lg p-2.5 border border-[var(--border)]">
+          <div class="text-xs text-[var(--muted-foreground)]">Hospital Capacity</div>
+          <div class="text-sm font-bold text-blue-500">1,400â€“2,400 Beds</div>
+        </div>
+        <div class="bg-[var(--secondary)]/50 rounded-lg p-2.5 border border-[var(--border)]">
+          <div class="text-xs text-[var(--muted-foreground)]">Restaurant Capacity</div>
+          <div class="text-sm font-bold text-emerald-500">90â€“140 Kitchens</div>
+        </div>
+        <div class="bg-[var(--secondary)]/50 rounded-lg p-2.5 border border-[var(--border)]">
+          <div class="text-xs text-[var(--muted-foreground)]">FEMA Sanitation (15 gal/p)</div>
+          <div class="text-sm font-bold text-amber-500">24,000 People/Day</div>
+        </div>
+        <div class="bg-[var(--secondary)]/50 rounded-lg p-2.5 border border-[var(--border)]">
+          <div class="text-xs text-[var(--muted-foreground)]">Drinking Water (1 gal/p)</div>
+          <div class="text-sm font-bold text-purple-500">360,000 People/Day</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ================= SLIDE 4: 6-STAGE TREATMENT PROCESS ================= -->
+    <div class="slide-frame flex-col justify-between h-full gap-5" data-slide="4">
+      <div>
+        <span class="text-xs font-mono uppercase text-cyan-500 font-bold">03 â€¢ MULTI-BARRIER TREATMENT TRAIN</span>
+        <h2 class="text-2xl md:text-3xl font-bold mt-1">6-Stage Municipal Treatment Architecture</h2>
+        <p class="text-sm text-[var(--muted-foreground)] mt-1">Every drop passes through six redundant physical, chemical, and photonic barriers before entering the building.</p>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-4 my-auto">
+        <div class="bg-[var(--secondary)]/40 border border-[var(--border)] rounded-xl p-4 space-y-1.5">
+          <span class="text-xs font-mono font-bold text-amber-500">STAGE 1 â€¢ INTAKE & STRAINING</span>
+          <h3 class="text-sm font-bold">Vacuum-Assisted Booster & 200 um Strainer</h3>
+          <p class="text-xs text-[var(--muted-foreground)]">7.5 HP VFD pump draws 260 GPM from depressurized hydrants (with -2 PSI pipe-collapse protection) through an auto-flushing 316SS wedge-wire strainer.</p>
+        </div>
+
+        <div class="bg-[var(--secondary)]/40 border border-[var(--border)] rounded-xl p-4 space-y-1.5">
+          <span class="text-xs font-mono font-bold text-orange-500">STAGE 2 â€¢ COAGULATION & PRE-FILTER</span>
+          <h3 class="text-sm font-bold">Inline Static Mixer & Duplex 25 um Bags</h3>
+          <p class="text-xs text-[var(--muted-foreground)]">Automated PACl coagulant dosing (when raw turbidity > 5 NTU) and duplex 4-bag stainless housings strip iron pipe scale and silt.</p>
+        </div>
+
+        <div class="bg-[var(--secondary)]/40 border border-cyan-500/40 rounded-xl p-4 space-y-1.5">
+          <span class="text-xs font-mono font-bold text-cyan-400">STAGE 3 â€¢ 0.02 MICRON ULTRAFILTRATION</span>
+          <h3 class="text-sm font-bold">14x PVDF Hollow-Fiber Modules (2 Trains)</h3>
+          <p class="text-xs text-[var(--muted-foreground)]">10,850 sq.ft. membrane surface area reduces turbidity to &lt; 0.05 NTU. Train A supplies the building while Train B runs a 45-sec air-scour backwash.</p>
+        </div>
+
+        <div class="bg-[var(--secondary)]/40 border border-[var(--border)] rounded-xl p-4 space-y-1.5">
+          <span class="text-xs font-mono font-bold text-emerald-500">STAGE 4 â€¢ CARBON ADSORPTION</span>
+          <h3 class="text-sm font-bold">Duplex 36"Ã—72" Coconut Shell GAC Vessels</h3>
+          <p class="text-xs text-[var(--muted-foreground)]">50 cu.ft. (1,500 lbs) of acid-washed granular activated carbon strips VOCs, fuel/chemical runoff, pesticides, PFAS, and odor.</p>
+        </div>
+
+        <div class="bg-[var(--secondary)]/40 border border-[var(--border)] rounded-xl p-4 space-y-1.5">
+          <span class="text-xs font-mono font-bold text-pink-500">STAGE 5 â€¢ DUAL DISINFECTION & CLEARWELL</span>
+          <h3 class="text-sm font-bold">Validated Amalgam UV + 12.5% NaOCl</h3>
+          <p class="text-xs text-[var(--muted-foreground)]">Dual 130 GPM UV reactors deliver &ge; 40 mJ/cm2 dose, followed by PID-controlled chlorine injection into a 500-gal baffled clearwell (2.0 mg/L residual).</p>
+        </div>
+
+        <div class="bg-[var(--secondary)]/40 border border-blue-500/40 rounded-xl p-4 space-y-1.5">
+          <span class="text-xs font-mono font-bold text-blue-400">STAGE 6 â€¢ BUILDING PRESSURIZATION</span>
+          <h3 class="text-sm font-bold">Triplex VFD Boosters + ASSE 1013 RPZ</h3>
+          <p class="text-xs text-[var(--muted-foreground)]">Three 7.5 HP multistage 316SS VFD pumps maintain constant 65â€“85 PSI building line pressure through a certified hospital RPZ backflow assembly.</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- ================= SLIDE 5: 36-FT GOOSENECK LAYOUT & WEIGHT ================= -->
+    <div class="slide-frame flex-col justify-between h-full gap-5" data-slide="5">
+      <div>
+        <span class="text-xs font-mono uppercase text-purple-500 font-bold">04 â€¢ TRAILER ARCHITECTURE & DOT WEIGHT MANAGEMENT</span>
+        <h2 class="text-2xl md:text-3xl font-bold mt-1">36-ft Triple-Axle Gooseneck Layout & One-Button Auto-Drain</h2>
+        <p class="text-sm text-[var(--muted-foreground)] mt-1">Towed by an F-450 / Ram 4500 pickup truck into tight hospital loading docks and restaurant parking lots where 53-ft semis cannot maneuver.</p>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-12 gap-5 my-auto">
+        <div class="md:col-span-7 bg-[var(--secondary)]/40 border border-[var(--border)] rounded-xl p-4 space-y-3">
+          <div class="text-xs font-bold uppercase text-[var(--muted-foreground)]">Spatial Zone Allocation (36 ft Ã— 8 ft)</div>
+          <div class="space-y-2 text-xs">
+            <div class="p-2.5 rounded bg-amber-500/10 border border-amber-500/30 flex justify-between">
+              <span><strong>8-ft Gooseneck Nose:</strong> 45 kW Cummins Gen + 100-Gal Fuel + Air + PLC/Wet Lab</span>
+              <span class="font-mono font-semibold">3,800 lbs</span>
+            </div>
+            <div class="p-2.5 rounded bg-emerald-500/10 border border-emerald-500/30 flex justify-between">
+              <span><strong>Forward Main Deck (8 ft):</strong> Intake Booster, Auto-Strainer, Bag Filters & Duplex 36" GAC</span>
+              <span class="font-mono font-semibold">3,750 lbs dry</span>
+            </div>
+            <div class="p-2.5 rounded bg-cyan-500/10 border border-cyan-500/30 flex justify-between">
+              <span><strong>Center Over-Axle Zone (11 ft):</strong> 14-Module UF Skid, Dual UV, BW Pump & Chem Tanks</span>
+              <span class="font-mono font-semibold">3,500 lbs dry</span>
+            </div>
+            <div class="p-2.5 rounded bg-blue-500/10 border border-blue-500/30 flex justify-between">
+              <span><strong>Rear Main Deck (9 ft):</strong> 500-Gal Baffled Clearwell, Triplex VFD Boosters, RPZ & Bulkhead</span>
+              <span class="font-mono font-semibold">1,450 lbs dry</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="md:col-span-5 bg-[var(--secondary)]/40 border border-[var(--border)] rounded-xl p-4 flex flex-col justify-between">
+          <div>
+            <div class="text-xs font-bold uppercase text-[var(--muted-foreground)]">Dry Transport vs. Wet Operating Weight</div>
+            <div class="mt-3 space-y-3">
+              <div class="p-3 rounded-lg bg-blue-500/15 border border-blue-500/30">
+                <div class="text-xs text-blue-400 font-semibold">Highway Transport Mode (Tanks Drained)</div>
+                <div class="text-2xl font-bold font-mono mt-0.5">21,700 lbs</div>
+                <div class="text-xs text-[var(--muted-foreground)]">Well under 30,000 lb Triple-Axle GVWR (4,550 lb hitch pin)</div>
+              </div>
+              <div class="p-3 rounded-lg bg-emerald-500/15 border border-emerald-500/30">
+                <div class="text-xs text-emerald-400 font-semibold">On-Site Wet Operating Mode (Full Water)</div>
+                <div class="text-2xl font-bold font-mono mt-0.5">30,870 lbs</div>
+                <div class="text-xs text-[var(--muted-foreground)]">Supported by 4-Point 40,000-lb Hydraulic Leveling Jacks</div>
+              </div>
+            </div>
+          </div>
+          <div class="text-xs text-[var(--muted-foreground)] pt-2 border-t border-[var(--border)]">
+            <strong>3.5-Min Auto-Drain:</strong> Pressing <em>"Prepare for Transport"</em> opens pneumatic dump valves (`XV-601`, `XV-302`, `XV-205`) to shed 9,170 lbs of water before towing.
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ================= SLIDE 6: FAIL-SAFE SCADA & INTERLOCKS ================= -->
+    <div class="slide-frame flex-col justify-between h-full gap-5" data-slide="6">
+      <div>
+        <span class="text-xs font-mono uppercase text-emerald-500 font-bold">05 â€¢ HOSPITAL-GRADE QUALITY ASSURANCE</span>
+        <h2 class="text-2xl md:text-3xl font-bold mt-1">Automated PLC SCADA & Fail-Safe Water Interlocks</h2>
+        <p class="text-sm text-[var(--muted-foreground)] mt-1">Zero possibility of untreated or off-spec water entering hospital or restaurant plumbing.</p>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-4 my-auto">
+        <div class="bg-[var(--secondary)]/40 border border-[var(--border)] rounded-xl p-4 space-y-2">
+          <div class="flex items-center justify-between">
+            <span class="text-xs font-mono font-bold text-cyan-400">INTERLOCK 1 â€¢ LASER TURBIDITY (`AIT-201`)</span>
+            <span class="px-2 py-0.5 rounded text-xs bg-emerald-500/15 text-emerald-400 font-mono">Normal: 0.02 NTU</span>
+          </div>
+          <p class="text-xs text-[var(--muted-foreground)]">
+            Hach TU5300sc laser nephelometer monitors UF filtrate continuously. If turbidity ever exceeds <strong>0.15 NTU</strong> for 5 seconds, potable valve <code>XV-602</code> slams shut and <code>XV-300</code> fails open to waste.
+          </p>
+        </div>
+
+        <div class="bg-[var(--secondary)]/40 border border-[var(--border)] rounded-xl p-4 space-y-2">
+          <div class="flex items-center justify-between">
+            <span class="text-xs font-mono font-bold text-pink-400">INTERLOCK 2 â€¢ FREE CHLORINE & UV (`AIT-601`)</span>
+            <span class="px-2 py-0.5 rounded text-xs bg-emerald-500/15 text-emerald-400 font-mono">Target: 2.0 mg/L</span>
+          </div>
+          <p class="text-xs text-[var(--muted-foreground)]">
+            Amperometric analyzer paces dual redundant NaOCl pumps. If residual drops below <strong>0.8 mg/L</strong>, exceeds <strong>4.0 mg/L</strong>, or UV intensity drops below <strong>40 mJ/cm2</strong>, building discharge locks out automatically.
+          </p>
+        </div>
+
+        <div class="bg-[var(--secondary)]/40 border border-[var(--border)] rounded-xl p-4 space-y-2">
+          <div class="flex items-center justify-between">
+            <span class="text-xs font-mono font-bold text-amber-400">INTERLOCK 3 â€¢ CITY MAIN COLLAPSE PROTECTION</span>
+            <span class="px-2 py-0.5 rounded text-xs bg-amber-500/15 text-amber-400 font-mono">Cutout: -2.0 PSI</span>
+          </div>
+          <p class="text-xs text-[var(--muted-foreground)]">
+            Suction transducer <code>PSL-101</code> modulates intake VFD pump <code>P-101</code> so pulling from a depressurized municipal hydrant never draws a vacuum strong enough to collapse city pipes.
+          </p>
+        </div>
+
+        <div class="bg-[var(--secondary)]/40 border border-[var(--border)] rounded-xl p-4 space-y-2">
+          <div class="flex items-center justify-between">
+            <span class="text-xs font-mono font-bold text-blue-400">INTERLOCK 4 â€¢ BUILDING OVER-PRESSURE GUARD</span>
+            <span class="px-2 py-0.5 rounded text-xs bg-blue-500/15 text-blue-400 font-mono">Setpoint: 65â€“85 PSI</span>
+          </div>
+          <p class="text-xs text-[var(--muted-foreground)]">
+            Triplex VFD booster skid smoothly adjusts flow from 5 GPM (nighttime demand) to 250 GPM (peak demand) with a high-pressure cutout at <strong>95 PSI</strong> and an ASSE 1013 RPZ backflow preventer.
+          </p>
+        </div>
+      </div>
+    </div>
+
+    <!-- ================= SLIDE 7: 30-MINUTE FIELD HOOKUP SOP ================= -->
+    <div class="slide-frame flex-col justify-between h-full gap-5" data-slide="7">
+      <div>
+        <span class="text-xs font-mono uppercase text-amber-500 font-bold">06 â€¢ RAPID FIELD DEPLOYMENT SOP</span>
+        <h2 class="text-2xl md:text-3xl font-bold mt-1">Arrival to Full Building Pressurization in 30 Minutes</h2>
+        <p class="text-sm text-[var(--muted-foreground)] mt-1">Standardized 4-step field protocol compliant with AWWA C651 and CDC/FEMA Hospital Emergency Water Guidelines.</p>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-4 gap-4 my-auto">
+        <div class="bg-[var(--secondary)]/40 border border-[var(--border)] rounded-xl p-4 space-y-2">
+          <div class="text-xs font-mono font-bold text-blue-500">MINUTES 0â€“10</div>
+          <h3 class="text-sm font-bold">1. Position, Level & Power Up</h3>
+          <p class="text-xs text-[var(--muted-foreground)]">
+            Park within 100 ft of hydrant and building tie-in. Deploy 4-point hydraulic auto-leveling jacks and start the 45 kW Tier-4 diesel generator (or plug into 100A hospital shore power).
+          </p>
+        </div>
+
+        <div class="bg-[var(--secondary)]/40 border border-[var(--border)] rounded-xl p-4 space-y-2">
+          <div class="text-xs font-mono font-bold text-amber-500">MINUTES 10â€“18</div>
+          <h3 class="text-sm font-bold">2. Hydrant Tap & Curb-Stop Isolation</h3>
+          <p class="text-xs text-[var(--muted-foreground)]">
+            Flush hydrant for 2 mins; connect 4" intake hose and 3" storm-drain waste hose. <strong>CRITICAL: Close & lock out the building's street main valve</strong> so treated water cannot leak back into the city main.
+          </p>
+        </div>
+
+        <div class="bg-[var(--secondary)]/40 border border-[var(--border)] rounded-xl p-4 space-y-2">
+          <div class="text-xs font-mono font-bold text-emerald-500">MINUTES 18â€“25</div>
+          <h3 class="text-sm font-bold">3. Auto-Flush & Hose Sanitization</h3>
+          <p class="text-xs text-[var(--muted-foreground)]">
+            Run 3-min Startup Flush to fill the 500-gal Clearwell. Verify &lt; 0.05 NTU turbidity, hyper-chlorinate the 3" NSF-61 delivery hose at 5.0 mg/L, and lock onto the hospital/restaurant tie-in port.
+          </p>
+        </div>
+
+        <div class="bg-[var(--secondary)]/40 border border-[var(--border)] rounded-xl p-4 space-y-2">
+          <div class="text-xs font-mono font-bold text-purple-500">MINUTES 25â€“30</div>
+          <h3 class="text-sm font-bold">4. Soft-Ramp Building Pressurization</h3>
+          <p class="text-xs text-[var(--muted-foreground)]">
+            Pressurize building risers at <strong>30 PSI</strong> first while bleeding trapped air from top-floor faucets (preventing water hammer), then ramp VFD boosters to <strong>75 PSI</strong>.
+          </p>
+        </div>
+      </div>
+    </div>
+
+    <!-- ================= SLIDE 8: CAPEX & OPEX ECONOMICS ================= -->
+    <div class="slide-frame flex-col justify-between h-full gap-5" data-slide="8">
+      <div>
+        <span class="text-xs font-mono uppercase text-blue-500 font-bold">07 â€¢ BUILD COST & UNIT ECONOMICS</span>
+        <h2 class="text-2xl md:text-3xl font-bold mt-1">Turnkey Build Cost ($424.3k) & Ultra-Low Operating Cost</h2>
+        <p class="text-sm text-[var(--muted-foreground)] mt-1">Custom modular integration saves $250,000â€“$400,000 compared to off-the-shelf OEM 250 GPM mobile plants ($650kâ€“$850k).</p>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-12 gap-5 my-auto">
+        <div class="md:col-span-7 bg-[var(--secondary)]/40 border border-[var(--border)] rounded-xl p-4 space-y-2 text-xs">
+          <div class="font-bold uppercase text-[var(--muted-foreground)] mb-1">Capital Expenditure (CapEx) Summary</div>
+          <div class="flex justify-between py-1 border-b border-[var(--border)]"><span>1. 36-ft Triple-Axle Gooseneck Trailer, Insulation, HVAC & 4-Pt Jacks</span><span class="font-mono font-semibold">$58,500</span></div>
+          <div class="flex justify-between py-1 border-b border-[var(--border)]"><span>2. Hollow-Fiber UF Skid (14x PVDF Modules, BW Pump, Blower, CIP)</span><span class="font-mono font-semibold">$74,200</span></div>
+          <div class="flex justify-between py-1 border-b border-[var(--border)]"><span>3. Duplex 36" GAC Vessels, Dual Amalgam UV & Chemical Dosing Skid</span><span class="font-mono font-semibold">$48,900</span></div>
+          <div class="flex justify-between py-1 border-b border-[var(--border)]"><span>4. 45 kW Tier-4 Diesel Generator, 100-Gal Tank, ATS & Air Compressor</span><span class="font-mono font-semibold">$39,200</span></div>
+          <div class="flex justify-between py-1 border-b border-[var(--border)]"><span>5. 316L SS Piping, 18x Pneumatic Valves (`XV`) & NSF-61 Hose Kit</span><span class="font-mono font-semibold">$38,700</span></div>
+          <div class="flex justify-between py-1 border-b border-[var(--border)]"><span>6. 500-Gal Clearwell, 3k-Gal Bladder, Triplex VFD Boosters & RPZ</span><span class="font-mono font-semibold">$36,400</span></div>
+          <div class="flex justify-between py-1 border-b border-[var(--border)]"><span>7. Rockwell PLC/SCADA Cabinet, Hach Laser Analyzers & Intake Skid</span><span class="font-mono font-semibold">$60,400</span></div>
+          <div class="flex justify-between py-1 border-b border-[var(--border)]"><span>8. Turnkey System Integration, 316L TIG Welding & UL-508A Wiring</span><span class="font-mono font-semibold">$68,000</span></div>
+          <div class="flex justify-between pt-1.5 text-sm font-bold text-blue-500"><span>TOTAL TURNKEY TRAILER BUILD COST</span><span class="font-mono">$424,300</span></div>
+        </div>
+
+        <div class="md:col-span-5 bg-[var(--secondary)]/40 border border-[var(--border)] rounded-xl p-4 flex flex-col justify-between">
+          <div class="space-y-3">
+            <div class="text-xs font-bold uppercase text-[var(--muted-foreground)]">Daily Operating Cost (OpEx @ 360,000 GPD)</div>
+            <div class="p-3 rounded-lg bg-amber-500/10 border border-amber-500/30 flex justify-between items-center">
+              <div>
+                <div class="text-xs font-semibold">100% Off-Grid Diesel Mode</div>
+                <div class="text-xs text-[var(--muted-foreground)]">44.4 gal/day diesel + NaOCl + filters</div>
+              </div>
+              <div class="text-right">
+                <div class="text-lg font-bold font-mono text-amber-500">$258.69/day</div>
+                <div class="text-xs font-mono text-[var(--muted-foreground)]">$0.72 / 1,000 gal</div>
+              </div>
+            </div>
+            <div class="p-3 rounded-lg bg-emerald-500/10 border border-emerald-500/30 flex justify-between items-center">
+              <div>
+                <div class="text-xs font-semibold">Hospital Shore Power Mode</div>
+                <div class="text-xs text-[var(--muted-foreground)]">Chemicals, bags & membrane reserve</div>
+              </div>
+              <div class="text-right">
+                <div class="text-lg font-bold font-mono text-emerald-500">$89.97/day</div>
+                <div class="text-xs font-mono text-[var(--muted-foreground)]">$0.25 / 1,000 gal</div>
+              </div>
+            </div>
+          </div>
+          <div class="p-3 rounded-lg bg-blue-500/10 border border-blue-500/30 text-xs">
+            <strong>99.9% Cheaper Than Tanker Water:</strong> Producing 360,000 gallons costs <strong>$259/day</strong> vs. <strong>$360,000+/day</strong> for bulk water tankers at $1.00/gal.
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ================= SLIDE 9: BUSINESS MODEL & BANK DSCR ================= -->
+    <div class="slide-frame flex-col justify-between h-full gap-5" data-slide="9">
+      <div>
+        <span class="text-xs font-mono uppercase text-emerald-500 font-bold">08 â€¢ COMMERCIAL REVENUE & DEBT COVERAGE</span>
+        <h2 class="text-2xl md:text-3xl font-bold mt-1">Dual-Revenue Model Eliminates Weather Seasonality</h2>
+        <p class="text-sm text-[var(--muted-foreground)] mt-1">Annual CMS compliance retainers cover 100%+ of bank debt service before the trailer ever deploys for a storm.</p>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-4 my-auto">
+        <div class="bg-[var(--secondary)]/40 border border-[var(--border)] rounded-xl p-4 space-y-2">
+          <span class="text-xs font-mono font-bold text-blue-500">STREAM 1 â€¢ RECURRING RETAINERS</span>
+          <div class="text-xl font-bold font-mono">$12,000 / yr</div>
+          <p class="text-xs text-[var(--muted-foreground)]">
+            <strong>Hospital Priority Standby Retainer</strong> (satisfies Joint Commission EM.02.02.09 & CMS 96-hr water plan) + <strong>$3,500/yr</strong> for restaurant/hotel groups.
+          </p>
+        </div>
+
+        <div class="bg-[var(--secondary)]/40 border border-[var(--border)] rounded-xl p-4 space-y-2">
+          <span class="text-xs font-mono font-bold text-emerald-500">STREAM 2 â€¢ EMERGENCY DEPLOYMENT</span>
+          <div class="text-xl font-bold font-mono">$5,500 / day</div>
+          <p class="text-xs text-[var(--muted-foreground)]">
+            Plus <strong>$4,500 Mobilization & Sanitization Fee</strong> per dispatch. Reimbursable under client Business Interruption insurance or FEMA Category B.
+          </p>
+        </div>
+
+        <div class="bg-[var(--secondary)]/40 border border-[var(--border)] rounded-xl p-4 space-y-2">
+          <span class="text-xs font-mono font-bold text-amber-500">STREAM 3 â€¢ PLANNED UTILITY BYPASS</span>
+          <div class="text-xl font-bold font-mono">$3,200 / day</div>
+          <p class="text-xs text-[var(--muted-foreground)]">
+            Non-emergency rentals during scheduled municipal water main replacements, hospital tank cleanings, and major outdoor events.
+          </p>
+        </div>
+      </div>
+
+      <div class="bg-[var(--secondary)]/60 border border-[var(--border)] rounded-xl p-4 grid grid-cols-2 md:grid-cols-4 gap-4 text-center">
+        <div>
+          <div class="text-xs text-[var(--muted-foreground)]">Year 1 Gross Revenue (11% Util)</div>
+          <div class="text-lg font-bold font-mono text-blue-500">$303,500</div>
+        </div>
+        <div>
+          <div class="text-xs text-[var(--muted-foreground)]">Year 1 EBITDA Cash Flow</div>
+          <div class="text-lg font-bold font-mono text-emerald-500">$228,240</div>
+        </div>
+        <div>
+          <div class="text-xs text-[var(--muted-foreground)]">Annual Loan Debt Service</div>
+          <div class="text-lg font-bold font-mono">$89,544</div>
+        </div>
+        <div>
+          <div class="text-xs text-[var(--muted-foreground)]">Year 1 / Year 2 DSCR</div>
+          <div class="text-lg font-bold font-mono text-emerald-400">2.55x â†’ 4.48x</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ================= SLIDE 10: SUMMARY & ROADMAP ================= -->
+    <div class="slide-frame flex-col justify-between h-full gap-6" data-slide="10">
+      <div>
+        <span class="text-xs font-mono uppercase text-blue-500 font-bold">09 â€¢ EXECUTION ROADMAP</span>
+        <h2 class="text-2xl md:text-3xl font-bold mt-1">120-Day Launch Plan & Complete Engineering Binder</h2>
+        <p class="text-sm text-[var(--muted-foreground)] mt-1">Ready for fabrication, State DEP permitting, and hospital standby contracting.</p>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-4 gap-4 my-auto">
+        <div class="bg-[var(--secondary)]/40 border border-[var(--border)] rounded-xl p-4 space-y-1.5">
+          <div class="text-xs font-mono font-bold text-blue-500">DAYS 1â€“30</div>
+          <div class="text-sm font-bold">Financing & Procurement</div>
+          <p class="text-xs text-[var(--muted-foreground)]">Close equipment financing ($467.5k loan + $82.5k equity). Order 36-ft gooseneck chassis, 45 kW generator, and UF/GAC/Booster skids.</p>
+        </div>
+        <div class="bg-[var(--secondary)]/40 border border-[var(--border)] rounded-xl p-4 space-y-1.5">
+          <div class="text-xs font-mono font-bold text-emerald-500">DAYS 31â€“75</div>
+          <div class="text-sm font-bold">316L TIG Welding & Pre-Sales</div>
+          <p class="text-xs text-[var(--muted-foreground)]">Skid integration and UL-508A PLC panel wiring. Pre-sell Priority Standby Retainers to regional hospital facilities directors & restaurant groups.</p>
+        </div>
+        <div class="bg-[var(--secondary)]/40 border border-[var(--border)] rounded-xl p-4 space-y-1.5">
+          <div class="text-xs font-mono font-bold text-amber-500">DAYS 76â€“100</div>
+          <div class="text-sm font-bold">FAT Testing & DEP Approval</div>
+          <p class="text-xs text-[var(--muted-foreground)]">Hydrostatic testing, PLC interlock verification, NSF-61 disinfection certification, and SAM.gov / FEMA vendor registration.</p>
+        </div>
+        <div class="bg-[var(--secondary)]/40 border border-[var(--border)] rounded-xl p-4 space-y-1.5">
+          <div class="text-xs font-mono font-bold text-purple-500">DAYS 101â€“120</div>
+          <div class="text-sm font-bold">Hospital Drills & Launch</div>
+          <p class="text-xs text-[var(--muted-foreground)]">Conduct annual 2-hour tie-in drills at contracted hospitals, initiate recurring retainer billing, and stand ready for 24/7 dispatch.</p>
+        </div>
+      </div>
+
+      <div class="bg-emerald-500/10 border border-emerald-500/30 rounded-xl p-4 flex flex-col sm:flex-row items-center justify-between gap-4">
+        <div class="text-xs">
+          <strong class="text-emerald-400">Complete Documentation Suite Ready:</strong> Engineering Design Package â€¢ 2D SCADA Simulator â€¢ 3D Explodable CAD Digital Twin â€¢ Master P&ID & Valve Matrix â€¢ Line-Item BOM â€¢ Field Tie-In SOP â€¢ Commercial Bank Loan Plan.
+        </div>
+        <button onclick="goToSlide(1)" class="px-4 py-2 rounded-lg text-xs font-bold bg-emerald-600 text-white shrink-0 hover:bg-emerald-500 transition">
+          Restart Presentation â†º
+        </button>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- Bottom Slide Thumbnail Strip -->
+  <div class="grid grid-cols-5 md:grid-cols-10 gap-1.5" id="thumb-strip"></div>
+
+  <script>
+    let currentSlide = 1;
+    const totalSlides = 10;
+    const slideTitles = [
+      "1. Title", "2. Problem", "3. UF vs RO", "4. 6-Stage Train", "5. 36-ft Layout",
+      "6. Interlocks", "7. 30-Min SOP", "8. Cost & BOM", "9. Financials", "10. Roadmap"
+    ];
+
+    const thumbStrip = document.getElementById('thumb-strip');
+    slideTitles.forEach((t, idx) => {
+      const n = idx + 1;
+      const btn = document.createElement('button');
+      btn.id = 'thumb-' + n;
+      btn.onclick = () => goToSlide(n);
+      btn.className = 'px-2 py-1.5 rounded text-xs font-medium truncate border transition text-center';
+      btn.textContent = t;
+      thumbStrip.appendChild(btn);
+    });
+
+    function goToSlide(n) {
+      currentSlide = Math.max(1, Math.min(totalSlides, n));
+      document.querySelectorAll('.slide-frame').forEach(el => {
+        el.classList.toggle('active', parseInt(el.dataset.slide, 10) === currentSlide);
+      });
+      document.getElementById('slide-counter').textContent = `Slide ${currentSlide} / ${totalSlides}`;
+      document.getElementById('slide-progress').style.width = `${(currentSlide / totalSlides) * 100}%`;
+
+      for (let i = 1; i <= totalSlides; i++) {
+        const th = document.getElementById('thumb-' + i);
+        if (i === currentSlide) {
+          th.className = 'px-2 py-1.5 rounded text-xs font-bold truncate border border-blue-500 bg-blue-600 text-white transition text-center';
+        } else {
+          th.className = 'px-2 py-1.5 rounded text-xs font-medium truncate border border-[var(--border)] bg-[var(--card)] text-[var(--muted-foreground)] hover:text-[var(--foreground)] transition text-center';
+        }
+      }
+    }
+
+    function nextSlide() {
+      if (currentSlide < totalSlides) goToSlide(currentSlide + 1);
+    }
+
+    function prevSlide() {
+      if (currentSlide > 1) goToSlide(currentSlide - 1);
+    }
+
+    window.addEventListener('keydown', (e) => {
+      if (e.key === 'ArrowRight' || e.key === ' ') {
+        e.preventDefault();
+        nextSlide();
+      } else if (e.key === 'ArrowLeft') {
+        e.preventDefault();
+        prevSlide();
+      }
+    });
+
+    goToSlide(1);
+  </script>
+</body>
+</html>
+

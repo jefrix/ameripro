@@ -1,0 +1,1044 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>MWTP-250 3D Explodable CAD & Water Flow Visualizer</title>
+  <script src="https://www.gstatic.com/antigravity/web/dev/tailwindcss.min.js"></script>
+  <style>
+    canvas {
+      display: block;
+      width: 100%;
+      height: 100%;
+      cursor: grab;
+    }
+    canvas:active {
+      cursor: grabbing;
+    }
+    .label-pill {
+      pointer-events: auto;
+      transition: transform 0.15s ease, box-shadow 0.15s ease;
+    }
+    .label-pill:hover {
+      transform: translate(-50%, -100%) scale(1.06);
+      z-index: 40;
+    }
+  </style>
+<style>:root { --background: #0b1120; --foreground: #f1f5f9; --card: #111827; --secondary: #1e293b; --secondary-foreground: #e2e8f0; --muted-foreground: #94a3b8; --border: #1e293b; --primary: #3b82f6; --primary-foreground: #ffffff; } html.light { --background: #f8fafc; --foreground: #0f172a; --card: #ffffff; --secondary: #f1f5f9; --secondary-foreground: #1e293b; --muted-foreground: #64748b; --border: #e2e8f0; --primary: #2563eb; --primary-foreground: #ffffff; }</style>
+</head>
+<body class="bg-[var(--background)] text-[var(--foreground)] antialiased p-4 md:p-6 space-y-4 select-none">
+
+  <!-- Top Control Bar -->
+  <div class="bg-[var(--card)] border border-[var(--border)] rounded-xl p-4 shadow-sm flex flex-col xl:flex-row xl:items-center xl:justify-between gap-4">
+    <div>
+      <div class="flex items-center gap-2">
+        <span class="px-2.5 py-0.5 rounded-full text-xs font-semibold bg-blue-500/15 text-blue-500 border border-blue-500/30">3D CAD DIGITAL TWIN</span>
+        <span class="text-xs font-mono text-[var(--muted-foreground)]">36-FT GOOSENECK â€¢ 250 GPM (360,000 GPD)</span>
+      </div>
+      <h1 class="text-lg font-bold mt-1">MWTP-250 Interactive 3D Explodable View & Water Flow Diagram</h1>
+      <p class="text-xs text-[var(--muted-foreground)]">Drag to Orbit 360Â° â€¢ Scroll to Zoom â€¢ Shift+Drag to Pan â€¢ Click any 3D Skid or Label to Inspect</p>
+    </div>
+
+    <!-- Interactive Controls -->
+    <div class="flex flex-wrap items-center gap-3">
+      <!-- Explode Slider -->
+      <div class="bg-[var(--secondary)]/60 border border-[var(--border)] rounded-lg px-3.5 py-2 flex items-center gap-3">
+        <label class="text-xs font-semibold whitespace-nowrap" for="explode-slider">Explode 3D View:</label>
+        <input id="explode-slider" type="range" min="0" max="100" value="0" class="w-28 sm:w-36 accent-blue-600 cursor-pointer" oninput="onExplodeSlider(this.value)">
+        <span id="explode-pct" class="text-xs font-mono font-bold text-blue-500 w-9 text-right">0%</span>
+      </div>
+
+      <!-- Quick Explode Toggle -->
+      <button onclick="toggleExplodePreset()" id="btn-explode" class="px-3 py-2 rounded-lg text-xs font-semibold bg-blue-600 text-white shadow-sm hover:bg-blue-500 transition">
+        Explode Assembly
+      </button>
+
+      <!-- Toggle Labels -->
+      <button onclick="toggleLabels()" id="btn-labels" class="px-3 py-2 rounded-lg text-xs font-semibold bg-emerald-600 text-white shadow-sm transition">
+        Labels: ON
+      </button>
+
+      <!-- Toggle Water Flow Particles -->
+      <button onclick="toggleFlow()" id="btn-flow" class="px-3 py-2 rounded-lg text-xs font-semibold bg-cyan-600 text-white shadow-sm transition">
+        Water Flow: ON
+      </button>
+
+      <!-- Toggle Enclosure Shell -->
+      <button onclick="toggleShell()" id="btn-shell" class="px-3 py-2 rounded-lg text-xs font-semibold bg-[var(--secondary)] text-[var(--secondary-foreground)] border border-[var(--border)] transition">
+        Walls: Wireframe
+      </button>
+    </div>
+  </div>
+
+  <!-- Main 3D Viewport + Side Inspector -->
+  <div class="grid grid-cols-1 lg:grid-cols-12 gap-4">
+
+    <!-- 3D Canvas Container (8 Cols) -->
+    <div class="lg:col-span-8 bg-[var(--card)] border border-[var(--border)] rounded-xl overflow-hidden relative shadow-sm" style="height: 580px;" id="viewport-container">
+      <canvas id="cad-canvas"></canvas>
+
+      <!-- Floating HTML 3D Callout Labels Layer -->
+      <div id="labels-container" class="absolute inset-0 pointer-events-none overflow-hidden"></div>
+
+      <!-- Camera Preset Buttons Overlay (Top Left) -->
+      <div class="absolute top-3 left-3 flex flex-wrap gap-1.5 z-20">
+        <button onclick="setCameraPreset('iso')" class="px-2.5 py-1 rounded text-xs font-semibold bg-[var(--card)]/90 border border-[var(--border)] hover:border-blue-500 backdrop-blur transition">
+          Isometric 3D
+        </button>
+        <button onclick="setCameraPreset('side')" class="px-2.5 py-1 rounded text-xs font-semibold bg-[var(--card)]/90 border border-[var(--border)] hover:border-blue-500 backdrop-blur transition">
+          Side Profile
+        </button>
+        <button onclick="setCameraPreset('top')" class="px-2.5 py-1 rounded text-xs font-semibold bg-[var(--card)]/90 border border-[var(--border)] hover:border-blue-500 backdrop-blur transition">
+          Top Plan View
+        </button>
+        <button onclick="setCameraPreset('rear')" class="px-2.5 py-1 rounded text-xs font-semibold bg-[var(--card)]/90 border border-[var(--border)] hover:border-blue-500 backdrop-blur transition">
+          Rear Manifold
+        </button>
+      </div>
+
+      <!-- Flow Legend Overlay (Bottom Left) -->
+      <div class="absolute bottom-3 left-3 bg-[var(--card)]/90 border border-[var(--border)] backdrop-blur rounded-lg px-3 py-2 flex flex-wrap items-center gap-3 text-xs z-20">
+        <span class="font-semibold text-[var(--muted-foreground)]">3D Flow Stream:</span>
+        <span class="flex items-center gap-1.5"><span class="w-2.5 h-2.5 rounded-full bg-amber-500 inline-block"></span> 1. Raw Hydrant Feed</span>
+        <span class="flex items-center gap-1.5"><span class="w-2.5 h-2.5 rounded-full bg-cyan-400 inline-block"></span> 2. 0.02 um UF Filtrate</span>
+        <span class="flex items-center gap-1.5"><span class="w-2.5 h-2.5 rounded-full bg-emerald-400 inline-block"></span> 3. GAC Carbon + UV</span>
+        <span class="flex items-center gap-1.5"><span class="w-2.5 h-2.5 rounded-full bg-blue-500 inline-block"></span> 4. Cl2 Clearwell & 75 PSI Bldg Out</span>
+      </div>
+    </div>
+
+    <!-- Right 4 Cols: Process Stage Stepper & Selected Skid Inspector -->
+    <div class="lg:col-span-4 flex flex-col gap-4">
+
+      <!-- Selected 3D Component Detail Card -->
+      <div class="bg-[var(--card)] border border-[var(--border)] rounded-xl p-4 shadow-sm flex-1 flex flex-col justify-between">
+        <div>
+          <div class="flex items-center justify-between border-b border-[var(--border)] pb-2.5">
+            <div>
+              <span id="detail-tag" class="text-xs font-mono font-bold text-blue-500 uppercase">UF-201A/B â€¢ STAGE 3</span>
+              <h2 id="detail-title" class="text-base font-bold mt-0.5">Hollow-Fiber Ultrafiltration Skid</h2>
+            </div>
+            <span id="detail-badge" class="px-2 py-0.5 rounded text-xs font-mono bg-[var(--secondary)] text-[var(--secondary-foreground)]">3,850 lbs wet</span>
+          </div>
+
+          <p id="detail-desc" class="text-xs text-[var(--muted-foreground)] mt-2.5 leading-relaxed">
+            14 vertical PVDF hollow-fiber membrane modules (0.02 micron pore size) arranged in two parallel 125 GPM trains directly over the triple torsion axles. Removes 99.9999% (6-log) of bacteria, Giardia, and Cryptosporidium without RO brine waste.
+          </p>
+
+          <div id="detail-specs" class="mt-3 space-y-1.5"></div>
+        </div>
+
+        <!-- Stage Navigation Buttons -->
+        <div class="mt-4 pt-3 border-t border-[var(--border)]">
+          <div class="text-xs font-semibold text-[var(--muted-foreground)] mb-2">Click to Highlight & Focus Stage in 3D:</div>
+          <div class="grid grid-cols-2 gap-1.5" id="stage-buttons"></div>
+        </div>
+      </div>
+
+      <!-- Water Flow Process Stepper Summary -->
+      <div class="bg-[var(--card)] border border-[var(--border)] rounded-xl p-4 shadow-sm space-y-2">
+        <div class="flex items-center justify-between">
+          <span class="text-xs font-bold uppercase tracking-wider text-[var(--muted-foreground)]">Filter Flow Path Mode</span>
+          <span class="text-xs font-mono text-emerald-500" id="flow-speed-label">250 GPM Active</span>
+        </div>
+        <div class="grid grid-cols-3 gap-1.5">
+          <button onclick="setFlowHighlight('all')" id="fl-all" class="px-2 py-1.5 rounded text-xs font-semibold bg-blue-600 text-white transition">All Streams</button>
+          <button onclick="setFlowHighlight('raw')" id="fl-raw" class="px-2 py-1.5 rounded text-xs font-semibold bg-[var(--secondary)] text-[var(--secondary-foreground)] border border-[var(--border)] transition">Raw & UF</button>
+          <button onclick="setFlowHighlight('potable')" id="fl-potable" class="px-2 py-1.5 rounded text-xs font-semibold bg-[var(--secondary)] text-[var(--secondary-foreground)] border border-[var(--border)] transition">GAC, UV & Out</button>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <script>
+    // ============================================================================
+    // 3D ENGINE & PROCEDURAL CAD BUILDER FOR MWTP-250 (Self-Contained WebGL/Canvas3D)
+    // Provides hardware-accelerated 3D projection, z-buffered solid/shaded faces,
+    // cylindrical vessels, UF membrane arrays, exploded view kinematics, and 3D flow particles
+    // ============================================================================
+
+    const canvas = document.getElementById('cad-canvas');
+    const ctx = canvas.getContext('2d');
+    const labelsContainer = document.getElementById('labels-container');
+
+    // Camera State (Spherical Orbit + Target Pan)
+    let cam = {
+      yaw: -0.68,
+      pitch: 0.46,
+      dist: 44,
+      target: { x: 1.5, y: 2.0, z: 0 },
+      targetGoal: { yaw: -0.68, pitch: 0.46, dist: 44, tx: 1.5, ty: 2.0, tz: 0 }
+    };
+
+    let explodeFactor = 0;       // 0.0 to 1.0
+    let explodeGoal = 0;
+    let showLabels = true;
+    let showFlow = true;
+    let showShellWireframe = true;
+    let flowFilter = 'all';
+    let selectedSkidId = 'uf';
+
+    // Subsystem Metadata & 3D Explode Vectors (dx, dy, dz in feet)
+    const skids = {
+      chassis: {
+        id: 'chassis',
+        num: '0',
+        short: '36-ft Gooseneck Chassis',
+        tag: 'CHASSIS-GN36 â€¢ MOBILITY PLATFORM',
+        title: '36-ft Triple-Axle Gooseneck Trailer & Jacks',
+        weight: '9,200 lbs tare',
+        color: '#64748b',
+        anchor: { x: 0, y: 0.5, z: 0 },
+        explodeVec: { x: 0, y: -5.5, z: 0 },
+        desc: '28-ft lower main deck + 8-ft elevated forward gooseneck deck. Rated at 30,000 lbs GVWR with triple 10,000-lb torsion axles and 4-point hydraulic outrigger jacks supporting 30,870 lbs wet weight.',
+        specs: [
+          ['Dimensions', '36 ft Length Ã— 8.0 ft Width'],
+          ['Axle Rating', '3 Ã— 10,000 lb Torsion Axles'],
+          ['Leveling Jacks', '4-Pt Hydraulic Outriggers (40k lb)'],
+          ['Tow Vehicle', 'Class 4/5 Pickup (2-5/16" Ball)']
+        ]
+      },
+      gen: {
+        id: 'gen',
+        num: 'UTIL',
+        short: '45 kW Diesel Gen + Air',
+        tag: 'GEN-801 â€¢ GOOSENECK DECK',
+        title: '45 kW Tier-4 Diesel Generator & Compressor',
+        weight: '2,850 lbs',
+        color: '#f59e0b',
+        anchor: { x: -14.2, y: 5.5, z: -1.1 },
+        explodeVec: { x: -7.5, y: 5.0, z: -4.5 },
+        desc: 'Sound-attenuated 45 kW prime / 50 kW standby diesel generator with a 100-gallon belly fuel tank (54 hours continuous autonomy at 250 GPM) plus 2 HP oil-free air compressor for pneumatic valves.',
+        specs: [
+          ['Power Output', '45 kW Prime (208V/480V 3-Ph)'],
+          ['Avg Trailer Load', '21.7 kW at 250 GPM'],
+          ['Fuel Autonomy', '54 Hours (100-Gal Tank)'],
+          ['Instrument Air', '2 HP Oil-Free Scroll (80 PSI)']
+        ]
+      },
+      plc: {
+        id: 'plc',
+        num: 'SCADA',
+        short: 'PLC SCADA & Wet Lab',
+        tag: 'CP-701 â€¢ CONTROL & QA',
+        title: 'Rockwell PLC Cabinet, Analyzers & Wet Lab',
+        weight: '950 lbs',
+        color: '#a855f7',
+        anchor: { x: -11.2, y: 5.2, z: 2.3 },
+        explodeVec: { x: -5.5, y: 6.0, z: 6.5 },
+        desc: 'CompactLogix PLC with 15" HMI automating filtration, air-scour backwash, and transport auto-drain. Houses Hach laser nephelometers and free chlorine analyzers with automatic off-spec divert.',
+        specs: [
+          ['Controller', 'Allen-Bradley CompactLogix + 15" HMI'],
+          ['Turbidity Lockout', 'Hach TU5300sc (Diverts > 0.15 NTU)'],
+          ['Chlorine Analyzer', 'Hach CLF10sc PID Dosing Loop'],
+          ['Stowed Storage', '3,000-Gal Collapsible Bladder Tank']
+        ]
+      },
+      intake: {
+        id: 'intake',
+        num: '1',
+        short: '1. Intake Pump & Strainers',
+        tag: 'P-101 / STR-101 / BF-101 â€¢ STAGE 1 & 2',
+        title: 'Raw Booster Pump, 200um Auto-Strainer & Bag Filters',
+        weight: '1,550 lbs wet',
+        color: '#d97706',
+        anchor: { x: -5.5, y: 3.0, z: 2.3 },
+        explodeVec: { x: -2.5, y: 1.5, z: 8.5 },
+        desc: 'Vacuum-assisted 7.5 HP VFD booster pump draws 260 GPM from depressurized fire hydrants (with -2 PSI suction cutout protection), followed by a 200-micron auto-flushing strainer and duplex 25-micron bag housings.',
+        specs: [
+          ['Intake Pump P-101', '260 GPM @ 130 ft TDH (7.5 HP VFD)'],
+          ['Auto Strainer', '200 um 316SS Wedge-Wire Screen'],
+          ['Pre-Filtration', 'Duplex 4-Bag 304SS (25 um Felt)'],
+          ['Coagulant Mixer', '3" 316SS Inline Static Mixer']
+        ]
+      },
+      uf: {
+        id: 'uf',
+        num: '2',
+        short: '2. 0.02um UF Membrane Skid',
+        tag: 'UF-201A/B â€¢ STAGE 3 (CORE BARRIER)',
+        title: 'Hollow-Fiber Ultrafiltration Skid (14 Modules)',
+        weight: '3,850 lbs wet',
+        color: '#06b6d4',
+        anchor: { x: 2.2, y: 4.2, z: -2.2 },
+        explodeVec: { x: 0, y: 6.5, z: -8.5 },
+        desc: '14 vertical PVDF hollow-fiber membrane modules (0.02 micron pore size) arranged in two parallel 125 GPM trains directly over the triple torsion axles. Removes 99.9999% (6-log) of bacteria, Giardia, and Cryptosporidium.',
+        specs: [
+          ['Pore Size & Flux', '0.02 Micron PVDF (10,850 sq.ft.)'],
+          ['Configuration', '2 Ã— 125 GPM Parallel Trains (14 Mod)'],
+          ['Filtrate Turbidity', '< 0.05 NTU Guaranteed'],
+          ['Auto Backwash', '45-sec Air Scour + Reverse Flush']
+        ]
+      },
+      gac: {
+        id: 'gac',
+        num: '3',
+        short: '3. Duplex 36" GAC Carbon',
+        tag: 'GAC-301A/B â€¢ STAGE 4',
+        title: 'Duplex Granular Activated Carbon (GAC) Vessels',
+        weight: '4,900 lbs wet',
+        color: '#10b981',
+        anchor: { x: -5.5, y: 4.5, z: -2.2 },
+        explodeVec: { x: -3.5, y: 4.5, z: -8.0 },
+        desc: 'Two 36-inch diameter Ã— 72-inch tall ASME FRP pressure vessels holding 50 cubic feet of acid-washed coconut shell activated carbon. Strips VOCs, petrochemicals, pesticides, PFAS, and taste/odor.',
+        specs: [
+          ['Vessel Dimensions', '2 Ã— 36" Dia Ã— 72" Tall FRP (150 PSI)'],
+          ['Carbon Volume', '50 cu.ft. Coconut Shell GAC'],
+          ['Flow Arrangement', 'Parallel Radial Flow (2 Ã— 125 GPM)'],
+          ['Transport Drain', 'XV-302 Pneumatic Underdrain Dump']
+        ]
+      },
+      chem: {
+        id: 'chem',
+        num: '4',
+        short: '4. Dual UV & Chem Dosing',
+        tag: 'UV-401 / CHEM-501 â€¢ STAGE 5',
+        title: 'Validated Amalgam UV Reactors & Chemical Skid',
+        weight: '1,750 lbs wet',
+        color: '#ec4899',
+        anchor: { x: 2.5, y: 2.8, z: 2.3 },
+        explodeVec: { x: 1.5, y: 1.0, z: 9.0 },
+        desc: 'Two 130 GPM 316L stainless steel UV reactors deliver >= 40 mJ/cm2 dose for instant pathogen inactivation, paired with double-walled day tanks for 12.5% Sodium Hypochlorite, PACl Coagulant, and Bisulfite.',
+        specs: [
+          ['UV Reactors', '2 Ã— 130 GPM Amalgam (>= 40 mJ/cm2)'],
+          ['Chlorine Dosing', '55-Gal 12.5% NaOCl (Target 2.0 mg/L)'],
+          ['Coagulant Tank', '35-Gal PACl (Auto ON > 5 NTU)'],
+          ['UF Backwash Pump', 'P-202 (180 GPM @ 40 PSI, 5 HP)']
+        ]
+      },
+      clearwell: {
+        id: 'clearwell',
+        num: '5',
+        short: '5. 500-Gal Baffled Clearwell',
+        tag: 'TK-601 â€¢ STAGE 5 SURGE & CT',
+        title: '500-Gallon Baffled Clearwell Tank',
+        weight: '4,620 lbs wet',
+        color: '#3b82f6',
+        anchor: { x: 11.2, y: 3.8, z: -2.1 },
+        explodeVec: { x: 6.5, y: 5.5, z: -7.5 },
+        desc: 'Rectangular cross-linked polyethylene (XLPE) tank inside a structural steel seismic cage with internal serpentine baffles. Provides chlorine contact mixing and hydraulic surge buffer for building booster pumps.',
+        specs: [
+          ['Tank Capacity', '500 Gal Nominal (Serpentine Baffled)'],
+          ['Highway Auto-Drain', '3" Pneumatic Valve XV-601 (2.5 min)'],
+          ['Level Control', 'Ultrasonic LIT-601 Paces Intake VFD'],
+          ['External Loop', 'Port for 3,000-Gal Ground Bladder']
+        ]
+      },
+      booster: {
+        id: 'booster',
+        num: '6',
+        short: '6. Triplex VFD Bldg Booster',
+        tag: 'P-601A/B/C & RPZ-602 â€¢ STAGE 6',
+        title: 'Triplex VFD Building Booster & RPZ Backflow Skid',
+        weight: '1,200 lbs wet',
+        color: '#2563eb',
+        anchor: { x: 11.2, y: 3.2, z: 2.2 },
+        explodeVec: { x: 7.0, y: 1.5, z: 8.5 },
+        desc: 'Three 7.5 HP vertical multistage stainless centrifugal pumps with individual VFDs pressurize hospital or restaurant plumbing at a constant 65â€“85 PSI through a certified 3-inch ASSE 1013 RPZ backflow preventer.',
+        specs: [
+          ['Pump Array', '3 Ã— 125 GPM Multistage 316SS (VFD)'],
+          ['Discharge Pressure', '65 to 85 PSI Constant Setpoint'],
+          ['Backflow Preventer', '3" Lead-Free ASSE 1013 RPZ'],
+          ['Rear Bulkhead', '4" In / 3" Bldg Out / 12-Tap Bar']
+        ]
+      }
+    };
+
+    // Build Stage Selector Buttons & HTML Labels
+    const stageBtnContainer = document.getElementById('stage-buttons');
+    const labelElements = {};
+
+    Object.values(skids).forEach(s => {
+      // Button in right inspector
+      const btn = document.createElement('button');
+      btn.id = 'stbtn-' + s.id;
+      btn.className = 'px-2.5 py-1.5 rounded text-xs font-medium text-left truncate border transition flex items-center gap-1.5';
+      btn.innerHTML = `<span class="w-2 h-2 rounded-full shrink-0" style="background:${s.color}"></span><span class="truncate">${s.short}</span>`;
+      btn.onclick = () => selectSkid3D(s.id, true);
+      stageBtnContainer.appendChild(btn);
+
+      // Floating 3D Callout Pill
+      const pill = document.createElement('div');
+      pill.className = 'label-pill absolute -translate-x-1/2 -translate-y-full px-2.5 py-1 rounded-md text-xs font-semibold shadow-md border cursor-pointer whitespace-nowrap flex items-center gap-1.5';
+      pill.style.backgroundColor = 'rgba(15, 23, 42, 0.88)';
+      pill.style.color = '#f8fafc';
+      pill.style.borderColor = s.color;
+      pill.innerHTML = `<span class="w-2 h-2 rounded-full" style="background:${s.color}"></span><span>${s.short}</span>`;
+      pill.onclick = (e) => {
+        e.stopPropagation();
+        selectSkid3D(s.id, true);
+      };
+      labelsContainer.appendChild(pill);
+      labelElements[s.id] = pill;
+    });
+
+    function selectSkid3D(id, focusCam = false) {
+      selectedSkidId = id;
+      const s = skids[id];
+      document.getElementById('detail-tag').textContent = s.tag;
+      document.getElementById('detail-title').textContent = s.title;
+      document.getElementById('detail-badge').textContent = s.weight;
+      document.getElementById('detail-desc').textContent = s.desc;
+
+      document.getElementById('detail-specs').innerHTML = s.specs.map(([k, v]) => `
+        <div class="flex justify-between items-center text-xs py-1 px-2 rounded bg-[var(--secondary)]/60 border border-[var(--border)]">
+          <span class="text-[var(--muted-foreground)]">${k}</span>
+          <span class="font-mono font-semibold">${v}</span>
+        </div>
+      `).join('');
+
+      Object.keys(skids).forEach(k => {
+        const b = document.getElementById('stbtn-' + k);
+        if (k === id) {
+          b.className = 'px-2.5 py-1.5 rounded text-xs font-semibold text-left truncate border border-blue-500 bg-blue-500/15 text-blue-400 transition flex items-center gap-1.5';
+        } else {
+          b.className = 'px-2.5 py-1.5 rounded text-xs font-medium text-left truncate border border-[var(--border)] bg-[var(--secondary)]/40 hover:bg-[var(--secondary)] transition flex items-center gap-1.5';
+        }
+      });
+
+      if (focusCam && id !== 'chassis') {
+        const ex = explodeGoal;
+        cam.targetGoal.tx = s.anchor.x + s.explodeVec.x * ex * 0.5;
+        cam.targetGoal.ty = s.anchor.y + s.explodeVec.y * ex * 0.5;
+        cam.targetGoal.tz = s.anchor.z + s.explodeVec.z * ex * 0.5;
+      }
+    }
+
+    // ============================================================================
+    // 3D GEOMETRY PRIMITIVES (Boxes, Cylinders, Pipes & Flow Paths)
+    // Coordinates in Feet: X = Trailer Length (-18 front to +18 rear),
+    // Y = Height (0 deck to 9 roof), Z = Width (-4 streetside to +4 curbside)
+    // ============================================================================
+
+    function getSkidOffset(skidId) {
+      const s = skids[skidId];
+      if (!s) return { x: 0, y: 0, z: 0 };
+      return {
+        x: s.explodeVec.x * explodeFactor,
+        y: s.explodeVec.y * explodeFactor,
+        z: s.explodeVec.z * explodeFactor
+      };
+    }
+
+    // 3D Math Helpers
+    function project3D(pt, width, height) {
+      // Translate by camera target
+      const dx = pt.x - cam.target.x;
+      const dy = pt.y - cam.target.y;
+      const dz = pt.z - cam.target.z;
+
+      // Rotate Yaw around Y axis
+      const cosY = Math.cos(cam.yaw);
+      const sinY = Math.sin(cam.yaw);
+      const x1 = dx * cosY - dz * sinY;
+      const z1 = dx * sinY + dz * cosY;
+
+      // Rotate Pitch around X axis
+      const cosP = Math.cos(cam.pitch);
+      const sinP = Math.sin(cam.pitch);
+      const y2 = dy * cosP - z1 * sinP;
+      const z2 = dy * sinP + z1 * cosP + cam.dist;
+
+      if (z2 < 1.0) return null;
+      const fov = Math.min(width, height) * 0.92;
+      const scale = fov / z2;
+      return {
+        sx: width * 0.5 + x1 * scale,
+        sy: height * 0.54 - y2 * scale,
+        depth: z2,
+        scale: scale
+      };
+    }
+
+    // Add 3D Box Faces to Render Queue
+    function addBox(faces, skidId, cx, cy, cz, wx, wy, wz, hexColor, alpha = 1.0, borderOnly = false) {
+      const off = getSkidOffset(skidId);
+      const x0 = cx - wx / 2 + off.x, x1 = cx + wx / 2 + off.x;
+      const y0 = cy - wy / 2 + off.y, y1 = cy + wy / 2 + off.y;
+      const z0 = cz - wz / 2 + off.z, z1 = cz + wz / 2 + off.z;
+
+      const v = [
+        { x: x0, y: y0, z: z0 }, { x: x1, y: y0, z: z0 },
+        { x: x1, y: y1, z: z0 }, { x: x0, y: y1, z: z0 },
+        { x: x0, y: y0, z: z1 }, { x: x1, y: y0, z: z1 },
+        { x: x1, y: y1, z: z1 }, { x: x0, y: y1, z: z1 }
+      ];
+
+      const boxFaces = [
+        { idx: [3, 2, 6, 7], shade: 1.12 }, // Top (+Y)
+        { idx: [0, 1, 5, 4], shade: 0.65 }, // Bottom (-Y)
+        { idx: [4, 5, 6, 7], shade: 0.98 }, // Curbside Front (+Z)
+        { idx: [1, 0, 3, 2], shade: 0.80 }, // Streetside Back (-Z)
+        { idx: [5, 1, 2, 6], shade: 0.90 }, // Rear (+X)
+        { idx: [0, 4, 7, 3], shade: 0.85 }  // Front (-X)
+      ];
+
+      boxFaces.forEach(f => {
+        faces.push({
+          skidId,
+          pts: f.idx.map(i => v[i]),
+          color: shadeHex(hexColor, f.shade),
+          baseHex: hexColor,
+          alpha,
+          borderOnly
+        });
+      });
+    }
+
+    // Add Vertical 3D Cylinder (for GAC Vessels, UF Modules, Chemical Tanks)
+    function addCylinderY(faces, skidId, cx, yBottom, yTop, radius, segments, hexColor) {
+      const off = getSkidOffset(skidId);
+      const xC = cx.x + off.x;
+      const zC = cx.z + off.z;
+      const y0 = yBottom + off.y;
+      const y1 = yTop + off.y;
+
+      const topPts = [];
+      for (let i = 0; i < segments; i++) {
+        const a0 = (i / segments) * Math.PI * 2;
+        const a1 = ((i + 1) / segments) * Math.PI * 2;
+        const p00 = { x: xC + Math.cos(a0) * radius, y: y0, z: zC + Math.sin(a0) * radius };
+        const p10 = { x: xC + Math.cos(a1) * radius, y: y0, z: zC + Math.sin(a1) * radius };
+        const p11 = { x: xC + Math.cos(a1) * radius, y: y1, z: zC + Math.sin(a1) * radius };
+        const p01 = { x: xC + Math.cos(a0) * radius, y: y1, z: zC + Math.sin(a0) * radius };
+
+        const light = 0.78 + 0.25 * Math.sin(a0 + 0.8);
+        faces.push({
+          skidId,
+          pts: [p00, p10, p11, p01],
+          color: shadeHex(hexColor, light),
+          baseHex: hexColor,
+          alpha: 1.0
+        });
+        topPts.push(p01);
+      }
+      faces.push({
+        skidId,
+        pts: topPts,
+        color: shadeHex(hexColor, 1.15),
+        baseHex: hexColor,
+        alpha: 1.0
+      });
+    }
+
+    function shadeHex(hex, factor) {
+      const num = parseInt(hex.replace('#', ''), 16);
+      let r = Math.min(255, Math.max(0, Math.round(((num >> 16) & 255) * factor)));
+      let g = Math.min(255, Math.max(0, Math.round(((num >> 8) & 255) * factor)));
+      let b = Math.min(255, Math.max(0, Math.round((num & 255) * factor)));
+      return `rgb(${r},${g},${b})`;
+    }
+
+    // Define 3D Water Flow Pipe Segments (Connects dynamically between skids even when exploded!)
+    const flowRoutes = [
+      // 1. Raw Water Feed (Amber): Rear Bulkhead -> Intake Skid -> UF Skid
+      {
+        stream: 'raw',
+        color: '#f59e0b',
+        nodes: [
+          { skid: 'chassis', pt: { x: 17.8, y: 1.5, z: 3.1 } },
+          { skid: 'intake',  pt: { x: -3.2, y: 1.5, z: 2.8 } },
+          { skid: 'intake',  pt: { x: -6.8, y: 2.5, z: 2.2 } },
+          { skid: 'uf',      pt: { x: -1.5, y: 4.5, z: -1.2 } },
+          { skid: 'uf',      pt: { x: 4.5,  y: 4.5, z: -1.2 } }
+        ]
+      },
+      // 2. UF Permeate (Cyan): UF Skid -> Duplex GAC Vessels
+      {
+        stream: 'raw',
+        color: '#06b6d4',
+        nodes: [
+          { skid: 'uf',  pt: { x: 1.5,  y: 5.2, z: -2.2 } },
+          { skid: 'uf',  pt: { x: -2.0, y: 5.2, z: -2.2 } },
+          { skid: 'gac', pt: { x: -4.2, y: 5.6, z: -2.2 } },
+          { skid: 'gac', pt: { x: -6.8, y: 5.6, z: -2.2 } }
+        ]
+      },
+      // 3. GAC Polished Water (Emerald): GAC Vessels -> UV & NaOCl Dosing -> Clearwell
+      {
+        stream: 'potable',
+        color: '#10b981',
+        nodes: [
+          { skid: 'gac',       pt: { x: -5.5, y: 1.6, z: -1.5 } },
+          { skid: 'chem',      pt: { x: 0.2,  y: 1.8, z: 1.6 } },
+          { skid: 'chem',      pt: { x: 4.8,  y: 2.2, z: 1.6 } },
+          { skid: 'clearwell', pt: { x: 8.5,  y: 4.6, z: -1.8 } }
+        ]
+      },
+      // 4. Finished Chlorinated Potable Water (Blue): Clearwell -> Triplex VFD Booster -> Rear Hospital Outlet
+      {
+        stream: 'potable',
+        color: '#3b82f6',
+        nodes: [
+          { skid: 'clearwell', pt: { x: 10.5, y: 3.2, z: -2.2 } },
+          { skid: 'clearwell', pt: { x: 13.5, y: 1.5, z: -1.6 } },
+          { skid: 'booster',   pt: { x: 9.8,  y: 1.8, z: 2.0 } },
+          { skid: 'booster',   pt: { x: 14.5, y: 2.6, z: 2.4 } },
+          { skid: 'chassis',   pt: { x: 18.2, y: 2.6, z: 2.4 } }
+        ]
+      }
+    ];
+
+    // Resize Handler
+    function resizeCanvas() {
+      const rect = canvas.parentElement.getBoundingClientRect();
+      const dpr = window.devicePixelRatio || 1;
+      canvas.width = rect.width * dpr;
+      canvas.height = rect.height * dpr;
+      ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+    }
+    window.addEventListener('resize', resizeCanvas);
+    resizeCanvas();
+
+    // Mouse / Touch Interaction for Orbit, Pan, Zoom & Ray-Picking
+    let isDragging = false;
+    let dragMode = 'orbit';
+    let lastMouse = { x: 0, y: 0 };
+    let downMouse = { x: 0, y: 0 };
+    let lastProjectedSkidCenters = {};
+
+    canvas.addEventListener('mousedown', (e) => {
+      isDragging = true;
+      dragMode = e.shiftKey || e.button === 2 ? 'pan' : 'orbit';
+      lastMouse = { x: e.clientX, y: e.clientY };
+      downMouse = { x: e.clientX, y: e.clientY };
+    });
+
+    window.addEventListener('mousemove', (e) => {
+      if (!isDragging) return;
+      const dx = e.clientX - lastMouse.x;
+      const dy = e.clientY - lastMouse.y;
+      lastMouse = { x: e.clientX, y: e.clientY };
+
+      if (dragMode === 'orbit') {
+        cam.targetGoal.yaw += dx * 0.0075;
+        cam.targetGoal.pitch = Math.max(-0.15, Math.min(1.45, cam.targetGoal.pitch - dy * 0.0075));
+      } else {
+        const panSpeed = cam.dist * 0.0015;
+        cam.targetGoal.tx += dx * Math.cos(cam.yaw) * panSpeed;
+        cam.targetGoal.tz -= dx * Math.sin(cam.yaw) * panSpeed;
+        cam.targetGoal.ty -= dy * panSpeed;
+      }
+    });
+
+    window.addEventListener('mouseup', (e) => {
+      if (!isDragging) return;
+      isDragging = false;
+      const moveDist = Math.hypot(e.clientX - downMouse.x, e.clientY - downMouse.y);
+      if (moveDist < 5) {
+        handleCanvasClick(e);
+      }
+    });
+
+    canvas.addEventListener('contextmenu', e => e.preventDefault());
+
+    canvas.addEventListener('wheel', (e) => {
+      e.preventDefault();
+      cam.targetGoal.dist = Math.max(18, Math.min(85, cam.targetGoal.dist - e.deltaY * 0.025));
+    }, { passive: false });
+
+    function handleCanvasClick(e) {
+      const rect = canvas.getBoundingClientRect();
+      const mx = e.clientX - rect.left;
+      const my = e.clientY - rect.top;
+
+      let bestId = null;
+      let bestDist = 48; // pixel hit radius
+      Object.entries(lastProjectedSkidCenters).forEach(([id, pt]) => {
+        if (!pt) return;
+        const d = Math.hypot(mx - pt.sx, my - pt.sy);
+        if (d < bestDist) {
+          bestDist = d;
+          bestId = id;
+        }
+      });
+      if (bestId) {
+        selectSkid3D(bestId, false);
+      }
+    }
+
+    // Build Complete 3D Scene Geometry Each Frame
+    function buildSceneFaces() {
+      const faces = [];
+
+      // 1. CHASSIS & GOOSENECK DECK
+      // Main 28-ft Lower Deck (-10 to +18 ft)
+      addBox(faces, 'chassis', 4.0, 0.4, 0, 28.0, 0.5, 8.0, '#334155');
+      // Gooseneck 8-ft Upper Deck (-18 to -10 ft)
+      addBox(faces, 'chassis', -14.0, 2.8, 0, 8.0, 0.45, 8.0, '#334155');
+      // Gooseneck Vertical Risers & Hitch Neck
+      addBox(faces, 'chassis', -10.2, 1.6, 0, 0.5, 2.4, 8.0, '#475569');
+      addBox(faces, 'chassis', -18.8, 2.2, 0, 2.0, 0.8, 2.2, '#475569');
+      // Triple Axles & 6 Tires (X = 2.0, 4.2, 6.4)
+      [1.8, 4.2, 6.6].forEach(ax => {
+        addBox(faces, 'chassis', ax, -0.4, -4.1, 1.7, 1.7, 0.6, '#1e293b');
+        addBox(faces, 'chassis', ax, -0.4, 4.1, 1.7, 1.7, 0.6, '#1e293b');
+      });
+      // 4-Point Hydraulic Outrigger Jacks
+      [[-9.5, -4.1], [-9.5, 4.1], [17.2, -4.1], [17.2, 4.1]].forEach(([jx, jz]) => {
+        addBox(faces, 'chassis', jx, -0.3, jz, 0.6, 1.6, 0.5, '#f59e0b');
+      });
+      // Rear Camlock Manifold Panel
+      addBox(faces, 'chassis', 17.85, 2.5, 0, 0.3, 3.6, 7.6, '#475569', 0.55);
+
+      // 2. GENERATOR & AIR COMPRESSOR (Gooseneck Front)
+      addBox(faces, 'gen', -14.8, 4.6, -1.2, 4.8, 3.2, 4.6, '#f59e0b');
+      addBox(faces, 'gen', -14.8, 3.3, -1.2, 5.0, 0.6, 4.8, '#b45309'); // 100-Gal Belly Fuel Tank
+      addBox(faces, 'gen', -14.8, 4.1, 2.4, 2.6, 2.2, 1.8, '#fbbf24');  // Air Compressor
+
+      // 3. PLC SCADA CABINET & WET LAB (Gooseneck Rear)
+      addBox(faces, 'plc', -11.2, 4.8, -2.5, 2.0, 3.5, 2.4, '#9333ea'); // PLC Cabinet
+      addBox(faces, 'plc', -11.2, 4.1, 2.4, 2.2, 2.2, 2.6, '#a855f7');  // Wet Lab & Stowed Pillow Tank
+
+      // 4. STAGE 1 & 2: INTAKE PUMP, AUTO-STRAINER & DUPLEX BAG FILTERS (Front Curbside)
+      addBox(faces, 'intake', -5.5, 0.85, 2.3, 5.2, 0.35, 2.8, '#78350f'); // Skid Base
+      addBox(faces, 'intake', -3.8, 1.7, 2.4, 1.6, 1.3, 1.2, '#d97706');   // P-101 Raw Booster
+      addCylinderY(faces, 'intake', { x: -5.4, z: 2.3 }, 1.0, 3.6, 0.65, 8, '#f59e0b'); // Auto Strainer STR-101
+      addCylinderY(faces, 'intake', { x: -6.9, z: 1.8 }, 1.0, 3.4, 0.5, 8, '#fbbf24');  // Bag Filter A
+      addCylinderY(faces, 'intake', { x: -6.9, z: 3.0 }, 1.0, 3.4, 0.5, 8, '#fbbf24');  // Bag Filter B
+
+      // 5. STAGE 3: HOLLOW-FIBER ULTRAFILTRATION SKID (14 PVDF Modules Over Axles)
+      addBox(faces, 'uf', 2.0, 0.85, -2.2, 8.2, 0.35, 2.9, '#164e63'); // UF Skid Base
+      addBox(faces, 'uf', 2.0, 5.1, -2.2, 7.8, 0.3, 2.2, '#0891b2');   // Top Permeate Header
+      for (let i = 0; i < 7; i++) {
+        const mx = -1.3 + i * 1.1;
+        // Train A (Back row) & Train B (Front row)
+        addCylinderY(faces, 'uf', { x: mx, z: -2.8 }, 1.1, 4.9, 0.38, 8, '#06b6d4');
+        addCylinderY(faces, 'uf', { x: mx, z: -1.6 }, 1.1, 4.9, 0.38, 8, '#22d3ee');
+      }
+
+      // 6. STAGE 4: DUPLEX 36" GAC CARBON VESSELS (Streetside Forward)
+      addBox(faces, 'gac', -5.5, 0.85, -2.2, 5.2, 0.35, 2.8, '#064e3b');
+      addCylinderY(faces, 'gac', { x: -4.2, z: -2.2 }, 1.0, 5.6, 1.05, 10, '#10b981');
+      addCylinderY(faces, 'gac', { x: -6.8, z: -2.2 }, 1.0, 5.6, 1.05, 10, '#059669');
+
+      // 7. STAGE 5: UV REACTORS, CHEMICAL DAY TANKS & BW PUMP (Curbside Center)
+      addBox(faces, 'chem', 2.2, 0.85, 2.3, 7.6, 0.35, 2.8, '#831843');
+      // 2x Horizontal/Vertical UV Reactors + BW Pump
+      addBox(faces, 'chem', -0.2, 1.8, 1.8, 2.6, 0.65, 0.65, '#f472b6');
+      addBox(faces, 'chem', -0.2, 2.7, 1.8, 2.6, 0.65, 0.65, '#f472b6');
+      // 3x Chemical Day Tanks (NaOCl, PACl, Bisulfite)
+      addCylinderY(faces, 'chem', { x: 2.3, z: 2.4 }, 1.0, 3.5, 0.72, 8, '#ec4899');
+      addCylinderY(faces, 'chem', { x: 4.0, z: 2.4 }, 1.0, 3.2, 0.62, 8, '#db2777');
+      addCylinderY(faces, 'chem', { x: 5.4, z: 2.4 }, 1.0, 3.0, 0.55, 8, '#be185d');
+
+      // 8. STAGE 5 BUFFER: 500-GAL BAFFLED CLEARWELL TANK (Rear Streetside)
+      addBox(faces, 'clearwell', 11.2, 2.9, -2.1, 6.2, 4.2, 2.8, '#3b82f6');
+
+      // 9. STAGE 6: TRIPLEX VFD BOOSTER PUMPS & RPZ BACKFLOW (Rear Curbside)
+      addBox(faces, 'booster', 11.2, 0.85, 2.3, 6.2, 0.35, 2.8, '#1e3a8a');
+      // 3x Vertical Multistage VFD Pumps
+      [9.2, 10.6, 12.0].forEach(px => {
+        addCylinderY(faces, 'booster', { x: px, z: 2.1 }, 1.0, 3.8, 0.42, 8, '#2563eb');
+      });
+      // 85-Gal Pressure Bladder Tank + ASSE 1013 RPZ Assembly
+      addCylinderY(faces, 'booster', { x: 13.5, z: 2.6 }, 1.0, 4.2, 0.65, 8, '#60a5fa');
+      addBox(faces, 'booster', 11.8, 2.2, 3.2, 2.8, 0.7, 0.5, '#93c5fd');
+
+      return faces;
+    }
+
+    // Animation Loop
+    let animTime = 0;
+    function renderLoop() {
+      animTime += 0.018;
+
+      // Smooth interpolation for camera and explode factor
+      cam.yaw += (cam.targetGoal.yaw - cam.yaw) * 0.14;
+      cam.pitch += (cam.targetGoal.pitch - cam.pitch) * 0.14;
+      cam.dist += (cam.targetGoal.dist - cam.dist) * 0.14;
+      cam.target.x += (cam.targetGoal.tx - cam.target.x) * 0.14;
+      cam.target.y += (cam.targetGoal.ty - cam.target.y) * 0.14;
+      cam.target.z += (cam.targetGoal.tz - cam.target.z) * 0.14;
+      explodeFactor += (explodeGoal - explodeFactor) * 0.12;
+
+      const width = canvas.clientWidth;
+      const height = canvas.clientHeight;
+      ctx.clearRect(0, 0, width, height);
+
+      // Draw Subtle 3D Ground Grid
+      ctx.strokeStyle = 'rgba(148, 163, 184, 0.14)';
+      ctx.lineWidth = 1;
+      const gridY = -1.2 - explodeFactor * 5.5;
+      for (let gx = -24; gx <= 24; gx += 4) {
+        const p1 = project3D({ x: gx, y: gridY, z: -12 }, width, height);
+        const p2 = project3D({ x: gx, y: gridY, z: 12 }, width, height);
+        if (p1 && p2) {
+          ctx.beginPath(); ctx.moveTo(p1.sx, p1.sy); ctx.lineTo(p2.sx, p2.sy); ctx.stroke();
+        }
+      }
+      for (let gz = -12; gz <= 12; gz += 4) {
+        const p1 = project3D({ x: -24, y: gridY, z: gz }, width, height);
+        const p2 = project3D({ x: 24, y: gridY, z: gz }, width, height);
+        if (p1 && p2) {
+          ctx.beginPath(); ctx.moveTo(p1.sx, p1.sy); ctx.lineTo(p2.sx, p2.sy); ctx.stroke();
+        }
+      }
+
+      // Draw Explode Guide Leader Lines when exploded
+      if (explodeFactor > 0.02) {
+        ctx.save();
+        ctx.setLineDash([4, 4]);
+        ctx.lineWidth = 1.2;
+        Object.values(skids).forEach(s => {
+          if (s.id === 'chassis') return;
+          const basePt = project3D(s.anchor, width, height);
+          const expPt = project3D({
+            x: s.anchor.x + s.explodeVec.x * explodeFactor,
+            y: s.anchor.y + s.explodeVec.y * explodeFactor,
+            z: s.anchor.z + s.explodeVec.z * explodeFactor
+          }, width, height);
+          if (basePt && expPt) {
+            ctx.strokeStyle = s.color;
+            ctx.globalAlpha = 0.55;
+            ctx.beginPath();
+            ctx.moveTo(basePt.sx, basePt.sy);
+            ctx.lineTo(expPt.sx, expPt.sy);
+            ctx.stroke();
+          }
+        });
+        ctx.restore();
+      }
+
+      // Project & Sort All 3D Solid Faces (Painter's Z-Buffer Algorithm)
+      const rawFaces = buildSceneFaces();
+      const projectedFaces = [];
+
+      rawFaces.forEach(f => {
+        const pPts = [];
+        let depthSum = 0;
+        for (let i = 0; i < f.pts.length; i++) {
+          const pr = project3D(f.pts[i], width, height);
+          if (!pr) return;
+          pPts.push(pr);
+          depthSum += pr.depth;
+        }
+        projectedFaces.push({
+          ...f,
+          pPts,
+          avgDepth: depthSum / f.pts.length
+        });
+      });
+
+      projectedFaces.sort((a, b) => b.avgDepth - a.avgDepth);
+
+      // Render Sorted Faces
+      projectedFaces.forEach(f => {
+        const isSelected = f.skidId === selectedSkidId;
+        ctx.beginPath();
+        ctx.moveTo(f.pPts[0].sx, f.pPts[0].sy);
+        for (let i = 1; i < f.pPts.length; i++) {
+          ctx.lineTo(f.pPts[i].sx, f.pPts[i].sy);
+        }
+        ctx.closePath();
+
+        ctx.globalAlpha = f.alpha;
+        ctx.fillStyle = f.color;
+        ctx.fill();
+
+        ctx.lineWidth = isSelected ? 1.6 : 0.7;
+        ctx.strokeStyle = isSelected ? '#ffffff' : 'rgba(15, 23, 42, 0.45)';
+        ctx.stroke();
+      });
+      ctx.globalAlpha = 1.0;
+
+      // Draw Optional Wireframe Trailer Enclosure Roof/Walls (Explodes Upward!)
+      if (showShellWireframe) {
+        const roofLift = explodeFactor * 8.5;
+        const corners = [
+          { x: -18, y: 3.0 + roofLift, z: -4 }, { x: -10, y: 3.0 + roofLift, z: -4 },
+          { x: -10, y: 0.6 + roofLift, z: -4 }, { x: 18,  y: 0.6 + roofLift, z: -4 },
+          { x: 18,  y: 7.8 + roofLift, z: -4 }, { x: -18, y: 7.8 + roofLift, z: -4 },
+          { x: -18, y: 3.0 + roofLift, z: 4 },  { x: -10, y: 3.0 + roofLift, z: 4 },
+          { x: -10, y: 0.6 + roofLift, z: 4 },  { x: 18,  y: 0.6 + roofLift, z: 4 },
+          { x: 18,  y: 7.8 + roofLift, z: 4 },  { x: -18, y: 7.8 + roofLift, z: 4 }
+        ].map(p => project3D(p, width, height));
+
+        if (corners.every(Boolean)) {
+          ctx.strokeStyle = 'rgba(148, 163, 184, 0.38)';
+          ctx.lineWidth = 1.2;
+          const edges = [
+            [0,1],[1,2],[2,3],[3,4],[4,5],[5,0],
+            [6,7],[7,8],[8,9],[9,10],[10,11],[11,6],
+            [0,6],[1,7],[2,8],[3,9],[4,10],[5,11]
+          ];
+          edges.forEach(([i, j]) => {
+            ctx.beginPath();
+            ctx.moveTo(corners[i].sx, corners[i].sy);
+            ctx.lineTo(corners[j].sx, corners[j].sy);
+            ctx.stroke();
+          });
+        }
+      }
+
+      // Draw 3D Interconnecting Process Pipes & Animated Water Flow Particles
+      if (showFlow) {
+        flowRoutes.forEach(route => {
+          if (flowFilter !== 'all' && route.stream !== flowFilter) return;
+
+          const worldNodes = route.nodes.map(n => {
+            const off = getSkidOffset(n.skid);
+            return { x: n.pt.x + off.x, y: n.pt.y + off.y, z: n.pt.z + off.z };
+          });
+
+          const projNodes = worldNodes.map(w => project3D(w, width, height));
+          if (!projNodes.every(Boolean)) return;
+
+          // Pipe Conduit Line
+          ctx.save();
+          ctx.strokeStyle = route.color;
+          ctx.globalAlpha = 0.65;
+          ctx.lineWidth = 3.5;
+          ctx.lineJoin = 'round';
+          ctx.beginPath();
+          ctx.moveTo(projNodes[0].sx, projNodes[0].sy);
+          for (let i = 1; i < projNodes.length; i++) {
+            ctx.lineTo(projNodes[i].sx, projNodes[i].sy);
+          }
+          ctx.stroke();
+
+          // Moving Glowing Water Droplets along the 3D Pipe Segments
+          ctx.globalAlpha = 1.0;
+          for (let seg = 0; seg < worldNodes.length - 1; seg++) {
+            const A = worldNodes[seg];
+            const B = worldNodes[seg + 1];
+            const numDrops = 4;
+            for (let d = 0; d < numDrops; d++) {
+              const t = ((animTime * 0.9 + d / numDrops) % 1.0);
+              const wx = A.x + (B.x - A.x) * t;
+              const wy = A.y + (B.y - A.y) * t;
+              const wz = A.z + (B.z - A.z) * t;
+              const pr = project3D({ x: wx, y: wy, z: wz }, width, height);
+              if (pr) {
+                ctx.fillStyle = '#ffffff';
+                ctx.beginPath();
+                ctx.arc(pr.sx, pr.sy, Math.max(2.5, pr.scale * 0.16), 0, Math.PI * 2);
+                ctx.fill();
+                ctx.strokeStyle = route.color;
+                ctx.lineWidth = 2;
+                ctx.stroke();
+              }
+            }
+          }
+          ctx.restore();
+        });
+      }
+
+      // Update Floating 3D HTML Labels
+      lastProjectedSkidCenters = {};
+      Object.values(skids).forEach(s => {
+        const off = getSkidOffset(s.id);
+        const worldPos = {
+          x: s.anchor.x + off.x,
+          y: s.anchor.y + off.y + 1.1,
+          z: s.anchor.z + off.z
+        };
+        const pr = project3D(worldPos, width, height);
+        lastProjectedSkidCenters[s.id] = pr;
+
+        const el = labelElements[s.id];
+        if (!showLabels || !pr || (s.id === 'chassis' && explodeFactor < 0.25)) {
+          el.style.display = 'none';
+        } else {
+          el.style.display = 'flex';
+          el.style.left = `${pr.sx}px`;
+          el.style.top = `${pr.sy}px`;
+          if (s.id === selectedSkidId) {
+            el.style.boxShadow = `0 0 12px ${s.color}`;
+            el.style.transform = 'translate(-50%, -100%) scale(1.08)';
+          } else {
+            el.style.boxShadow = 'none';
+            el.style.transform = 'translate(-50%, -100%) scale(1.0)';
+          }
+        }
+      });
+
+      requestAnimationFrame(renderLoop);
+    }
+
+    // UI Control Callbacks
+    function onExplodeSlider(val) {
+      explodeGoal = parseInt(val, 10) / 100;
+      document.getElementById('explode-pct').textContent = val + '%';
+      const btn = document.getElementById('btn-explode');
+      btn.textContent = explodeGoal > 0.5 ? 'Collapse Assembly' : 'Explode Assembly';
+    }
+
+    function toggleExplodePreset() {
+      const slider = document.getElementById('explode-slider');
+      const nextVal = explodeGoal > 0.3 ? 0 : 85;
+      slider.value = nextVal;
+      onExplodeSlider(nextVal);
+      if (nextVal > 0) {
+        cam.targetGoal.dist = 54;
+      } else {
+        cam.targetGoal.dist = 44;
+      }
+    }
+
+    function toggleLabels() {
+      showLabels = !showLabels;
+      const btn = document.getElementById('btn-labels');
+      btn.textContent = showLabels ? 'Labels: ON' : 'Labels: OFF';
+      btn.className = showLabels
+        ? 'px-3 py-2 rounded-lg text-xs font-semibold bg-emerald-600 text-white shadow-sm transition'
+        : 'px-3 py-2 rounded-lg text-xs font-semibold bg-[var(--secondary)] text-[var(--secondary-foreground)] border border-[var(--border)] transition';
+    }
+
+    function toggleFlow() {
+      showFlow = !showFlow;
+      const btn = document.getElementById('btn-flow');
+      btn.textContent = showFlow ? 'Water Flow: ON' : 'Water Flow: OFF';
+      btn.className = showFlow
+        ? 'px-3 py-2 rounded-lg text-xs font-semibold bg-cyan-600 text-white shadow-sm transition'
+        : 'px-3 py-2 rounded-lg text-xs font-semibold bg-[var(--secondary)] text-[var(--secondary-foreground)] border border-[var(--border)] transition';
+    }
+
+    function toggleShell() {
+      showShellWireframe = !showShellWireframe;
+      const btn = document.getElementById('btn-shell');
+      btn.textContent = showShellWireframe ? 'Walls: Wireframe' : 'Walls: Hidden';
+    }
+
+    function setCameraPreset(preset) {
+      cam.targetGoal.tx = 0.5;
+      cam.targetGoal.ty = 2.0;
+      cam.targetGoal.tz = 0;
+      if (preset === 'iso') {
+        cam.targetGoal.yaw = -0.68;
+        cam.targetGoal.pitch = 0.46;
+        cam.targetGoal.dist = explodeGoal > 0.3 ? 52 : 44;
+      } else if (preset === 'side') {
+        cam.targetGoal.yaw = 0.0;
+        cam.targetGoal.pitch = 0.12;
+        cam.targetGoal.dist = 46;
+      } else if (preset === 'top') {
+        cam.targetGoal.yaw = 0.0;
+        cam.targetGoal.pitch = 1.42;
+        cam.targetGoal.dist = 48;
+      } else if (preset === 'rear') {
+        cam.targetGoal.yaw = -1.57;
+        cam.targetGoal.pitch = 0.25;
+        cam.targetGoal.dist = 34;
+      }
+    }
+
+    function setFlowHighlight(mode) {
+      flowFilter = mode;
+      ['all', 'raw', 'potable'].forEach(m => {
+        const b = document.getElementById('fl-' + m);
+        if (m === mode) {
+          b.className = 'px-2 py-1.5 rounded text-xs font-semibold bg-blue-600 text-white transition';
+        } else {
+          b.className = 'px-2 py-1.5 rounded text-xs font-semibold bg-[var(--secondary)] text-[var(--secondary-foreground)] border border-[var(--border)] transition';
+        }
+      });
+    }
+
+    // Initialize Default Selection & Start 3D Loop
+    selectSkid3D('uf', false);
+    requestAnimationFrame(renderLoop);
+  </script>
+</body>
+</html>
+

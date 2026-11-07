@@ -1,0 +1,454 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="icon" href="../favicon.ico" type="image/x-icon">
+  <title>MWTP-250 | Mobile Water Treatment Facility Portal</title>
+  <script src="https://www.gstatic.com/antigravity/web/dev/tailwindcss.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+  <style>
+    :root {
+      --background: #0b1120;
+      --foreground: #f1f5f9;
+      --card: #111827;
+      --secondary: #1e293b;
+      --secondary-foreground: #e2e8f0;
+      --muted-foreground: #94a3b8;
+      --border: #1e293b;
+      --primary: #3b82f6;
+      --primary-foreground: #ffffff;
+    }
+    html.light {
+      --background: #f8fafc;
+      --foreground: #0f172a;
+      --card: #ffffff;
+      --secondary: #f1f5f9;
+      --secondary-foreground: #1e293b;
+      --muted-foreground: #64748b;
+      --border: #e2e8f0;
+      --primary: #2563eb;
+      --primary-foreground: #ffffff;
+    }
+    body {
+      background-color: var(--background);
+      color: var(--foreground);
+      font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+    }
+    .md-prose h1 { font-size: 1.75rem; font-weight: 800; margin-top: 0.5rem; margin-bottom: 1rem; border-bottom: 1px solid var(--border); padding-bottom: 0.5rem; }
+    .md-prose h2 { font-size: 1.35rem; font-weight: 700; margin-top: 1.75rem; margin-bottom: 0.75rem; color: #38bdf8; }
+    .md-prose h3 { font-size: 1.1rem; font-weight: 600; margin-top: 1.25rem; margin-bottom: 0.5rem; }
+    .md-prose p { font-size: 0.925rem; line-height: 1.65; margin-bottom: 0.85rem; color: var(--secondary-foreground); }
+    .md-prose ul, .md-prose ol { padding-left: 1.5rem; margin-bottom: 1rem; font-size: 0.925rem; line-height: 1.6; }
+    .md-prose ul { list-style-type: disc; }
+    .md-prose ol { list-style-type: decimal; }
+    .md-prose li { margin-bottom: 0.35rem; }
+    .md-prose table { width: 100%; border-collapse: collapse; margin: 1.25rem 0; font-size: 0.825rem; }
+    .md-prose th { background: var(--secondary); font-weight: 700; text-align: left; padding: 0.65rem 0.75rem; border: 1px solid var(--border); }
+    .md-prose td { padding: 0.55rem 0.75rem; border: 1px solid var(--border); }
+    .md-prose pre { background: #090d16; color: #e2e8f0; padding: 1rem; border-radius: 0.5rem; overflow-x: auto; font-size: 0.8rem; margin: 1rem 0; border: 1px solid var(--border); }
+    .md-prose code { font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace; font-size: 0.825rem; background: var(--secondary); padding: 0.15rem 0.35rem; border-radius: 0.25rem; }
+    .md-prose pre code { background: transparent; padding: 0; }
+    .md-prose blockquote { border-left: 4px solid #3b82f6; background: rgba(59, 130, 246, 0.08); padding: 0.75rem 1rem; border-radius: 0.375rem; margin: 1rem 0; }
+  </style>
+</head>
+<body class="min-h-screen flex flex-col">
+
+  <!-- Top Navigation Header -->
+  <header class="bg-[var(--card)] border-b border-[var(--border)] sticky top-0 z-30 px-4 md:px-8 py-3.5 flex flex-wrap items-center justify-between gap-4 shadow-sm">
+    <div class="flex items-center gap-3">
+      <a href="../index.html" class="px-2.5 py-1 rounded text-xs font-mono font-semibold bg-[var(--secondary)] text-[var(--muted-foreground)] hover:text-[var(--foreground)] border border-[var(--border)] transition">
+        ← AMERIPRO MAP
+      </a>
+      <div>
+        <div class="flex items-center gap-2">
+          <span class="text-base font-extrabold tracking-tight">MWTP-250 PORTAL</span>
+          <span class="px-2 py-0.5 rounded-full text-xs font-semibold bg-blue-500/15 text-blue-400 border border-blue-500/30">250 GPM / 360,000 GPD</span>
+        </div>
+        <p class="text-xs text-[var(--muted-foreground)]">36-ft Gooseneck Emergency Mobile Water Treatment Facility — Complete Engineering & Commercial Suite</p>
+      </div>
+    </div>
+
+    <div class="flex items-center gap-2">
+      <button onclick="showDashboard()" id="btn-home" class="px-3.5 py-1.5 rounded-lg text-xs font-semibold bg-blue-600 text-white shadow-sm hover:bg-blue-500 transition">
+        All Artifacts Grid
+      </button>
+      <a id="btn-open-new" href="mwtp_250_3d_explodable_view.html" target="_blank" class="hidden px-3.5 py-1.5 rounded-lg text-xs font-semibold bg-[var(--secondary)] text-[var(--secondary-foreground)] border border-[var(--border)] hover:border-blue-500 transition">
+        Open Fullscreen ↗
+      </a>
+      <button onclick="toggleTheme()" class="px-3 py-1.5 rounded-lg text-xs font-semibold bg-[var(--secondary)] text-[var(--secondary-foreground)] border border-[var(--border)] transition" id="theme-btn">
+        Theme: Dark
+      </button>
+    </div>
+  </header>
+
+  <!-- Main Content Container -->
+  <main class="flex-1 max-w-7xl w-full mx-auto p-4 md:p-8 space-y-8" id="dashboard-view">
+
+    <!-- Hero Banner -->
+    <div class="bg-gradient-to-r from-blue-950 via-slate-900 to-cyan-950 border border-blue-500/30 rounded-2xl p-6 md:p-8 text-white shadow-lg flex flex-col lg:flex-row lg:items-center lg:justify-between gap-6">
+      <div class="space-y-2.5 max-w-3xl">
+        <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full text-xs font-bold bg-cyan-500/20 text-cyan-300 border border-cyan-400/30">
+          MUNICIPAL-GRADE ULTRAFILTRATION • GAC • UV • CHLORINATION • VFD BUILDING PRESSURIZATION
+        </div>
+        <h1 class="text-2xl md:text-4xl font-extrabold tracking-tight">
+          Emergency Mobile Water Treatment Facility (MWTP-250)
+        </h1>
+        <p class="text-sm text-slate-300 leading-relaxed">
+          Engineered inside a pickup-towed 36-ft triple-axle gooseneck trailer to supply hospitals, commercial restaurants, and municipalities with <strong>250 GPM (360,000 GPD)</strong> of EPA-compliant potable water pressurized at <strong>65–85 PSI</strong> within 30 minutes of arrival.
+        </p>
+      </div>
+
+      <div class="grid grid-cols-2 gap-3 shrink-0">
+        <button onclick="openArtifact('mwtp_250_3d_explodable_view.html', 'html', '3D Explodable CAD & Water Flow')" class="px-4 py-3 rounded-xl bg-blue-600 hover:bg-blue-500 text-white text-xs font-bold shadow transition text-left">
+          <div class="text-cyan-200 font-mono">LAUNCH 3D CAD</div>
+          <div class="text-sm mt-0.5">3D Explodable View →</div>
+        </button>
+        <button onclick="openArtifact('mwtp_250_slide_deck.html', 'html', '10-Slide Executive Presentation')" class="px-4 py-3 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-bold shadow transition text-left">
+          <div class="text-emerald-200 font-mono">PITCH DECK</div>
+          <div class="text-sm mt-0.5">10-Slide Presentation →</div>
+        </button>
+      </div>
+    </div>
+
+    <!-- SECTION 1: INTERACTIVE VISUALIZERS, SIMULATORS & SALES BROCHURES -->
+    <div class="space-y-4">
+      <div class="flex items-center justify-between border-b border-[var(--border)] pb-2">
+        <h2 class="text-lg font-bold">1. Interactive 3D/2D Visualizers, Presentations & Sales Brochures</h2>
+        <span class="text-xs font-mono text-[var(--muted-foreground)]">5 Interactive HTML Apps</span>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+
+        <!-- Card 1: 3D Explodable View -->
+        <div class="bg-[var(--card)] border border-[var(--border)] hover:border-blue-500/60 rounded-xl p-5 flex flex-col justify-between gap-4 shadow-sm transition">
+          <div class="space-y-2">
+            <div class="flex items-center justify-between">
+              <span class="px-2.5 py-0.5 rounded text-xs font-bold bg-blue-500/15 text-blue-400">3D CAD DIGITAL TWIN</span>
+              <span class="text-xs font-mono text-[var(--muted-foreground)]">Three/Canvas3D</span>
+            </div>
+            <h3 class="text-base font-bold">3D Explodable View & Water Flow Diagram</h3>
+            <p class="text-xs text-[var(--muted-foreground)] leading-relaxed">
+              Orbit 360°, explode the 36-ft gooseneck assembly from 0% to 100%, toggle 3D callout labels, and trace animated water droplets through all 6 treatment skids.
+            </p>
+          </div>
+          <div class="flex items-center gap-2 pt-2 border-t border-[var(--border)]">
+            <button onclick="openArtifact('mwtp_250_3d_explodable_view.html', 'html', '3D Explodable CAD & Water Flow')" class="flex-1 px-3 py-2 rounded-lg text-xs font-semibold bg-blue-600 text-white hover:bg-blue-500 transition">
+              Launch in Viewer
+            </button>
+            <a href="mwtp_250_3d_explodable_view.html" target="_blank" class="px-3 py-2 rounded-lg text-xs font-semibold bg-[var(--secondary)] text-[var(--secondary-foreground)] border border-[var(--border)] hover:border-blue-500 transition">
+              New Tab ↗
+            </a>
+          </div>
+        </div>
+
+        <!-- Card 2: 2D Floorplan & SCADA Simulator -->
+        <div class="bg-[var(--card)] border border-[var(--border)] hover:border-cyan-500/60 rounded-xl p-5 flex flex-col justify-between gap-4 shadow-sm transition">
+          <div class="space-y-2">
+            <div class="flex items-center justify-between">
+              <span class="px-2.5 py-0.5 rounded text-xs font-bold bg-cyan-500/15 text-cyan-400">SCADA SIMULATOR</span>
+              <span class="text-xs font-mono text-[var(--muted-foreground)]">Interactive HMI</span>
+            </div>
+            <h3 class="text-base font-bold">Interactive Floorplan & Process Simulator</h3>
+            <p class="text-xs text-[var(--muted-foreground)] leading-relaxed">
+              Click any skid on the top-down trailer blueprint, switch between Normal Filtration, UF Backwash, and Dry Highway Transport modes, and simulate hospital/restaurant demand.
+            </p>
+          </div>
+          <div class="flex items-center gap-2 pt-2 border-t border-[var(--border)]">
+            <button onclick="openArtifact('mwtp_250_interactive_simulator.html', 'html', 'Interactive Floorplan & Process Simulator')" class="flex-1 px-3 py-2 rounded-lg text-xs font-semibold bg-cyan-600 text-white hover:bg-cyan-500 transition">
+              Launch in Viewer
+            </button>
+            <a href="mwtp_250_interactive_simulator.html" target="_blank" class="px-3 py-2 rounded-lg text-xs font-semibold bg-[var(--secondary)] text-[var(--secondary-foreground)] border border-[var(--border)] hover:border-cyan-500 transition">
+              New Tab ↗
+            </a>
+          </div>
+        </div>
+
+        <!-- Card 3: 10-Slide Executive Presentation -->
+        <div class="bg-[var(--card)] border border-[var(--border)] hover:border-purple-500/60 rounded-xl p-5 flex flex-col justify-between gap-4 shadow-sm transition">
+          <div class="space-y-2">
+            <div class="flex items-center justify-between">
+              <span class="px-2.5 py-0.5 rounded text-xs font-bold bg-purple-500/15 text-purple-400">SLIDE DECK</span>
+              <span class="text-xs font-mono text-[var(--muted-foreground)]">10 Slides</span>
+            </div>
+            <h3 class="text-base font-bold">Executive Presentation Slide Deck</h3>
+            <p class="text-xs text-[var(--muted-foreground)] leading-relaxed">
+              10-slide interactive presentation explaining the problem, why UF beats RO, the 6-stage train, 36-ft weight management, safety interlocks, CapEx/OpEx, and bank DSCR.
+            </p>
+          </div>
+          <div class="flex items-center gap-2 pt-2 border-t border-[var(--border)]">
+            <button onclick="openArtifact('mwtp_250_slide_deck.html', 'html', '10-Slide Executive Presentation')" class="flex-1 px-3 py-2 rounded-lg text-xs font-semibold bg-purple-600 text-white hover:bg-purple-500 transition">
+              Launch in Viewer
+            </button>
+            <a href="mwtp_250_slide_deck.html" target="_blank" class="px-3 py-2 rounded-lg text-xs font-semibold bg-[var(--secondary)] text-[var(--secondary-foreground)] border border-[var(--border)] hover:border-purple-500 transition">
+              New Tab ↗
+            </a>
+          </div>
+        </div>
+
+        <!-- Card 4: Hospital Sales Brochure -->
+        <div class="bg-[var(--card)] border border-[var(--border)] hover:border-blue-500/60 rounded-xl p-5 flex flex-col justify-between gap-4 shadow-sm transition">
+          <div class="space-y-2">
+            <div class="flex items-center justify-between">
+              <span class="px-2.5 py-0.5 rounded text-xs font-bold bg-blue-500/15 text-blue-400">HOSPITAL BROCHURE</span>
+              <span class="text-xs font-mono text-[var(--muted-foreground)]">Print / PDF Ready</span>
+            </div>
+            <h3 class="text-base font-bold">Hospital & Healthcare Continuity Brochure</h3>
+            <p class="text-xs text-[var(--muted-foreground)] leading-relaxed">
+              Client leave-behind for Hospital Facilities Directors & COOs. Covers CMS 42 CFR 482.15 & Joint Commission EM.02.02.09 compliance and the $1,000/mo Priority Standby Retainer.
+            </p>
+          </div>
+          <div class="flex items-center gap-2 pt-2 border-t border-[var(--border)]">
+            <button onclick="openArtifact('MWTP_250_Hospital_Sales_Brochure.html', 'html', 'Hospital Sales Brochure')" class="flex-1 px-3 py-2 rounded-lg text-xs font-semibold bg-blue-600 text-white hover:bg-blue-500 transition">
+              Open Brochure
+            </button>
+            <a href="MWTP_250_Hospital_Sales_Brochure.html" target="_blank" class="px-3 py-2 rounded-lg text-xs font-semibold bg-[var(--secondary)] text-[var(--secondary-foreground)] border border-[var(--border)] hover:border-blue-500 transition">
+              New Tab ↗
+            </a>
+          </div>
+        </div>
+
+        <!-- Card 5: Restaurant Sales Brochure -->
+        <div class="bg-[var(--card)] border border-[var(--border)] hover:border-emerald-500/60 rounded-xl p-5 flex flex-col justify-between gap-4 shadow-sm transition">
+          <div class="space-y-2">
+            <div class="flex items-center justify-between">
+              <span class="px-2.5 py-0.5 rounded text-xs font-bold bg-emerald-500/15 text-emerald-400">RESTAURANT BROCHURE</span>
+              <span class="text-xs font-mono text-[var(--muted-foreground)]">Print / PDF Ready</span>
+            </div>
+            <h3 class="text-base font-bold">Restaurant & Hospitality Sales Brochure</h3>
+            <p class="text-xs text-[var(--muted-foreground)] leading-relaxed">
+              Sales leave-behind for Restaurant Groups, Hotels & Commercial Kitchens. Highlights staying legally open during Boil Water Advisories and protecting dishwashers & ice machines.
+            </p>
+          </div>
+          <div class="flex items-center gap-2 pt-2 border-t border-[var(--border)]">
+            <button onclick="openArtifact('MWTP_250_Restaurant_Sales_Brochure.html', 'html', 'Restaurant & Hospitality Brochure')" class="flex-1 px-3 py-2 rounded-lg text-xs font-semibold bg-emerald-600 text-white hover:bg-emerald-500 transition">
+              Open Brochure
+            </button>
+            <a href="MWTP_250_Restaurant_Sales_Brochure.html" target="_blank" class="px-3 py-2 rounded-lg text-xs font-semibold bg-[var(--secondary)] text-[var(--secondary-foreground)] border border-[var(--border)] hover:border-emerald-500 transition">
+              New Tab ↗
+            </a>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- SECTION 2: ENGINEERING DOCUMENTS, SOPs & BANK BUSINESS PLAN -->
+    <div class="space-y-4">
+      <div class="flex items-center justify-between border-b border-[var(--border)] pb-2">
+        <h2 class="text-lg font-bold">2. Engineering Specifications, P&ID, BOM, Field SOP & Bank Loan Business Plan</h2>
+        <span class="text-xs font-mono text-[var(--muted-foreground)]">5 Technical & Financial Documents</span>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+
+        <!-- Doc 1: Engineering Design Package -->
+        <div class="bg-[var(--card)] border border-[var(--border)] hover:border-amber-500/60 rounded-xl p-5 flex flex-col justify-between gap-4 shadow-sm transition">
+          <div class="space-y-2">
+            <div class="flex items-center justify-between">
+              <span class="px-2.5 py-0.5 rounded text-xs font-bold bg-amber-500/15 text-amber-400">ENGINEERING SPECS</span>
+              <span class="text-xs font-mono text-[var(--muted-foreground)]">Markdown + Mermaid</span>
+            </div>
+            <h3 class="text-base font-bold">Complete Engineering Design Package</h3>
+            <p class="text-xs text-[var(--muted-foreground)] leading-relaxed">
+              Design basis, hydraulic mass balance (S-101 to S-107), equipment schedule, 36-ft gooseneck dry/wet weight budget (21,700 vs 30,870 lbs), and 45 kW generator electrical load table.
+            </p>
+          </div>
+          <div class="flex items-center gap-2 pt-2 border-t border-[var(--border)]">
+            <button onclick="openArtifact('MWTP_250_Engineering_Design_Package.md', 'md', 'Engineering Design Package')" class="flex-1 px-3 py-2 rounded-lg text-xs font-semibold bg-amber-600 text-white hover:bg-amber-500 transition">
+              Read Document
+            </button>
+            <a href="MWTP_250_Engineering_Design_Package.md" target="_blank" class="px-3 py-2 rounded-lg text-xs font-semibold bg-[var(--secondary)] text-[var(--secondary-foreground)] border border-[var(--border)] transition">
+              Raw .MD ↗
+            </a>
+          </div>
+        </div>
+
+        <!-- Doc 2: Detailed P&ID & Valve Matrix -->
+        <div class="bg-[var(--card)] border border-[var(--border)] hover:border-cyan-500/60 rounded-xl p-5 flex flex-col justify-between gap-4 shadow-sm transition">
+          <div class="space-y-2">
+            <div class="flex items-center justify-between">
+              <span class="px-2.5 py-0.5 rounded text-xs font-bold bg-cyan-500/15 text-cyan-400">P&ID & PLC LOGIC</span>
+              <span class="text-xs font-mono text-[var(--muted-foreground)]">ISA-5.1 Tagged</span>
+            </div>
+            <h3 class="text-base font-bold">Detailed P&ID & Automated Valve Matrix</h3>
+            <p class="text-xs text-[var(--muted-foreground)] leading-relaxed">
+              Master P&ID schematic, 18 pneumatic butterfly valve register (`XV-101` to `XV-602`), PLC truth matrix across all 6 modes, and hospital fail-safe sensor interlocks.
+            </p>
+          </div>
+          <div class="flex items-center gap-2 pt-2 border-t border-[var(--border)]">
+            <button onclick="openArtifact('MWTP_250_PID_and_Valve_Matrix.md', 'md', 'Detailed P&ID & Valve Matrix')" class="flex-1 px-3 py-2 rounded-lg text-xs font-semibold bg-cyan-600 text-white hover:bg-cyan-500 transition">
+              Read Document
+            </button>
+            <a href="MWTP_250_PID_and_Valve_Matrix.md" target="_blank" class="px-3 py-2 rounded-lg text-xs font-semibold bg-[var(--secondary)] text-[var(--secondary-foreground)] border border-[var(--border)] transition">
+              Raw .MD ↗
+            </a>
+          </div>
+        </div>
+
+        <!-- Doc 3: Bill of Materials & Cost Breakdown -->
+        <div class="bg-[var(--card)] border border-[var(--border)] hover:border-emerald-500/60 rounded-xl p-5 flex flex-col justify-between gap-4 shadow-sm transition">
+          <div class="space-y-2">
+            <div class="flex items-center justify-between">
+              <span class="px-2.5 py-0.5 rounded text-xs font-bold bg-emerald-500/15 text-emerald-400">BOM & CAPEX/OPEX</span>
+              <span class="text-xs font-mono text-[var(--muted-foreground)]">$424,300 Turnkey</span>
+            </div>
+            <h3 class="text-base font-bold">Bill of Materials (BOM) & Cost Breakdown</h3>
+            <p class="text-xs text-[var(--muted-foreground)] leading-relaxed">
+              Line-item BOM across all 9 categories with reference OEM models (Cummins, DuPont IntegraFlux, Grundfos, Rockwell, Hach) plus daily OpEx ($0.72 / 1,000 gal).
+            </p>
+          </div>
+          <div class="flex items-center gap-2 pt-2 border-t border-[var(--border)]">
+            <button onclick="openArtifact('MWTP_250_BOM_and_Cost_Breakdown.md', 'md', 'Bill of Materials & Cost Breakdown')" class="flex-1 px-3 py-2 rounded-lg text-xs font-semibold bg-emerald-600 text-white hover:bg-emerald-500 transition">
+              Read Document
+            </button>
+            <a href="MWTP_250_BOM_and_Cost_Breakdown.md" target="_blank" class="px-3 py-2 rounded-lg text-xs font-semibold bg-[var(--secondary)] text-[var(--secondary-foreground)] border border-[var(--border)] transition">
+              Raw .MD ↗
+            </a>
+          </div>
+        </div>
+
+        <!-- Doc 4: Field Tie-In SOP -->
+        <div class="bg-[var(--card)] border border-[var(--border)] hover:border-rose-500/60 rounded-xl p-5 flex flex-col justify-between gap-4 shadow-sm transition">
+          <div class="space-y-2">
+            <div class="flex items-center justify-between">
+              <span class="px-2.5 py-0.5 rounded text-xs font-bold bg-rose-500/15 text-rose-400">FIELD MANUAL SOP</span>
+              <span class="text-xs font-mono text-[var(--muted-foreground)]">30-Min Hookup</span>
+            </div>
+            <h3 class="text-base font-bold">Hospital & Restaurant Emergency Tie-In SOP</h3>
+            <p class="text-xs text-[var(--muted-foreground)] leading-relaxed">
+              Step-by-step field manual for hydrant tapping, street main curb-stop isolation (LOTO), delivery hose hyper-chlorination, and 2-stage soft-ramp building pressurization.
+            </p>
+          </div>
+          <div class="flex items-center gap-2 pt-2 border-t border-[var(--border)]">
+            <button onclick="openArtifact('MWTP_250_Hospital_Restaurant_Tie_In_SOP.md', 'md', 'Hospital & Restaurant Tie-In SOP')" class="flex-1 px-3 py-2 rounded-lg text-xs font-semibold bg-rose-600 text-white hover:bg-rose-500 transition">
+              Read Document
+            </button>
+            <a href="MWTP_250_Hospital_Restaurant_Tie_In_SOP.md" target="_blank" class="px-3 py-2 rounded-lg text-xs font-semibold bg-[var(--secondary)] text-[var(--secondary-foreground)] border border-[var(--border)] transition">
+              Raw .MD ↗
+            </a>
+          </div>
+        </div>
+
+        <!-- Doc 5: Bank Loan Business Plan -->
+        <div class="bg-[var(--card)] border border-[var(--border)] hover:border-blue-500/60 rounded-xl p-5 flex flex-col justify-between gap-4 shadow-sm transition">
+          <div class="space-y-2">
+            <div class="flex items-center justify-between">
+              <span class="px-2.5 py-0.5 rounded text-xs font-bold bg-blue-500/15 text-blue-400">BANK UNDERWRITING</span>
+              <span class="text-xs font-mono text-[var(--muted-foreground)]">2.55x Yr-1 DSCR</span>
+            </div>
+            <h3 class="text-base font-bold">Commercial Bank / SBA 7(a) Loan Business Plan</h3>
+            <p class="text-xs text-[var(--muted-foreground)] leading-relaxed">
+              Complete underwriting package ($550k project / $467.5k loan request), <65% LTV collateral valuation, dual-stream retainer + deployment model, and 3-year pro forma financials.
+            </p>
+          </div>
+          <div class="flex items-center gap-2 pt-2 border-t border-[var(--border)]">
+            <button onclick="openArtifact('MWTP_250_Bank_Loan_Business_Plan.md', 'md', 'Commercial Bank Loan Business Plan')" class="flex-1 px-3 py-2 rounded-lg text-xs font-semibold bg-blue-600 text-white hover:bg-blue-500 transition">
+              Read Document
+            </button>
+            <a href="MWTP_250_Bank_Loan_Business_Plan.md" target="_blank" class="px-3 py-2 rounded-lg text-xs font-semibold bg-[var(--secondary)] text-[var(--secondary-foreground)] border border-[var(--border)] transition">
+              Raw .MD ↗
+            </a>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+  </main>
+
+  <!-- Embedded Viewer Stage (For viewing HTML apps or rendered Markdown documents inline) -->
+  <section id="viewer-stage" class="hidden flex-1 flex-col max-w-7xl w-full mx-auto p-4 md:p-6 gap-4">
+    <div class="bg-[var(--card)] border border-[var(--border)] rounded-xl px-4 py-3 flex items-center justify-between">
+      <div class="flex items-center gap-3">
+        <button onclick="showDashboard()" class="px-3 py-1.5 rounded-lg text-xs font-semibold bg-blue-600 text-white hover:bg-blue-500 transition">
+          ← Back to All Artifacts
+        </button>
+        <h2 id="viewer-title" class="text-sm md:text-base font-bold">Artifact Viewer</h2>
+      </div>
+      <a id="viewer-ext-link" href="#" target="_blank" class="text-xs font-mono text-blue-400 hover:underline">
+        Open Standalone File ↗
+      </a>
+    </div>
+
+    <!-- HTML Iframe Container -->
+    <iframe id="html-iframe" class="hidden w-full rounded-xl border border-[var(--border)] bg-[var(--card)] shadow-lg" style="height: 780px;"></iframe>
+
+    <!-- Markdown Rendered Container -->
+    <div id="md-container" class="hidden bg-[var(--card)] border border-[var(--border)] rounded-2xl p-6 md:p-10 shadow-lg md-prose overflow-x-auto"></div>
+  </section>
+
+  <script>
+    mermaid.initialize({ startOnLoad: false, theme: 'dark' });
+
+    function toggleTheme() {
+      const root = document.documentElement;
+      const isLight = root.classList.toggle('light');
+      root.classList.toggle('dark', !isLight);
+      document.getElementById('theme-btn').textContent = isLight ? 'Theme: Light' : 'Theme: Dark';
+    }
+
+    function showDashboard() {
+      document.getElementById('dashboard-view').classList.remove('hidden');
+      document.getElementById('viewer-stage').classList.add('hidden');
+      document.getElementById('viewer-stage').classList.remove('flex');
+      document.getElementById('btn-open-new').classList.add('hidden');
+      document.getElementById('html-iframe').src = 'about:blank';
+    }
+
+    async function openArtifact(filename, type, title) {
+      document.getElementById('dashboard-view').classList.add('hidden');
+      const stage = document.getElementById('viewer-stage');
+      stage.classList.remove('hidden');
+      stage.classList.add('flex');
+
+      document.getElementById('viewer-title').textContent = title;
+      document.getElementById('viewer-ext-link').href = filename;
+      const topNewBtn = document.getElementById('btn-open-new');
+      topNewBtn.href = filename;
+      topNewBtn.classList.remove('hidden');
+
+      const iframe = document.getElementById('html-iframe');
+      const mdBox = document.getElementById('md-container');
+
+      if (type === 'html') {
+        mdBox.classList.add('hidden');
+        iframe.classList.remove('hidden');
+        iframe.src = filename;
+      } else {
+        iframe.classList.add('hidden');
+        iframe.src = 'about:blank';
+        mdBox.classList.remove('hidden');
+        mdBox.innerHTML = '<div class="text-sm text-[var(--muted-foreground)] py-8 text-center">Loading engineering document...</div>';
+
+        try {
+          const res = await fetch(filename);
+          let text = await res.text();
+
+          // Convert GitHub alerts like > [!IMPORTANT] into styled callouts
+          text = text.replace(/>\s*\[!(NOTE|TIP|IMPORTANT|WARNING|CAUTION)\]/g, '> **$1:**');
+
+          mdBox.innerHTML = marked.parse(text);
+
+          // Render any mermaid code blocks
+          const mermaidBlocks = mdBox.querySelectorAll('code.language-mermaid');
+          for (let i = 0; i < mermaidBlocks.length; i++) {
+            const codeEl = mermaidBlocks[i];
+            const preEl = codeEl.parentElement;
+            const graphDef = codeEl.textContent;
+            const div = document.createElement('div');
+            div.className = 'mermaid my-6 flex justify-center bg-slate-900/60 p-4 rounded-xl border border-slate-800 overflow-x-auto';
+            div.textContent = graphDef;
+            preEl.replaceWith(div);
+          }
+          await mermaid.run({ nodes: mdBox.querySelectorAll('.mermaid') });
+        } catch (err) {
+          mdBox.innerHTML = `<div class="text-rose-500 text-sm">Failed to load ${filename}: ${err.message}</div>`;
+        }
+      }
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+  </script>
+</body>
+</html>
