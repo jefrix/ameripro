@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>MWTP-50 & MWTP-250 Piping Diagrams, Spool Schedules & Plumber Tie-In Details</title>
+  <title>MWTP-50, MWTP-50C & MWTP-250 Piping Diagrams, Spool Schedules & Plumber Tie-In Details</title>
   <script src="https://www.gstatic.com/antigravity/web/dev/tailwindcss.min.js"></script>
   <style>
     :root {
@@ -83,12 +83,12 @@
         <span class="px-2.5 py-0.5 rounded-full text-xs font-mono bg-emerald-500/15 text-emerald-400 border border-emerald-500/30">NSF/ANSI 61 • ASME B31.3 • IPC / UPC</span>
         <a href="MWTP_Electrical_Schematics.html" class="px-2.5 py-0.5 rounded-full text-xs font-semibold bg-amber-500/15 text-amber-400 border border-amber-500/30 hover:bg-amber-500/25 transition">← Open Electrical Schematics</a>
       </div>
-      <h1 class="text-lg md:text-xl font-extrabold mt-1">MWTP-50 &amp; MWTP-250 Process Piping Schematics, Spool Schedules, Bulkhead Layouts &amp; Plumber Tie-In Details</h1>
-      <p class="text-xs text-[var(--muted-foreground)]">For Licensed Master Plumber, 316L SS TIG Pipefitter &amp; Civil/Environmental PE Review • DWG Set P-101 through P-104</p>
+      <h1 class="text-lg md:text-xl font-extrabold mt-1">MWTP-50, MWTP-50C &amp; MWTP-250 Process Piping Schematics, Spool Schedules, Bulkhead Layouts &amp; Plumber Tie-In Details</h1>
+      <p class="text-xs text-[var(--muted-foreground)]">For Licensed Master Plumber, 316L SS TIG Pipefitter &amp; Civil/Environmental PE Review • DWG Set P-101 through P-105</p>
     </div>
 
     <div class="flex flex-wrap items-center gap-2">
-      <button onclick="showSheet('all')" id="tab-all" class="sheet-tab px-3 py-2 rounded-lg text-xs font-semibold bg-[var(--secondary)] text-[var(--secondary-foreground)] border border-[var(--border)] transition">Show All 4 Sheets</button>
+      <button onclick="showSheet('all')" id="tab-all" class="sheet-tab px-3 py-2 rounded-lg text-xs font-semibold bg-[var(--secondary)] text-[var(--secondary-foreground)] border border-[var(--border)] transition">Show All 5 Sheets</button>
       <button onclick="window.print()" class="px-3.5 py-2 rounded-lg text-xs font-bold bg-cyan-600 hover:bg-cyan-500 text-white shadow transition">Print / Save PDF (All Sheets)</button>
       <button onclick="toggleTheme()" id="theme-btn" class="px-3 py-2 rounded-lg text-xs font-semibold bg-[var(--secondary)] text-[var(--secondary-foreground)] border border-[var(--border)] transition">Theme: Dark</button>
     </div>
@@ -100,11 +100,11 @@
       <strong class="text-cyan-400 uppercase font-mono">CRITICAL PLUMBING &amp; SANITARY RULES (NSF/ANSI 61 &amp; AWWA C651):</strong>
       <span class="text-[var(--muted-foreground)]"> (1) All wetted metallic pipe, valves, and camlocks in potable contact MUST be 316L stainless steel or NSF-61 lead-free bronze (≤ 0.25% Pb). (2) NEVER tie potable discharge into a Fire Department Connection (FDC). (3) NEVER route UF backwash waste (<code>35–180 GPM</code>) into a restaurant's upstream grease interceptor inlet — connect only to the downstream sanitary sewer cleanout.</span>
     </div>
-    <span class="font-mono text-[11px] text-cyan-300 shrink-0">DWG SET: P-101 THROUGH P-104</span>
+    <span class="font-mono text-[11px] text-cyan-300 shrink-0">DWG SET: P-101 THROUGH P-105</span>
   </div>
 
   <!-- Sheet Selector Tabs -->
-  <nav class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-2.5 no-print">
+  <nav class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-2.5 no-print">
     <button onclick="showSheet('p1')" id="tab-p1" class="sheet-tab active p-3 rounded-xl border border-[var(--border)] bg-[var(--card)] text-left transition">
       <div class="text-xs font-mono font-bold text-emerald-400">SHEET P-101 • MWTP-50 (RESTAURANT)</div>
       <div class="text-sm font-bold mt-0.5">1.5"–2" 316L SS Piping &amp; 5-Port Bulkhead</div>
@@ -124,6 +124,11 @@
       <div class="text-xs font-mono font-bold text-purple-400">SHEET P-104 • PIPEFITTER SPECS &amp; QA</div>
       <div class="text-sm font-bold mt-0.5">TIG Weld / Passivation, Gasket &amp; Hydrotest</div>
       <div class="text-[11px] text-[var(--muted-foreground)] mt-0.5">150 PSI Hydrotest, Freeze Drains &amp; AWWA C651</div>
+    </button>
+    <button onclick="showSheet('p5')" id="tab-p5" class="sheet-tab p-3 rounded-xl border border-violet-500/40 bg-[var(--card)] text-left transition">
+      <div class="text-xs font-mono font-bold text-violet-400">SHEET P-105 • MWTP-50C (REV C PIPING)</div>
+      <div class="text-sm font-bold mt-0.5">RPZ Direct Feed, 186 mJ/cm² UV &amp; 4-Port Bulkhead</div>
+      <div class="text-[11px] text-[var(--muted-foreground)] mt-0.5">No Ground Tanks on BWA • Port A/B Intake • 20-ft Deck</div>
     </button>
   </nav>
 
@@ -735,9 +740,184 @@
     </div>
   </section>
 
+
+  <!-- ========================================================================= -->
+  <!-- SHEET P-105: MWTP-50C (REV C) DIRECT RPZ FEED, VIRUS UV & 4-PORT BULKHEAD -->
+  <!-- ========================================================================= -->
+  <section id="sheet-p5" class="sheet-section hidden bg-[var(--card)] border border-violet-500/40 rounded-2xl overflow-hidden shadow-lg space-y-6 p-5 md:p-6">
+    <div class="flex flex-col md:flex-row md:items-center md:justify-between border-b border-[var(--border)] pb-4 gap-3">
+      <div>
+        <div class="flex items-center gap-2">
+          <span class="px-2 py-0.5 rounded text-xs font-mono font-bold bg-violet-500/20 text-violet-400">DWG P-105</span>
+          <span class="text-xs font-mono text-[var(--muted-foreground)]">SYSTEM: MWTP-50C ("KITCHENSHIELD-50C") • 20-FT SPLIT-POWER WATER TRAILER (REV C)</span>
+        </div>
+        <h2 class="text-lg font-bold mt-1">MWTP-50C 1.5"–2.0" 316L SS Process Piping: Direct RPZ Intake (Port A), Dual 186 mJ/cm² UV &amp; 4-Port Bulkhead</h2>
+        <p class="text-xs text-[var(--muted-foreground)]">Eliminates both ground bladders (<code>TK-100</code> and <code>TK-401</code>) and transfer pump <code>P-401</code> on Boil Water Advisory jobs by combining a pressurized ASSE 1013 RPZ intake train with EPA LT2 4-log virus-validated UV reactors (<code>UV-401A/B</code>) flowing directly into the 150-gal onboard clearwell (<code>TK-601</code>).</p>
+      </div>
+      <div class="bg-[var(--secondary)] border border-violet-500/30 rounded-lg px-3 py-2 text-xs font-mono shrink-0">
+        <div><strong>PORT A (BWA JOBS):</strong> 1.5" Pressurized Feed → <code>PSV-100</code> (≥20 PSI) → <code>RPZ-100</code></div>
+        <div><strong>PORT B (OUTAGE JOBS):</strong> 2.0" Suction from Tanker or <code>PWR-25</code> 550-Gal Tank</div>
+        <div><strong>VIRUS CREDIT:</strong> <code>UV-401A/B</code> ≥ 186 mJ/cm² @ 40 GPM, 85% UVT (No CT Bladder)</div>
+      </div>
+    </div>
+
+    <!-- SVG Mechanical Piping Schematic for MWTP-50C (Rev C) -->
+    <div class="blueprint-canvas border border-[var(--border)] rounded-xl p-3 overflow-x-auto">
+      <svg viewBox="0 0 1150 580" class="w-full min-w-[920px] h-auto" xmlns="http://www.w3.org/2000/svg">
+        <rect x="10" y="10" width="1130" height="36" rx="6" fill="#0f172a" stroke="#4c1d95" stroke-width="1.5"/>
+        <text x="24" y="33" fill="#c4b5fd" font-family="monospace" font-size="13" font-weight="bold">P-105: MWTP-50C (REV C) PROCESS PIPING DIAGRAM — DIRECT RPZ FEED, 4-MOD UF, 186 mJ/cm² UV &amp; 4-PORT BULKHEAD</text>
+        <text x="1125" y="33" text-anchor="end" fill="#94a3b8" font-family="monospace" font-size="11">SCALE: NTS • REV C</text>
+
+        <!-- STAGE 1: DUAL-MODE RAW INTAKE (PORT A PRESSURIZED RPZ vs PORT B SUCTION) -->
+        <rect x="20" y="60" width="355" height="225" rx="8" fill="#111827" stroke="#f59e0b" stroke-width="2"/>
+        <text x="32" y="80" fill="#fbbf24" font-family="monospace" font-size="11" font-weight="bold">1. DUAL-MODE INTAKE MANIFOLD (PORT A / PORT B)</text>
+
+        <!-- Port A Box -->
+        <rect x="32" y="92" width="330" height="82" rx="5" fill="#1e293b" stroke="#38bdf8" stroke-width="1.5"/>
+        <text x="42" y="110" fill="#38bdf8" font-family="monospace" font-size="9.5" font-weight="bold">PORT A (1.5" CAMLOCK — BWA PRESSURIZED FEED):</text>
+        <text x="42" y="125" fill="#e2e8f0" font-family="monospace" font-size="8.5">• Service-Line Tee (upstream of Double-Block) or Hydrant</text>
+        <text x="42" y="140" fill="#fde047" font-family="monospace" font-size="8.5">• PT-100 → PSV-100 (Holds ≥20 PSI on City Main; Trips &lt;22 PSI)</text>
+        <text x="42" y="155" fill="#34d399" font-family="monospace" font-size="8.5">• RPZ-100 (1.5" ASSE 1013 w/ FS-100 Relief Switch) → XV-100</text>
+        <text x="42" y="169" fill="#94a3b8" font-family="monospace" font-size="8">• ZERO GROUND BREAK TANK REQUIRED ON PRESSURIZED BWA JOBS</text>
+
+        <!-- Port B Box -->
+        <rect x="32" y="182" width="330" height="54" rx="5" fill="#0f172a" stroke="#f59e0b" stroke-width="1.5"/>
+        <text x="42" y="199" fill="#fbbf24" font-family="monospace" font-size="9.5" font-weight="bold">PORT B (2.0" CAMLOCK — OUTAGE SUCTION MODE):</text>
+        <text x="42" y="214" fill="#cbd5e1" font-family="monospace" font-size="8.5">• Drafts from Potable Tanker or PWR-25 550-Gal Break Tank</text>
+        <text x="42" y="228" fill="#cbd5e1" font-family="monospace" font-size="8.5">• 2" Foot Valve/Strainer → XV-103 (2" Ball) → P-101 Suction</text>
+
+        <text x="32" y="255" fill="#22d3ee" font-family="monospace" font-size="9.5" font-weight="bold">• P-101 (3 HP VFD 316SS) → ST-101 (100µm) → BF-101A/B (5µm)</text>
+        <text x="32" y="271" fill="#cbd5e1" font-family="monospace" font-size="8.5">  + P-501 PACl Quill + SM-101 Static Mixer → FIT-200 (1.5" Mag)</text>
+
+        <!-- STAGE 2: 4-MODULE HOLLOW-FIBER UF SKID (UF-201A..D) -->
+        <rect x="395" y="60" width="320" height="225" rx="8" fill="#111827" stroke="#06b6d4" stroke-width="2"/>
+        <text x="408" y="80" fill="#22d3ee" font-family="monospace" font-size="11" font-weight="bold">2. 4-MODULE PVDF UF SKID (UF-201A..D)</text>
+        <text x="408" y="100" fill="#e2e8f0" font-family="monospace" font-size="9.5">• Headers: 1.5" Sch 10S 316L SS Sanitary Tri-Clamp</text>
+        <text x="408" y="116" fill="#cbd5e1" font-family="monospace" font-size="9">• 4 × 0.02 µm Outside-In PVDF Modules (≥4-Log Crypto/</text>
+        <text x="408" y="130" fill="#cbd5e1" font-family="monospace" font-size="9">  Giardia); 35 GPM Normal (4 Modules) / 31 GPM in BW</text>
+        <text x="408" y="148" fill="#34d399" font-family="monospace" font-size="9">• Permeate Header: PT-202 (TMP) + AIT-201 Turbidity</text>
+        <text x="408" y="164" fill="#fda4af" font-family="monospace" font-size="9">  (Trips if >0.15 NTU; Hardwired >0.30 NTU via K-SAFE)</text>
+        <text x="408" y="182" fill="#fde047" font-family="monospace" font-size="9">• Automated Daily Pressure-Decay DIT (18 PSI Air via</text>
+        <text x="408" y="196" fill="#fde047" font-family="monospace" font-size="9">  XV-206; Pass ≤ 0.15 PSI/min decay)</text>
+        <text x="408" y="214" fill="#22d3ee" font-family="monospace" font-size="9">• Backwash Supply: Tapped off P-601A/B Booster Header</text>
+        <text x="408" y="228" fill="#cbd5e1" font-family="monospace" font-size="8.5">  via XV-203 (35 GPM for 45s every 60m — no separate BW pump)</text>
+
+        <!-- STAGE 3: DUAL 186 mJ/cm² VIRUS-RATED UV + NaOCl RESIDUAL TRIM -->
+        <rect x="735" y="60" width="395" height="225" rx="8" fill="#111827" stroke="#a855f7" stroke-width="2"/>
+        <text x="748" y="80" fill="#c084fc" font-family="monospace" font-size="11" font-weight="bold">3. VIRUS-RATED UV (186 mJ/cm²) + NaOCl TRIM</text>
+        <text x="748" y="100" fill="#34d399" font-family="monospace" font-size="9.5" font-weight="bold">• REPLACES 600-GAL CONTACT TANK TK-401 &amp; PUMP P-401!</text>
+        <text x="748" y="118" fill="#e2e8f0" font-family="monospace" font-size="9">• AIT-401 Online UVT Analyzer (254 nm, ≥85% Design UVT)</text>
+        <text x="748" y="135" fill="#c084fc" font-family="monospace" font-size="9.5" font-weight="bold">• UV-401A (Duty) &amp; UV-401B (Standby) — 1.5" 316L SS:</text>
+        <text x="748" y="151" fill="#cbd5e1" font-family="monospace" font-size="9">  UVDGM-validated to deliver RED ≥ 186 mJ/cm² at 40 GPM</text>
+        <text x="748" y="166" fill="#cbd5e1" font-family="monospace" font-size="9">  and 85% UVT (4-Log Virus Inactivation per EPA LT2 Table)</text>
+        <text x="748" y="184" fill="#fde047" font-family="monospace" font-size="9">• Flow Orifice FO-401: Caps flow at 40 GPM until UV-401B</text>
+        <text x="748" y="199" fill="#fde047" font-family="monospace" font-size="9">  reaches 100% UV intensity (prevents unvalidated burst)</text>
+        <text x="748" y="217" fill="#34d399" font-family="monospace" font-size="9">• Post-UV: P-502A/B 12.5% NaOCl Quill + SM-502 Mixer</text>
+        <text x="748" y="232" fill="#cbd5e1" font-family="monospace" font-size="8.5">  (Doses 1.5–2.0 mg/L Free Cl₂ for building residual only)</text>
+        <text x="748" y="248" fill="#fda4af" font-family="monospace" font-size="8.5">• XV-300 (1.5" Fail-Open Divert): Dumps to Waste if Dose &lt;186</text>
+
+        <!-- STAGE 4: 150-GAL BAFFLED CLEARWELL, DUPLEX BOOSTERS & 4-PORT BULKHEAD -->
+        <rect x="20" y="305" width="1110" height="190" rx="8" fill="#111827" stroke="#8b5cf6" stroke-width="2"/>
+        <text x="35" y="327" fill="#c4b5fd" font-family="monospace" font-size="11.5" font-weight="bold">4. 150-GAL BAFFLED CLEARWELL (TK-601), DUPLEX 3 HP VFD BOOSTERS (P-601A/B), RPZ-602 &amp; REAR 4-PORT BULKHEAD</text>
+
+        <!-- TK-601 Clearwell Box -->
+        <rect x="35" y="340" width="275" height="140" rx="6" fill="#0f172a" stroke="#3b82f6" stroke-width="1.8"/>
+        <text x="172" y="360" text-anchor="middle" fill="#60a5fa" font-family="monospace" font-size="10" font-weight="bold">TK-601 (150-GAL ONBOARD CLEARWELL)</text>
+        <text x="47" y="378" fill="#e2e8f0" font-family="monospace" font-size="8.5">• Heavy-Wall HDPE in Steel Cradle over Axles</text>
+        <text x="47" y="394" fill="#e2e8f0" font-family="monospace" font-size="8.5">• Provides Surge Volume for 50 GPM Dish Bursts</text>
+        <text x="47" y="410" fill="#e2e8f0" font-family="monospace" font-size="8.5">  and 26-Gal UF Backwash Draws</text>
+        <text x="47" y="426" fill="#34d399" font-family="monospace" font-size="8.5">• LT-601 Radar Level + Screened Vent + Overflow</text>
+        <text x="47" y="442" fill="#fde047" font-family="monospace" font-size="8.5">• AIT-601 (Free Cl₂ / pH / °C Analyzer Loop):</text>
+        <text x="47" y="456" fill="#cbd5e1" font-family="monospace" font-size="8">  Locks XV-601 closed if Free Cl₂ &lt;0.5 or &gt;4.0 mg/L</text>
+
+        <!-- Duplex Booster & RPZ-602 Box -->
+        <rect x="325" y="340" width="365" height="140" rx="6" fill="#1e293b" stroke="#3b82f6" stroke-width="1.8"/>
+        <text x="507" y="360" text-anchor="middle" fill="#93c5fd" font-family="monospace" font-size="10" font-weight="bold">DUPLEX BOOSTERS P-601A/B + RPZ-602 (PW-2"-316SS)</text>
+        <text x="338" y="378" fill="#e2e8f0" font-family="monospace" font-size="8.5">• Suction Header: 2.0" Sch 10S 316L SS from TK-601</text>
+        <text x="338" y="394" fill="#e2e8f0" font-family="monospace" font-size="8.5">• P-601A (3 HP Duty) + P-601B (3 HP Lag/Standby VFD)</text>
+        <text x="338" y="410" fill="#e2e8f0" font-family="monospace" font-size="8.5">• 20-Gal NSF-61 Bladder Tank + PT-602 PID (65 PSI)</text>
+        <text x="338" y="426" fill="#34d399" font-family="monospace" font-size="8.5">• FIT-602 (2" Fiscal Magmeter) → XV-601 (2" FC Block)</text>
+        <text x="338" y="442" fill="#fde047" font-family="monospace" font-size="8.5">• RPZ-602 (2.0" ASSE 1013 Lead-Free Bronze Backflow)</text>
+        <text x="338" y="458" fill="#cbd5e1" font-family="monospace" font-size="8.5">  with 2" Air-Gap Funnel routed to Floor Drain</text>
+
+        <!-- 4-Port Rear Bulkhead Box (vs 5-Port on MWTP-50) -->
+        <rect x="705" y="340" width="410" height="140" rx="6" fill="#0f172a" stroke="#10b981" stroke-width="1.8"/>
+        <text x="910" y="360" text-anchor="middle" fill="#34d399" font-family="monospace" font-size="10" font-weight="bold">MWTP-50C REAR HEATED 4-PORT BULKHEAD PANEL</text>
+        <text x="718" y="380" fill="#38bdf8" font-family="monospace" font-size="9" font-weight="bold">1. PORT A — PRESSURIZED RAW IN (1.5" Female Camlock — Blue):</text>
+        <text x="718" y="394" fill="#cbd5e1" font-family="monospace" font-size="8">   Feeds PT-100 → PSV-100 → RPZ-100 → XV-100 (BWA Mode)</text>
+        <text x="718" y="411" fill="#fbbf24" font-family="monospace" font-size="9" font-weight="bold">2. PORT B — SUCTION RAW IN (2.0" Male Camlock — Blue):</text>
+        <text x="718" y="425" fill="#cbd5e1" font-family="monospace" font-size="8">   Feeds XV-103 → P-101 Suction (Tanker / PWR-25 550-Gal Tank)</text>
+        <text x="718" y="442" fill="#34d399" font-family="monospace" font-size="9" font-weight="bold">3. PORT C — POTABLE WATER OUT (2.0" Female Camlock — White):</text>
+        <text x="718" y="456" fill="#cbd5e1" font-family="monospace" font-size="8">   Post-RPZ-602 to Customer Riser Tee (50 ft × 2" NSF-61 Hose)</text>
+        <text x="718" y="472" fill="#fb7185" font-family="monospace" font-size="9" font-weight="bold">4. PORT D — DECHLORINATED WASTE (2.0" Male Camlock — Gray)</text>
+
+        <!-- Bottom Waste & Dechlorination Bar -->
+        <rect x="20" y="508" width="1110" height="58" rx="8" fill="#111827" stroke="#f43f5e" stroke-width="1.8"/>
+        <line x1="40" y1="538" x2="900" y2="538" stroke="#f43f5e" stroke-width="4"/>
+        <text x="45" y="527" fill="#fda4af" font-family="monospace" font-size="10.5" font-weight="bold">COMMON WASTE &amp; DECHLORINATION HEADER (BW-2"-PVC80): COLLECTS ST-101, UF BW, XV-300, RPZ-100/602 &amp; TK-601 OVERFLOW</text>
+        <text x="45" y="555" fill="#cbd5e1" font-family="monospace" font-size="9">P-503 Sodium Bisulfite (NaHSO₃) Injection Quill → 2" Static Mixer → PORT D (2" Gray Camlock) → Downstream Sanitary Sewer Cleanout (Bypass Grease Trap!)</text>
+      </svg>
+    </div>
+
+    <!-- MWTP-50C Pipe Spool & Valve Comparison Schedule -->
+    <div class="space-y-2">
+      <h3 class="text-sm font-bold uppercase tracking-wider text-violet-400 font-mono">MWTP-50C (Rev C) Pipe Spool &amp; Valve Schedule — Key Differences vs. MWTP-50 (Rev B)</h3>
+      <div class="overflow-x-auto border border-[var(--border)] rounded-xl">
+        <table class="w-full text-left text-xs font-mono">
+          <thead class="bg-[var(--secondary)] text-[var(--secondary-foreground)] uppercase border-b border-[var(--border)]">
+            <tr>
+              <th class="py-2 px-3">Line / Valve Tag</th>
+              <th class="py-2 px-3">Size &amp; Material</th>
+              <th class="py-2 px-3">Service / Function on MWTP-50C (Rev C)</th>
+              <th class="py-2 px-3">Actuation / Fail State</th>
+              <th class="py-2 px-3">Change vs. MWTP-50 (Rev B)</th>
+            </tr>
+          </thead>
+          <tbody class="divide-y divide-[var(--border)]">
+            <tr>
+              <td class="py-2 px-3 font-bold text-sky-400">RW-100A / RPZ-100</td>
+              <td class="py-2 px-3">1.5" 316L SS + Bronze RPZ</td>
+              <td class="py-2 px-3 font-sans">Direct Pressurized Raw Intake (<code>Port A</code> → <code>PT-100</code> → <code>PSV-100</code> → <code>RPZ-100</code> → <code>XV-100</code>)</td>
+              <td class="py-2 px-3">Spring-Return FC + <code>FS-100</code> Switch</td>
+              <td class="py-2 px-3 text-emerald-400 font-sans font-semibold">NEW: Eliminates 550-gal break tank on BWA jobs</td>
+            </tr>
+            <tr>
+              <td class="py-2 px-3 font-bold text-amber-400">RW-100B / XV-103</td>
+              <td class="py-2 px-3">2.0" Sch 10S 316L SS</td>
+              <td class="py-2 px-3 font-sans">Unpressurized Tanker / Break-Tank Suction Intake (<code>Port B</code> → <code>XV-103</code> → <code>P-101</code> Suction)</td>
+              <td class="py-2 px-3">Pneumatic / Electric Ball (FC)</td>
+              <td class="py-2 px-3 font-sans">Used only when city main is depressurized (&lt;20 PSI)</td>
+            </tr>
+            <tr>
+              <td class="py-2 px-3 font-bold text-violet-400">UV-401A / UV-401B</td>
+              <td class="py-2 px-3">1.5" 316L SS Sanitary</td>
+              <td class="py-2 px-3 font-sans">1 Duty + 1 Standby Amalgam UV Reactors Validated at ≥186 mJ/cm² (@ 40 GPM, 85% UVT) + <code>FO-401</code></td>
+              <td class="py-2 px-3">Auto Standby Warmup &gt;35 GPM</td>
+              <td class="py-2 px-3 text-emerald-400 font-sans font-semibold">NEW: Replaces 600-gal CT bladder <code>TK-401</code> &amp; <code>P-401</code></td>
+            </tr>
+            <tr>
+              <td class="py-2 px-3 font-bold text-rose-400">XV-300</td>
+              <td class="py-2 px-3">1.5" 316L SS Sanitary</td>
+              <td class="py-2 px-3 font-sans">Post-UV Off-Spec Divert-to-Waste Valve (Trips on Turbidity &gt;0.15 NTU or UV Dose &lt;186 mJ/cm²)</td>
+              <td class="py-2 px-3">Pneumatic Fail-Open (FO to Waste)</td>
+              <td class="py-2 px-3 font-sans">Relocated downstream of <code>UV-401A/B</code> to guard clearwell</td>
+            </tr>
+            <tr>
+              <td class="py-2 px-3 font-bold text-blue-400">PW-600 / XV-601</td>
+              <td class="py-2 px-3">2.0" Sch 10S 316L SS</td>
+              <td class="py-2 px-3 font-sans">Potable Discharge Header (<code>TK-601</code> → <code>P-601A/B</code> → <code>FIT-602</code> → <code>XV-601</code> → <code>RPZ-602</code> → <code>Port C</code>)</td>
+              <td class="py-2 px-3">Pneumatic Fail-Closed (<code>K-SAFE</code>)</td>
+              <td class="py-2 px-3 font-sans">Bulkhead simplified from 5 ports to 4 ports (no CT loop ports)</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </section>
+
   <script>
     function showSheet(id) {
-      const sheets = ['p1', 'p2', 'p3', 'p4'];
+      const sheets = ['p1', 'p2', 'p3', 'p4', 'p5'];
       sheets.forEach(s => {
         const el = document.getElementById('sheet-' + s);
         const tab = document.getElementById('tab-' + s);
