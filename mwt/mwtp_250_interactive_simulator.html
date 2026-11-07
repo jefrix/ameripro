@@ -38,11 +38,11 @@
   <div class="bg-[var(--card)] border border-[var(--border)] rounded-xl p-5 shadow-sm flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4">
     <div>
       <div class="flex items-center gap-2.5">
-        <span class="px-2.5 py-0.5 rounded-full text-xs font-semibold bg-emerald-500/15 text-emerald-500 border border-emerald-500/30" id="status-badge">ONLINE • POTABLE VERIFIED</span>
-        <span class="text-xs text-[var(--muted-foreground)] font-mono">MODEL: MWTP-250-GN36</span>
+        <span class="px-2.5 py-0.5 rounded-full text-xs font-semibold bg-emerald-500/15 text-emerald-500 border border-emerald-500/30" id="status-badge">ONLINE • ALL BARRIERS GREEN</span>
+        <span class="text-xs text-[var(--muted-foreground)] font-mono">MODEL: MWTP-250-GN36 · REV B</span>
       </div>
       <h1 class="text-xl font-bold mt-1">36-ft Gooseneck Emergency Water Treatment Facility</h1>
-      <p class="text-sm text-[var(--muted-foreground)]">Interactive Floorplan, SCADA Process Simulator & Emergency Facility Demand Calculator</p>
+      <p class="text-sm text-[var(--muted-foreground)]">Interactive Floorplan, SCADA Process Simulator &amp; Contact-Time (CT) Calculator</p>
     </div>
 
     <!-- Mode Switcher -->
@@ -54,7 +54,7 @@
         UF Train B Backwash
       </button>
       <button onclick="setOperatingMode('transport')" id="btn-mode-transport" class="px-3.5 py-2 rounded-lg text-xs font-semibold bg-[var(--secondary)] text-[var(--secondary-foreground)] border border-[var(--border)] transition">
-        Dry Highway Transport Mode
+        Drain &amp; Preserve (Transport)
       </button>
     </div>
   </div>
@@ -62,34 +62,34 @@
   <!-- Top KPI Telemetry Bar -->
   <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3">
     <div class="bg-[var(--card)] border border-[var(--border)] rounded-xl p-3.5">
-      <div class="text-xs text-[var(--muted-foreground)]">Net Potable Output</div>
-      <div class="text-lg font-bold font-mono mt-0.5 text-blue-500" id="kpi-flow">250 GPM</div>
-      <div class="text-xs text-[var(--muted-foreground)] font-mono" id="kpi-gpd">360,000 GPD</div>
+      <div class="text-xs text-[var(--muted-foreground)]">Building Flow</div>
+      <div class="text-lg font-bold font-mono mt-0.5 text-blue-500" id="kpi-flow">180 GPM</div>
+      <div class="text-xs text-[var(--muted-foreground)] font-mono" id="kpi-gpd">259,200 GPD</div>
     </div>
     <div class="bg-[var(--card)] border border-[var(--border)] rounded-xl p-3.5">
-      <div class="text-xs text-[var(--muted-foreground)]">Finished Turbidity</div>
-      <div class="text-lg font-bold font-mono mt-0.5 text-emerald-500" id="kpi-turbidity">0.03 NTU</div>
-      <div class="text-xs text-[var(--muted-foreground)]" id="kpi-log-removal">6-Log Bacteria / 4-Log Virus</div>
+      <div class="text-xs text-[var(--muted-foreground)]">UF Permeate Turbidity</div>
+      <div class="text-lg font-bold font-mono mt-0.5 text-emerald-500" id="kpi-turbidity">0.02 NTU</div>
+      <div class="text-xs text-[var(--muted-foreground)]" id="kpi-log-removal">Daily integrity test: PASS</div>
     </div>
     <div class="bg-[var(--card)] border border-[var(--border)] rounded-xl p-3.5">
-      <div class="text-xs text-[var(--muted-foreground)]">Free Chlorine Residual</div>
-      <div class="text-lg font-bold font-mono mt-0.5 text-emerald-500" id="kpi-chlorine">2.0 mg/L</div>
-      <div class="text-xs text-[var(--muted-foreground)]" id="kpi-naocl-rate">NaOCl: 0.24 GPH</div>
+      <div class="text-xs text-[var(--muted-foreground)]">Chlorine CT (4-log virus)</div>
+      <div class="text-lg font-bold font-mono mt-0.5 text-emerald-500" id="kpi-chlorine">CT 12.5</div>
+      <div class="text-xs text-[var(--muted-foreground)]" id="kpi-naocl-rate">Required 4.0 · Cl₂ 1.5 mg/L</div>
     </div>
     <div class="bg-[var(--card)] border border-[var(--border)] rounded-xl p-3.5">
-      <div class="text-xs text-[var(--muted-foreground)]">Building Line Pressure</div>
+      <div class="text-xs text-[var(--muted-foreground)]">Building Pressure (PT-603)</div>
       <div class="text-lg font-bold font-mono mt-0.5 text-sky-500" id="kpi-pressure">70 PSI</div>
-      <div class="text-xs text-[var(--muted-foreground)]" id="kpi-vfd-state">Triplex VFD Active</div>
+      <div class="text-xs text-[var(--muted-foreground)]" id="kpi-vfd-state">2 Duty VFDs Active</div>
     </div>
     <div class="bg-[var(--card)] border border-[var(--border)] rounded-xl p-3.5">
-      <div class="text-xs text-[var(--muted-foreground)]">Generator Load & Autonomy</div>
-      <div class="text-lg font-bold font-mono mt-0.5 text-amber-500" id="kpi-power">21.7 kW</div>
-      <div class="text-xs text-[var(--muted-foreground)]" id="kpi-fuel">54 hrs (1.85 gal/hr)</div>
+      <div class="text-xs text-[var(--muted-foreground)]">Generator Load &amp; Autonomy</div>
+      <div class="text-lg font-bold font-mono mt-0.5 text-amber-500" id="kpi-power">30 kW</div>
+      <div class="text-xs text-[var(--muted-foreground)]" id="kpi-fuel">60 hrs (2.5 gal/hr)</div>
     </div>
     <div class="bg-[var(--card)] border border-[var(--border)] rounded-xl p-3.5">
-      <div class="text-xs text-[var(--muted-foreground)]">Total Trailer Weight</div>
-      <div class="text-lg font-bold font-mono mt-0.5" id="kpi-weight">30,870 lbs</div>
-      <div class="text-xs text-emerald-500 font-medium" id="kpi-weight-note">On 4-Pt Hydraulic Jacks</div>
+      <div class="text-xs text-[var(--muted-foreground)]">Weight on Trailer</div>
+      <div class="text-lg font-bold font-mono mt-0.5" id="kpi-weight">28,420 lbs</div>
+      <div class="text-xs text-emerald-500 font-medium" id="kpi-weight-note">Ground tanks deployed</div>
     </div>
   </div>
 
@@ -98,35 +98,35 @@
     <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2">
       <div>
         <h2 class="text-base font-semibold">Interactive 36-ft Gooseneck Trailer Floorplan (Click any skid to inspect)</h2>
-        <p class="text-xs text-[var(--muted-foreground)]">8-ft Elevated Gooseneck Deck + 28-ft Lower Main Deck • 96" Interior Width • Triple 10,000-lb Torsion Axles</p>
+        <p class="text-xs text-[var(--muted-foreground)]">Fire-separated gooseneck machinery compartment + 28-ft main deck (9.5 ft clear) • 96" interior width • Triple 10,000-lb axles • Ground tanks shown below</p>
       </div>
-      <div class="flex items-center gap-4 text-xs">
-        <span class="flex items-center gap-1.5"><span class="w-3 h-1.5 rounded bg-amber-500 inline-block"></span> Raw Feed</span>
-        <span class="flex items-center gap-1.5"><span class="w-3 h-1.5 rounded bg-cyan-500 inline-block"></span> UF Filtrate</span>
+      <div class="flex flex-wrap items-center gap-4 text-xs">
+        <span class="flex items-center gap-1.5"><span class="w-3 h-1.5 rounded bg-amber-500 inline-block"></span> Raw Water</span>
+        <span class="flex items-center gap-1.5"><span class="w-3 h-1.5 rounded bg-cyan-500 inline-block"></span> UF Permeate</span>
+        <span class="flex items-center gap-1.5"><span class="w-3 h-1.5 rounded bg-emerald-500 inline-block"></span> Chlorine Contact</span>
         <span class="flex items-center gap-1.5"><span class="w-3 h-1.5 rounded bg-blue-500 inline-block"></span> Potable Pressurized</span>
-        <span class="flex items-center gap-1.5"><span class="w-3 h-1.5 rounded bg-rose-500 inline-block"></span> Backwash Waste</span>
+        <span class="flex items-center gap-1.5"><span class="w-3 h-1.5 rounded bg-rose-500 inline-block"></span> Waste (to sewer)</span>
       </div>
     </div>
 
     <!-- SVG Blueprint -->
     <div class="w-full overflow-x-auto">
-      <svg viewBox="0 0 1120 390" class="w-full min-w-[820px] h-auto select-none">
+      <svg viewBox="0 0 1120 470" class="w-full min-w-[820px] h-auto select-none">
         <!-- Dimension Rulers -->
         <g stroke="currentColor" stroke-opacity="0.35" fill="currentColor" class="text-[var(--muted-foreground)]" font-size="12">
-          <!-- Total 36 ft line -->
           <line x1="70" y1="22" x2="1050" y2="22" stroke-width="1.5"/>
           <line x1="70" y1="16" x2="70" y2="28" stroke-width="1.5"/>
           <line x1="300" y1="16" x2="300" y2="28" stroke-width="1.5"/>
           <line x1="1050" y1="16" x2="1050" y2="28" stroke-width="1.5"/>
-          <text x="185" y="16" text-anchor="middle" stroke="none" font-weight="600">8 ft Elevated Gooseneck</text>
-          <text x="675" y="16" text-anchor="middle" stroke="none" font-weight="600">28 ft Main Lower Deck (Total 36 ft Length × 8 ft Width)</text>
+          <text x="185" y="16" text-anchor="middle" stroke="none" font-weight="600">8 ft Gooseneck (machinery)</text>
+          <text x="675" y="16" text-anchor="middle" stroke="none" font-weight="600">28 ft Main Deck (Total 36 ft Length × 8 ft Width)</text>
         </g>
 
         <!-- Gooseneck Hitch Tongue (Front Left) -->
         <polygon points="15,175 70,125 70,225 15,195" fill="none" stroke="currentColor" stroke-opacity="0.5" stroke-width="2.5"/>
         <circle cx="28" cy="185" r="7" fill="#3b82f6" />
-        <text x="38" y="162" font-size="12" fill="currentColor" opacity="0.75" font-weight="600">2-5/16" Hitch</text>
-        <text x="20" y="218" font-size="12" fill="currentColor" opacity="0.65">Pin: 4,550 lb</text>
+        <text x="38" y="162" font-size="12" fill="currentColor" opacity="0.75" font-weight="600">Hitch</text>
+        <text x="8" y="240" font-size="12" fill="currentColor" opacity="0.65">Pin ~5,300 lb</text>
 
         <!-- Hydraulic Leveling Jacks (4 Corners) -->
         <g id="jacks-group">
@@ -136,89 +136,77 @@
           <rect x="1018" y="326" width="24" height="10" rx="2" fill="#f59e0b" />
         </g>
 
-        <!-- Triple Axles Indicator (Under Center-Rear Main Deck) -->
+        <!-- Triple Axles Indicator -->
         <g opacity="0.75">
-          <!-- Top Wheels -->
           <rect x="615" y="32" width="42" height="12" rx="3" fill="#64748b"/>
           <rect x="670" y="32" width="42" height="12" rx="3" fill="#64748b"/>
           <rect x="725" y="32" width="42" height="12" rx="3" fill="#64748b"/>
-          <!-- Bottom Wheels -->
           <rect x="615" y="326" width="42" height="12" rx="3" fill="#64748b"/>
           <rect x="670" y="326" width="42" height="12" rx="3" fill="#64748b"/>
           <rect x="725" y="326" width="42" height="12" rx="3" fill="#64748b"/>
-          <text x="691" y="356" text-anchor="middle" font-size="12" fill="currentColor" font-weight="600">TRIPLE 10,000-LB AXLES (30,000 LB GVWR)</text>
+          <text x="691" y="354" text-anchor="middle" font-size="12" fill="currentColor" font-weight="600">3 × 10K-LB AXLES · 30K GVWR</text>
         </g>
 
         <!-- Main Trailer Outer Insulated Shell -->
         <rect x="70" y="45" width="980" height="280" rx="8" fill="#0f172a" fill-opacity="0.18" stroke="currentColor" stroke-opacity="0.7" stroke-width="3"/>
 
-        <!-- Bulkhead Divider between 8ft Gooseneck and 28ft Main Deck -->
-        <line x1="300" y1="45" x2="300" y2="165" stroke="currentColor" stroke-opacity="0.6" stroke-width="3" stroke-dasharray="6 3"/>
-        <line x1="300" y1="205" x2="300" y2="325" stroke="currentColor" stroke-opacity="0.6" stroke-width="3" stroke-dasharray="6 3"/>
+        <!-- Firewall between gooseneck machinery compartment and main deck -->
+        <line x1="300" y1="45" x2="300" y2="325" stroke="#f97316" stroke-opacity="0.8" stroke-width="4"/>
+        <text x="293" y="185" text-anchor="middle" font-size="11" fill="#f97316" font-weight="700" transform="rotate(-90 293 185)">FIREWALL</text>
 
         <!-- Center 32" Operator Walkway -->
-        <rect x="195" y="165" width="845" height="40" fill="currentColor" fill-opacity="0.05" stroke="currentColor" stroke-opacity="0.15" stroke-dasharray="4 4"/>
-        <text x="585" y="189" text-anchor="middle" font-size="12" fill="currentColor" opacity="0.4" font-weight="600" letter-spacing="2">32" OPERATOR WALKWAY & OVERHEAD 316SS PIPE RACK</text>
+        <rect x="310" y="165" width="730" height="40" fill="currentColor" fill-opacity="0.05" stroke="currentColor" stroke-opacity="0.15" stroke-dasharray="4 4"/>
+        <text x="660" y="189" text-anchor="middle" font-size="12" fill="currentColor" opacity="0.4" font-weight="600" letter-spacing="2">32" OPERATOR WALKWAY &amp; OVERHEAD PIPE RACK</text>
 
-        <!-- ================= SKID 1: GENERATOR & AIR COMPRESSOR (Gooseneck Nose) ================= -->
+        <!-- ================= GENERATOR (Gooseneck) ================= -->
         <g onclick="selectSkid('gen')" id="skid-gen" class="skid-box">
           <rect x="82" y="57" width="110" height="256" rx="6" fill="#f59e0b" fill-opacity="0.18" stroke="#f59e0b" stroke-width="2"/>
-          <text x="137" y="115" text-anchor="middle" font-size="13" font-weight="700" fill="currentColor">45 kW DIESEL</text>
+          <text x="137" y="115" text-anchor="middle" font-size="13" font-weight="700" fill="currentColor">80 kW DIESEL</text>
           <text x="137" y="133" text-anchor="middle" font-size="13" font-weight="700" fill="currentColor">GENERATOR</text>
           <text x="137" y="155" text-anchor="middle" font-size="12" fill="currentColor" opacity="0.8">Tier 4 Sound-Atten</text>
           <line x1="94" y1="185" x2="180" y2="185" stroke="#f59e0b" stroke-opacity="0.4"/>
-          <text x="137" y="215" text-anchor="middle" font-size="12" font-weight="600" fill="currentColor">100-Gal Belly Tank</text>
-          <text x="137" y="235" text-anchor="middle" font-size="12" fill="currentColor" opacity="0.8">(54 hr Autonomy)</text>
-          <text x="137" y="275" text-anchor="middle" font-size="12" font-weight="600" fill="currentColor">+ 2 HP Oil-Free</text>
-          <text x="137" y="292" text-anchor="middle" font-size="12" fill="currentColor" opacity="0.8">Air Compressor</text>
+          <text x="137" y="215" text-anchor="middle" font-size="12" font-weight="600" fill="currentColor">150-Gal Belly Tank</text>
+          <text x="137" y="235" text-anchor="middle" font-size="12" fill="currentColor" opacity="0.8">(~48 hr at full load)</text>
+          <text x="137" y="275" text-anchor="middle" font-size="12" font-weight="600" fill="currentColor">Exterior doors</text>
+          <text x="137" y="292" text-anchor="middle" font-size="12" fill="currentColor" opacity="0.8">no crew space</text>
         </g>
 
-        <!-- ================= SKID 2: PLC SCADA & WET LAB (Gooseneck Rear) ================= -->
+        <!-- ================= DUPLEX AIR (Gooseneck) ================= -->
+        <g onclick="selectSkid('air')" id="skid-air" class="skid-box">
+          <rect x="202" y="57" width="84" height="256" rx="6" fill="#a855f7" fill-opacity="0.16" stroke="#a855f7" stroke-width="2"/>
+          <text x="244" y="130" text-anchor="middle" font-size="12" font-weight="700" fill="currentColor">DUPLEX</text>
+          <text x="244" y="148" text-anchor="middle" font-size="12" font-weight="700" fill="currentColor">AIR</text>
+          <text x="244" y="170" text-anchor="middle" font-size="12" fill="currentColor" opacity="0.8">2 × 2 HP</text>
+          <text x="244" y="210" text-anchor="middle" font-size="12" fill="currentColor" opacity="0.8">Receiver</text>
+          <text x="244" y="228" text-anchor="middle" font-size="12" fill="currentColor" opacity="0.8">+ Dryer</text>
+        </g>
+
+        <!-- ================= PLC / LAB / SAFETY (Front Main Deck Top) ================= -->
         <g onclick="selectSkid('plc')" id="skid-plc" class="skid-box">
-          <rect x="202" y="57" width="88" height="100" rx="6" fill="#8b5cf6" fill-opacity="0.18" stroke="#8b5cf6" stroke-width="2"/>
-          <text x="246" y="88" text-anchor="middle" font-size="12" font-weight="700" fill="currentColor">PLC / SCADA</text>
-          <text x="246" y="106" text-anchor="middle" font-size="12" fill="currentColor" opacity="0.85">15" HMI Panel</text>
-          <text x="246" y="124" text-anchor="middle" font-size="12" fill="currentColor" opacity="0.75">Cl2 & Turbidity</text>
-          <text x="246" y="142" text-anchor="middle" font-size="12" fill="currentColor" opacity="0.75">Analyzers</text>
-
-          <rect x="202" y="213" width="88" height="100" rx="6" fill="#8b5cf6" fill-opacity="0.18" stroke="#8b5cf6" stroke-width="2"/>
-          <text x="246" y="248" text-anchor="middle" font-size="12" font-weight="700" fill="currentColor">WET LAB</text>
-          <text x="246" y="266" text-anchor="middle" font-size="12" fill="currentColor" opacity="0.85">Sample Sink</text>
-          <text x="246" y="284" text-anchor="middle" font-size="12" fill="currentColor" opacity="0.75">+ Stowed 3k Gal</text>
-          <text x="246" y="300" text-anchor="middle" font-size="12" fill="currentColor" opacity="0.75">Bladder Tank</text>
+          <rect x="314" y="57" width="185" height="100" rx="6" fill="#8b5cf6" fill-opacity="0.18" stroke="#8b5cf6" stroke-width="2"/>
+          <text x="406" y="80" text-anchor="middle" font-size="13" font-weight="700" fill="currentColor">PLC / HMI · WET LAB</text>
+          <text x="406" y="100" text-anchor="middle" font-size="12" fill="currentColor" opacity="0.85">Turbidity, UVT, Cl₂ / pH / Temp</text>
+          <text x="406" y="118" text-anchor="middle" font-size="12" fill="currentColor" opacity="0.85">Live CT Calculation</text>
+          <text x="406" y="140" text-anchor="middle" font-size="12" font-weight="600" fill="#a78bfa">+ Eyewash / Safety Station</text>
         </g>
 
-        <!-- ================= SKID 3: INTAKE PUMP, STRAINER & BAG FILTER (Front Bottom) ================= -->
+        <!-- ================= INTAKE (Front Main Deck Bottom) ================= -->
         <g onclick="selectSkid('intake')" id="skid-intake" class="skid-box">
           <rect x="314" y="213" width="185" height="100" rx="6" fill="#d97706" fill-opacity="0.18" stroke="#d97706" stroke-width="2"/>
-          <text x="406" y="238" text-anchor="middle" font-size="13" font-weight="700" fill="currentColor">1. INTAKE & PRE-FILTER</text>
-          <text x="406" y="258" text-anchor="middle" font-size="12" fill="currentColor" opacity="0.85">P-101 Raw Booster (7.5 HP)</text>
-          <text x="406" y="276" text-anchor="middle" font-size="12" fill="currentColor" opacity="0.85">200 um Auto Wedge Strainer</text>
-          <text x="406" y="294" text-anchor="middle" font-size="12" fill="currentColor" opacity="0.85">Duplex 25 um Bag Housings</text>
+          <text x="406" y="238" text-anchor="middle" font-size="13" font-weight="700" fill="currentColor">1–2. INTAKE &amp; PRE-FILTER</text>
+          <text x="406" y="258" text-anchor="middle" font-size="12" fill="currentColor" opacity="0.85">P-101 Intake Pump (15 HP)</text>
+          <text x="406" y="276" text-anchor="middle" font-size="12" fill="currentColor" opacity="0.85">200 µm Auto Strainer</text>
+          <text x="406" y="294" text-anchor="middle" font-size="12" fill="currentColor" opacity="0.85">25 µm Bags → PACl Mixer</text>
         </g>
 
-        <!-- ================= SKID 4: DUPLEX GAC CARBON VESSELS (Front Top) ================= -->
-        <g onclick="selectSkid('gac')" id="skid-gac" class="skid-box">
-          <rect x="314" y="57" width="185" height="100" rx="6" fill="#10b981" fill-opacity="0.18" stroke="#10b981" stroke-width="2"/>
-          <circle cx="358" cy="107" r="30" fill="#10b981" fill-opacity="0.25" stroke="#10b981" stroke-width="1.5"/>
-          <circle cx="448" cy="107" r="30" fill="#10b981" fill-opacity="0.25" stroke="#10b981" stroke-width="1.5"/>
-          <text x="358" y="104" text-anchor="middle" font-size="12" font-weight="700" fill="currentColor">GAC-A</text>
-          <text x="358" y="119" text-anchor="middle" font-size="12" fill="currentColor">36"×72"</text>
-          <text x="448" y="104" text-anchor="middle" font-size="12" font-weight="700" fill="currentColor">GAC-B</text>
-          <text x="448" y="119" text-anchor="middle" font-size="12" fill="currentColor">36"×72"</text>
-          <text x="406" y="72" text-anchor="middle" font-size="12" font-weight="700" fill="currentColor">3. CARBON POLISHING</text>
-        </g>
-
-        <!-- ================= SKID 5: HOLLOW-FIBER UF SKID (Center Top - Over Axles) ================= -->
+        <!-- ================= UF SKID (Center Top) ================= -->
         <g onclick="selectSkid('uf')" id="skid-uf" class="skid-box skid-selected">
           <rect x="512" y="57" width="280" height="100" rx="6" fill="#06b6d4" fill-opacity="0.20" stroke="#06b6d4" stroke-width="2"/>
-          <text x="652" y="77" text-anchor="middle" font-size="13" font-weight="700" fill="currentColor">2. ULTRAFILTRATION (0.02 um PVDF)</text>
-          <!-- 7 Modules Train A -->
+          <text x="652" y="77" text-anchor="middle" font-size="13" font-weight="700" fill="currentColor">3. ULTRAFILTRATION + DAILY DIT</text>
           <g fill="#06b6d4" stroke="#0891b2" stroke-width="1.2">
             <circle cx="536" cy="103" r="10"/><circle cx="560" cy="103" r="10"/><circle cx="584" cy="103" r="10"/>
             <circle cx="608" cy="103" r="10"/><circle cx="632" cy="103" r="10"/><circle cx="656" cy="103" r="10"/><circle cx="680" cy="103" r="10"/>
           </g>
-          <!-- 7 Modules Train B -->
           <g id="uf-train-b-modules" fill="#06b6d4" stroke="#0891b2" stroke-width="1.2">
             <circle cx="536" cy="131" r="10"/><circle cx="560" cy="131" r="10"/><circle cx="584" cy="131" r="10"/>
             <circle cx="608" cy="131" r="10"/><circle cx="632" cy="131" r="10"/><circle cx="656" cy="131" r="10"/><circle cx="680" cy="131" r="10"/>
@@ -227,67 +215,81 @@
           <text x="738" y="134" text-anchor="middle" font-size="12" font-weight="600" fill="currentColor" id="uf-train-b-label">Train B: 125G</text>
         </g>
 
-        <!-- ================= SKID 6: UV REACTORS, CHEM DOSING & BW PUMP (Center Bottom - Over Axles) ================= -->
+        <!-- ================= UV + CHEMICAL ROOM (Center Bottom) ================= -->
         <g onclick="selectSkid('chem')" id="skid-chem" class="skid-box">
           <rect x="512" y="213" width="280" height="100" rx="6" fill="#ec4899" fill-opacity="0.16" stroke="#ec4899" stroke-width="2"/>
-          <text x="652" y="235" text-anchor="middle" font-size="13" font-weight="700" fill="currentColor">4. UV DISINFECTION & CHEMICAL SKID</text>
-          <text x="585" y="258" text-anchor="middle" font-size="12" font-weight="600" fill="currentColor">2x LPHO UV Reactors</text>
-          <text x="585" y="276" text-anchor="middle" font-size="12" fill="currentColor" opacity="0.85">Dose: >= 40 mJ/cm2</text>
+          <text x="652" y="235" text-anchor="middle" font-size="13" font-weight="700" fill="currentColor">4. UV ×3 · 5. CHLORINE · CHEM ROOM</text>
+          <text x="585" y="258" text-anchor="middle" font-size="12" font-weight="600" fill="currentColor">2 Duty + 1 Standby UV</text>
+          <text x="585" y="276" text-anchor="middle" font-size="12" fill="currentColor" opacity="0.85">≥ 40 mJ/cm² + UVT</text>
           <text x="585" y="294" text-anchor="middle" font-size="12" fill="currentColor" opacity="0.85">+ UF Backwash Pump</text>
-          <!-- Chemical Day Tanks -->
-          <circle cx="685" cy="272" r="20" fill="#ec4899" fill-opacity="0.25" stroke="#ec4899" stroke-width="1.5"/>
-          <text x="685" y="276" text-anchor="middle" font-size="12" font-weight="700" fill="currentColor">NaOCl</text>
-          <circle cx="732" cy="272" r="18" fill="#ec4899" fill-opacity="0.25" stroke="#ec4899" stroke-width="1.5"/>
-          <text x="732" y="276" text-anchor="middle" font-size="12" font-weight="700" fill="currentColor">PACl</text>
-          <circle cx="772" cy="272" r="15" fill="#ec4899" fill-opacity="0.25" stroke="#ec4899" stroke-width="1.5"/>
-          <text x="772" y="276" text-anchor="middle" font-size="12" font-weight="700" fill="currentColor">CIP</text>
+          <rect x="665" y="250" width="36" height="44" rx="3" fill="#ec4899" fill-opacity="0.25" stroke="#ec4899" stroke-width="1.5"/>
+          <text x="683" y="276" text-anchor="middle" font-size="10" font-weight="700" fill="currentColor">OXID.</text>
+          <rect x="708" y="250" width="36" height="44" rx="3" fill="#f59e0b" fill-opacity="0.25" stroke="#f59e0b" stroke-width="1.5"/>
+          <text x="726" y="276" text-anchor="middle" font-size="10" font-weight="700" fill="currentColor">ACID</text>
+          <rect x="751" y="250" width="34" height="44" rx="3" fill="#94a3b8" fill-opacity="0.25" stroke="#94a3b8" stroke-width="1.5"/>
+          <text x="768" y="276" text-anchor="middle" font-size="10" font-weight="700" fill="currentColor">PACl</text>
         </g>
 
-        <!-- ================= SKID 7: 500-GAL BAFFLED CLEARWELL TANK (Rear Top) ================= -->
+        <!-- ================= CLEARWELL (Rear Top) ================= -->
         <g onclick="selectSkid('clearwell')" id="skid-clearwell" class="skid-box">
           <rect x="805" y="57" width="195" height="100" rx="6" fill="#3b82f6" fill-opacity="0.20" stroke="#3b82f6" stroke-width="2"/>
-          <!-- Baffle lines -->
           <line x1="855" y1="57" x2="855" y2="130" stroke="#3b82f6" stroke-width="2" stroke-opacity="0.6"/>
           <line x1="905" y1="84" x2="905" y2="157" stroke="#3b82f6" stroke-width="2" stroke-opacity="0.6"/>
           <line x1="955" y1="57" x2="955" y2="130" stroke="#3b82f6" stroke-width="2" stroke-opacity="0.6"/>
-          <text x="902" y="92" text-anchor="middle" font-size="13" font-weight="700" fill="currentColor">5. 500-GAL BAFFLED</text>
-          <text x="902" y="110" text-anchor="middle" font-size="13" font-weight="700" fill="currentColor">CLEARWELL TANK</text>
-          <text x="902" y="132" text-anchor="middle" font-size="12" fill="currentColor" opacity="0.9" id="clearwell-level-label">Level: 92% (460 Gal)</text>
+          <text x="902" y="92" text-anchor="middle" font-size="13" font-weight="700" fill="currentColor">500-GAL BAFFLED</text>
+          <text x="902" y="110" text-anchor="middle" font-size="13" font-weight="700" fill="currentColor">CLEARWELL</text>
+          <text x="902" y="132" text-anchor="middle" font-size="12" fill="currentColor" opacity="0.9" id="clearwell-level-label">Level: 85% (425 Gal)</text>
         </g>
 
-        <!-- ================= SKID 8: TRIPLEX VFD BOOSTER & RPZ BACKFLOW (Rear Bottom) ================= -->
+        <!-- ================= BOOSTER (Rear Bottom) ================= -->
         <g onclick="selectSkid('booster')" id="skid-booster" class="skid-box">
           <rect x="805" y="213" width="195" height="100" rx="6" fill="#2563eb" fill-opacity="0.22" stroke="#2563eb" stroke-width="2"/>
           <text x="902" y="236" text-anchor="middle" font-size="13" font-weight="700" fill="currentColor">6. BUILDING BOOSTER</text>
-          <text x="902" y="255" text-anchor="middle" font-size="12" fill="currentColor" opacity="0.9">3x 7.5 HP VFD Multistage</text>
-          <text x="902" y="273" text-anchor="middle" font-size="12" fill="currentColor" opacity="0.9">65-85 PSI Constant Press</text>
-          <text x="902" y="292" text-anchor="middle" font-size="12" font-weight="600" fill="#60a5fa">+ ASSE 1013 RPZ Backflow</text>
+          <text x="902" y="255" text-anchor="middle" font-size="12" fill="currentColor" opacity="0.9">3× 15 HP VFD (2+1)</text>
+          <text x="902" y="273" text-anchor="middle" font-size="12" fill="currentColor" opacity="0.9">+ P-401 CT Transfer</text>
+          <text x="902" y="292" text-anchor="middle" font-size="12" font-weight="600" fill="#60a5fa">+ ASSE 1013 RPZ</text>
         </g>
 
-        <!-- ================= REAR BULKHEAD MANIFOLD CONNECTIONS ================= -->
+        <!-- ================= REAR BULKHEAD ================= -->
         <g onclick="selectSkid('manifold')" id="skid-manifold" class="skid-box">
           <rect x="1010" y="57" width="32" height="256" rx="4" fill="#475569" fill-opacity="0.35" stroke="#94a3b8" stroke-width="1.5"/>
           <text x="1026" y="185" text-anchor="middle" font-size="12" font-weight="700" fill="currentColor" transform="rotate(-90 1026 185)">REAR CAMLOCK BULKHEAD</text>
         </g>
 
+        <!-- ================= GROUND TANKS (beside trailer) ================= -->
+        <text x="40" y="405" font-size="12" font-weight="700" fill="#f59e0b">HYDRANT ≥ 20 PSI</text>
+        <text x="40" y="421" font-size="12" fill="currentColor" opacity="0.75">via meter + backflow + PSV-100</text>
+        <text x="40" y="437" font-size="12" fill="currentColor" opacity="0.75">— or TANKER</text>
+        <g onclick="selectSkid('tanks')" id="skid-tanks" class="skid-box">
+          <rect x="330" y="372" width="150" height="80" rx="10" fill="#f59e0b" fill-opacity="0.14" stroke="#f59e0b" stroke-width="2" stroke-dasharray="5 3"/>
+          <text x="405" y="400" text-anchor="middle" font-size="12" font-weight="700" fill="currentColor">TK-100 RAW</text>
+          <text x="405" y="417" text-anchor="middle" font-size="12" fill="currentColor" opacity="0.85">3,000-Gal Break Tank</text>
+          <text x="405" y="434" text-anchor="middle" font-size="12" fill="currentColor" opacity="0.85">(air-gap fill)</text>
+          <rect x="800" y="372" width="170" height="80" rx="10" fill="#10b981" fill-opacity="0.14" stroke="#10b981" stroke-width="2" stroke-dasharray="5 3"/>
+          <line x1="843" y1="372" x2="843" y2="430" stroke="#10b981" stroke-opacity="0.5" stroke-width="2"/>
+          <line x1="886" y1="394" x2="886" y2="452" stroke="#10b981" stroke-opacity="0.5" stroke-width="2"/>
+          <line x1="929" y1="372" x2="929" y2="430" stroke="#10b981" stroke-opacity="0.5" stroke-width="2"/>
+          <text x="885" y="465" text-anchor="middle" font-size="12" font-weight="700" fill="currentColor">TK-401 BAFFLED CONTACT TANK (3,000 GAL)</text>
+        </g>
+
         <!-- Animated Process Piping Overlay -->
         <g fill="none" stroke-width="3" id="piping-overlay">
-          <!-- Raw Water Intake Line (Rear Bulkhead -> Intake Skid -> UF Skid) -->
-          <path id="pipe-raw" class="pipe-flow" stroke="#f59e0b" d="M 1045 295 L 406 295 L 406 185 L 600 185 L 600 157"/>
-          <!-- UF Filtrate to GAC & UV -->
-          <path id="pipe-uf" class="pipe-flow" stroke="#06b6d4" d="M 550 157 L 550 175 L 406 175 L 406 157"/>
-          <!-- GAC to UV/Cl2 to Clearwell -->
-          <path id="pipe-gac" class="pipe-flow" stroke="#10b981" d="M 465 157 L 465 195 L 585 195 L 585 213"/>
-          <!-- UV/Cl2 into Clearwell and down to Booster -->
-          <path id="pipe-potable" class="pipe-flow" stroke="#3b82f6" d="M 650 213 L 650 175 L 835 175 L 835 157 M 935 157 L 935 213 M 1000 260 L 1055 260"/>
-          <!-- Backwash Waste Line -->
+          <!-- Raw: hydrant/tanker -> TK-100 -> intake -> UF -->
+          <path id="pipe-raw" class="pipe-flow" stroke="#f59e0b" d="M 245 412 L 330 412 M 405 372 L 405 313 M 470 213 L 470 185 L 600 185 L 600 157"/>
+          <!-- UF permeate -> UV / chlorine -->
+          <path id="pipe-uf" class="pipe-flow" stroke="#06b6d4" d="M 700 157 L 700 213"/>
+          <!-- Chlorinated -> contact tank -> P-401 -> clearwell -->
+          <path id="pipe-ct" class="pipe-flow" stroke="#10b981" d="M 780 313 L 780 412 L 800 412 M 970 412 L 990 412 L 990 175 L 935 175 L 935 157"/>
+          <!-- Clearwell -> booster -> building -->
+          <path id="pipe-potable" class="pipe-flow" stroke="#3b82f6" d="M 870 157 L 870 213 M 1000 260 L 1055 260"/>
+          <!-- Waste -->
           <path id="pipe-waste" class="pipe-paused" stroke="#f43f5e" stroke-opacity="0.45" d="M 750 157 L 750 198 L 1055 198"/>
         </g>
 
         <!-- Exterior Connection Callouts (Right Side) -->
-        <text x="1060" y="299" font-size="12" font-weight="700" fill="#f59e0b">IN: 4" Hydrant</text>
         <text x="1060" y="264" font-size="12" font-weight="700" fill="#3b82f6">OUT: 3" Bldg</text>
-        <text x="1060" y="202" font-size="12" font-weight="700" fill="#f43f5e">OUT: 3" Waste</text>
+        <text x="1060" y="202" font-size="12" font-weight="700" fill="#f43f5e">OUT: Waste</text>
+        <text x="1060" y="216" font-size="11" fill="#f43f5e" opacity="0.8">(dechlor → sewer)</text>
       </svg>
     </div>
   </div>
@@ -303,12 +305,10 @@
             <span class="text-xs font-mono uppercase text-blue-500 font-semibold" id="insp-tag">UF-201A/B • STAGE 3</span>
             <h3 class="text-base font-bold mt-0.5" id="insp-title">Hollow-Fiber Ultrafiltration Skid</h3>
           </div>
-          <span class="px-2.5 py-1 rounded text-xs font-mono bg-[var(--secondary)] text-[var(--secondary-foreground)]" id="insp-weight">Dry: 2,400 lb | Wet: 3,850 lb</span>
+          <span class="px-2.5 py-1 rounded text-xs font-mono bg-[var(--secondary)] text-[var(--secondary-foreground)]" id="insp-weight">Road: 3,300 lb | Wet: 3,900 lb</span>
         </div>
 
-        <p class="text-sm text-[var(--muted-foreground)] mt-3 leading-relaxed" id="insp-desc">
-          Dual parallel trains (7 modules per train, 14 total) using 0.02-micron PVDF hollow-fiber membranes. Provides an absolute physical barrier against bacteria (6-log), Giardia/Cryptosporidium (6-log), and viruses (4-log) without requiring Reverse Osmosis power or brine rejection.
-        </p>
+        <p class="text-sm text-[var(--muted-foreground)] mt-3 leading-relaxed" id="insp-desc"></p>
 
         <div class="mt-4 space-y-2" id="insp-specs">
           <!-- Populated dynamically by JS -->
@@ -316,89 +316,85 @@
       </div>
 
       <div class="mt-4 pt-3 border-t border-[var(--border)] flex items-center justify-between text-xs text-[var(--muted-foreground)]">
-        <span>Location: <strong class="text-[var(--foreground)]" id="insp-loc">Center Main Deck (Over Triple Axles)</strong></span>
-        <span>Power: <strong class="text-[var(--foreground)]" id="insp-power">0.3 kW avg (5.0 kW in Backwash)</strong></span>
+        <span>Location: <strong class="text-[var(--foreground)]" id="insp-loc"></strong></span>
+        <span>Power: <strong class="text-[var(--foreground)]" id="insp-power"></strong></span>
       </div>
     </div>
 
-    <!-- Right 7 Cols: Interactive Emergency Demand & Process Simulator -->
+    <!-- Right 7 Cols: Interactive Process Simulator -->
     <div class="lg:col-span-7 bg-[var(--card)] border border-[var(--border)] rounded-xl p-5 shadow-sm space-y-5">
       <div class="border-b border-[var(--border)] pb-3 flex items-center justify-between">
         <div>
-          <h3 class="text-base font-bold">Emergency Scenario & Hydraulic Simulator</h3>
-          <p class="text-xs text-[var(--muted-foreground)]">Adjust raw water conditions and connected emergency facilities to test trailer capacity</p>
+          <h3 class="text-base font-bold">Facility Demand, Water Conditions &amp; CT Simulator</h3>
+          <p class="text-xs text-[var(--muted-foreground)]">One trailer serves one building connection. Adjust that building's peak demand and the water conditions.</p>
         </div>
-        <button onclick="resetSimulator()" class="text-xs text-blue-500 hover:underline font-medium">Reset to Design Max (250 GPM)</button>
+        <button onclick="resetSimulator()" class="text-xs text-blue-500 hover:underline font-medium">Reset</button>
       </div>
 
       <!-- Sliders Grid -->
       <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-        <!-- Slider 1: Connected Hospital Beds -->
         <div class="bg-[var(--secondary)]/50 border border-[var(--border)] rounded-lg p-3.5">
           <div class="flex justify-between text-xs font-semibold mb-1.5">
-            <span>Connected Hospital Beds (200 GPD/bed)</span>
-            <span class="font-mono text-blue-500" id="lbl-hospitals">1,200 Beds</span>
+            <span>Facility Peak Domestic Demand</span>
+            <span class="font-mono text-blue-500" id="lbl-hospitals">180 GPM</span>
           </div>
-          <input type="range" id="sim-hospitals" min="0" max="1800" step="50" value="1200" oninput="updateSimulation()" class="w-full accent-blue-600 cursor-pointer">
+          <input type="range" id="sim-hospitals" min="10" max="320" step="10" value="180" oninput="updateSimulation()" class="w-full accent-blue-600 cursor-pointer">
           <div class="flex justify-between text-xs text-[var(--muted-foreground)] mt-1">
-            <span>0 Beds</span>
-            <span>1,800 Beds (3 Hospitals)</span>
+            <span>10 GPM (restaurant)</span>
+            <span>320 GPM (over capacity)</span>
           </div>
         </div>
 
-        <!-- Slider 2: Connected Restaurants / Kitchens -->
         <div class="bg-[var(--secondary)]/50 border border-[var(--border)] rounded-lg p-3.5">
           <div class="flex justify-between text-xs font-semibold mb-1.5">
-            <span>Restaurants / Relief Kitchens (3,000 GPD)</span>
-            <span class="font-mono text-emerald-500" id="lbl-restaurants">30 Kitchens</span>
+            <span>Water Temperature</span>
+            <span class="font-mono text-emerald-500" id="lbl-restaurants">15 °C</span>
           </div>
-          <input type="range" id="sim-restaurants" min="0" max="100" step="5" value="30" oninput="updateSimulation()" class="w-full accent-emerald-600 cursor-pointer">
+          <input type="range" id="sim-restaurants" min="1" max="30" step="1" value="15" oninput="updateSimulation()" class="w-full accent-emerald-600 cursor-pointer">
           <div class="flex justify-between text-xs text-[var(--muted-foreground)] mt-1">
-            <span>0 Kitchens</span>
-            <span>100 Kitchens</span>
+            <span>1 °C (winter)</span>
+            <span>30 °C (summer)</span>
           </div>
         </div>
 
-        <!-- Slider 3: Raw Hydrant Turbidity -->
         <div class="bg-[var(--secondary)]/50 border border-[var(--border)] rounded-lg p-3.5">
           <div class="flex justify-between text-xs font-semibold mb-1.5">
-            <span>Raw Feed Water Turbidity (NTU)</span>
+            <span>Raw Water Turbidity (NTU)</span>
             <span class="font-mono text-amber-500" id="lbl-raw-ntu">12 NTU</span>
           </div>
           <input type="range" id="sim-raw-ntu" min="1" max="80" step="1" value="12" oninput="updateSimulation()" class="w-full accent-amber-500 cursor-pointer">
           <div class="flex justify-between text-xs text-[var(--muted-foreground)] mt-1">
-            <span>1 NTU (Clear Main)</span>
-            <span>80 NTU (Severely Stirred Main)</span>
+            <span>1 NTU (clear main)</span>
+            <span>80 NTU (needs pretreatment)</span>
           </div>
         </div>
 
-        <!-- Slider 4: Target Building Discharge Pressure -->
         <div class="bg-[var(--secondary)]/50 border border-[var(--border)] rounded-lg p-3.5">
           <div class="flex justify-between text-xs font-semibold mb-1.5">
-            <span>Building Booster Pressure Setpoint</span>
+            <span>Building Pressure Setpoint (PT-603)</span>
             <span class="font-mono text-sky-500" id="lbl-set-psi">70 PSI</span>
           </div>
           <input type="range" id="sim-set-psi" min="45" max="85" step="5" value="70" oninput="updateSimulation()" class="w-full accent-sky-500 cursor-pointer">
           <div class="flex justify-between text-xs text-[var(--muted-foreground)] mt-1">
-            <span>45 PSI (1-Story)</span>
-            <span>85 PSI (Multi-Story Hospital)</span>
+            <span>45 PSI (1-story)</span>
+            <span>85 PSI (multi-story hospital)</span>
           </div>
         </div>
       </div>
 
-      <!-- Simulated Capacity Utilization Bar & Spare Capacity Readout -->
+      <!-- Capacity Utilization Bar -->
       <div class="bg-[var(--secondary)]/40 border border-[var(--border)] rounded-lg p-4 space-y-2.5">
         <div class="flex items-center justify-between text-xs">
-          <span class="font-semibold">Trailer Capacity Utilization (<span id="util-gpd">330,000</span> / 360,000 GPD max)</span>
-          <span class="font-mono font-bold text-blue-500" id="util-pct">91.7% Load (229 GPM)</span>
+          <span class="font-semibold">Plant Capacity Used (<span id="util-gpd">180</span> / <span id="util-max">250</span> GPM)</span>
+          <span class="font-mono font-bold text-blue-500" id="util-pct">72% Load</span>
         </div>
         <div class="w-full h-3 bg-[var(--border)] rounded-full overflow-hidden flex">
-          <div id="bar-hosp" class="bg-blue-500 h-full transition-all duration-200" style="width: 66.7%" title="Hospital Demand"></div>
-          <div id="bar-rest" class="bg-emerald-500 h-full transition-all duration-200" style="width: 25%" title="Restaurant Demand"></div>
+          <div id="bar-hosp" class="bg-blue-500 h-full transition-all duration-200" style="width: 72%" title="Facility demand"></div>
+          <div id="bar-rest" class="bg-emerald-500 h-full transition-all duration-200" style="width: 0%" title="Community fill station"></div>
         </div>
         <div class="flex flex-wrap items-center justify-between gap-2 text-xs text-[var(--muted-foreground)] pt-1">
-          <span id="spare-people-text">Remaining Spare Capacity: <strong class="text-[var(--foreground)]">+30,000 GPD</strong> (Serves <strong class="text-emerald-500">+2,000 residents</strong> at 15 gal/day)</span>
-          <span id="coag-status" class="font-mono text-amber-500">PACl Coagulant Dosing: AUTO ON (0.65 GPH)</span>
+          <span id="spare-people-text"></span>
+          <span id="coag-status" class="font-mono text-amber-500"></span>
         </div>
       </div>
 
@@ -408,115 +404,129 @@
   <script>
     const skidData = {
       gen: {
-        tag: "GEN-801 & AC-802 • UTILITY ZONE",
-        title: "45 kW Tier-4 Diesel Generator & Instrument Air",
-        weight: "Dry: 2,850 lb | Wet: 2,850 lb",
-        loc: "8-ft Elevated Gooseneck Nose",
-        power: "Generates up to 45 kW Prime / 50 kW Standby",
-        desc: "Sound-attenuated (66 dBA @ 23 ft) diesel generator mounted in the forward gooseneck compartment with external intake/exhaust louvers. Includes a 100-gallon belly fuel tank for 54+ hours of continuous full-load operation plus a 2 HP oil-free compressor for pneumatic UF valves.",
+        tag: "GEN-801 • GOOSENECK MACHINERY COMPARTMENT",
+        title: "80 kW Tier-4 Diesel Generator",
+        weight: "Road: 3,950 lb | Wet: 3,950 lb",
+        loc: "Gooseneck (fire-separated, exterior access)",
+        power: "80 kW Prime",
+        desc: "Sound-attenuated diesel generator in a fire-separated gooseneck compartment with exterior doors and direct radiator and exhaust venting, so heat, exhaust and fuel stay out of the crew area. Sized at roughly twice the running load to handle VFD harmonics and motor starts.",
         specs: [
-          ["Voltage Output", "208/240V or 480V 3-Phase, 60 Hz + 120V Single-Phase"],
-          ["Shore Power Transfer", "100A Automatic Transfer Switch (Camlock shore input)"],
-          ["Fuel Consumption", "1.85 gal/hr at 21.7 kW average trailer load"],
-          ["Pneumatic Air Supply", "2.0 HP Oil-Free Compressor + Refrigerated Air Dryer (80 PSI)"]
+          ["Voltage Output", "208/240V or 480V 3-Phase, 60 Hz + 120V"],
+          ["Shore Power Transfer", "200A ATS at 480V (open transition)"],
+          ["Fuel Consumption", "~3.1 gal/hr at 37.8 kW average load"],
+          ["Autonomy", "150-gal belly tank ≈ 48 hours at 250 GPM"]
+        ]
+      },
+      air: {
+        tag: "AC-802A/B • INSTRUMENT AIR",
+        title: "Duplex Oil-Free Instrument Air",
+        weight: "Road: 450 lb | Wet: 450 lb",
+        loc: "Gooseneck (fire-separated)",
+        power: "1.5 kW lead compressor, 25% duty",
+        desc: "Two oil-free scroll compressors in lead/lag with a receiver and refrigerated dryer. Every automated valve fails safe on air loss, so a single compressor would be a single point of failure for the building supply. The receiver holds the valves for at least 10 minutes if both compressors stop.",
+        specs: [
+          ["Compressors", "2 × 2 HP oil-free scroll, lead/lag"],
+          ["Header Pressure", "80 PSI (alarm 65, low-low 55)"],
+          ["Uses", "20 XV valves, UF air scour assist, integrity-test air"],
+          ["Dryer", "Refrigerated, with auto drain"]
         ]
       },
       plc: {
-        tag: "CP-701 & LAB-702 • CONTROL & QA ZONE",
-        title: "PLC SCADA Cabinet, Online Analyzers & Wet Lab",
-        weight: "Dry: 950 lb | Wet: 950 lb",
-        loc: "Rear Gooseneck / Front Main Deck Entry",
-        power: "1.2 kW Continuous (120V UPS Backed)",
-        desc: "Allen-Bradley CompactLogix PLC with a 15-inch touchscreen HMI that automates membrane filtration, air-scour backwashes, and chemical pacing. Continuously monitors turbidity and free chlorine with automatic divert-to-waste if water ever drifts out of EPA compliance.",
+        tag: "CP-701 & LAB-702 • CONTROL, QA & SAFETY",
+        title: "PLC SCADA, Online Analyzers, Wet Lab & Safety Station",
+        weight: "Road: 700 lb | Wet: 750 lb",
+        loc: "Front Main Deck (standing headroom)",
+        power: "1.5 kW Continuous (UPS backed)",
+        desc: "CompactLogix PLC with a 15-inch HMI that runs filtration, backwash, the daily membrane integrity test, and the live chlorine contact-time (CT) calculation. Any out-of-range reading closes the building outlet. The safety station has an ANSI Z358.1 eyewash/drench and the chlorine gas detector.",
         specs: [
-          ["Online Turbidity", "2x Hach TU5300sc Laser Nephelometers (Auto-divert > 0.15 NTU)"],
-          ["Online Chlorine & pH", "Amperometric Free Cl2 Analyzer (PID loop controls NaOCl pump)"],
-          ["Emergency Storage", "Stowed 3,000-Gal NSF-61 collapsible pillow tank for ground deploy"],
-          ["Remote Telemetry", "Cellular / Starlink SCADA gateway for remote monitoring"]
+          ["Turbidity", "2× Hach TU5300sc (permeate divert above 0.15 NTU)"],
+          ["UV", "Intensity sensors + online UVT analyzer"],
+          ["Chlorine / pH / Temp", "AIT-402 at contact-tank outlet (CT) + AIT-601 finished"],
+          ["Sampling", "Bac-T taps; samples to a state-certified lab"]
         ]
       },
       intake: {
-        tag: "P-101, STR-101 & BF-101 • STAGE 1 & 2",
-        title: "Vacuum-Assisted Raw Booster, Auto-Strainer & Bag Filters",
-        weight: "Dry: 1,150 lb | Wet: 1,550 lb",
-        loc: "Forward Main Deck (Curbside)",
-        power: "5.2 kW (7.5 HP VFD Intake Pump)",
-        desc: "Draws water from depressurized fire hydrants (0–20 PSI) or surface sources. A low-suction pressure cutout switch (-2 PSI) prevents collapsing municipal pipes. Removes coarse sediment via an automatic 200-micron wedge-wire strainer and duplex 25-micron bag housings.",
+        tag: "P-101, STR-101, BF-101 & SM-101 • STAGE 1 & 2",
+        title: "Intake Pump, Auto-Strainer, Bag Filters & Inline Coagulation",
+        weight: "Road: 1,350 lb | Wet: 1,750 lb",
+        loc: "Forward Main Deck",
+        power: "9.7 kW (15 HP VFD Intake Pump)",
+        desc: "Draws from the ground-deployed raw break tank, never directly from the city main. The hydrant fills that tank through an air gap, with a pressure-sustaining valve holding the main at 20 PSI or more. Bag filters come before the PACl injection so floc can't blind them.",
         specs: [
-          ["Intake Booster Pump", "260 GPM @ 130 ft TDH, 316SS, VFD speed modulation"],
-          ["Auto Strainer (STR-101)", "200-micron 316SS wedge-wire, auto differential-pressure flush"],
-          ["Pre-Filtration (BF-101)", "Duplex 4-bag 304SS housings (25 um) for continuous operation"],
-          ["Inline Static Mixer", "316SS helical mixer for PACl coagulant dispersion"]
+          ["Intake Pump", "260 GPM @ 130 ft TDH, 15 HP, self-priming"],
+          ["Auto Strainer", "200 µm 316SS wedge-wire, ΔP-triggered flush"],
+          ["Bag Filters", "Duplex 4-bag 304SS (25 µm), changeover while running"],
+          ["Coagulant", "PACl after bags, only when raw turbidity above 5 NTU"]
         ]
       },
       uf: {
         tag: "UF-201A/B • STAGE 3 (CORE BARRIER)",
         title: "Hollow-Fiber Ultrafiltration Skid (0.02 Micron)",
-        weight: "Dry: 2,400 lb | Wet: 3,850 lb",
-        loc: "Center Main Deck (Directly Over Triple Axles)",
-        power: "0.3 kW Avg (5.0 kW during 45-sec Backwash)",
-        desc: "Dual parallel trains (7 modules per train, 14 total) using 0.02-micron PVDF hollow-fiber membranes. Provides an absolute physical barrier against bacteria (6-log), Giardia/Cryptosporidium (6-log), and viruses (4-log) without requiring Reverse Osmosis power or brine rejection.",
+        weight: "Road: 3,300 lb | Wet: 3,900 lb",
+        loc: "Center Main Deck (Over Triple Axles)",
+        power: "0.3 kW avg (5.2 kW during 45-sec backwash)",
+        desc: "Two trains of 7 PVDF modules (14 total). Log credit for Giardia, Cryptosporidium and bacteria comes from the modules' NSF/ANSI 419 challenge test and is proven by a daily pressure-decay integrity test. UF isn't counted for viruses — chlorine contact time covers those. Modules are kept wet with preservative between jobs.",
         specs: [
-          ["Total Membrane Area", "10,850 sq.ft. (14x 775 sq.ft. PVDF modules, 33 GFD flux)"],
-          ["Train Redundancy", "2 x 125 GPM independent trains (Train A runs while Train B backwashes)"],
-          ["Filtrate Quality", "< 0.05 NTU guaranteed regardless of raw main turbidity spikes"],
-          ["Auto Backwash Cycle", "45-sec air scour + filtrate reverse flush every 45 minutes"]
+          ["Membrane Area", "10,850 sq.ft. (14 × 775 sq.ft., 33 GFD)"],
+          ["Backwash", "45 sec per train every 45 min; partner train carries ~125 GPM"],
+          ["Integrity Test", "Daily pressure-decay test per train (XV-207A/B)"],
+          ["Storage", "Filled with preservative — never blown dry"]
         ]
       },
-      gac: {
-        tag: "GAC-301A/B • STAGE 4",
-        title: "Duplex Granular Activated Carbon (GAC) Vessels",
-        weight: "Dry: 2,600 lb | Wet: 4,900 lb",
-        loc: "Forward-Mid Main Deck (Streetside)",
-        power: "Passive Pressure Driven (8 PSI delta-P)",
-        desc: "Two 36-inch diameter x 72-inch tall ASME FRP pressure vessels operated in parallel (125 GPM each). Packed with 50 cubic feet of acid-washed coconut shell activated carbon to strip VOCs, fuel/chemical spills, pesticides, disinfection byproducts, and taste/odor.",
+      tanks: {
+        tag: "TK-100 & TK-401 • GROUND-DEPLOYED",
+        title: "Raw Break Tank & Baffled Chlorine Contact Tank",
+        weight: "Stowed: 1,300 lb | On trailer when running: 0 lb",
+        loc: "Ground beside trailer (stowed in belly boxes)",
+        power: "P-401 transfer pump: 3.7 kW",
+        desc: "TK-100 takes hydrant or tanker water through an air gap, so the city main is always protected. TK-401 has baffle curtains that give about 6 minutes of effective contact time at 250 GPM, enough for 4-log virus inactivation at 2.0 mg/L free chlorine even in cold water. P-401 returns treated water to the clearwell.",
         specs: [
-          ["Vessel Rating", "2x 36\" Dia x 72\" FRP Vessels, 150 PSI working pressure"],
-          ["Carbon Media Volume", "50 cu.ft. total (1,500 lbs acid-washed coconut shell GAC)"],
-          ["Empty Bed Contact Time", "3.0 minutes EBCT at 250 GPM (6.0 min at 125 GPM)"],
-          ["Transport Note", "Media remains damp in vessels; free water drained via pneumatic valve"]
+          ["TK-100", "3,000-gal open-top frame tank, NSF-61 liner, cover"],
+          ["TK-401", "3,000-gal baffled frame tank, NSF-61, cover"],
+          ["Effective Contact", "T10 ≈ 1,500 gal ÷ flow (≈ 6 min at 250 GPM)"],
+          ["Color Code", "Blue hoses = raw, white hoses = treated"]
         ]
       },
       chem: {
-        tag: "UV-401A/B & CHEM-501 • STAGE 5",
-        title: "Validated UV Reactors & Chemical Dosing Skid",
-        weight: "Dry: 1,100 lb | Wet: 1,750 lb",
-        loc: "Center Main Deck (Curbside Over Axles)",
-        power: "2.5 kW Continuous (2x 1.2 kW UV + Metering Pumps)",
-        desc: "Provides dual-barrier disinfection: two parallel 316L stainless steel UV reactors deliver a >= 40 mJ/cm2 dose to immediately inactivate any protozoa or viruses, followed by flow-paced 12.5% Sodium Hypochlorite injection to maintain a 2.0 mg/L residual in the hospital plumbing.",
+        tag: "UV-401A/B/C & CHEM-501 • STAGE 4 & 5",
+        title: "UV Reactors, Chlorine Dosing & Segregated Chemical Room",
+        weight: "Road: 1,100 lb | Wet: 1,500 lb",
+        loc: "Center Main Deck (Over Axles)",
+        power: "2.4 kW UV (2 duty) + metering pumps",
+        desc: "Three UVDGM-validated reactors (2 duty + 1 standby) give at least 40 mJ/cm² for Giardia and Cryptosporidium. Chlorine is dosed after UV and heads to the contact tank. Oxidizer, acid and PACl cabinets are kept separate, with an exhaust fan and chlorine gas detector, because acid plus bleach releases chlorine gas.",
         specs: [
-          ["UV Reactors (UV-401)", "2x 130 GPM LPHO Amalgam 316L SS with UV intensity sensors"],
-          ["Primary Chlorination", "55-Gal double-wall 12.5% NaOCl tank + redundant stepper pumps"],
-          ["Coagulant (PACl)", "35-Gal tank, auto-activated only when raw turbidity > 5 NTU"],
-          ["Dechlorination / CIP", "Sodium bisulfite neutralizes backwash chlorine prior to storm drain"]
+          ["UV Reactors", "3 × 125 GPM LPHO amalgam, 2 duty + 1 standby"],
+          ["Chlorination", "12.5% NaOCl duty/standby pumps, trimmed on CT"],
+          ["Dechlorination", "Bisulfite into the common waste header (all waste)"],
+          ["Chemical Hauling", "≤ 8-gal containers, DOT materials-of-trade limits"]
         ]
       },
       clearwell: {
-        tag: "TK-601 • STAGE 5 BUFFER",
-        title: "500-Gallon Baffled HDPE Clearwell & Surge Tank",
-        weight: "Dry: 450 lb | Wet: 4,620 lb",
-        loc: "Rear Main Deck (Streetside)",
-        power: "Passive Atmospheric Tank with Ultrasonic Level Sensor",
-        desc: "Heavy-duty cross-linked polyethylene (XLPE) tank enclosed in a structural steel transport cage. Internal serpentine baffles prevent short-circuiting for chlorine mixing while providing hydraulic surge capacity for the Triplex building booster pumps and UF backwash pump.",
+        tag: "TK-601 • BOOSTER SUCTION",
+        title: "500-Gallon Baffled Clearwell",
+        weight: "Road: 450 lb | Wet: 4,620 lb",
+        loc: "Rear Main Deck",
+        power: "Passive tank with level transmitter",
+        desc: "XLPE tank in a steel transport cage that feeds the building boosters and the UF backwash pump. It holds about 2 minutes of flow, which isn't enough contact time by itself, so it isn't counted for CT — that's TK-401's job.",
         specs: [
-          ["Onboard Volume", "500 Gallons (460 Gal nominal operating level, 1.0 baffle factor)"],
-          ["External CT Expansion", "Camlock loop for external 3,000-Gal pillow bladder tank"],
-          ["Transport Auto-Drain", "3-inch pneumatic dump valve empties tank in 2.5 minutes"],
-          ["Instrumentation", "Ultrasonic level transmitter modulates raw intake VFD speed"]
+          ["Volume", "500 gal (~32\" × 48\" × 75\")"],
+          ["Level Control", "Holds 85%; trims P-101 / P-401"],
+          ["Low-Low", "Trips boosters and backwash pump (dry-run protection)"],
+          ["Drain", "XV-601 to dechlorinated waste header"]
         ]
       },
       booster: {
-        tag: "P-601A/B/C & RPZ-602 • STAGE 6",
-        title: "Triplex VFD Building Pressurization & RPZ Backflow Skid",
-        weight: "Dry: 1,000 lb | Wet: 1,200 lb",
-        loc: "Rear Main Deck (Curbside)",
-        power: "10.4 kW at 250 GPM (3x 7.5 HP VFD Pumps)",
-        desc: "Delivers municipal street pressure (65 to 85 PSI) directly into a hospital or restaurant's plumbing system so toilets, sterilizers, HVAC cooling towers, and commercial dishwashers operate normally. Includes an ASSE 1013 Reduced Pressure Zone (RPZ) backflow preventer.",
+        tag: "P-601A/B/C, P-401 & RPZ-602 • STAGE 6",
+        title: "Triplex VFD Building Booster, CT Transfer Pump & RPZ",
+        weight: "Road: 1,700 lb | Wet: 1,700 lb",
+        loc: "Rear Main Deck",
+        power: "17.8 kW at 250 GPM / 80 PSI (2 × 15 HP duty)",
+        desc: "Three 15 HP multistage pumps (2 duty + 1 standby) push about 100 PSI at the pump so the building still sees 65–85 PSI after the RPZ and hose losses. The VFDs control on a transmitter at the building end of the hose.",
         specs: [
-          ["Pump Configuration", "3x 125 GPM Vertical Multistage 316SS Pumps (2 Duty + 1 Standby)"],
-          ["Pressure Control", "Individual VFDs + 85-Gal ASME bladder tank (5 to 250+ GPM range)"],
-          ["Backflow Protection", "3-inch Lead-Free ASSE 1013 RPZ assembly certified for hospital tie-in"],
-          ["Sanitary Piping", "Schedule 10 316L Stainless Steel manifold with sample ports"]
+          ["Pumps", "3 × 125 GPM vertical multistage 316SS, 15 HP"],
+          ["Control", "VFDs on remote PT-603, 85-gal bladder tank"],
+          ["Backflow", "3\" ASSE 1013 RPZ (~12 PSI loss at 250 GPM)"],
+          ["High-High Trip", "Building above 90 PSI or pump above 110 PSI"]
         ]
       },
       manifold: {
@@ -524,13 +534,13 @@
         title: "Heated Rear Camlock Bulkhead & Community Tap Bar",
         weight: "Integrated in Rear Frame",
         loc: "Rear Exterior Compartment Door",
-        power: "Heat-Traced for Sub-Freezing Operation",
-        desc: "All raw, potable, and waste hoses connect at the rear bulkhead via NSF-61 food-grade stainless steel camlocks. Also includes a fold-out 12-faucet community filling station along the exterior wall for residents to fill water jugs.",
+        power: "Heat-traced for sub-freezing operation",
+        desc: "Raw, contact-tank, potable, and waste hoses all connect at the rear bulkhead with NSF-61 stainless camlocks. Never connect to a fire department connection (FDC) — only to the building's domestic water tie-in.",
         specs: [
-          ["Inlet A & B", "4\" Storz/Camlock (Fire Hydrant) + 3\" Camlock (Suction/Tanker)"],
-          ["Outlet A (Hospital)", "3\" Female Stainless Camlock (up to 250 GPM @ 85 PSI)"],
-          ["Outlet B (Restaurant)", "Dual 1.5\" & 2\" Sanitary Hose Connections"],
-          ["Outlet C (Community)", "12-Tap 3/4\" Exterior Manifold for filling resident containers"]
+          ["Raw Inlet", "4\" from TK-100 break tank"],
+          ["Contact Tank", "4\" out / 4\" return to TK-401"],
+          ["Outlet A / B", "3\" hospital · 1.5\" & 2\" restaurant (post-RPZ)"],
+          ["Outlet C", "12-tap 3/4\" community fill manifold"]
         ]
       }
     };
@@ -552,7 +562,7 @@
 
       const specsContainer = document.getElementById('insp-specs');
       specsContainer.innerHTML = d.specs.map(([k, v]) => `
-        <div class="flex justify-between items-center text-xs py-1.5 px-2.5 rounded bg-[var(--secondary)]/60 border border-[var(--border)]">
+        <div class="flex justify-between items-center gap-3 text-xs py-1.5 px-2.5 rounded bg-[var(--secondary)]/60 border border-[var(--border)]">
           <span class="text-[var(--muted-foreground)] font-medium">${k}</span>
           <span class="font-mono font-semibold text-right">${v}</span>
         </div>
@@ -561,173 +571,215 @@
 
     function setOperatingMode(mode) {
       currentMode = mode;
-      const modes = ['normal', 'backwash', 'transport'];
-      modes.forEach(m => {
+      ['normal', 'backwash', 'transport'].forEach(m => {
         const btn = document.getElementById('btn-mode-' + m);
-        if (m === mode) {
-          btn.className = "px-3.5 py-2 rounded-lg text-xs font-semibold bg-blue-600 text-white shadow-sm transition";
-        } else {
-          btn.className = "px-3.5 py-2 rounded-lg text-xs font-semibold bg-[var(--secondary)] text-[var(--secondary-foreground)] border border-[var(--border)] transition";
-        }
+        btn.className = m === mode
+          ? "px-3.5 py-2 rounded-lg text-xs font-semibold bg-blue-600 text-white shadow-sm transition"
+          : "px-3.5 py-2 rounded-lg text-xs font-semibold bg-[var(--secondary)] text-[var(--secondary-foreground)] border border-[var(--border)] transition";
       });
 
-      const badge = document.getElementById('status-badge');
-      const pipeRaw = document.getElementById('pipe-raw');
-      const pipeUf = document.getElementById('pipe-uf');
-      const pipeGac = document.getElementById('pipe-gac');
-      const pipePotable = document.getElementById('pipe-potable');
+      const pipes = ['pipe-raw', 'pipe-uf', 'pipe-ct', 'pipe-potable'].map(id => document.getElementById(id));
       const pipeWaste = document.getElementById('pipe-waste');
       const trainBModules = document.getElementById('uf-train-b-modules');
       const trainBLabel = document.getElementById('uf-train-b-label');
       const cwLabel = document.getElementById('clearwell-level-label');
       const jacksGroup = document.getElementById('jacks-group');
+      const tanks = document.getElementById('skid-tanks');
 
       if (mode === 'normal') {
-        badge.textContent = "ONLINE • POTABLE VERIFIED";
-        badge.className = "px-2.5 py-0.5 rounded-full text-xs font-semibold bg-emerald-500/15 text-emerald-500 border border-emerald-500/30";
-        [pipeRaw, pipeUf, pipeGac, pipePotable].forEach(p => { p.classList.add('pipe-flow'); p.classList.remove('pipe-paused'); p.style.opacity = '1'; });
-        pipeWaste.classList.remove('pipe-flow');
-        pipeWaste.classList.add('pipe-paused');
-        pipeWaste.setAttribute('stroke-opacity', '0.35');
+        pipes.forEach(p => { p.classList.add('pipe-flow'); p.classList.remove('pipe-paused'); p.style.opacity = '1'; });
+        pipeWaste.classList.remove('pipe-flow'); pipeWaste.classList.add('pipe-paused'); pipeWaste.setAttribute('stroke-opacity', '0.35'); pipeWaste.style.opacity = '1';
         trainBModules.setAttribute('fill', '#06b6d4');
         trainBLabel.textContent = "Train B: 125G";
-        cwLabel.textContent = "Level: 92% (460 Gal)";
+        cwLabel.textContent = "Level: 85% (425 Gal)";
         jacksGroup.style.opacity = "1";
+        tanks.style.opacity = "1";
       } else if (mode === 'backwash') {
-        badge.textContent = "AUTO BACKWASH • TRAIN A ONLINE / TRAIN B AIR SCOUR";
-        badge.className = "px-2.5 py-0.5 rounded-full text-xs font-semibold bg-amber-500/15 text-amber-500 border border-amber-500/30";
-        [pipeRaw, pipeUf, pipeGac, pipePotable, pipeWaste].forEach(p => { p.classList.add('pipe-flow'); p.classList.remove('pipe-paused'); p.style.opacity = '1'; });
+        [...pipes, pipeWaste].forEach(p => { p.classList.add('pipe-flow'); p.classList.remove('pipe-paused'); p.style.opacity = '1'; });
         pipeWaste.setAttribute('stroke-opacity', '1');
         trainBModules.setAttribute('fill', '#f43f5e');
         trainBLabel.textContent = "Train B: BACKWASH";
         cwLabel.textContent = "Level: 78% (390 Gal)";
         jacksGroup.style.opacity = "1";
+        tanks.style.opacity = "1";
       } else if (mode === 'transport') {
-        badge.textContent = "STANDBY • TANKS DRAINED FOR HIGHWAY TOWING";
-        badge.className = "px-2.5 py-0.5 rounded-full text-xs font-semibold bg-slate-500/20 text-[var(--muted-foreground)] border border-[var(--border)]";
-        [pipeRaw, pipeUf, pipeGac, pipePotable, pipeWaste].forEach(p => { p.classList.remove('pipe-flow'); p.classList.add('pipe-paused'); p.style.opacity = '0.25'; });
+        [...pipes, pipeWaste].forEach(p => { p.classList.remove('pipe-flow'); p.classList.add('pipe-paused'); p.style.opacity = '0.25'; });
         trainBModules.setAttribute('fill', '#64748b');
-        trainBLabel.textContent = "Train B: DRAINED";
+        trainBLabel.textContent = "Train B: PRESERVED";
         cwLabel.textContent = "Level: 0% (DRAINED)";
         jacksGroup.style.opacity = "0.2";
+        tanks.style.opacity = "0.25";
       }
 
       updateSimulation();
     }
 
+    // EPA free chlorine CT for 4-log virus inactivation, pH 6–9 (mg·min/L)
+    const CT_TABLE = [[0.5, 12], [5, 8], [10, 6], [15, 4], [20, 3], [25, 2]];
+    function ctRequired(tempC) {
+      if (tempC <= CT_TABLE[0][0]) return CT_TABLE[0][1];
+      for (let i = 1; i < CT_TABLE.length; i++) {
+        const [t1, c1] = CT_TABLE[i - 1], [t2, c2] = CT_TABLE[i];
+        if (tempC <= t2) return c1 + (c2 - c1) * (tempC - t1) / (t2 - t1);
+      }
+      return CT_TABLE[CT_TABLE.length - 1][1];
+    }
+
+    function setBadge(text, tone) {
+      const badge = document.getElementById('status-badge');
+      const tones = {
+        ok: "bg-emerald-500/15 text-emerald-500 border-emerald-500/30",
+        warn: "bg-amber-500/15 text-amber-500 border-amber-500/30",
+        bad: "bg-rose-500/15 text-rose-500 border-rose-500/30",
+        idle: "bg-slate-500/20 text-[var(--muted-foreground)] border-[var(--border)]"
+      };
+      badge.textContent = text;
+      badge.className = "px-2.5 py-0.5 rounded-full text-xs font-semibold border " + tones[tone];
+    }
+
     function updateSimulation() {
-      const beds = parseInt(document.getElementById('sim-hospitals').value, 10);
-      const rests = parseInt(document.getElementById('sim-restaurants').value, 10);
+      const demand = parseInt(document.getElementById('sim-hospitals').value, 10);
+      const tempC = parseInt(document.getElementById('sim-restaurants').value, 10);
       const rawNtu = parseInt(document.getElementById('sim-raw-ntu').value, 10);
       const setPsi = parseInt(document.getElementById('sim-set-psi').value, 10);
 
-      document.getElementById('lbl-hospitals').textContent = beds.toLocaleString() + " Beds";
-      document.getElementById('lbl-restaurants').textContent = rests + " Kitchens";
+      document.getElementById('lbl-hospitals').textContent = demand + " GPM";
+      document.getElementById('lbl-restaurants').textContent = tempC + " °C";
       document.getElementById('lbl-raw-ntu').textContent = rawNtu + " NTU";
       document.getElementById('lbl-set-psi').textContent = setPsi + " PSI";
 
-      const hospGpd = beds * 200;
-      const restGpd = rests * 3000;
-      let totalDemandGpd = hospGpd + restGpd;
-      const maxGpd = currentMode === 'backwash' ? 270000 : 360000;
+      const coagEl = document.getElementById('coag-status');
+      const spareEl = document.getElementById('spare-people-text');
 
       if (currentMode === 'transport') {
+        setBadge("DRAINED & PRESERVED • CLASS A CDL TOW", 'idle');
         document.getElementById('kpi-flow').textContent = "0 GPM";
-        document.getElementById('kpi-gpd').textContent = "Tanks Drained";
+        document.getElementById('kpi-gpd').textContent = "Plant drained";
         document.getElementById('kpi-turbidity').textContent = "-- NTU";
-        document.getElementById('kpi-chlorine').textContent = "-- mg/L";
-        document.getElementById('kpi-naocl-rate').textContent = "Dosing Standby";
+        document.getElementById('kpi-log-removal').textContent = "Membranes preserved wet";
+        document.getElementById('kpi-chlorine').textContent = "--";
+        document.getElementById('kpi-naocl-rate').textContent = "Dosing locked out";
         document.getElementById('kpi-pressure').textContent = "0 PSI";
-        document.getElementById('kpi-vfd-state').textContent = "Pumps Locked Out";
+        document.getElementById('kpi-vfd-state').textContent = "Pumps locked out";
         document.getElementById('kpi-power').textContent = "0.0 kW";
-        document.getElementById('kpi-fuel').textContent = "100 Gal Ready";
-        document.getElementById('kpi-weight').textContent = "21,700 lbs";
-        document.getElementById('kpi-weight-note').textContent = "Under 30k GVWR (Highway Safe)";
+        document.getElementById('kpi-fuel').textContent = "150 Gal ready";
+        document.getElementById('kpi-weight').textContent = "24,100 lbs";
+        document.getElementById('kpi-weight-note').textContent = "Road weight — under 30k GVWR";
         document.getElementById('kpi-weight-note').className = "text-xs text-blue-500 font-medium";
+        document.getElementById('util-gpd').textContent = "0";
+        document.getElementById('util-max').textContent = "250";
+        document.getElementById('util-pct').textContent = "Offline";
+        document.getElementById('util-pct').className = "font-mono font-bold text-[var(--muted-foreground)]";
+        document.getElementById('bar-hosp').style.width = "0%";
+        document.getElementById('bar-rest').style.width = "0%";
+        spareEl.textContent = "Weigh the rig on a certified scale if the load changed.";
+        coagEl.textContent = "";
         return;
       }
 
-      const activeGpd = Math.min(totalDemandGpd, 360000);
-      const activeGpm = Math.round(activeGpd / 1440);
-      const displayGpm = Math.max(activeGpm, 10);
+      // Capacity: 250 GPM rated; one train during a 45-sec backwash
+      const ufMax = currentMode === 'backwash' ? 125 : 250;
+      const flow = Math.min(demand, 250);
+      const overCap = demand > 250;
 
-      // Update KPIs
-      document.getElementById('kpi-flow').textContent = displayGpm + " GPM";
-      document.getElementById('kpi-gpd').textContent = (displayGpm * 1440).toLocaleString() + " GPD";
+      // Turbidity / source suitability
+      const tooTurbid = rawNtu > 50;
+      const outNtu = rawNtu > 40 ? 0.04 : 0.02;
 
-      const outNtu = rawNtu > 40 ? "0.04 NTU" : "0.02 NTU";
-      document.getElementById('kpi-turbidity').textContent = outNtu;
+      // Chlorine contact time in TK-401: effective volume 1,500 gal (3,000 × 0.5 baffle factor)
+      const t10 = 1500 / Math.max(flow, 10);
+      const req = ctRequired(tempC);
+      let residual = 1.5;
+      while (residual * t10 < req && residual < 2.0) residual = Math.round((residual + 0.1) * 10) / 10;
+      const ct = residual * t10;
+      const ctOk = ct >= req;
 
-      // NaOCl rate at 12.5% for 2.0 mg/L
-      const naoclGph = ((displayGpm * 60 * 2.0) / 125000).toFixed(2);
-      document.getElementById('kpi-chlorine').textContent = "2.0 mg/L";
-      document.getElementById('kpi-naocl-rate').textContent = `NaOCl: ${naoclGph} GPH`;
+      document.getElementById('kpi-flow').textContent = (ctOk && !tooTurbid ? flow : 0) + " GPM";
+      document.getElementById('kpi-gpd').textContent = currentMode === 'backwash'
+        ? "UF at 125 GPM for 45 s — tanks buffer"
+        : ((ctOk && !tooTurbid ? flow : 0) * 1440).toLocaleString() + " GPD";
 
-      document.getElementById('kpi-pressure').textContent = setPsi + " PSI";
-      const pumpsActive = displayGpm > 125 ? "2 Duty VFDs Active" : "1 Duty VFD Active";
-      document.getElementById('kpi-vfd-state').textContent = pumpsActive;
+      document.getElementById('kpi-turbidity').textContent = outNtu.toFixed(2) + " NTU";
+      document.getElementById('kpi-log-removal').textContent = currentMode === 'backwash' ? "Train B backwashing" : "Daily integrity test: PASS";
 
-      // Power calculation
-      const baseKw = 5.4; // UV, PLC, HVAC, Air
-      const pumpKw = (displayGpm / 250) * (15.6 * (setPsi / 70));
-      const bwKw = currentMode === 'backwash' ? 4.7 : 0.3;
-      const totalKw = (baseKw + pumpKw + bwKw).toFixed(1);
-      const fuelGph = (totalKw * 0.085).toFixed(2);
-      const fuelHrs = Math.round(100 / fuelGph);
+      const chl = document.getElementById('kpi-chlorine');
+      chl.textContent = "CT " + ct.toFixed(1);
+      chl.className = "text-lg font-bold font-mono mt-0.5 " + (ctOk ? "text-emerald-500" : "text-rose-500");
+      document.getElementById('kpi-naocl-rate').textContent = `Required ${req.toFixed(1)} · Cl₂ ${residual.toFixed(1)} mg/L · T10 ${t10.toFixed(1)} min`;
 
-      document.getElementById('kpi-power').textContent = totalKw + " kW";
-      document.getElementById('kpi-fuel').textContent = `${fuelHrs} hrs (${fuelGph} gal/hr)`;
+      document.getElementById('kpi-pressure').textContent = (ctOk && !tooTurbid ? setPsi : 0) + " PSI";
+      document.getElementById('kpi-vfd-state').textContent = !ctOk || tooTurbid ? "XV-602 CLOSED" : (flow > 125 ? "2 Duty VFDs Active" : "1 Duty VFD Active");
 
-      document.getElementById('kpi-weight').textContent = "30,870 lbs";
-      document.getElementById('kpi-weight-note').textContent = "On 4-Pt Hydraulic Jacks";
+      // Power (kW): base loads + pumps scaled to flow; booster scaled to pump head (setpoint + ~20 PSI losses)
+      const f = flow / 250;
+      const baseKw = 2.4 + 1.5 + 2.0 + 0.4;          // UV, PLC/analyzers, HVAC, air
+      const intakeKw = 9.7 * f + 3.7 * f;            // P-101 + P-401
+      const boosterKw = 17.8 * f * ((setPsi + 20) / 100);
+      const bwKw = currentMode === 'backwash' ? 5.2 : 0.3;
+      const totalKw = baseKw + intakeKw + boosterKw + bwKw;
+      const fuelGph = totalKw * 0.082;
+      document.getElementById('kpi-power').textContent = totalKw.toFixed(1) + " kW";
+      document.getElementById('kpi-fuel').textContent = `${Math.round(150 / fuelGph)} hrs (${fuelGph.toFixed(1)} gal/hr)`;
+
+      document.getElementById('kpi-weight').textContent = "28,420 lbs";
+      document.getElementById('kpi-weight-note').textContent = "Ground tanks deployed";
       document.getElementById('kpi-weight-note').className = "text-xs text-emerald-500 font-medium";
 
-      // Utilization Bar
-      document.getElementById('util-gpd').textContent = totalDemandGpd.toLocaleString();
-      const pct = ((totalDemandGpd / 360000) * 100).toFixed(1);
+      // Utilization
+      document.getElementById('util-gpd').textContent = demand;
+      document.getElementById('util-max').textContent = ufMax;
+      const pct = Math.round(demand / ufMax * 100);
       const utilLabel = document.getElementById('util-pct');
-      if (totalDemandGpd > 360000) {
-        utilLabel.textContent = `${pct}% OVERLOAD (Capped at 250 GPM)`;
+      if (overCap) {
+        utilLabel.textContent = `${pct}% — OVER 250 GPM: facility needs a second source`;
         utilLabel.className = "font-mono font-bold text-rose-500";
+      } else if (demand > ufMax) {
+        utilLabel.textContent = `${pct}% — clearwell & contact tank cover the 45 s dip`;
+        utilLabel.className = "font-mono font-bold text-amber-500";
       } else {
-        utilLabel.textContent = `${pct}% Load (${displayGpm} GPM)`;
+        utilLabel.textContent = `${pct}% Load`;
         utilLabel.className = "font-mono font-bold text-blue-500";
       }
+      document.getElementById('bar-hosp').style.width = Math.min(pct, 100) + "%";
+      const spareGpm = Math.max(0, 250 - demand);
+      document.getElementById('bar-rest').style.width = "0%";
 
-      const hospPct = Math.min((hospGpd / 360000) * 100, 100);
-      const restPct = Math.min((restGpd / 360000) * 100, 100 - hospPct);
-      document.getElementById('bar-hosp').style.width = hospPct + "%";
-      document.getElementById('bar-rest').style.width = restPct + "%";
-
-      const spareGpd = Math.max(0, 360000 - totalDemandGpd);
-      const sparePeople = Math.floor(spareGpd / 15);
-      const spareEl = document.getElementById('spare-people-text');
-      if (spareGpd > 0) {
-        spareEl.innerHTML = `Remaining Spare Capacity: <strong class="text-[var(--foreground)]">+${spareGpd.toLocaleString()} GPD</strong> (Serves <strong class="text-emerald-500">+${sparePeople.toLocaleString()} residents</strong> at 15 gal/day)`;
+      if (tooTurbid) {
+        spareEl.innerHTML = `<strong class="text-rose-500">Raw turbidity above 50 NTU — source needs upstream pretreatment; building outlet held closed.</strong>`;
+      } else if (!ctOk) {
+        spareEl.innerHTML = `<strong class="text-rose-500">CT short of 4-log virus requirement — XV-602 closed. Reduce flow or warm water.</strong>`;
+      } else if (overCap) {
+        spareEl.innerHTML = `<strong class="text-rose-500">Demand exceeds the plant's 250 GPM rating.</strong> Shed loads (e.g., cooling-tower makeup) or add a second unit.`;
       } else {
-        spareEl.innerHTML = `<strong class="text-rose-500">Trailer at 100% Peak Capacity (360,000 GPD)</strong> — Deploy external 3,000-gal bladder tank for peak shaving`;
+        const people = Math.floor(spareGpm * 1440 / 15);
+        spareEl.innerHTML = `Spare capacity: <strong class="text-[var(--foreground)]">${spareGpm} GPM</strong> — about <strong class="text-emerald-500">${people.toLocaleString()} people/day</strong> at 15 gal/day from the community fill manifold`;
       }
 
-      const coagEl = document.getElementById('coag-status');
-      if (rawNtu > 5) {
-        const paclGph = ((displayGpm * 0.0025) * (rawNtu / 12)).toFixed(2);
+      if (tooTurbid) {
+        coagEl.textContent = "PACl: source not suitable";
+        coagEl.className = "font-mono text-rose-500";
+      } else if (rawNtu > 5) {
+        const paclGph = ((flow * 0.0025) * (rawNtu / 12)).toFixed(2);
         coagEl.textContent = `PACl Coagulant: AUTO ON (${paclGph} GPH)`;
         coagEl.className = "font-mono text-amber-500";
       } else {
-        coagEl.textContent = "PACl Coagulant: STANDBY (Raw <= 5 NTU)";
+        coagEl.textContent = "PACl Coagulant: STANDBY (raw ≤ 5 NTU)";
         coagEl.className = "font-mono text-emerald-500";
       }
+
+      if (tooTurbid || !ctOk) setBadge("OUTLET LOCKED • CHECK ALARMS", 'bad');
+      else if (currentMode === 'backwash') setBadge("AUTO BACKWASH • TRAIN A ONLINE / TRAIN B AIR SCOUR", 'warn');
+      else setBadge("ONLINE • ALL BARRIERS GREEN", 'ok');
     }
 
     function resetSimulator() {
-      document.getElementById('sim-hospitals').value = 1350;
-      document.getElementById('sim-restaurants').value = 30;
+      document.getElementById('sim-hospitals').value = 180;
+      document.getElementById('sim-restaurants').value = 15;
       document.getElementById('sim-raw-ntu').value = 12;
       document.getElementById('sim-set-psi').value = 70;
       setOperatingMode('normal');
     }
 
-    // Initialize default selection and simulation
     selectSkid('uf');
     updateSimulation();
   </script>

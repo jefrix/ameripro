@@ -1,131 +1,145 @@
 # Bill of Materials (BOM) & Capital Cost Breakdown (MWTP-250)
 
+**Revision B — November 2026.** Reflects the Rev B design: break tank and hydrant kit, contact tank and transfer pump, UF integrity testing, third UV reactor, larger pumps and generator, duplex instrument air, segregated chemical room and safety station; onboard GAC removed. Adds engineering, and a 15% contingency for a first-of-a-kind build.
+
 ## 1. Executive Cost Summary
 
-This estimate reflects **2026 commercial industrial pricing** for NSF-61 / EPA municipal-grade components required to build one **MWTP-250 (250 GPM / 360,000 GPD)** unit inside a custom 36-ft Triple-Axle Gooseneck Trailer.
+These are **budget estimates** for one **MWTP-250 (250 GPM rated)** unit in a custom 36-ft triple-axle gooseneck. Every line needs a written vendor quote before it goes in a loan package. **[VERIFY all prices.]**
 
 | Category | Subsystem Description | Equipment Cost (USD) | % of Hardware |
 | :--- | :--- | :---: | :---: |
-| **1.0** | **36-ft Triple-Axle Gooseneck Trailer & Hydraulic Outriggers** | $58,500 | 16.4% |
-| **2.0** | **Stage 1 & 2: Raw Intake Booster, Auto-Strainer & Duplex Bag Filters** | $24,800 | 7.0% |
-| **3.0** | **Stage 3: Hollow-Fiber Ultrafiltration (UF) Skid (14 Modules, 0.02 μm)** | $74,200 | 20.8% |
-| **4.0** | **Stage 4 & 5: Duplex GAC Carbon Vessels, Dual UV Reactors & Chemical Skid** | $48,900 | 13.7% |
-| **5.0** | **Stage 6: 500-Gal Baffled Clearwell, Triplex VFD Booster & RPZ Backflow** | $36,400 | 10.2% |
-| **6.0** | **316L SS Process Piping, 18x Pneumatic Valves (`XV`) & Bulkhead Manifolds** | $38,700 | 10.9% |
-| **7.0** | **PLC/SCADA Control Panel, Laser Turbidity & Chlorine Analyzers, Wet Lab** | $35,600 | 10.0% |
-| **8.0** | **45 kW Tier-4 Diesel Generator, 100-Gal Fuel Tank & Instrument Air** | $39,200 | 11.0% |
-| — | **SUBTOTAL — MAJOR EQUIPMENT & MATERIALS** | **$356,300** | **100.0%** |
+| **1.0** | **36-ft Triple-Axle Gooseneck, 9.5-ft Tall Box, Firewall & Hydraulic Outriggers** | $64,500 | 14.9% |
+| **2.0** | **Stage 1 & 2: Hydrant Kit, Raw Break Tank, 15 HP Intake Pump, Auto-Strainer & Bag Filters** | $34,200 | 7.9% |
+| **3.0** | **Stage 3: Hollow-Fiber UF Skid (14 Modules) + Direct Integrity Test** | $80,200 | 18.5% |
+| **4.0** | **Stage 4 & 5: 3 UV Reactors, Chemical Dosing, Segregated Chemical Room & Contact Tank** | $59,800 | 13.8% |
+| **5.0** | **Stage 6: 500-Gal Clearwell, Triplex 15 HP VFD Booster & RPZ Backflow** | $42,700 | 9.9% |
+| **6.0** | **316L SS Process Piping, 20 Pneumatic Valves (`XV`), Bulkhead & Hose Kits** | $43,800 | 10.1% |
+| **7.0** | **PLC/SCADA, Analyzers, Wet Lab & Safety Station** | $46,800 | 10.8% |
+| **8.0** | **80 kW Tier-4 Diesel Generator, 150-Gal Fuel, ATS & Duplex Instrument Air** | $61,000 | 14.1% |
+| — | **SUBTOTAL — MAJOR EQUIPMENT & MATERIALS** | **$433,000** | **100.0%** |
 | **9.0** | **System Integration, 316L SS TIG Welding, UL-508A Panel Wiring & FAT Testing** | $68,000 | — |
-| — | **TOTAL TURNKEY BUILD COST (Single Unit)** | **$424,300** | — |
+| **10.0** | **Engineering: PE Basis-of-Design, Stamped Drawings, State Plan Review** | $22,000 | — |
+| **11.0** | **Contingency (15% of items 1.0–10.0, first-of-a-kind build)** | $78,450 | — |
+| — | **TOTAL TURNKEY BUILD COST (Single Unit)** | **$601,450** | — |
 
-> [!TIP]
-> **Commercial Comparison:** Turnkey 250 GPM municipal UF trailers purchased from large OEMs typically retail between **$650,000 and $850,000**. Procuring the skids and integrating on a custom commercial gooseneck chassis saves **~$250,000–$400,000 per trailer**.
+> [!NOTE]
+> **Commercial comparison:** Get at least two written quotes for a comparable turnkey mobile UF plant before using any OEM price comparison with a lender or customer. Rev A's "$650,000–$850,000 OEM retail" figure has no quote behind it and has been removed.
 
 ---
 
 ## 2. Line-Item Bill of Materials (BOM)
 
-### 2.1 Category 1.0: Mobility Platform & Enclosure (`$58,500`)
+### 2.1 Category 1.0: Mobility Platform & Enclosure (`$64,500`)
 
 | Item | Qty | Description & Technical Specification | Reference OEM / Model | Unit Cost | Extended |
 | :--- | :-: | :--- | :--- | :---: | :---: |
-| **1.1** | 1 | **36-ft Triple-Axle Commercial Gooseneck Trailer** (28 ft main deck + 8 ft gooseneck), 3 × 10,000 lb Dexter torsion axles, electric-over-hydraulic disc brakes, 30,000 lb GVWR, heavy-duty steel tube frame | ATC / Featherlite / Custom Commercial | $39,500 | $39,500 |
-| **1.2** | 1 | **Insulated All-Season Package:** R-12 closed-cell spray foam walls/ceiling, 0.125" aluminum treadplate marine floor with perimeter floor drains, rear barn doors + streetside/curbside access doors | Factory Upfit | $7,800 | $7,800 |
-| **1.3** | 1 | **4-Point Hydraulic Auto-Leveling Outrigger Jacks** (40,000 lb static support capacity for wet operating load) | Equalizer Systems / Bulldog | $6,400 | $6,400 |
-| **1.4** | 1 | **24,000 BTU Split Heat Pump HVAC + Compartment Unit Heaters** (Freeze protection down to -10°F) | Mitsubishi / Qmark | $4,800 | $4,800 |
+| **1.1** | 1 | **36-ft Triple-Axle Commercial Gooseneck** (28 ft main deck + 8 ft gooseneck), **9.5-ft main-deck interior** within 13'-6" legal height, 3 × 10,000 lb torsion axles, electric-over-hydraulic disc brakes, 30,000 lb GVWR | ATC / Featherlite / Custom Commercial | $44,000 | $44,000 |
+| **1.2** | 1 | **Insulated Package + Machinery Compartment:** R-12 closed-cell foam, aluminum treadplate floor with perimeter drains, **fire-separated gooseneck generator compartment with exterior doors and radiator/exhaust venting**, rear barn doors + side doors, curbside belly boxes | Factory Upfit | $8,500 | $8,500 |
+| **1.3** | 1 | **4-Point Hydraulic Auto-Leveling Outrigger Jacks** | Equalizer Systems / Bulldog | $6,400 | $6,400 |
+| **1.4** | 1 | **24,000 BTU Heat Pump HVAC + Unit Heaters + Chemical-Room Exhaust Fan** | Mitsubishi / Qmark | $5,600 | $5,600 |
 
 ---
 
-### 2.2 Category 2.0: Intake & Pre-Filtration (`$24,800`)
+### 2.2 Category 2.0: Supply, Break Tank & Pre-Filtration (`$34,200`)
 
 | Item | Qty | Description & Technical Specification | Reference OEM / Model | Unit Cost | Extended |
 | :--- | :-: | :--- | :--- | :---: | :---: |
-| **2.1** | 1 | **Raw Water Intake Booster Pump (`P-101`):** 260 GPM @ 130 ft TDH, 7.5 HP TEFC motor, 316SS wet end, vacuum-priming assist + VFD | Goulds 3656SS / Grundfos | $5,400 | $5,400 |
-| **2.2** | 1 | **Automatic Self-Cleaning Strainer (`STR-101`):** 3" flanged 316SS body, 200 μm wedge-wire screen, motorized suction scanner/brush with ΔP switch (`PDI-102`) | Eaton / Amiad SAF-1500 | $9,800 | $9,800 |
-| **2.3** | 1 | **316L SS Inline Helical Static Mixer (`SM-101`):** 3" NPT/Flanged with dual chemical injection quills | Koflo 3" 316SS | $1,400 | $1,400 |
-| **2.4** | 1 | **Duplex Multi-Bag Filter Housing (`BF-101A/B`):** 2x 4-bag 304SS vessels (150 PSI) with continuous-flow transfer valve + 100 spare 25 μm felt bags | Eaton Duoline / Pentair | $8,200 | $8,200 |
+| **2.1** | 1 | **Raw Water Intake Pump (`P-101`):** Self-priming, 260 GPM @ 130 ft TDH, **15 HP** TEFC, 316SS wet end, VFD | Gorman-Rupp / Goulds / Grundfos | $7,200 | $7,200 |
+| **2.2** | 1 | **Automatic Self-Cleaning Strainer (`STR-101`):** 3" 316SS, 200 μm wedge-wire, motorized scanner with ΔP switch (`PDI-102`) | Eaton / Amiad SAF-1500 | $9,800 | $9,800 |
+| **2.3** | 1 | **316L SS Inline Static Mixer (`SM-101`):** 3", single injection quill (PACl), installed **after** the bag filters | Koflo 3" 316SS | $1,400 | $1,400 |
+| **2.4** | 1 | **Duplex Bag Filter Housing (`BF-101A/B`):** 2 × 4-bag 304SS with transfer valve + 100 spare 25 μm bags | Eaton Duoline / Pentair | $8,200 | $8,200 |
+| **2.5** | 1 | **Raw-Water Break Tank (`TK-100`):** 3,000-gal open-top frame tank, NSF-61 liner, cover, air-gap fill nozzle, level transmitter (`LIT-100`) | Husky / Fol-Da-Tank | $5,200 | $5,200 |
+| **2.6** | 1 | **Hydrant Kit:** Pressure-sustaining valve `PSV-100` (set 20 PSI), `PT-100`, fill valve `XV-100` actuator package, hydrant wrench. *Hydrant meter and backflow device are normally rented from the utility with the hydrant permit.* | Cla-Val / Watts | $2,400 | $2,400 |
 
 ---
 
-### 2.3 Category 3.0: Hollow-Fiber Ultrafiltration Skid (`$74,200`)
+### 2.3 Category 3.0: Hollow-Fiber Ultrafiltration Skid (`$80,200`)
 
 | Item | Qty | Description & Technical Specification | Reference OEM / Model | Unit Cost | Extended |
 | :--- | :-: | :--- | :--- | :---: | :---: |
-| **3.1** | 14 | **PVDF Hollow-Fiber UF Membrane Modules (`UF-201A/B`):** 0.02 μm nominal pore size, 775 ft² (72 m²) area per module (10,850 ft² total), NSF-61 certified | DuPont IntegraFlux / Toray / Veolia ZeeWeed | $2,650 | $37,100 |
-| **3.2** | 1 | **UF Structural 304SS Skid Frame & Schedule 80 PVC/316SS Manifolds:** Dual-train rack (2 × 7 modules) with shock-absorbing vibration mounts | Custom Fabricated | $14,500 | $14,500 |
-| **3.3** | 1 | **UF Backwash Pump (`P-202`):** 180 GPM @ 40 PSI, 5.0 HP 316SS close-coupled centrifugal pump with soft-starter | Grundfos / Ebara 316SS | $3,600 | $3,600 |
-| **3.4** | 1 | **Oil-Free Air Scour Regenerative Blower (`BL-201`) & CIP Heater/Tank (`TK-203`):** 2.0 HP oil-free blower + 100-gal HDPE Clean-In-Place tank with 6 kW immersion heater | Gast / Fuji + Custom CIP | $6,800 | $6,800 |
-| **3.5** | 1 | **UF Skid Local Valve & Sensor Harness:** Pre-mounted sanitary couplings, sample valves, air vents, and glycerine pressure gauges | Integrated Package | $12,200 | $12,200 |
+| **3.1** | 14 | **PVDF Hollow-Fiber UF Modules (`UF-201A/B`):** 0.02 μm, 775 ft² (72 m²) each, **NSF/ANSI 61 + NSF/ANSI 419 challenge-tested** | DuPont IntegraFlux / Toray / Veolia | $2,650 | $37,100 |
+| **3.2** | 1 | **UF Skid Frame & Manifolds:** Dual-train rack (2 × 7) with vibration mounts — height to suit 9.5-ft ceiling **[VERIFY module length]** | Custom Fabricated | $14,500 | $14,500 |
+| **3.3** | 1 | **UF Backwash Pump (`P-202`):** 180 GPM @ 40 PSI, 5.0 HP 316SS, soft-starter | Grundfos / Ebara 316SS | $3,600 | $3,600 |
+| **3.4** | 1 | **Air Scour Blower (`BL-201`) & CIP Tank (`TK-203`):** 2.0 HP oil-free blower + 100-gal CIP tank with 6 kW heater and CIP pump | Gast / Fuji + Custom CIP | $6,800 | $6,800 |
+| **3.5** | 1 | **UF Local Valve & Sensor Harness:** sanitary couplings, sample valves, air vents, gauges | Integrated Package | $12,200 | $12,200 |
+| **3.6** | 1 | **Direct Integrity Test Panel (`DIT-201`):** regulated air supply, high-resolution pressure transmitters, PLC test routine | Membrane OEM package | $4,800 | $4,800 |
+| **3.7** | 1 | **Membrane Preservation Kit:** preservative chemical stock, glycol for freeze season, fill fittings | Membrane OEM recommended | $1,200 | $1,200 |
 
 ---
 
-### 2.4 Category 4.0: Carbon Polishing, UV & Chemical Dosing (`$48,900`)
+### 2.4 Category 4.0: UV, Chemical Dosing, Chemical Room & Contact Tank (`$59,800`)
 
 | Item | Qty | Description & Technical Specification | Reference OEM / Model | Unit Cost | Extended |
 | :--- | :-: | :--- | :--- | :---: | :---: |
-| **4.1** | 2 | **36" Dia x 72" FRP Pressure Vessels (`GAC-301A/B`):** 150 PSI ASME code-stamped composite vessels with 3" flanged hub-and-lateral underdrains | Pentair Structural / Clack | $5,200 | $10,400 |
-| **4.2** | 50 | **Granular Activated Carbon Media (ft³):** NSF-61 acid-washed 12× 40 mesh coconut shell GAC (1,500 lbs total) + underbed garnet gravel | Calgon Filtrasorb / Jacobi | $110/ft³ | $5,500 |
-| **4.3** | 2 | **Validated Amalgam UV Disinfection Reactors (`UV-401A/B`):** 130 GPM each (260 GPM total), 316L SS chamber, ≥ 40 mJ/cm² dose, UV intensity sensor (`UIT-401`) & controller | Viqua / TrojanUV / Luminor Blackcomb | $9,600 | $19,200 |
-| **4.4** | 4 | **Digital Stepper Diaphragm Chemical Metering Pumps (`P-501` to `P-503`):** 4–20mA flow-paced dosing for PACl Coagulant, 12.5% NaOCl (Duty + Standby), and Sodium Bisulfite | Grundfos DDA / Prominent | $2,200 | $8,800 |
-| **4.5** | 3 | **Double-Walled HDPE Chemical Day Tanks:** 55-gal NaOCl, 35-gal PACl, 35-gal Bisulfite with transport tie-down cages, calibration columns & spill containment | Assmann / Snyder HDPE | — | $5,000 |
+| **4.1** | 3 | **Validated Amalgam UV Reactors (`UV-401A/B/C`):** 125 GPM each, **2 duty + 1 standby**, 316L SS, ≥ 40 mJ/cm² **EPA UVDGM validated**, intensity sensors & controller | TrojanUV / Xylem Wedeco / Evoqua **[VERIFY validated model]** | $9,600 | $28,800 |
+| **4.2** | 1 | **Online UVT Analyzer (`AIT-401`)** | Real Tech / Hach | $4,500 | $4,500 |
+| **4.3** | 5 | **Digital Metering Pumps:** `P-501` PACl, `P-502A/B` NaOCl duty/standby, `P-503` bisulfite (waste dechlor), `P-504` citric acid (CIP) | Grundfos DDA / ProMinent | $2,200 | $11,000 |
+| **4.4** | Lot | **Segregated Chemical Storage:** separate oxidizer, acid/reducer and PACl cabinets with individual spill containment; small-container (≤ 8 gal) stock for transport | Justrite / Denios | — | $5,500 |
+| **4.5** | 1 | **Baffled Contact Tank (`TK-401`):** 3,000-gal NSF-61 frame tank with internal baffle curtains, cover, level transmitter (`LIT-401`) | Husky / SEI (custom baffles) | $6,800 | $6,800 |
+| **4.6** | 1 | **Contact Tank Transfer Pump (`P-401`):** self-priming 260 GPM @ 40 ft, 5 HP, VFD | Gorman-Rupp / Grundfos | $3,200 | $3,200 |
+
+*Removed from Rev A: 2 × 36" GAC vessels ($10,400) and 50 ft³ GAC media ($5,500).*
 
 ---
 
-### 2.5 Category 5.0: Clearwell, Building Booster Skid & Backflow (`$36,400`)
+### 2.5 Category 5.0: Clearwell, Building Booster Skid & Backflow (`$42,700`)
 
 | Item | Qty | Description & Technical Specification | Reference OEM / Model | Unit Cost | Extended |
 | :--- | :-: | :--- | :--- | :---: | :---: |
-| **5.1** | 1 | **500-Gallon Baffled Clearwell Tank (`TK-601`):** Heavy-wall NSF-61 XLPE rectangular tank with internal serpentine baffles & structural steel highway cage | Custom Plastic Fab | $4,900 | $4,900 |
-| **5.2** | 1 | **Stowed 3,000-Gallon Collapsible Pillow Bladder Tank:** NSF-61 potable fabric tank with 3" camlocks (for ground deployment if extended CT or peak storage is needed) | Husky Portable / SEI | $4,200 | $4,200 |
-| **5.3** | 1 | **Triplex VFD Vertical Multistage Booster Skid (`P-601A/B/C`):** 3 × 125 GPM @ 80 PSI (7.5 HP each) 316SS pumps, individual VFDs, 316SS headers, 85-gal ASME bladder tank | Grundfos Hydro MPC-E / Goulds | $21,500 | $21,500 |
-| **5.4** | 1 | **3-Inch Reduced Pressure Zone (RPZ) Backflow Preventer (`RPZ-602`):** Lead-free 316SS body, ASSE 1013 / AWWA certified for hospital potable tie-in | Watts 957 / Wilkins 375XL | $5,800 | $5,800 |
+| **5.1** | 1 | **500-Gal Baffled Clearwell (`TK-601`):** NSF-61 XLPE rectangular tank (~32" × 48" × 75") with baffles and steel transport cage | Custom Plastic Fab | $4,900 | $4,900 |
+| **5.2** | 1 | **Triplex VFD Booster Skid (`P-601A/B/C`):** 3 × 125 GPM @ ~100 PSI, **15 HP each (2 duty + 1 standby)**, 316SS, individual VFDs, 85-gal ASME bladder tank, remote pressure transmitter (`PT-603`) | Grundfos Hydro MPC-E / Goulds | $32,000 | $32,000 |
+| **5.3** | 1 | **3" RPZ Backflow Preventer (`RPZ-602`):** lead-free, ASSE 1013 / AWWA, field-testable | Watts 957 / Wilkins 375XL | $5,800 | $5,800 |
+
+*Rev A's 3,000-gal pillow bladder is replaced by the baffled contact tank in item 4.5.*
 
 ---
 
-### 2.6 Category 6.0: 316L SS Piping, Pneumatic Valves & Hose Kit (`$38,700`)
+### 2.6 Category 6.0: Piping, Pneumatic Valves & Hose Kits (`$43,800`)
 
 | Item | Qty | Description & Technical Specification | Reference OEM / Model | Unit Cost | Extended |
 | :--- | :-: | :--- | :--- | :---: | :---: |
-| **6.1** | 18 | **Pneumatically Actuated 316SS Butterfly Valves (`XV-101` to `XV-602`):** 1" to 3" NSF-61 EPDM seats, spring-return rack-and-pinion actuators, 24VDC Namur solenoids & limit switches | Bray Series 20/92 / Keystone | $850 avg | $15,300 |
-| **6.2** | Lot | **Schedule 10 316L SS Sanitary/Victaulic Piping, Check Valves & Manual Valves:** All interconnecting headers, overhead pipe hangers, and heat tracing | Victaulic / Swagelok | — | $13,800 |
-| **6.3** | 1 | **Rear Stainless Camlock Bulkhead + 12-Tap Community Manifold + Hose Kit:** 100 ft of 4" intake hose, 150 ft of 3" NSF-61 high-pressure potable hose, 200 ft of 3" waste hose, hydrant wrench & pressure regulator | Snap-Tite / Kuriyama NSF-61 | $9,600 | $9,600 |
+| **6.1** | 20 | **Pneumatically Actuated 316SS Valves (`XV-100` to `XV-602`):** 0.5" to 4" NSF-61 seats, spring-return actuators, 24VDC solenoids & limit switches | Bray / Keystone | $850 avg | $17,000 |
+| **6.2** | Lot | **Schedule 10 316L SS Piping, Check Valves & Manual Valves:** headers, hangers, heat tracing | Victaulic / Swagelok | — | $13,800 |
+| **6.3** | 1 | **Bulkhead, 12-Tap Manifold & Hose Kits:** 100 ft 4" NSF-61 hydrant-to-tank hose, 2 × 50 ft 4" contact-tank hoses, 150 ft 3" NSF-61 potable hose, 200 ft 3" waste hose, hose ramps, **hose-sanitizing kit** (batch tank, pump, test strips) | Snap-Tite / Kuriyama NSF-61 | $13,000 | $13,000 |
 
 ---
 
-### 2.7 Category 7.0: PLC SCADA & Online Water Quality Lab (`$35,600`)
+### 2.7 Category 7.0: PLC SCADA, Online Water Quality Lab & Safety (`$46,800`)
 
 | Item | Qty | Description & Technical Specification | Reference OEM / Model | Unit Cost | Extended |
 | :--- | :-: | :--- | :--- | :---: | :---: |
-| **7.1** | 1 | **Main PLC Control Cabinet (`CP-701`):** NEMA 4X enclosure, Allen-Bradley CompactLogix 5380 PLC, 15" PanelView Plus HMI, 24VDC power supplies, UPS backup, Starlink/Cellular gateway | Rockwell Automation | $14,200 | $14,200 |
-| **7.2** | 2 | **Online Laser Nephelometer Turbidity Analyzers (`AIT-101`, `AIT-201`):** Continuous raw and UF permeate monitoring (0.0001 to 1000 NTU) | Hach TU5300sc + SC200 | $5,400 | $10,800 |
-| **7.3** | 1 | **Online Reagentless Free Chlorine & pH Analyzer Panel (`AIT-601`):** Amperometric sensor flow cell with automatic pH compensation | Hach CLF10sc + pHD | $5,800 | $5,800 |
-| **7.4** | Lot | **Magnetic Flow Meters (`FIT-200/602`), Pressure Transmitters (`PT`), Ultrasonic Level (`LIT-601`) & Benchtop DR900 Spectrophotometer** | Endress+Hauser / IFM / Hach | — | $4,800 |
+| **7.1** | 1 | **Main PLC Control Cabinet (`CP-701`):** NEMA 4X, CompactLogix 5380, 15" PanelView Plus, UPS, Starlink/cellular gateway, CT calculation logic | Rockwell Automation | $14,200 | $14,200 |
+| **7.2** | 2 | **Laser Turbidity Analyzers (`AIT-101`, `AIT-201`)** | Hach TU5300sc + SC200 | $5,400 | $10,800 |
+| **7.3** | 2 | **Free Chlorine, pH & Temperature Analyzer Panels (`AIT-402` contact-tank outlet, `AIT-601` finished)** | Hach CLF10sc + pHD | $5,800 | $11,600 |
+| **7.4** | Lot | **Mag Meters, Pressure Transmitters, Level Transmitters, DR900 Colorimeter, Bench Turbidimeter, Bac-T Sampling Supplies** | Endress+Hauser / IFM / Hach | — | $5,400 |
+| **7.5** | Lot | **Safety Station:** ANSI Z358.1 tempered eyewash/drench, chlorine gas detector (`AIT-901`), spill kits, fire extinguishers, scene lighting, traffic cones & signs | Bradley / Honeywell / Justrite | — | $4,800 |
 
 ---
 
-### 2.8 Category 8.0: Autonomous Power & Pneumatic Air (`$39,200`)
+### 2.8 Category 8.0: Power & Instrument Air (`$61,000`)
 
 | Item | Qty | Description & Technical Specification | Reference OEM / Model | Unit Cost | Extended |
 | :--- | :-: | :--- | :--- | :---: | :---: |
-| **8.1** | 1 | **45 kW Prime / 50 kW Standby Tier-4 Final Diesel Generator:** Sound-attenuated enclosure (66 dBA), 208/480V 3-phase switchable, integrated 100-gallon sub-base belly fuel tank | Cummins C50D6C / Caterpillar / Kohler | $31,500 | $31,500 |
-| **8.2** | 1 | **100A Automatic Transfer Switch (ATS) & Shore Power Camlock Panel:** Allows running off hospital/grid shore power (50 ft 4/0 SOOW cable included) | ASCO 300 Series / Hubbell | $4,200 | $4,200 |
-| **8.3** | 1 | **2.0 HP Oil-Free Scroll Air Compressor + Refrigerated Dryer (`AC-802`):** Supplies clean, dry 80 PSI air to all 18 pneumatic valves | Atlas Copco SF2 / Quincy | $3,500 | $3,500 |
+| **8.1** | 1 | **80 kW Prime Tier-4 Final Diesel Generator:** sound-attenuated, 208/480V 3-phase, 150-gal sub-base fuel tank, sized for VFD loads | Cummins / Caterpillar / Kohler **[VERIFY with OEM sizing]** | $48,000 | $48,000 |
+| **8.2** | 1 | **200A ATS & Shore Power Camlock Panel (480V)** with shore cable | ASCO 300 / Hubbell | $6,800 | $6,800 |
+| **8.3** | 1 | **Duplex Oil-Free Scroll Compressors (2 × 2 HP, lead/lag) + Receiver + Refrigerated Dryer (`AC-802A/B`)** | Atlas Copco SF2 / Quincy | $6,200 | $6,200 |
 
 ---
 
-## 3. Operating Cost (OpEx) per Day of Emergency Deployment
+## 3. Operating Cost (OpEx) per Day of Deployment
 
-When operating at **full 250 GPM (360,000 Gallons/Day)** on off-grid diesel generator power:
+At **250 GPM rated (~350,000 gallons/day net)** on generator power. Crew labor is in the business plan, not here.
 
-| Consumable / Operating Item | Consumption Rate | Unit Cost | Daily Cost (360,000 Gal) | Cost per 1,000 Gal |
+| Consumable / Operating Item | Consumption Rate | Unit Cost | Daily Cost | Cost per 1,000 Gal (net) |
 | :--- | :--- | :---: | :---: | :---: |
-| **Off-Road Diesel Fuel** (21.7 kW avg load) | 1.85 gal/hr (44.4 gal/day) | $3.80 / gal | $168.72 | $0.47 |
-| **12.5% Sodium Hypochlorite (NaOCl)** (2.0 mg/L dose) | 5.76 gal/day | $3.25 / gal | $18.72 | $0.05 |
-| **PACl Coagulant** (If raw turbidity > 5 NTU) | 4.50 gal/day | $4.50 / gal | $20.25 | $0.06 |
-| **25-Micron Bag Filters & CIP Chemicals** (Amortized) | 2 bags/day avg | $6.50 / bag | $13.00 | $0.04 |
-| **Membrane, UV Lamp & Carbon Reserve** (5-yr amortization) | — | — | $38.00 | $0.11 |
-| **TOTAL OPERATING COST (Off-Grid Diesel)** | — | — | **$258.69 / day** | **$0.72 / 1,000 Gal** |
-| **TOTAL OPERATING COST (On Shore Power)** | — | — | **$89.97 / day** | **$0.25 / 1,000 Gal** |
+| **Off-Road Diesel Fuel** (37.8 kW avg load) | ~3.1 gal/hr (74 gal/day) | $3.80 / gal | $281.20 | $0.80 |
+| **12.5% Sodium Hypochlorite** (~2.5 mg/L dose for 1.5–2.0 mg/L residual) | 7.2 gal/day | $3.25 / gal | $23.40 | $0.07 |
+| **PACl Coagulant** (only if raw turbidity > 5 NTU) | 4.50 gal/day | $4.50 / gal | $20.25 | $0.06 |
+| **Bag Filters & CIP Chemicals** (amortized) | 2 bags/day avg | $6.50 / bag | $13.00 | $0.04 |
+| **Bac-T Lab Samples & Field Reagents** | Per state sampling plan | — | $75.00 | $0.21 |
+| **Membrane, UV Lamp & Consumable Reserve** | — | — | $38.00 | $0.11 |
+| **TOTAL OPERATING COST (Generator Power)** | — | — | **$450.85 / day** | **$1.29 / 1,000 Gal** |
+| **TOTAL OPERATING COST (Shore Power, ~907 kWh/day at $0.13/kWh)** | — | — | **$287.59 / day** | **$0.82 / 1,000 Gal** |
 
 > [!NOTE]
-> Producing **360,000 gallons of hospital-grade pressurized potable water** costs only **$0.72 per 1,000 gallons** (0.07 cents per gallon) including diesel generator fuel—compared to **$1.50 to $3.00 per gallon** for emergency bottled water or bulk potable water tanker deliveries (> $500,000/day for the same volume).
+> At about $1.29 per 1,000 gallons in consumables, the plant's water costs roughly a tenth of a cent per gallon before labor. Delivered bulk or bottled water typically costs far more per gallon and doesn't keep a building pressurized — but quote local tanker and bottled-water prices before putting a specific comparison in front of a customer.

@@ -33,7 +33,7 @@
     <div>
       <div class="flex items-center gap-2">
         <span class="px-2.5 py-0.5 rounded-full text-xs font-semibold bg-blue-500/15 text-blue-500 border border-blue-500/30">3D CAD DIGITAL TWIN</span>
-        <span class="text-xs font-mono text-[var(--muted-foreground)]">36-FT GOOSENECK • 250 GPM (360,000 GPD)</span>
+        <span class="text-xs font-mono text-[var(--muted-foreground)]">36-FT GOOSENECK • 250 GPM RATED • REV B</span>
       </div>
       <h1 class="text-lg font-bold mt-1">MWTP-250 Interactive 3D Explodable View & Water Flow Diagram</h1>
       <p class="text-xs text-[var(--muted-foreground)]">Drag to Orbit 360° • Scroll to Zoom • Shift+Drag to Pan • Click any 3D Skid or Label to Inspect</p>
@@ -99,9 +99,9 @@
       <!-- Flow Legend Overlay (Bottom Left) -->
       <div class="absolute bottom-3 left-3 bg-[var(--card)]/90 border border-[var(--border)] backdrop-blur rounded-lg px-3 py-2 flex flex-wrap items-center gap-3 text-xs z-20">
         <span class="font-semibold text-[var(--muted-foreground)]">3D Flow Stream:</span>
-        <span class="flex items-center gap-1.5"><span class="w-2.5 h-2.5 rounded-full bg-amber-500 inline-block"></span> 1. Raw Hydrant Feed</span>
+        <span class="flex items-center gap-1.5"><span class="w-2.5 h-2.5 rounded-full bg-amber-500 inline-block"></span> 1. Raw (Break Tank)</span>
         <span class="flex items-center gap-1.5"><span class="w-2.5 h-2.5 rounded-full bg-cyan-400 inline-block"></span> 2. 0.02 um UF Filtrate</span>
-        <span class="flex items-center gap-1.5"><span class="w-2.5 h-2.5 rounded-full bg-emerald-400 inline-block"></span> 3. GAC Carbon + UV</span>
+        <span class="flex items-center gap-1.5"><span class="w-2.5 h-2.5 rounded-full bg-emerald-400 inline-block"></span> 3. UV + Cl₂ Contact Tank</span>
         <span class="flex items-center gap-1.5"><span class="w-2.5 h-2.5 rounded-full bg-blue-500 inline-block"></span> 4. Cl2 Clearwell & 75 PSI Bldg Out</span>
       </div>
     </div>
@@ -117,11 +117,11 @@
               <span id="detail-tag" class="text-xs font-mono font-bold text-blue-500 uppercase">UF-201A/B • STAGE 3</span>
               <h2 id="detail-title" class="text-base font-bold mt-0.5">Hollow-Fiber Ultrafiltration Skid</h2>
             </div>
-            <span id="detail-badge" class="px-2 py-0.5 rounded text-xs font-mono bg-[var(--secondary)] text-[var(--secondary-foreground)]">3,850 lbs wet</span>
+            <span id="detail-badge" class="px-2 py-0.5 rounded text-xs font-mono bg-[var(--secondary)] text-[var(--secondary-foreground)]">3,900 lbs wet</span>
           </div>
 
           <p id="detail-desc" class="text-xs text-[var(--muted-foreground)] mt-2.5 leading-relaxed">
-            14 vertical PVDF hollow-fiber membrane modules (0.02 micron pore size) arranged in two parallel 125 GPM trains directly over the triple torsion axles. Removes 99.9999% (6-log) of bacteria, Giardia, and Cryptosporidium without RO brine waste.
+            14 PVDF hollow-fiber modules (0.02 micron) in two parallel 125 GPM trains over the axles, integrity-tested daily.
           </p>
 
           <div id="detail-specs" class="mt-3 space-y-1.5"></div>
@@ -143,7 +143,7 @@
         <div class="grid grid-cols-3 gap-1.5">
           <button onclick="setFlowHighlight('all')" id="fl-all" class="px-2 py-1.5 rounded text-xs font-semibold bg-blue-600 text-white transition">All Streams</button>
           <button onclick="setFlowHighlight('raw')" id="fl-raw" class="px-2 py-1.5 rounded text-xs font-semibold bg-[var(--secondary)] text-[var(--secondary-foreground)] border border-[var(--border)] transition">Raw & UF</button>
-          <button onclick="setFlowHighlight('potable')" id="fl-potable" class="px-2 py-1.5 rounded text-xs font-semibold bg-[var(--secondary)] text-[var(--secondary-foreground)] border border-[var(--border)] transition">GAC, UV & Out</button>
+          <button onclick="setFlowHighlight('potable')" id="fl-potable" class="px-2 py-1.5 rounded text-xs font-semibold bg-[var(--secondary)] text-[var(--secondary-foreground)] border border-[var(--border)] transition">UV, CT &amp; Out</button>
         </div>
       </div>
 
@@ -186,52 +186,52 @@
         short: '36-ft Gooseneck Chassis',
         tag: 'CHASSIS-GN36 • MOBILITY PLATFORM',
         title: '36-ft Triple-Axle Gooseneck Trailer & Jacks',
-        weight: '9,200 lbs tare',
+        weight: '9,800 lbs tare',
         color: '#64748b',
         anchor: { x: 0, y: 0.5, z: 0 },
         explodeVec: { x: 0, y: -5.5, z: 0 },
-        desc: '28-ft lower main deck + 8-ft elevated forward gooseneck deck. Rated at 30,000 lbs GVWR with triple 10,000-lb torsion axles and 4-point hydraulic outrigger jacks supporting 30,870 lbs wet weight.',
+        desc: '28-ft main deck with a 9.5-ft clear interior, plus an 8-ft gooseneck machinery compartment behind a firewall. 30,000 lb GVWR on triple 10,000-lb axles. Road weight ~24,100 lb; ~28,420 lb on the trailer when running.',
         specs: [
-          ['Dimensions', '36 ft Length × 8.0 ft Width'],
+          ['Dimensions', '36 ft × 8.0 ft, 9.5 ft clear main deck'],
           ['Axle Rating', '3 × 10,000 lb Torsion Axles'],
-          ['Leveling Jacks', '4-Pt Hydraulic Outriggers (40k lb)'],
-          ['Tow Vehicle', 'Class 4/5 Pickup (2-5/16" Ball)']
+          ['Pin Weight', '~5,300 lb — Class 5 chassis cab'],
+          ['Licensing', 'Class A CDL + USDOT number']
         ]
       },
       gen: {
         id: 'gen',
         num: 'UTIL',
-        short: '45 kW Diesel Gen + Air',
-        tag: 'GEN-801 • GOOSENECK DECK',
-        title: '45 kW Tier-4 Diesel Generator & Compressor',
-        weight: '2,850 lbs',
+        short: '80 kW Gen + Duplex Air',
+        tag: 'GEN-801 / AC-802A/B • GOOSENECK COMPARTMENT',
+        title: '80 kW Tier-4 Generator & Duplex Instrument Air',
+        weight: '4,400 lbs',
         color: '#f59e0b',
         anchor: { x: -14.2, y: 5.5, z: -1.1 },
         explodeVec: { x: -7.5, y: 5.0, z: -4.5 },
-        desc: 'Sound-attenuated 45 kW prime / 50 kW standby diesel generator with a 100-gallon belly fuel tank (54 hours continuous autonomy at 250 GPM) plus 2 HP oil-free air compressor for pneumatic valves.',
+        desc: 'Sound-attenuated 80 kW prime diesel generator with a 150-gallon belly tank (~48 hours at 250 GPM), in a fire-separated compartment with exterior doors and direct exhaust/radiator venting. Two oil-free compressors (lead/lag) with a receiver keep the fail-safe valves supplied.',
         specs: [
-          ['Power Output', '45 kW Prime (208V/480V 3-Ph)'],
-          ['Avg Trailer Load', '21.7 kW at 250 GPM'],
-          ['Fuel Autonomy', '54 Hours (100-Gal Tank)'],
-          ['Instrument Air', '2 HP Oil-Free Scroll (80 PSI)']
+          ['Power Output', '80 kW Prime (208V/480V 3-Ph)'],
+          ['Avg Plant Load', '~38 kW at 250 GPM'],
+          ['Fuel Autonomy', '~48 Hours (150-Gal Tank)'],
+          ['Instrument Air', '2 × 2 HP Oil-Free + Receiver']
         ]
       },
       plc: {
         id: 'plc',
         num: 'SCADA',
-        short: 'PLC SCADA & Wet Lab',
-        tag: 'CP-701 • CONTROL & QA',
-        title: 'Rockwell PLC Cabinet, Analyzers & Wet Lab',
-        weight: '950 lbs',
+        short: 'PLC, Lab & Safety Station',
+        tag: 'CP-701 • CONTROL, QA & SAFETY',
+        title: 'PLC Cabinet, Analyzers, Wet Lab & Eyewash',
+        weight: '750 lbs',
         color: '#a855f7',
-        anchor: { x: -11.2, y: 5.2, z: 2.3 },
-        explodeVec: { x: -5.5, y: 6.0, z: 6.5 },
-        desc: 'CompactLogix PLC with 15" HMI automating filtration, air-scour backwash, and transport auto-drain. Houses Hach laser nephelometers and free chlorine analyzers with automatic off-spec divert.',
+        anchor: { x: -5.5, y: 3.8, z: -2.2 },
+        explodeVec: { x: -3.5, y: 4.5, z: -8.0 },
+        desc: 'CompactLogix PLC with 15" HMI running filtration, backwash, the daily membrane integrity test, and the live chlorine contact-time calculation. Moved to the main deck in Rev B so operators have standing headroom. Includes the ANSI Z358.1 eyewash/drench.',
         specs: [
           ['Controller', 'Allen-Bradley CompactLogix + 15" HMI'],
-          ['Turbidity Lockout', 'Hach TU5300sc (Diverts > 0.15 NTU)'],
-          ['Chlorine Analyzer', 'Hach CLF10sc PID Dosing Loop'],
-          ['Stowed Storage', '3,000-Gal Collapsible Bladder Tank']
+          ['Turbidity Lockout', 'Hach TU5300sc (diverts above 0.15 NTU)'],
+          ['CT Calculation', 'AIT-402 Cl₂ / pH / Temp + flow'],
+          ['Safety', 'Eyewash/drench, Cl₂ gas detector']
         ]
       },
       intake: {
@@ -239,107 +239,125 @@
         num: '1',
         short: '1. Intake Pump & Strainers',
         tag: 'P-101 / STR-101 / BF-101 • STAGE 1 & 2',
-        title: 'Raw Booster Pump, 200um Auto-Strainer & Bag Filters',
-        weight: '1,550 lbs wet',
+        title: 'Intake Pump, 200 µm Auto-Strainer & Bag Filters',
+        weight: '1,750 lbs wet',
         color: '#d97706',
         anchor: { x: -5.5, y: 3.0, z: 2.3 },
         explodeVec: { x: -2.5, y: 1.5, z: 8.5 },
-        desc: 'Vacuum-assisted 7.5 HP VFD booster pump draws 260 GPM from depressurized fire hydrants (with -2 PSI suction cutout protection), followed by a 200-micron auto-flushing strainer and duplex 25-micron bag housings.',
+        desc: 'A 15 HP self-priming pump draws 260 GPM from the ground-deployed break tank (never directly from the city main), through a 200-micron auto-flushing strainer and duplex 25-micron bag housings, then inline PACl coagulation ahead of the UF.',
         specs: [
-          ['Intake Pump P-101', '260 GPM @ 130 ft TDH (7.5 HP VFD)'],
-          ['Auto Strainer', '200 um 316SS Wedge-Wire Screen'],
-          ['Pre-Filtration', 'Duplex 4-Bag 304SS (25 um Felt)'],
-          ['Coagulant Mixer', '3" 316SS Inline Static Mixer']
+          ['Intake Pump P-101', '260 GPM @ 130 ft TDH (15 HP VFD)'],
+          ['Auto Strainer', '200 µm 316SS Wedge-Wire Screen'],
+          ['Pre-Filtration', 'Duplex 4-Bag 304SS (25 µm Felt)'],
+          ['Coagulant', 'PACl after bags (only above 5 NTU)']
+        ]
+      },
+      rawtank: {
+        id: 'rawtank',
+        num: '1A',
+        short: 'TK-100 Raw Break Tank',
+        tag: 'TK-100 • GROUND-DEPLOYED (STAGE 1)',
+        title: '3,000-Gallon Raw-Water Break Tank',
+        weight: 'Stowed in belly box',
+        color: '#fbbf24',
+        anchor: { x: -4.0, y: 0.0, z: 8.5 },
+        explodeVec: { x: -1.5, y: -5.5, z: 3.0 },
+        desc: 'Open-top frame tank filled through an air gap from a hydrant (through the utility meter, backflow device, and a pressure-sustaining valve that holds the main at 20 PSI or more) or from tankers. The air gap protects the city system.',
+        specs: [
+          ['Volume', '3,000 gal, NSF-61 liner, covered'],
+          ['Fill', 'Air gap; XV-100 closes below 20 PSI'],
+          ['Hydrant Kit', 'Utility meter + backflow + PSV-100'],
+          ['No Pressure?', 'Tanker shuttle (~15,000 gal/hr)']
         ]
       },
       uf: {
         id: 'uf',
         num: '2',
-        short: '2. 0.02um UF Membrane Skid',
+        short: '2. 0.02µm UF + Integrity Test',
         tag: 'UF-201A/B • STAGE 3 (CORE BARRIER)',
         title: 'Hollow-Fiber Ultrafiltration Skid (14 Modules)',
-        weight: '3,850 lbs wet',
+        weight: '3,900 lbs wet',
         color: '#06b6d4',
         anchor: { x: 2.2, y: 4.2, z: -2.2 },
         explodeVec: { x: 0, y: 6.5, z: -8.5 },
-        desc: '14 vertical PVDF hollow-fiber membrane modules (0.02 micron pore size) arranged in two parallel 125 GPM trains directly over the triple torsion axles. Removes 99.9999% (6-log) of bacteria, Giardia, and Cryptosporidium.',
+        desc: '14 PVDF hollow-fiber modules (0.02 micron) in two 125 GPM trains over the axles. Credit for Giardia, Cryptosporidium and bacteria comes from NSF 419 testing and a daily pressure-decay integrity test. Kept wet with preservative between jobs.',
         specs: [
-          ['Pore Size & Flux', '0.02 Micron PVDF (10,850 sq.ft.)'],
+          ['Pore Size & Area', '0.02 Micron PVDF (10,850 sq.ft.)'],
           ['Configuration', '2 × 125 GPM Parallel Trains (14 Mod)'],
-          ['Filtrate Turbidity', '< 0.05 NTU Guaranteed'],
+          ['Integrity Test', 'Daily pressure-decay (XV-207A/B)'],
           ['Auto Backwash', '45-sec Air Scour + Reverse Flush']
-        ]
-      },
-      gac: {
-        id: 'gac',
-        num: '3',
-        short: '3. Duplex 36" GAC Carbon',
-        tag: 'GAC-301A/B • STAGE 4',
-        title: 'Duplex Granular Activated Carbon (GAC) Vessels',
-        weight: '4,900 lbs wet',
-        color: '#10b981',
-        anchor: { x: -5.5, y: 4.5, z: -2.2 },
-        explodeVec: { x: -3.5, y: 4.5, z: -8.0 },
-        desc: 'Two 36-inch diameter × 72-inch tall ASME FRP pressure vessels holding 50 cubic feet of acid-washed coconut shell activated carbon. Strips VOCs, petrochemicals, pesticides, PFAS, and taste/odor.',
-        specs: [
-          ['Vessel Dimensions', '2 × 36" Dia × 72" Tall FRP (150 PSI)'],
-          ['Carbon Volume', '50 cu.ft. Coconut Shell GAC'],
-          ['Flow Arrangement', 'Parallel Radial Flow (2 × 125 GPM)'],
-          ['Transport Drain', 'XV-302 Pneumatic Underdrain Dump']
         ]
       },
       chem: {
         id: 'chem',
-        num: '4',
-        short: '4. Dual UV & Chem Dosing',
-        tag: 'UV-401 / CHEM-501 • STAGE 5',
-        title: 'Validated Amalgam UV Reactors & Chemical Skid',
-        weight: '1,750 lbs wet',
+        num: '3',
+        short: '3. UV ×3 & Chemical Room',
+        tag: 'UV-401A/B/C / CHEM-501 • STAGE 4 & 5',
+        title: 'Validated UV Reactors & Segregated Chemical Room',
+        weight: '1,500 lbs wet',
         color: '#ec4899',
         anchor: { x: 2.5, y: 2.8, z: 2.3 },
         explodeVec: { x: 1.5, y: 1.0, z: 9.0 },
-        desc: 'Two 130 GPM 316L stainless steel UV reactors deliver >= 40 mJ/cm2 dose for instant pathogen inactivation, paired with double-walled day tanks for 12.5% Sodium Hypochlorite, PACl Coagulant, and Bisulfite.',
+        desc: 'Three UVDGM-validated reactors (2 duty + 1 standby, ≥ 40 mJ/cm²) with UVT monitoring, then 12.5% hypochlorite dosing. Oxidizer, acid, and PACl cabinets are kept separate, vented, and watched by a chlorine gas detector.',
         specs: [
-          ['UV Reactors', '2 × 130 GPM Amalgam (>= 40 mJ/cm2)'],
-          ['Chlorine Dosing', '55-Gal 12.5% NaOCl (Target 2.0 mg/L)'],
-          ['Coagulant Tank', '35-Gal PACl (Auto ON > 5 NTU)'],
+          ['UV Reactors', '3 × 125 GPM Amalgam (2 duty + 1)'],
+          ['Chlorine Dosing', 'NaOCl duty/standby, trimmed on CT'],
+          ['Chemical Storage', 'Separate oxidizer / acid / PACl'],
           ['UF Backwash Pump', 'P-202 (180 GPM @ 40 PSI, 5 HP)']
+        ]
+      },
+      ct: {
+        id: 'ct',
+        num: '4',
+        short: '4. TK-401 Contact Tank',
+        tag: 'TK-401 • GROUND-DEPLOYED (STAGE 5)',
+        title: '3,000-Gallon Baffled Chlorine Contact Tank',
+        weight: 'Stowed in belly box',
+        color: '#10b981',
+        anchor: { x: 10.5, y: 0.0, z: 8.5 },
+        explodeVec: { x: 2.0, y: -5.5, z: 3.0 },
+        desc: 'Baffle curtains give about 6 minutes of effective contact time (T10) at 250 GPM — enough for 4-log virus inactivation at 2.0 mg/L free chlorine even near freezing. Transfer pump P-401 returns the water to the onboard clearwell.',
+        specs: [
+          ['Volume', '3,000 gal NSF-61, baffled, covered'],
+          ['Effective Contact', 'T10 ≈ 6 min at 250 GPM'],
+          ['CT Check', 'Live in PLC (flow, temp, pH, Cl₂)'],
+          ['Replaces', 'Rev A onboard GAC vessels']
         ]
       },
       clearwell: {
         id: 'clearwell',
         num: '5',
-        short: '5. 500-Gal Baffled Clearwell',
-        tag: 'TK-601 • STAGE 5 SURGE & CT',
+        short: '5. 500-Gal Clearwell',
+        tag: 'TK-601 • BOOSTER SUCTION',
         title: '500-Gallon Baffled Clearwell Tank',
         weight: '4,620 lbs wet',
         color: '#3b82f6',
         anchor: { x: 11.2, y: 3.8, z: -2.1 },
         explodeVec: { x: 6.5, y: 5.5, z: -7.5 },
-        desc: 'Rectangular cross-linked polyethylene (XLPE) tank inside a structural steel seismic cage with internal serpentine baffles. Provides chlorine contact mixing and hydraulic surge buffer for building booster pumps.',
+        desc: 'XLPE tank in a steel transport cage feeding the building boosters and the UF backwash pump. At about 2 minutes of flow it isn\'t counted for chlorine contact time — the ground contact tank handles that.',
         specs: [
-          ['Tank Capacity', '500 Gal Nominal (Serpentine Baffled)'],
-          ['Highway Auto-Drain', '3" Pneumatic Valve XV-601 (2.5 min)'],
-          ['Level Control', 'Ultrasonic LIT-601 Paces Intake VFD'],
-          ['External Loop', 'Port for 3,000-Gal Ground Bladder']
+          ['Tank Capacity', '500 Gal (~32" × 48" × 75")'],
+          ['Drain', 'XV-601 to dechlorinated waste'],
+          ['Level Control', 'LIT-601 trims P-101 / P-401'],
+          ['Low-Low', 'Trips boosters & backwash pump']
         ]
       },
       booster: {
         id: 'booster',
         num: '6',
-        short: '6. Triplex VFD Bldg Booster',
-        tag: 'P-601A/B/C & RPZ-602 • STAGE 6',
-        title: 'Triplex VFD Building Booster & RPZ Backflow Skid',
-        weight: '1,200 lbs wet',
+        short: '6. Triplex 15 HP Booster',
+        tag: 'P-601A/B/C, P-401 & RPZ-602 • STAGE 6',
+        title: 'Triplex VFD Building Booster, CT Transfer Pump & RPZ',
+        weight: '1,700 lbs',
         color: '#2563eb',
         anchor: { x: 11.2, y: 3.2, z: 2.2 },
         explodeVec: { x: 7.0, y: 1.5, z: 8.5 },
-        desc: 'Three 7.5 HP vertical multistage stainless centrifugal pumps with individual VFDs pressurize hospital or restaurant plumbing at a constant 65–85 PSI through a certified 3-inch ASSE 1013 RPZ backflow preventer.',
+        desc: 'Three 15 HP multistage pumps (2 duty + 1 standby) deliver ~100 PSI at the pump so the building sees 65–85 PSI after the RPZ and hose losses, controlled from a transmitter at the building end of the hose.',
         specs: [
-          ['Pump Array', '3 × 125 GPM Multistage 316SS (VFD)'],
-          ['Discharge Pressure', '65 to 85 PSI Constant Setpoint'],
+          ['Pump Array', '3 × 125 GPM, 15 HP, 316SS (VFD)'],
+          ['Building Pressure', '65 to 85 PSI on remote PT-603'],
           ['Backflow Preventer', '3" Lead-Free ASSE 1013 RPZ'],
-          ['Rear Bulkhead', '4" In / 3" Bldg Out / 12-Tap Bar']
+          ['Rear Bulkhead', 'Raw / CT tank / Bldg / Waste / 12-Tap']
         ]
       }
     };
@@ -531,41 +549,47 @@
 
     // Define 3D Water Flow Pipe Segments (Connects dynamically between skids even when exploded!)
     const flowRoutes = [
-      // 1. Raw Water Feed (Amber): Rear Bulkhead -> Intake Skid -> UF Skid
+      // 1. Raw Water (Amber): Hydrant/Tanker -> TK-100 break tank -> Intake Skid -> UF Skid
       {
         stream: 'raw',
         color: '#f59e0b',
         nodes: [
-          { skid: 'chassis', pt: { x: 17.8, y: 1.5, z: 3.1 } },
+          { skid: 'rawtank', pt: { x: -9.0, y: 0.2, z: 11.0 } },
+          { skid: 'rawtank', pt: { x: -4.0, y: 0.6, z: 8.5 } },
+          { skid: 'rawtank', pt: { x: -3.2, y: 0.2, z: 5.0 } },
           { skid: 'intake',  pt: { x: -3.2, y: 1.5, z: 2.8 } },
           { skid: 'intake',  pt: { x: -6.8, y: 2.5, z: 2.2 } },
           { skid: 'uf',      pt: { x: -1.5, y: 4.5, z: -1.2 } },
           { skid: 'uf',      pt: { x: 4.5,  y: 4.5, z: -1.2 } }
         ]
       },
-      // 2. UF Permeate (Cyan): UF Skid -> Duplex GAC Vessels
+      // 2. UF Permeate (Cyan): UF Skid -> UV Reactors
       {
         stream: 'raw',
         color: '#06b6d4',
         nodes: [
-          { skid: 'uf',  pt: { x: 1.5,  y: 5.2, z: -2.2 } },
-          { skid: 'uf',  pt: { x: -2.0, y: 5.2, z: -2.2 } },
-          { skid: 'gac', pt: { x: -4.2, y: 5.6, z: -2.2 } },
-          { skid: 'gac', pt: { x: -6.8, y: 5.6, z: -2.2 } }
+          { skid: 'uf',   pt: { x: 1.5,  y: 5.2, z: -2.2 } },
+          { skid: 'uf',   pt: { x: -1.0, y: 5.2, z: -0.4 } },
+          { skid: 'chem', pt: { x: -0.2, y: 2.7, z: 1.6 } },
+          { skid: 'chem', pt: { x: 1.6,  y: 2.7, z: 1.6 } }
         ]
       },
-      // 3. GAC Polished Water (Emerald): GAC Vessels -> UV & NaOCl Dosing -> Clearwell
+      // 3. Chlorinated Water (Emerald): UV/NaOCl -> TK-401 Contact Tank -> Clearwell
       {
         stream: 'potable',
         color: '#10b981',
         nodes: [
-          { skid: 'gac',       pt: { x: -5.5, y: 1.6, z: -1.5 } },
-          { skid: 'chem',      pt: { x: 0.2,  y: 1.8, z: 1.6 } },
-          { skid: 'chem',      pt: { x: 4.8,  y: 2.2, z: 1.6 } },
+          { skid: 'chem',      pt: { x: 6.0,  y: 1.4, z: 3.0 } },
+          { skid: 'ct',        pt: { x: 7.5,  y: 0.2, z: 5.5 } },
+          { skid: 'ct',        pt: { x: 8.5,  y: 0.6, z: 8.5 } },
+          { skid: 'ct',        pt: { x: 12.5, y: 0.6, z: 8.5 } },
+          { skid: 'ct',        pt: { x: 15.8, y: 0.2, z: 5.0 } },
+          { skid: 'booster',   pt: { x: 15.2, y: 1.6, z: 2.0 } },
+          { skid: 'clearwell', pt: { x: 11.2, y: 2.0, z: -3.4 } },
           { skid: 'clearwell', pt: { x: 8.5,  y: 4.6, z: -1.8 } }
         ]
       },
-      // 4. Finished Chlorinated Potable Water (Blue): Clearwell -> Triplex VFD Booster -> Rear Hospital Outlet
+      // 4. Finished Potable Water (Blue): Clearwell -> Triplex VFD Booster -> Rear Outlet
       {
         stream: 'potable',
         color: '#3b82f6',
@@ -683,12 +707,15 @@
 
       // 2. GENERATOR & AIR COMPRESSOR (Gooseneck Front)
       addBox(faces, 'gen', -14.8, 4.6, -1.2, 4.8, 3.2, 4.6, '#f59e0b');
-      addBox(faces, 'gen', -14.8, 3.3, -1.2, 5.0, 0.6, 4.8, '#b45309'); // 100-Gal Belly Fuel Tank
-      addBox(faces, 'gen', -14.8, 4.1, 2.4, 2.6, 2.2, 1.8, '#fbbf24');  // Air Compressor
+      addBox(faces, 'gen', -14.8, 3.3, -1.2, 5.0, 0.6, 4.8, '#b45309'); // 150-Gal Belly Fuel Tank
+      addBox(faces, 'gen', -14.8, 4.1, 2.4, 2.6, 2.2, 1.8, '#fbbf24');  // Air Compressor A
+      addBox(faces, 'gen', -11.4, 4.1, 2.4, 2.2, 2.2, 1.8, '#fcd34d');  // Air Compressor B
+      addCylinderY(faces, 'gen', { x: -11.4, z: -2.2 }, 3.1, 6.3, 0.7, 8, '#d97706'); // Air Receiver
 
-      // 3. PLC SCADA CABINET & WET LAB (Gooseneck Rear)
-      addBox(faces, 'plc', -11.2, 4.8, -2.5, 2.0, 3.5, 2.4, '#9333ea'); // PLC Cabinet
-      addBox(faces, 'plc', -11.2, 4.1, 2.4, 2.2, 2.2, 2.6, '#a855f7');  // Wet Lab & Stowed Pillow Tank
+      // 3. PLC SCADA CABINET, WET LAB & SAFETY STATION (Front Main Deck, Streetside)
+      addBox(faces, 'plc', -6.6, 2.9, -2.6, 2.4, 4.2, 2.2, '#9333ea'); // PLC Cabinet
+      addBox(faces, 'plc', -4.0, 1.9, -2.6, 2.4, 2.2, 2.2, '#a855f7'); // Wet Lab Bench
+      addBox(faces, 'plc', -2.2, 2.4, -3.4, 0.9, 3.2, 0.6, '#c084fc'); // Eyewash / Drench
 
       // 4. STAGE 1 & 2: INTAKE PUMP, AUTO-STRAINER & DUPLEX BAG FILTERS (Front Curbside)
       addBox(faces, 'intake', -5.5, 0.85, 2.3, 5.2, 0.35, 2.8, '#78350f'); // Skid Base
@@ -707,20 +734,21 @@
         addCylinderY(faces, 'uf', { x: mx, z: -1.6 }, 1.1, 4.9, 0.38, 8, '#22d3ee');
       }
 
-      // 6. STAGE 4: DUPLEX 36" GAC CARBON VESSELS (Streetside Forward)
-      addBox(faces, 'gac', -5.5, 0.85, -2.2, 5.2, 0.35, 2.8, '#064e3b');
-      addCylinderY(faces, 'gac', { x: -4.2, z: -2.2 }, 1.0, 5.6, 1.05, 10, '#10b981');
-      addCylinderY(faces, 'gac', { x: -6.8, z: -2.2 }, 1.0, 5.6, 1.05, 10, '#059669');
+      // 6. GROUND-DEPLOYED TANKS: TK-100 Raw Break Tank (curbside) & TK-401 Contact Tank (streetside)
+      addBox(faces, 'rawtank', -4.0, -0.55, 8.5, 6.0, 1.3, 5.0, '#f59e0b', 0.7);
+      addBox(faces, 'ct', 10.5, -0.55, 8.5, 7.0, 1.3, 5.0, '#10b981', 0.7);
+      [8.2, 10.5, 12.8].forEach(bx => addBox(faces, 'ct', bx, -0.4, 8.5, 0.15, 1.0, 4.4, '#047857')); // Baffle curtains
 
       // 7. STAGE 5: UV REACTORS, CHEMICAL DAY TANKS & BW PUMP (Curbside Center)
       addBox(faces, 'chem', 2.2, 0.85, 2.3, 7.6, 0.35, 2.8, '#831843');
-      // 2x Horizontal/Vertical UV Reactors + BW Pump
+      // 3x UV Reactors (2 duty + 1 standby)
       addBox(faces, 'chem', -0.2, 1.8, 1.8, 2.6, 0.65, 0.65, '#f472b6');
       addBox(faces, 'chem', -0.2, 2.7, 1.8, 2.6, 0.65, 0.65, '#f472b6');
-      // 3x Chemical Day Tanks (NaOCl, PACl, Bisulfite)
-      addCylinderY(faces, 'chem', { x: 2.3, z: 2.4 }, 1.0, 3.5, 0.72, 8, '#ec4899');
-      addCylinderY(faces, 'chem', { x: 4.0, z: 2.4 }, 1.0, 3.2, 0.62, 8, '#db2777');
-      addCylinderY(faces, 'chem', { x: 5.4, z: 2.4 }, 1.0, 3.0, 0.55, 8, '#be185d');
+      addBox(faces, 'chem', -0.2, 3.6, 1.8, 2.6, 0.65, 0.65, '#fbcfe8');
+      // Segregated chemical cabinets (oxidizer / acid-reducer / PACl)
+      addBox(faces, 'chem', 2.6, 2.3, 2.6, 1.3, 2.6, 1.6, '#ec4899');
+      addBox(faces, 'chem', 4.2, 2.3, 2.6, 1.3, 2.6, 1.6, '#f59e0b');
+      addBox(faces, 'chem', 5.8, 2.3, 2.6, 1.3, 2.6, 1.6, '#94a3b8');
 
       // 8. STAGE 5 BUFFER: 500-GAL BAFFLED CLEARWELL TANK (Rear Streetside)
       addBox(faces, 'clearwell', 11.2, 2.9, -2.1, 6.2, 4.2, 2.8, '#3b82f6');
@@ -734,6 +762,8 @@
       // 85-Gal Pressure Bladder Tank + ASSE 1013 RPZ Assembly
       addCylinderY(faces, 'booster', { x: 13.5, z: 2.6 }, 1.0, 4.2, 0.65, 8, '#60a5fa');
       addBox(faces, 'booster', 11.8, 2.2, 3.2, 2.8, 0.7, 0.5, '#93c5fd');
+      // P-401 contact-tank transfer pump
+      addBox(faces, 'booster', 15.2, 1.6, 2.0, 1.4, 1.2, 1.2, '#1d4ed8');
 
       return faces;
     }
@@ -848,10 +878,10 @@
         const corners = [
           { x: -18, y: 3.0 + roofLift, z: -4 }, { x: -10, y: 3.0 + roofLift, z: -4 },
           { x: -10, y: 0.6 + roofLift, z: -4 }, { x: 18,  y: 0.6 + roofLift, z: -4 },
-          { x: 18,  y: 7.8 + roofLift, z: -4 }, { x: -18, y: 7.8 + roofLift, z: -4 },
+          { x: 18,  y: 10.1 + roofLift, z: -4 }, { x: -18, y: 10.1 + roofLift, z: -4 },
           { x: -18, y: 3.0 + roofLift, z: 4 },  { x: -10, y: 3.0 + roofLift, z: 4 },
           { x: -10, y: 0.6 + roofLift, z: 4 },  { x: 18,  y: 0.6 + roofLift, z: 4 },
-          { x: 18,  y: 7.8 + roofLift, z: 4 },  { x: -18, y: 7.8 + roofLift, z: 4 }
+          { x: 18,  y: 10.1 + roofLift, z: 4 },  { x: -18, y: 10.1 + roofLift, z: 4 }
         ].map(p => project3D(p, width, height));
 
         if (corners.every(Boolean)) {
