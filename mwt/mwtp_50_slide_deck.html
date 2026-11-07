@@ -1,0 +1,615 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>MWTP-50 ("KitchenShield-50") Executive Pitch Deck Presentation</title>
+  <script src="https://www.gstatic.com/antigravity/web/dev/tailwindcss.min.js"></script>
+  <style>
+    .slide-frame {
+      display: none;
+      animation: fadeIn 0.25s ease-out;
+    }
+    .slide-frame.active {
+      display: flex;
+    }
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(6px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+  </style>
+<style>:root { --background: #0b1120; --foreground: #f1f5f9; --card: #111827; --secondary: #1e293b; --secondary-foreground: #e2e8f0; --muted-foreground: #94a3b8; --border: #1e293b; --primary: #10b981; --primary-foreground: #ffffff; } html.light { --background: #f8fafc; --foreground: #0f172a; --card: #ffffff; --secondary: #f1f5f9; --secondary-foreground: #1e293b; --muted-foreground: #64748b; --border: #e2e8f0; --primary: #059669; --primary-foreground: #ffffff; }</style>
+</head>
+<body class="bg-[var(--background)] text-[var(--foreground)] antialiased p-4 md:p-6 flex flex-col gap-4 select-none">
+
+  <!-- Top Presentation Control Header -->
+  <div class="bg-[var(--card)] border border-[var(--border)] rounded-xl px-5 py-3 shadow-sm flex flex-wrap items-center justify-between gap-3">
+    <div class="flex items-center gap-3">
+      <span class="px-2.5 py-0.5 rounded-full text-xs font-bold bg-emerald-500/15 text-emerald-400 border border-emerald-500/30">RESTAURANT UNIT PITCH DECK</span>
+      <span class="text-sm font-semibold">MWTP-50-GN22 ("KitchenShield-50"): Non-CDL Compact Gooseneck Water Plant</span>
+    </div>
+
+    <!-- Slide Navigation Controls -->
+    <div class="flex items-center gap-2">
+      <button onclick="prevSlide()" class="px-3 py-1.5 rounded-lg text-xs font-semibold bg-[var(--secondary)] text-[var(--secondary-foreground)] border border-[var(--border)] hover:border-emerald-500 transition">
+        ← Prev
+      </button>
+      <span id="slide-counter" class="text-xs font-mono font-bold px-3">Slide 1 / 10</span>
+      <button onclick="nextSlide()" class="px-3 py-1.5 rounded-lg text-xs font-semibold bg-emerald-600 text-white shadow-sm hover:bg-emerald-500 transition">
+        Next →
+      </button>
+    </div>
+  </div>
+
+  <!-- Progress Bar -->
+  <div class="w-full h-1.5 bg-[var(--border)] rounded-full overflow-hidden">
+    <div id="slide-progress" class="h-full bg-emerald-500 transition-all duration-300" style="width: 10%;"></div>
+  </div>
+
+  <!-- SLIDE CONTAINER (16:9 Presentation Stage) -->
+  <div class="bg-[var(--card)] border border-[var(--border)] rounded-2xl shadow-md p-6 md:p-10 min-h-[540px] flex flex-col justify-between relative overflow-hidden">
+
+    <!-- ================= SLIDE 1: TITLE SLIDE ================= -->
+    <div class="slide-frame active flex-col justify-between h-full gap-8" data-slide="1">
+      <div class="space-y-4 max-w-3xl">
+        <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full text-xs font-semibold bg-emerald-500/15 text-emerald-400 border border-emerald-500/30">
+          PURPOSE-BUILT FOR COMMERCIAL KITCHENS · 9,990 LB GVWR GOOSENECK · NO CLASS A CDL
+        </div>
+        <h1 class="text-3xl md:text-5xl font-extrabold tracking-tight leading-tight">
+          MWTP-50 ("KitchenShield-50") Compact Restaurant Water Plant
+        </h1>
+        <p class="text-base md:text-lg text-[var(--muted-foreground)] leading-relaxed">
+          A 22-ft compact gooseneck mobile water treatment unit (<strong class="text-[var(--foreground)]">35 GPM continuous / 50 GPM peak</strong>) towed by a standard 1-ton pickup without a Class A CDL — engineered for <strong class="text-[var(--foreground)]">AmeriPro's existing F.O.G. and hood-cleaning restaurant accounts</strong> during Boil Water Advisories and main breaks.
+        </p>
+      </div>
+
+      <div class="grid grid-cols-2 md:grid-cols-4 gap-4 pt-4">
+        <div class="bg-[var(--secondary)]/50 border border-[var(--border)] rounded-xl p-4">
+          <div class="text-xs text-[var(--muted-foreground)]">Kitchen Output</div>
+          <div class="text-2xl font-bold font-mono text-emerald-400 mt-1">35 / 50 GPM</div>
+          <div class="text-xs text-[var(--muted-foreground)]">35 GPM continuous · 50 GPM peak</div>
+        </div>
+        <div class="bg-[var(--secondary)]/50 border border-[var(--border)] rounded-xl p-4">
+          <div class="text-xs text-[var(--muted-foreground)]">Trailer &amp; Licensing</div>
+          <div class="text-2xl font-bold font-mono text-blue-400 mt-1">9,990 lb GVWR</div>
+          <div class="text-xs text-[var(--muted-foreground)]">22-ft Gooseneck · No Class A CDL</div>
+        </div>
+        <div class="bg-[var(--secondary)]/50 border border-[var(--border)] rounded-xl p-4">
+          <div class="text-xs text-[var(--muted-foreground)]">Dual Power Mode</div>
+          <div class="text-2xl font-bold font-mono text-amber-400 mt-1">50A or 20 kW</div>
+          <div class="text-xs text-[var(--muted-foreground)]">240V 50A Shore Plug or Diesel Gen</div>
+        </div>
+        <div class="bg-[var(--secondary)]/50 border border-[var(--border)] rounded-xl p-4">
+          <div class="text-xs text-[var(--muted-foreground)]">Turnkey Build Cost</div>
+          <div class="text-2xl font-bold font-mono text-purple-400 mt-1">$238,625</div>
+          <div class="text-xs text-[var(--muted-foreground)]">60% less CapEx than MWTP-250</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ================= SLIDE 2: WHY BUILD THE MWTP-50 FIRST / ALONGSIDE ================= -->
+    <div class="slide-frame flex-col justify-between h-full gap-6" data-slide="2">
+      <div>
+        <span class="text-xs font-mono uppercase text-emerald-400 font-bold">01 • STRATEGIC ADVANTAGE FOR AMERIPRO</span>
+        <h2 class="text-2xl md:text-3xl font-bold mt-1">Why a Compact 35–50 GPM Unit Fits AmeriPro's Restaurant Base</h2>
+        <p class="text-sm text-[var(--muted-foreground)] mt-1">The 250 GPM hospital unit is 5× larger than a restaurant needs. Right-sizing unlocks faster ROI and zero CDL bottlenecks.</p>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-5 my-auto">
+        <div class="bg-[var(--secondary)]/40 border border-emerald-500/30 rounded-xl p-5 space-y-2.5">
+          <div class="text-sm font-bold text-emerald-400">1. Stays Under the Class A CDL Threshold</div>
+          <p class="text-xs text-[var(--muted-foreground)] leading-relaxed">
+            Federal Class A CDL rules trigger at <strong>26,001 lb GCWR</strong> when the trailer exceeds <strong>10,000 lb GVWR</strong>. At <strong>9,990 lb GVWR</strong> behind a 1-ton pickup (~21,490 lb GCWR), any AmeriPro technician with a standard driver's license and DOT medical card can tow it.
+          </p>
+        </div>
+
+        <div class="bg-[var(--secondary)]/40 border border-blue-500/30 rounded-xl p-5 space-y-2.5">
+          <div class="text-sm font-bold text-blue-400">2. Built-In Customer Base (F.O.G. &amp; Hoods)</div>
+          <p class="text-xs text-[var(--muted-foreground)] leading-relaxed">
+            AmeriPro already services restaurant kitchens for grease traps and exhaust hoods. Route technicians already know the owner, the back alley, the water shutoff, and the downstream sanitary sewer cleanout.
+          </p>
+        </div>
+
+        <div class="bg-[var(--secondary)]/40 border border-amber-500/30 rounded-xl p-5 space-y-2.5">
+          <div class="text-sm font-bold text-amber-400">3. Lower Risk Track-Record Builder</div>
+          <p class="text-xs text-[var(--muted-foreground)] leading-relaxed">
+            At <strong>$238,625 turnkey</strong> (vs. $601,450 for the MWTP-250), just 15 restaurant group retainers cover 101% of the annual SBA loan payment — proving the regulatory model with the state before or alongside the hospital flagship.
+          </p>
+        </div>
+      </div>
+
+      <div class="bg-emerald-500/10 border border-emerald-500/30 rounded-xl p-3.5 text-xs flex flex-wrap items-center justify-between gap-2">
+        <span><strong>Head-to-Head Comparison:</strong> MWTP-50 fits in <strong>2 parking spaces</strong> (vs. 4–6 for MWTP-250) and costs restaurants <strong>$3,200/day</strong> (vs. $7,500/day hospital rate).</span>
+        <span class="font-mono font-bold text-emerald-400 shrink-0">2.14x–2.68x Year-1 DSCR</span>
+      </div>
+    </div>
+
+    <!-- ================= SLIDE 3: RESTAURANT HYDRAULIC PROFILE ================= -->
+    <div class="slide-frame flex-col justify-between h-full gap-6" data-slide="3">
+      <div>
+        <span class="text-xs font-mono uppercase text-blue-400 font-bold">02 • COMMERCIAL KITCHEN DEMAND PROFILE</span>
+        <h2 class="text-2xl md:text-3xl font-bold mt-1">What a Commercial Kitchen Actually Needs During an Advisory</h2>
+        <p class="text-sm text-[var(--muted-foreground)] mt-1">A busy full-service restaurant uses 4,000–10,000 gallons/day (6–15 GPM average), with short 35–50 GPM peak bursts.</p>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-6 my-auto">
+        <div class="bg-[var(--secondary)]/30 border border-[var(--border)] rounded-xl p-5 space-y-3">
+          <div class="flex items-center justify-between">
+            <span class="text-sm font-bold">Fixture-by-Fixture Kitchen Demand</span>
+            <span class="px-2 py-0.5 rounded text-xs bg-blue-500/15 text-blue-400 font-semibold">60–75 PSI Required</span>
+          </div>
+          <ul class="text-xs text-[var(--muted-foreground)] space-y-2 list-disc pl-4">
+            <li><strong>Dish Machine (12–18 GPM bursts):</strong> Needs ≥ 20 PSI dynamic flow (60 PSI line pressure) for sanitizing rinse cycles; main-break sediment clogs solenoid screens.</li>
+            <li><strong>3-Compartment &amp; Prep Sinks (8–15 GPM):</strong> Continuous flow during food prep and pot washing.</li>
+            <li><strong>Ice Machines, Soda &amp; Espresso (2–5 GPM):</strong> Direct ingestion hazard during a Boil Water Advisory; needs 0.02 µm UF + carbon block polish + UV + Cl₂.</li>
+            <li><strong>Restroom Flushometers (10–20 GPM bursts):</strong> Commercial tankless valves require ≥ 35–45 PSI at 15+ GPM just to close properly.</li>
+          </ul>
+        </div>
+
+        <div class="bg-emerald-500/10 border border-emerald-500/40 rounded-xl p-5 space-y-3">
+          <div class="flex items-center justify-between">
+            <span class="text-sm font-bold text-emerald-400">How MWTP-50 Buffers 50 GPM Peaks</span>
+            <span class="px-2 py-0.5 rounded text-xs bg-emerald-500/20 text-emerald-300 font-semibold">Steady CT + Surge Buffer</span>
+          </div>
+          <ul class="text-xs space-y-2 list-disc pl-4">
+            <li><strong>Steady 35 GPM Treatment Train:</strong> UF, UV, and the 600-gal baffled contact tank (<code>TK-401</code>) never exceed 35 GPM so 4-log virus contact time (<code>T10 = 8.57 min</code>) is never compromised.</li>
+            <li><strong>Onboard 150-Gal Surge Clearwell (<code>TK-601</code>):</strong> Positioned over the tandem axles downstream of the contact tank.</li>
+            <li><strong>Duplex 3 HP VFD Boosters (<code>P-601A/B</code>):</strong> Draw from the 150-gal clearwell to deliver <strong>up to 50 GPM peak bursts at 60–75 PSI</strong> whenever the dish pit and restrooms peak together.</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="grid grid-cols-4 gap-3 text-center">
+        <div class="bg-[var(--secondary)]/50 rounded-lg p-2.5 border border-[var(--border)]">
+          <div class="text-xs text-[var(--muted-foreground)]">Avg Kitchen Flow</div>
+          <div class="text-sm font-bold text-blue-400">8–18 GPM</div>
+        </div>
+        <div class="bg-[var(--secondary)]/50 rounded-lg p-2.5 border border-[var(--border)]">
+          <div class="text-xs text-[var(--muted-foreground)]">Continuous UF/CT Rate</div>
+          <div class="text-sm font-bold text-emerald-400">35 GPM (50,400 GPD)</div>
+        </div>
+        <div class="bg-[var(--secondary)]/50 rounded-lg p-2.5 border border-[var(--border)]">
+          <div class="text-xs text-[var(--muted-foreground)]">Peak Booster Delivery</div>
+          <div class="text-sm font-bold text-amber-400">50 GPM @ 60–75 PSI</div>
+        </div>
+        <div class="bg-[var(--secondary)]/50 rounded-lg p-2.5 border border-[var(--border)]">
+          <div class="text-xs text-[var(--muted-foreground)]">Arrival to Pressurized</div>
+          <div class="text-sm font-bold text-purple-400">~2 Hours</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ================= SLIDE 4: THREE RAW-WATER SUPPLY MODES ================= -->
+    <div class="slide-frame flex-col justify-between h-full gap-5" data-slide="4">
+      <div>
+        <span class="text-xs font-mono uppercase text-cyan-400 font-bold">03 • FLEXIBLE RAW WATER SUPPLY</span>
+        <h2 class="text-2xl md:text-3xl font-bold mt-1">Three Feed Modes — Including Zero-Hydrant Boil Water Advisory Mode</h2>
+        <p class="text-sm text-[var(--muted-foreground)] mt-1">Every supply mode feeds the 550-gal collapsible break tank (<code>TK-100</code>) through a physical air gap and a 20 PSI pressure-sustaining valve (<code>PSV-100</code>).</p>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-5 my-auto">
+        <div class="bg-emerald-500/10 border border-emerald-500/40 rounded-xl p-5 space-y-2.5">
+          <div class="flex items-center justify-between">
+            <span class="text-xs font-mono font-bold text-emerald-400">MODE 1A • NO HYDRANT NEEDED</span>
+            <span class="px-2 py-0.5 rounded text-[10px] bg-emerald-500/20 text-emerald-300 font-bold">PRIMARY BWA MODE</span>
+          </div>
+          <h3 class="text-base font-bold">Restaurant's Own Upstream Tap</h3>
+          <p class="text-xs text-[var(--muted-foreground)] leading-relaxed">
+            During a Boil Water Advisory where the street main still has pressure (40–70 PSI), once the restaurant's interior shutoff valve is closed, the MWTP-50 draws 15–35 GPM from an <strong>upstream exterior hose bibb or upstream test port</strong> (before the closed shutoff) through <code>PSV-100</code> into <code>TK-100</code> — no fire hydrant permit needed!
+          </p>
+        </div>
+
+        <div class="bg-[var(--secondary)]/40 border border-blue-500/30 rounded-xl p-5 space-y-2.5">
+          <div class="flex items-center justify-between">
+            <span class="text-xs font-mono font-bold text-blue-400">MODE 1B • PERMITTED HYDRANT</span>
+            <span class="px-2 py-0.5 rounded text-[10px] bg-blue-500/20 text-blue-300 font-bold">≥ 20 PSI RESIDUAL</span>
+          </div>
+          <h3 class="text-base font-bold">Municipal Fire Hydrant</h3>
+          <p class="text-xs text-[var(--muted-foreground)] leading-relaxed">
+            Connects via utility hydrant meter and backflow assembly through 1.5" pressure-sustaining valve <code>PSV-100</code> (set to hold the street main at ≥ 20 PSI residual) into the <code>TK-100</code> air-gap fill nozzle.
+          </p>
+        </div>
+
+        <div class="bg-[var(--secondary)]/40 border border-amber-500/30 rounded-xl p-5 space-y-2.5">
+          <div class="flex items-center justify-between">
+            <span class="text-xs font-mono font-bold text-amber-400">MODE 1C • WATER MAIN OUTAGE</span>
+            <span class="px-2 py-0.5 rounded text-[10px] bg-amber-500/20 text-amber-300 font-bold">1 DROP / DAY</span>
+          </div>
+          <h3 class="text-base font-bold">Single Potable Tanker Delivery</h3>
+          <p class="text-xs text-[var(--muted-foreground)] leading-relaxed">
+            Whereas a 250 GPM hospital plant requires 15,000 gal/hr of continuous tanker shuttles during a zero-pressure outage, a restaurant using 4,000–6,000 gal/day can run all day on <strong>1 or 2 potable tanker drops</strong> into <code>TK-100</code>.
+          </p>
+        </div>
+      </div>
+
+      <div class="bg-[var(--secondary)]/60 border border-[var(--border)] rounded-xl p-3.5 text-xs flex items-center justify-between">
+        <span><strong>Taste &amp; Odor Bonus:</strong> Duplex #2 pre-filter housings (<code>BF-101A/B</code>) accept radial-flow activated carbon block cartridges to polish off pipe odors for coffee, tea, and fountain drinks.</span>
+        <span class="font-mono font-bold text-cyan-400 shrink-0 ml-4">NSF-42 / NSF-61</span>
+      </div>
+    </div>
+
+    <!-- ================= SLIDE 5: 6-STAGE MULTI-BARRIER TRAIN ================= -->
+    <div class="slide-frame flex-col justify-between h-full gap-5" data-slide="5">
+      <div>
+        <span class="text-xs font-mono uppercase text-emerald-400 font-bold">04 • SAME REGULATORY RIGOR AS MWTP-250</span>
+        <h2 class="text-2xl md:text-3xl font-bold mt-1">6-Stage Treatment Train &amp; Verified 4-Log Virus CT</h2>
+        <p class="text-sm text-[var(--muted-foreground)] mt-1">Every pathogen credit is backed by online verification: daily UF pressure-decay test, UVDGM-validated UV, and measured contact time.</p>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-4 my-auto">
+        <div class="bg-[var(--secondary)]/40 border border-[var(--border)] rounded-xl p-4 space-y-1.5">
+          <span class="text-xs font-mono font-bold text-sky-400">STAGE 1 &amp; 2 • INTAKE &amp; PRE-FILTER</span>
+          <h3 class="text-sm font-bold">550-Gal Break Tank, 3 HP Pump &amp; Duplex #2 Bags</h3>
+          <p class="text-xs text-[var(--muted-foreground)]"><code>P-101</code> (3 HP VFD) pulls 40 GPM from <code>TK-100</code> through a 1.5" 200 µm auto-strainer and duplex 25 µm bag/carbon housings, followed by inline PACl dosing.</p>
+        </div>
+
+        <div class="bg-[var(--secondary)]/40 border border-teal-500/40 rounded-xl p-4 space-y-1.5">
+          <span class="text-xs font-mono font-bold text-teal-400">STAGE 3 • 0.02 µm ULTRAFILTRATION</span>
+          <h3 class="text-sm font-bold">4 × 60" PVDF Modules + Daily DIT-201</h3>
+          <p class="text-xs text-[var(--muted-foreground)]">2,200 sq.ft. membrane area (24.2 GFD flux at 35 GPM). 60-inch vertical modules stand 6.5 ft tall to fit under a 7.5-ft roof. Automated daily pressure-decay test verifies ≥ 4-log protozoa removal.</p>
+        </div>
+
+        <div class="bg-[var(--secondary)]/40 border border-[var(--border)] rounded-xl p-4 space-y-1.5">
+          <span class="text-xs font-mono font-bold text-purple-400">STAGE 4 • 100% REDUNDANT UV</span>
+          <h3 class="text-sm font-bold">2 × 40 GPM UV Reactors (1 Duty + 1 Standby)</h3>
+          <p class="text-xs text-[var(--muted-foreground)]">UVDGM-validated ≥ 40 mJ/cm² dose with online UVT analyzer (<code>AIT-401</code>). Automatic duty-swap if lamp intensity drops.</p>
+        </div>
+
+        <div class="bg-[var(--secondary)]/40 border border-emerald-500/40 rounded-xl p-4 space-y-1.5">
+          <span class="text-xs font-mono font-bold text-emerald-400">STAGE 5 • 4-LOG VIRUS CHLORINE CT</span>
+          <h3 class="text-sm font-bold">600-Gal Baffled Ground Contact Tank (<code>TK-401</code>)</h3>
+          <p class="text-xs text-[var(--muted-foreground)]">At 35 GPM, <code>HDT = 17.1 min</code> and <code>T10 = 8.57 min</code> (0.50 baffle factor). At 1.5 mg/L free Cl₂, <code>CT = 12.85 mg·min/L</code> — exceeding 4-log virus requirements even at 0.5 °C!</p>
+        </div>
+
+        <div class="bg-[var(--secondary)]/40 border border-[var(--border)] rounded-xl p-4 space-y-1.5">
+          <span class="text-xs font-mono font-bold text-rose-400">STAGE 5B • CHEMICAL SAFETY</span>
+          <h3 class="text-sm font-bold">Segregated Vented Cabinets &amp; Gas Sensor</h3>
+          <p class="text-xs text-[var(--muted-foreground)]">Separate bunded enclosures for 12.5% NaOCl vs. citric acid / bisulfite prevent accidental mixing, backed by <code>AIT-901</code> Cl₂ gas detector, exhaust fan, and ANSI eyewash.</p>
+        </div>
+
+        <div class="bg-[var(--secondary)]/40 border border-blue-500/40 rounded-xl p-4 space-y-1.5">
+          <span class="text-xs font-mono font-bold text-blue-400">STAGE 6 • 50 GPM KITCHEN BOOSTER</span>
+          <h3 class="text-sm font-bold">150-Gal Clearwell + Duplex 3 HP VFD + 2" RPZ</h3>
+          <p class="text-xs text-[var(--muted-foreground)]"><code>P-401</code> transfers CT-verified water into the 150-gal onboard clearwell; duplex 3 HP boosters (<code>P-601A/B</code>) hold 60–75 PSI through an ASSE 1013 RPZ (<code>RPZ-602</code>).</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- ================= SLIDE 6: 22-FT COMPACT GOOSENECK LAYOUT & WEIGHT ================= -->
+    <div class="slide-frame flex-col justify-between h-full gap-5" data-slide="6">
+      <div>
+        <span class="text-xs font-mono uppercase text-purple-400 font-bold">05 • ALLEY-READY GOOSENECK ARCHITECTURE</span>
+        <h2 class="text-2xl md:text-3xl font-bold mt-1">22-ft Compact Gooseneck Layout &amp; 9,990 lb Non-CDL Weight Budget</h2>
+        <p class="text-sm text-[var(--muted-foreground)] mt-1">16-ft main treatment deck + 6-ft elevated gooseneck deck × 8-ft wide × 7.5-ft interior ceiling (9.5-ft road height clears drive-thru canopies).</p>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-12 gap-5 my-auto">
+        <div class="md:col-span-7 bg-[var(--secondary)]/40 border border-[var(--border)] rounded-xl p-4 space-y-2.5">
+          <div class="text-xs font-bold uppercase text-[var(--muted-foreground)]">Zone-by-Zone Weight Breakdown (MWTP-50-GN22)</div>
+          <div class="space-y-2 text-xs">
+            <div class="p-2.5 rounded bg-amber-500/10 border border-amber-500/30 flex justify-between">
+              <span><strong>Gooseneck Deck (0–6 ft, 1-Hr Firewall):</strong> 20 kW Gen, 40-Gal Fuel, 50A ATS &amp; Duplex Air</span>
+              <span class="font-mono font-semibold">1,420 lbs</span>
+            </div>
+            <div class="p-2.5 rounded bg-cyan-500/10 border border-cyan-500/30 flex justify-between">
+              <span><strong>Front Deck (6–11 ft):</strong> <code>P-101</code> Intake, Auto-Strainer, Duplex Bags, PLC/Lab &amp; Eyewash</span>
+              <span class="font-mono font-semibold">800 lbs</span>
+            </div>
+            <div class="p-2.5 rounded bg-emerald-500/10 border border-emerald-500/30 flex justify-between">
+              <span><strong>Over Tandem Axles (11–17 ft):</strong> 4-Module UF Skid (wet), 150-Gal Clearwell, UV &amp; Booster</span>
+              <span class="font-mono font-semibold">1,480 lbs road</span>
+            </div>
+            <div class="p-2.5 rounded bg-blue-500/10 border border-blue-500/30 flex justify-between">
+              <span><strong>Rear Deck &amp; Chassis (17–22 ft):</strong> Trailer Frame (3,150 lb), 316L Piping, Chem Bay, RPZ &amp; Tanks</span>
+              <span class="font-mono font-semibold">4,650 lbs</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="md:col-span-5 bg-[var(--secondary)]/40 border border-[var(--border)] rounded-xl p-4 flex flex-col justify-between">
+          <div class="space-y-3">
+            <div class="text-xs font-bold uppercase text-[var(--muted-foreground)]">Road vs. On-Site Operating Weight</div>
+            <div class="p-3 rounded-lg bg-blue-500/15 border border-blue-500/30">
+              <div class="text-xs text-blue-400 font-semibold">Road Transport Weight (UF Wet Preserved)</div>
+              <div class="text-2xl font-bold font-mono mt-0.5">8,350 lbs</div>
+              <div class="text-xs text-[var(--muted-foreground)]">1,670 lb pin weight (20%) on 1-ton truck · 6,680 lb on axles</div>
+            </div>
+            <div class="p-3 rounded-lg bg-emerald-500/15 border border-emerald-500/30">
+              <div class="text-xs text-emerald-400 font-semibold">On-Site Wet Weight (150-Gal Clearwell Full)</div>
+              <div class="text-2xl font-bold font-mono mt-0.5">9,550 lbs</div>
+              <div class="text-xs text-[var(--muted-foreground)]">Stays under <strong>9,990 lb GVWR</strong> even when full! (550/600-gal tanks on ground)</div>
+            </div>
+          </div>
+          <div class="text-xs text-[var(--muted-foreground)] pt-2 border-t border-[var(--border)]">
+            <strong>Why Gooseneck for Restaurants?</strong> Pivots over the pickup bed for 90° turns into cramped grease-trap and dumpster alleys.
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ================= SLIDE 7: DUAL POWER & FAIL-SAFE INTERLOCKS ================= -->
+    <div class="slide-frame flex-col justify-between h-full gap-5" data-slide="7">
+      <div>
+        <span class="text-xs font-mono uppercase text-amber-400 font-bold">06 • 240V SINGLE-PHASE POWER &amp; SCADA INTERLOCKS</span>
+        <h2 class="text-2xl md:text-3xl font-bold mt-1">Silent 240V 50A Restaurant Shore Plug OR 20 kW Diesel Generator</h2>
+        <p class="text-sm text-[var(--muted-foreground)] mt-1">All motors are ≤ 3 HP with 240V 1-phase-in / 230V 3-phase-out VFDs — drawing just <strong>8.25 kW average (34.4 Amps at 240V)</strong>.</p>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-4 my-auto">
+        <div class="bg-emerald-500/10 border border-emerald-500/40 rounded-xl p-4 space-y-2">
+          <div class="flex items-center justify-between">
+            <span class="text-xs font-mono font-bold text-emerald-400">POWER MODE A • BOIL WATER ADVISORY</span>
+            <span class="px-2 py-0.5 rounded text-xs bg-emerald-500/20 text-emerald-300 font-mono">$0 Fuel / Silent</span>
+          </div>
+          <p class="text-xs text-[var(--muted-foreground)]">
+            During a Boil Water Advisory, the restaurant still has grid power. Plugging into a pre-installed <strong>240V 50A NEMA 14-50 / CS6365 receptacle</strong> runs the entire treatment plant silently next to outdoor dining patios with zero diesel exhaust.
+          </p>
+        </div>
+
+        <div class="bg-amber-500/10 border border-amber-500/40 rounded-xl p-4 space-y-2">
+          <div class="flex items-center justify-between">
+            <span class="text-xs font-mono font-bold text-amber-400">POWER MODE B • STORM / GRID OUTAGE</span>
+            <span class="px-2 py-0.5 rounded text-xs bg-amber-500/20 text-amber-300 font-mono">47-Hr Fuel Tank</span>
+          </div>
+          <p class="text-xs text-[var(--muted-foreground)]">
+            When grid power is down or no 50A plug is available, the sound-attenuated <strong>20 kW Tier-4 Final diesel generator (62 dBA)</strong> on the gooseneck deck runs for <strong>47 hours continuously</strong> on its 40-gallon tank (0.85 gal/hr).
+          </p>
+        </div>
+
+        <div class="bg-[var(--secondary)]/40 border border-[var(--border)] rounded-xl p-4 space-y-2">
+          <div class="flex items-center justify-between">
+            <span class="text-xs font-mono font-bold text-cyan-400">AUTOMATIC QUALITY SHUTOFF (<code>XV-602</code>)</span>
+            <span class="px-2 py-0.5 rounded text-xs bg-cyan-500/15 text-cyan-300 font-mono">Fail-Safe Closed</span>
+          </div>
+          <p class="text-xs text-[var(--muted-foreground)]">
+            Potable discharge valve <code>XV-602</code> locks shut automatically if laser turbidity (<code>AIT-201</code>) exceeds <strong>0.15 NTU</strong>, UV dose drops below <strong>40 mJ/cm²</strong>, free chlorine drops below <strong>0.8 mg/L</strong>, or calculated 4-log virus CT falls below 1.0× required.
+          </p>
+        </div>
+
+        <div class="bg-[var(--secondary)]/40 border border-[var(--border)] rounded-xl p-4 space-y-2">
+          <div class="flex items-center justify-between">
+            <span class="text-xs font-mono font-bold text-purple-400">HEALTH INSPECTOR COMPLIANCE LOGS</span>
+            <span class="px-2 py-0.5 rounded text-xs bg-purple-500/15 text-purple-300 font-mono">1-Click Export</span>
+          </div>
+          <p class="text-xs text-[var(--muted-foreground)]">
+            The UL-508A PLC/HMI (<code>CP-701</code>) prints or exports a timestamped PDF compliance report (daily DIT pressure-decay pass, turbidity, UV dose, and chlorine CT) + certified lab Bac-T chain-of-custody for the county health inspector.
+          </p>
+        </div>
+      </div>
+    </div>
+
+    <!-- ================= SLIDE 8: 2-HOUR RESTAURANT TIE-IN & F.O.G. RULE ================= -->
+    <div class="slide-frame flex-col justify-between h-full gap-5" data-slide="8">
+      <div>
+        <span class="text-xs font-mono uppercase text-rose-400 font-bold">07 • RESTAURANT FIELD SOP &amp; GREASE TRAP PROTECTION</span>
+        <h2 class="text-2xl md:text-3xl font-bold mt-1">Arrival to Pressurized Kitchen in ~2 Hours</h2>
+        <p class="text-sm text-[var(--muted-foreground)] mt-1">Mapped in advance during regular AmeriPro F.O.G. and hood cleaning service visits.</p>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-4 gap-4 my-auto">
+        <div class="bg-[var(--secondary)]/40 border border-[var(--border)] rounded-xl p-4 space-y-2">
+          <div class="text-xs font-mono font-bold text-blue-400">0:00–0:30</div>
+          <h3 class="text-sm font-bold">1. Alley Park, Level &amp; Plug In</h3>
+          <p class="text-xs text-[var(--muted-foreground)]">
+            Back 22-ft gooseneck into 2 parking spaces beside utility door, set 4 stabilizer jacks, plug into 240V 50A shore power (or start 20 kW gen), and unfold 550-gal &amp; 600-gal ground tanks.
+          </p>
+        </div>
+
+        <div class="bg-[var(--secondary)]/40 border border-[var(--border)] rounded-xl p-4 space-y-2">
+          <div class="text-xs font-mono font-bold text-amber-400">0:30–1:00</div>
+          <h3 class="text-sm font-bold">2. Isolate Street &amp; Connect Supply</h3>
+          <p class="text-xs text-[var(--muted-foreground)]">
+            <strong>Close building shutoff valve</strong> so treated water cannot backfeed the street. Connect upstream BWA tap or hydrant via <code>PSV-100</code> (≥ 20 PSI) to <code>TK-100</code> air gap. Connect waste hose to <strong>downstream sanitary cleanout</strong>.
+          </p>
+        </div>
+
+        <div class="bg-[var(--secondary)]/40 border border-[var(--border)] rounded-xl p-4 space-y-2">
+          <div class="text-xs font-mono font-bold text-emerald-400">1:00–1:40</div>
+          <h3 class="text-sm font-bold">3. DIT Test, Prove CT &amp; Sanitize Hose</h3>
+          <p class="text-xs text-[var(--muted-foreground)]">
+            Run 5-min automated UF pressure-decay test (<code>DIT-201</code>), turn over 600-gal contact tank until CT and Cl₂ are green, pull Bac-T sample, and sanitize the 1.5"/2" potable hose with the 50 mg/L kit.
+          </p>
+        </div>
+
+        <div class="bg-[var(--secondary)]/40 border border-[var(--border)] rounded-xl p-4 space-y-2">
+          <div class="text-xs font-mono font-bold text-purple-400">1:40–2:00</div>
+          <h3 class="text-sm font-bold">4. Soft-Ramp Kitchen to 65 PSI</h3>
+          <p class="text-xs text-[var(--muted-foreground)]">
+            Fill kitchen lines at <strong>30 PSI</strong> while bleeding air at the farthest 3-comp sink, then ramp duplex VFD boosters to <strong>65 PSI</strong>. Verify ≥ 1.0 mg/L free Cl₂ at point of use.
+          </p>
+        </div>
+      </div>
+
+      <div class="bg-rose-500/10 border border-rose-500/30 rounded-xl p-3.5 text-xs flex items-center justify-between">
+        <span><strong>SOP Rule 4 — F.O.G. Grease Trap Protection:</strong> Never discharge 35–60 GPM UF backwash water into a kitchen drain upstream of the grease trap! Always use the <strong>downstream sanitary sewer cleanout</strong> on the street side of the grease interceptor.</span>
+        <span class="font-mono font-bold text-rose-400 shrink-0 ml-4">Zero Grease Washout</span>
+      </div>
+    </div>
+
+    <!-- ================= SLIDE 9: TURNKEY BOM & DAILY UNIT ECONOMICS ================= -->
+    <div class="slide-frame flex-col justify-between h-full gap-5" data-slide="9">
+      <div>
+        <span class="text-xs font-mono uppercase text-blue-400 font-bold">08 • TURNKEY BUILD COST ($238,625) &amp; DAILY MARGIN</span>
+        <h2 class="text-2xl md:text-3xl font-bold mt-1">Itemized BOM &amp; 78.5%–81.0% Direct Deployment Margin</h2>
+        <p class="text-sm text-[var(--muted-foreground)] mt-1">Includes PE engineering ($12k), system integration ($24k), and a full 15% contingency ($31.1k).</p>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-12 gap-5 my-auto">
+        <div class="md:col-span-7 bg-[var(--secondary)]/40 border border-[var(--border)] rounded-xl p-4 space-y-1.5 text-xs">
+          <div class="font-bold uppercase text-[var(--muted-foreground)] mb-1">MWTP-50-GN22 Turnkey Capital Budget</div>
+          <div class="flex justify-between py-1 border-b border-[var(--border)]"><span>1. 22-ft Compact Gooseneck (9,990 lb GVWR), FRP Walls, 1-Hr Firewall &amp; Jacks</span><span class="font-mono font-semibold">$31,000</span></div>
+          <div class="flex justify-between py-1 border-b border-[var(--border)]"><span>2. Compact UF Skid (4 × 60" PVDF Modules, 2,200 sq.ft.) + Automated <code>DIT-201</code></span><span class="font-mono font-semibold">$26,500</span></div>
+          <div class="flex justify-between py-1 border-b border-[var(--border)]"><span>3. 2 × 40 GPM UV (1+1), Dosing, Vented Chem Cabinets, 600-Gal CT Tank &amp; <code>P-401</code></span><span class="font-mono font-semibold">$23,400</span></div>
+          <div class="flex justify-between py-1 border-b border-[var(--border)]"><span>4. UL-508A PLC/HMI, TU5300sc Laser Turbidimeter, Cl₂/pH, Gas Sensor &amp; Eyewash</span><span class="font-mono font-semibold">$22,400</span></div>
+          <div class="flex justify-between py-1 border-b border-[var(--border)]"><span>5. 20 kW Tier-4 Diesel Gen, 40-Gal Tank, 240V 50A Shore ATS &amp; Duplex Air</span><span class="font-mono font-semibold">$21,700</span></div>
+          <div class="flex justify-between py-1 border-b border-[var(--border)]"><span>6. 316L SS Piping (1.5"–2"), 12 Actuated Valves (<code>XV</code>), Bulkhead &amp; Sanitized Hoses</span><span class="font-mono font-semibold">$16,500</span></div>
+          <div class="flex justify-between py-1 border-b border-[var(--border)]"><span>7. Stage 1/2 Intake &amp; Pre-Filter ($15,200) + Stage 6 150-Gal Clearwell/Booster/RPZ ($14,800)</span><span class="font-mono font-semibold">$30,000</span></div>
+          <div class="flex justify-between py-1 border-b border-[var(--border)]"><span>8. Integration ($24,000) + PE Stamped Engineering ($12,000) + 15% Contingency ($31,125)</span><span class="font-mono font-semibold">$67,125</span></div>
+          <div class="flex justify-between pt-1.5 text-sm font-bold text-emerald-400"><span>TOTAL TURNKEY BUILD COST (SINGLE MWTP-50-GN22)</span><span class="font-mono">$238,625</span></div>
+        </div>
+
+        <div class="md:col-span-5 bg-[var(--secondary)]/40 border border-[var(--border)] rounded-xl p-4 flex flex-col justify-between">
+          <div class="space-y-3">
+            <div class="text-xs font-bold uppercase text-[var(--muted-foreground)]">Daily Restaurant Deployment Economics</div>
+            <div class="p-3 rounded-lg bg-emerald-500/10 border border-emerald-500/30 flex justify-between items-center">
+              <div>
+                <div class="text-xs font-semibold text-emerald-400">Active Restaurant Billing Rate</div>
+                <div class="text-xs text-[var(--muted-foreground)]">+ $2,500 one-time mobilization fee</div>
+              </div>
+              <div class="text-right">
+                <div class="text-lg font-bold font-mono text-emerald-400">$3,200 / day</div>
+                <div class="text-xs font-mono text-[var(--muted-foreground)]">Saves $10k–$25k/day sales</div>
+              </div>
+            </div>
+            <div class="p-3 rounded-lg bg-blue-500/10 border border-blue-500/30 flex justify-between items-center">
+              <div>
+                <div class="text-xs font-semibold">Direct Daily Cost (Shore Power)</div>
+                <div class="text-xs text-[var(--muted-foreground)]">Operator + tech check ($520) + chems/lab ($89)</div>
+              </div>
+              <div class="text-right">
+                <div class="text-lg font-bold font-mono text-blue-400">$609 / day</div>
+                <div class="text-xs font-mono text-emerald-400">+$2,591/day net (81.0%)</div>
+              </div>
+            </div>
+            <div class="p-3 rounded-lg bg-amber-500/10 border border-amber-500/30 flex justify-between items-center">
+              <div>
+                <div class="text-xs font-semibold">Direct Daily Cost (20 kW Diesel Gen)</div>
+                <div class="text-xs text-[var(--muted-foreground)]">Includes ~20 gal/day diesel ($80/day)</div>
+              </div>
+              <div class="text-right">
+                <div class="text-lg font-bold font-mono text-amber-400">$689 / day</div>
+                <div class="text-xs font-mono text-emerald-400">+$2,511/day net (78.5%)</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ================= SLIDE 10: SBA FINANCING, DSCR & FLEET ROADMAP ================= -->
+    <div class="slide-frame flex-col justify-between h-full gap-5" data-slide="10">
+      <div>
+        <span class="text-xs font-mono uppercase text-emerald-400 font-bold">09 • SBA 7(a) FINANCING, DSCR &amp; EXPANSION PATH</span>
+        <h2 class="text-2xl md:text-3xl font-bold mt-1">15 Retainers Cover 101% of Annual Debt Service Before Day 1</h2>
+        <p class="text-sm text-[var(--muted-foreground)] mt-1">De-risked entry strategy: launch MWTP-50 into AmeriPro's restaurant accounts, then scale into the hospital-grade MWTP-250.</p>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-4 my-auto">
+        <div class="bg-[var(--secondary)]/40 border border-[var(--border)] rounded-xl p-4 space-y-2">
+          <span class="text-xs font-mono font-bold text-emerald-400">RETAINER BUNDLING</span>
+          <div class="text-xl font-bold font-mono">$150–$295 / mo</div>
+          <p class="text-xs text-[var(--muted-foreground)]">
+            <strong>$1,800/yr</strong> single restaurant or <strong>$3,500/yr</strong> multi-unit franchise group (up to 5 stores). Added directly to existing AmeriPro F.O.G. and hood cleaning invoices.
+          </p>
+        </div>
+
+        <div class="bg-[var(--secondary)]/40 border border-[var(--border)] rounded-xl p-4 space-y-2">
+          <span class="text-xs font-mono font-bold text-blue-400">OPTION A • WITH NEW 1-TON TRUCK</span>
+          <div class="text-xl font-bold font-mono">$325,000 Total</div>
+          <p class="text-xs text-[var(--muted-foreground)]">
+            $238.6k trailer + $62k F-350 SRW gooseneck truck + $24.4k working capital. 85% SBA loan ($276.25k) = <strong>$3,462/mo ($41,547/yr)</strong> → <strong>2.14x Year-1 DSCR</strong>.
+          </p>
+        </div>
+
+        <div class="bg-[var(--secondary)]/40 border border-[var(--border)] rounded-xl p-4 space-y-2">
+          <span class="text-xs font-mono font-bold text-amber-400">OPTION B • EXISTING FLEET TRUCK</span>
+          <div class="text-xl font-bold font-mono">$260,000 Total</div>
+          <p class="text-xs text-[var(--muted-foreground)]">
+            Uses an existing AmeriPro 1-ton pickup. 85% SBA loan ($221k) = <strong>$2,770/mo ($33,238/yr)</strong> → <strong>2.68x Year-1 DSCR</strong>.
+          </p>
+        </div>
+      </div>
+
+      <div class="bg-[var(--secondary)]/60 border border-[var(--border)] rounded-xl p-4 grid grid-cols-2 md:grid-cols-4 gap-4 text-center">
+        <div>
+          <div class="text-xs text-[var(--muted-foreground)]">Year 1 Gross Revenue (25 Days)</div>
+          <div class="text-lg font-bold font-mono text-blue-400">$137,000</div>
+        </div>
+        <div>
+          <div class="text-xs text-[var(--muted-foreground)]">Year 1 EBITDA Cash Flow</div>
+          <div class="text-lg font-bold font-mono text-emerald-400">$89,075</div>
+        </div>
+        <div>
+          <div class="text-xs text-[var(--muted-foreground)]">Year 2 EBITDA (45 Active Days)</div>
+          <div class="text-lg font-bold font-mono text-emerald-400">$173,995</div>
+        </div>
+        <div>
+          <div class="text-xs text-[var(--muted-foreground)]">DSCR Yr 1 → Yr 2 (Option A/B)</div>
+          <div class="text-lg font-bold font-mono text-amber-400">2.14x–2.68x → 4.19x+</div>
+        </div>
+      </div>
+
+      <div class="bg-emerald-500/10 border border-emerald-500/30 rounded-xl p-3.5 flex flex-col sm:flex-row items-center justify-between gap-4">
+        <div class="text-xs">
+          <strong class="text-emerald-400">Complete MWTP-50 Suite:</strong> Engineering Design &amp; BOM • Interactive 22-ft Gooseneck &amp; CT Simulator • Restaurant Sales Brochure • Combined Field Tie-In SOP.
+        </div>
+        <button onclick="goToSlide(1)" class="px-4 py-2 rounded-lg text-xs font-bold bg-emerald-600 text-white shrink-0 hover:bg-emerald-500 transition">
+          Restart Presentation ↺
+        </button>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- Bottom Slide Thumbnail Strip -->
+  <div class="grid grid-cols-5 md:grid-cols-10 gap-1.5" id="thumb-strip"></div>
+
+  <script>
+    let currentSlide = 1;
+    const totalSlides = 10;
+    const slideTitles = [
+      "1. Title", "2. Why MWTP-50", "3. Kitchen Demand", "4. 3 Feed Modes", "5. 6-Stage Train",
+      "6. 22-ft Gooseneck", "7. 50A Shore / Gen", "8. 2-Hr Hookup", "9. $238k BOM", "10. DSCR & ROI"
+    ];
+
+    const thumbStrip = document.getElementById('thumb-strip');
+    slideTitles.forEach((t, idx) => {
+      const n = idx + 1;
+      const btn = document.createElement('button');
+      btn.id = 'thumb-' + n;
+      btn.onclick = () => goToSlide(n);
+      btn.className = 'px-2 py-1.5 rounded text-xs font-medium truncate border transition text-center';
+      btn.textContent = t;
+      thumbStrip.appendChild(btn);
+    });
+
+    function goToSlide(n) {
+      currentSlide = Math.max(1, Math.min(totalSlides, n));
+      document.querySelectorAll('.slide-frame').forEach(el => {
+        el.classList.toggle('active', parseInt(el.dataset.slide, 10) === currentSlide);
+      });
+      document.getElementById('slide-counter').textContent = `Slide ${currentSlide} / ${totalSlides}`;
+      document.getElementById('slide-progress').style.width = `${(currentSlide / totalSlides) * 100}%`;
+
+      for (let i = 1; i <= totalSlides; i++) {
+        const th = document.getElementById('thumb-' + i);
+        if (i === currentSlide) {
+          th.className = 'px-2 py-1.5 rounded text-xs font-bold truncate border border-emerald-500 bg-emerald-600 text-white transition text-center';
+        } else {
+          th.className = 'px-2 py-1.5 rounded text-xs font-medium truncate border border-[var(--border)] bg-[var(--card)] text-[var(--muted-foreground)] hover:text-[var(--foreground)] transition text-center';
+        }
+      }
+    }
+
+    function nextSlide() {
+      if (currentSlide < totalSlides) goToSlide(currentSlide + 1);
+    }
+
+    function prevSlide() {
+      if (currentSlide > 1) goToSlide(currentSlide - 1);
+    }
+
+    window.addEventListener('keydown', (e) => {
+      if (e.key === 'ArrowRight' || e.key === ' ') {
+        e.preventDefault();
+        nextSlide();
+      } else if (e.key === 'ArrowLeft') {
+        e.preventDefault();
+        prevSlide();
+      }
+    });
+
+    goToSlide(1);
+  </script>
+</body>
+</html>
