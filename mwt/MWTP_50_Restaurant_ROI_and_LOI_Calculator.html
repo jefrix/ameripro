@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>MWTP-50 ("KitchenShield-50") — Restaurant Downtime ROI &amp; Standby LOI Generator</title>
+  <title>MWTP-50 (Rev B) &amp; MWTP-50C (Rev C) — Restaurant Downtime ROI &amp; Standby LOI Generator</title>
   <script src="https://www.gstatic.com/antigravity/web/dev/tailwindcss.min.js"></script>
   <style>
     @media print {
@@ -13,6 +13,8 @@
     }
     :root { --background: #0b1120; --foreground: #f1f5f9; --card: #111827; --secondary: #1e293b; --secondary-foreground: #e2e8f0; --muted-foreground: #94a3b8; --border: #1e293b; --primary: #10b981; --primary-foreground: #ffffff; }
     html.light { --background: #f8fafc; --foreground: #0f172a; --card: #ffffff; --secondary: #f1f5f9; --secondary-foreground: #1e293b; --muted-foreground: #64748b; --border: #e2e8f0; --primary: #059669; --primary-foreground: #ffffff; }
+    .sys-btn-active-c { background-color: #7c3aed !important; color: #ffffff !important; border-color: #8b5cf6 !important; }
+    .sys-btn-active-b { background-color: #059669 !important; color: #ffffff !important; border-color: #10b981 !important; }
   </style>
 </head>
 <body class="bg-[var(--background)] text-[var(--foreground)] antialiased p-4 md:p-6 max-w-6xl mx-auto space-y-6">
@@ -20,8 +22,17 @@
   <!-- Top Sales Action Bar (Hidden when printing) -->
   <div class="no-print bg-[var(--card)] border border-[var(--border)] rounded-xl px-4 py-3 flex flex-wrap items-center justify-between gap-3 shadow-sm">
     <div class="flex flex-wrap items-center gap-2.5">
+      <a href="index.html" class="px-2.5 py-1 rounded text-xs font-mono font-semibold bg-[var(--secondary)] text-[var(--secondary-foreground)] border border-[var(--border)] hover:border-emerald-500 transition">← Portal Home</a>
       <span class="px-2.5 py-0.5 rounded-full text-xs font-bold bg-emerald-500/15 text-emerald-400 border border-emerald-500/30">INTERACTIVE ROI &amp; LOI GENERATOR</span>
-      <span class="text-xs text-[var(--muted-foreground)]">Calculate Boil Water Advisory Shutdown Losses vs. MWTP-50 Standby Protection &amp; Print a Signed LOI</span>
+      <!-- System Toggle Pills: MWTP-50C (Rev C) vs MWTP-50 (Rev B) -->
+      <div class="inline-flex rounded-lg border border-[var(--border)] bg-[var(--secondary)] p-0.5">
+        <button id="btn-sys-50c" onclick="setSystemModel('50C')" class="px-3 py-1 rounded-md text-xs font-bold transition sys-btn-active-c">
+          MWTP-50C (Rev C • Split-Power)
+        </button>
+        <button id="btn-sys-50b" onclick="setSystemModel('50')" class="px-3 py-1 rounded-md text-xs font-bold text-[var(--muted-foreground)] transition">
+          MWTP-50 (Rev B • Self-Contained)
+        </button>
+      </div>
     </div>
     <div class="flex items-center gap-2">
       <button onclick="presetSingle()" class="px-3 py-1.5 rounded-lg text-xs font-semibold bg-[var(--secondary)] text-[var(--secondary-foreground)] border border-[var(--border)] hover:border-emerald-500 transition">
@@ -42,18 +53,35 @@
     <!-- Header -->
     <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-4 border-b border-[var(--border)] pb-4">
       <div>
-        <div class="text-xs font-mono uppercase text-emerald-400 font-bold">AMERIPRO ENVIRONMENTAL SERVICES • KITCHENSHIELD-50 PROGRAM</div>
+        <div id="hdr-kicker" class="text-xs font-mono uppercase text-violet-400 font-bold">
+          AMERIPRO ENVIRONMENTAL SERVICES • KITCHENSHIELD-50C (REV C SPLIT-POWER) PROGRAM
+        </div>
         <h1 class="text-2xl md:text-3xl font-extrabold tracking-tight mt-0.5">
           Commercial Kitchen Boil Water Advisory ROI &amp; Standby Proposal
         </h1>
-        <p class="text-xs text-[var(--muted-foreground)] mt-1">
-          Powered by the <strong>MWTP-50-GN22 Compact Gooseneck Water Treatment Plant</strong> (35 GPM continuous / 50 GPM peak @ 60–75 PSI • 2–3 Parking-Space Footprint • 240V 50A Shore Plug or 20 kW Diesel Gen)
+        <p id="hdr-sub" class="text-xs text-[var(--muted-foreground)] mt-1">
+          Powered by the <strong>MWTP-50C ("KitchenShield-50C") 20-ft Split-Power Water Trailer</strong> (35 GPM continuous / 50 GPM peak @ 65 PSI • 186 mJ/cm² Virus-Rated UV • Zero Ground Tanks on BWA Jobs • ~1.5-Hr Hookup on 240V 50A Shore Power + optional <strong>PWR-25</strong> Generator Trailer)
         </p>
       </div>
       <div class="bg-emerald-500/10 border border-emerald-500/30 rounded-xl px-4 py-2.5 text-center shrink-0">
         <div class="text-[10px] font-mono uppercase text-emerald-400 font-bold">Break-Even Shutdown Time</div>
-        <div id="hero-breakeven" class="text-2xl font-extrabold font-mono text-emerald-400">3.5 Hours</div>
+        <div id="hero-breakeven" class="text-2xl font-extrabold font-mono text-emerald-400">2.9 Hours</div>
         <div class="text-[10px] text-[var(--muted-foreground)]">of avoided closure pays for 1 full year of Standby</div>
+      </div>
+    </div>
+
+    <!-- Dynamic Architecture Comparison Strip -->
+    <div id="arch-banner" class="bg-violet-500/10 border border-violet-500/30 rounded-xl px-4 py-3 text-xs flex flex-col md:flex-row md:items-center justify-between gap-3">
+      <div id="arch-summary" class="leading-relaxed">
+        <strong class="text-violet-400 uppercase font-mono">SELECTED SYSTEM — MWTP-50C (REV C SPLIT-POWER):</strong>
+        <span class="text-[var(--secondary-foreground)]"> 20-ft water trailer (<code>7,310 lb</code> road / <code>8,660 lb</code> site, non-CDL) plugs into your building's 240V 50A shore receptacle and achieves 4-log virus credit via <strong>186 mJ/cm² validated UV</strong> — <strong>zero ground bladders in your parking lot</strong> and water to the kitchen in <strong>~1.5 hours</strong>.</span>
+      </div>
+      <div class="flex items-center gap-2 shrink-0 no-print">
+        <label class="text-[11px] font-semibold text-[var(--muted-foreground)]">Job Mode:</label>
+        <select id="inp-pwr25" onchange="calcROI()" class="bg-[var(--card)] border border-violet-500/40 rounded-lg px-2.5 py-1 text-xs font-semibold text-violet-300">
+          <option value="shore" selected>Boil Water Advisory (Building 50A Shore Power • $3,200/day)</option>
+          <option value="gen">Water + Power Outage (Add PWR-25 Gen &amp; Tank Trailer • +$400/day)</option>
+        </select>
       </div>
     </div>
 
@@ -70,20 +98,22 @@
             <input id="inp-company" type="text" value="Peachtree Hospitality Group LLC" oninput="calcROI()" class="w-full bg-[var(--card)] border border-[var(--border)] rounded-lg px-3 py-1.5 font-semibold">
           </div>
           <div>
-            <label class="block text-[11px] font-semibold text-[var(--muted-foreground)] mb-1">Locations Covered</label>
+            <label class="block text-[11px] font-semibold text-[var(--muted-foreground)] mb-1">Locations Covered (Max 10 / Trailer)</label>
             <select id="inp-stores" onchange="calcROI()" class="w-full bg-[var(--card)] border border-[var(--border)] rounded-lg px-2.5 py-1.5 font-semibold text-emerald-400">
-              <option value="1">1 Location ($150/mo • $1,800/yr)</option>
-              <option value="2">2 Locations ($125/mo per store • $3,000/yr)</option>
-              <option value="3">3 Locations ($125/mo per store • $4,500/yr)</option>
-              <option value="4">4 Locations ($125/mo per store • $6,000/yr)</option>
-              <option value="5" selected>5 Locations ($125/mo per store • $7,500/yr)</option>
+              <option value="1">1 Location (Single Store)</option>
+              <option value="2">2 Locations ($125/mo/store • $3,000/yr)</option>
+              <option value="3">3 Locations ($125/mo/store • $4,500/yr)</option>
+              <option value="4">4 Locations ($125/mo/store • $6,000/yr)</option>
+              <option value="5" selected>5 Locations ($125/mo/store • $7,500/yr)</option>
+              <option value="8">8 Locations ($125/mo/store • $12,000/yr)</option>
+              <option value="10">10 Locations — Full Unit Cap ($15,000/yr)</option>
             </select>
           </div>
           <div>
             <label class="block text-[11px] font-semibold text-[var(--muted-foreground)] mb-1">AmeriPro F.O.G. / Hood Client?</label>
             <select id="inp-fog" onchange="calcROI()" class="w-full bg-[var(--card)] border border-[var(--border)] rounded-lg px-2.5 py-1.5 font-semibold">
-              <option value="yes" selected>Yes — Existing Account ($0 Survey)</option>
-              <option value="new">New Account (Bundle w/ F.O.G.)</option>
+              <option value="yes" selected>Yes — Bundled F.O.G./Hood ($2,000/yr 1-Store)</option>
+              <option value="new">Standalone Water Only ($2,500/yr 1-Store)</option>
             </select>
           </div>
         </div>
@@ -128,6 +158,8 @@
               </div>
               <input id="inp-spoil" type="range" min="500" max="10000" step="500" value="3000" oninput="calcROI()" class="no-print w-full accent-rose-500">
             </div>
+          </div>
+
           <div class="grid grid-cols-2 gap-3 pt-2 border-t border-[var(--border)]">
             <div>
               <div class="flex justify-between font-semibold mb-1">
@@ -186,29 +218,29 @@
             <div class="bg-sky-500/10 border border-sky-500/30 rounded-xl p-4 space-y-2.5">
               <div class="flex items-center justify-between">
                 <span class="text-xs font-bold text-sky-400 uppercase">Option B: Open on Workarounds</span>
-                <span id="out-w-badge" class="text-[10px] font-mono bg-sky-500/20 text-sky-300 px-2 py-0.5 rounded">70% of Sales</span>
+                <span id="out-w-badge" class="text-[10px] font-mono bg-sky-500/20 text-sky-300 px-2 py-0.5 rounded">50% of Sales</span>
               </div>
               <div class="space-y-1.5 text-xs">
                 <div class="flex justify-between">
                   <span class="text-[var(--muted-foreground)]">Lost Margin on Reduced Sales:</span>
-                  <span id="out-w-margin" class="font-mono font-semibold">$6,480</span>
+                  <span id="out-w-margin" class="font-mono font-semibold">$10,800</span>
                 </div>
                 <div class="flex justify-between">
                   <span class="text-[var(--muted-foreground)]">Bottled Water, Ice &amp; Disposables:</span>
-                  <span id="out-w-supplies" class="font-mono font-semibold">$1,800</span>
+                  <span id="out-w-supplies" class="font-mono font-semibold">$3,000</span>
                 </div>
                 <div class="pt-2 border-t border-sky-500/30 flex justify-between text-sm font-extrabold text-sky-400">
                   <span>Direct Bottom-Line Loss:</span>
-                  <span id="out-w-total" class="font-mono">$8,280</span>
+                  <span id="out-w-total" class="font-mono">$13,800</span>
                 </div>
               </div>
             </div>
 
-            <!-- Box B: Operating on MWTP-50 -->
-            <div class="bg-emerald-500/10 border border-emerald-500/40 rounded-xl p-4 space-y-2.5">
+            <!-- Box B: Operating on MWTP-50C / MWTP-50 -->
+            <div id="box-opt-c" class="bg-violet-500/10 border border-violet-500/40 rounded-xl p-4 space-y-2.5">
               <div class="flex items-center justify-between">
-                <span class="text-xs font-bold text-emerald-400 uppercase">Option C: Full Service on MWTP-50</span>
-                <span class="text-[10px] font-mono bg-emerald-500/20 text-emerald-300 px-2 py-0.5 rounded">Health Dept Approved</span>
+                <span id="opt-c-title" class="text-xs font-bold text-violet-300 uppercase">Option C: Full Service on MWTP-50C</span>
+                <span id="opt-c-badge" class="text-[10px] font-mono bg-violet-500/20 text-violet-300 px-2 py-0.5 rounded">~1.5-Hr Setup</span>
               </div>
               <div class="space-y-1.5 text-xs">
                 <div class="flex justify-between">
@@ -220,10 +252,10 @@
                   <span class="font-mono font-semibold">$2,500</span>
                 </div>
                 <div class="flex justify-between">
-                  <span class="text-[var(--muted-foreground)]">Active Treatment (<span id="out-days-txt">3</span> d × $3,200/d):</span>
+                  <span class="text-[var(--muted-foreground)]">Active Treatment (<span id="out-days-txt">3</span> d × <span id="out-day-rate-txt">$3,200</span>/d):</span>
                   <span id="out-active-fee" class="font-mono font-semibold">$9,600</span>
                 </div>
-                <div class="pt-2 border-t border-emerald-500/30 flex justify-between text-sm font-extrabold text-emerald-400">
+                <div class="pt-2 border-t border-violet-500/30 flex justify-between text-sm font-extrabold text-emerald-400">
                   <span>Total Deployment Invoice:</span>
                   <span id="out-total-fee" class="font-mono">$12,100</span>
                 </div>
@@ -236,46 +268,46 @@
         <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
           <div class="bg-[var(--secondary)]/60 border border-[var(--border)] rounded-xl p-3.5 text-center">
             <div class="text-[11px] text-[var(--muted-foreground)] uppercase">Daily Retainer Cost / Store</div>
-            <div id="out-daily-retainer" class="text-xl font-extrabold font-mono text-blue-400 mt-1">$1.92 / day</div>
+            <div id="out-daily-retainer" class="text-xl font-extrabold font-mono text-blue-400 mt-1">$4.11 / day</div>
             <div id="out-retainer-sub" class="text-[10px] text-[var(--muted-foreground)] mt-0.5">$1,500/yr per store ($125/mo/store)</div>
           </div>
 
           <div class="bg-[var(--secondary)]/60 border border-[var(--border)] rounded-xl p-3.5 text-center">
             <div class="text-[11px] text-[var(--muted-foreground)] uppercase">Gross Sales Protected</div>
             <div id="out-sales-saved" class="text-xl font-extrabold font-mono text-emerald-400 mt-1">$36,000</div>
-            <div class="text-[10px] text-[var(--muted-foreground)] mt-0.5">+ Guest loyalty &amp; staff shifts preserved</div>
+            <div id="out-setup-note" class="text-[10px] text-[var(--muted-foreground)] mt-0.5">No ground tanks • ~1.5-hr BWA hookup</div>
           </div>
 
           <div class="bg-emerald-500/15 border border-emerald-500/40 rounded-xl p-3.5 text-center">
             <div class="text-[11px] text-emerald-300 uppercase font-bold">Saved vs. Best Alternative (1 Event)</div>
-            <div id="out-net-saved" class="text-xl font-extrabold font-mono text-emerald-400 mt-1">+$12,500</div>
-            <div id="out-roi-pct" class="text-[10px] text-emerald-300 font-semibold mt-0.5">3.6× Return on Annual Retainer</div>
+            <div id="out-net-saved" class="text-xl font-extrabold font-mono text-emerald-400 mt-1">+$1,700</div>
+            <div id="out-roi-pct" class="text-[10px] text-emerald-300 font-semibold mt-0.5">1.1× the Annual Retainer per Store</div>
           </div>
         </div>
 
         <!-- Included in Standby Membership Box -->
         <div class="bg-[var(--secondary)]/40 border border-[var(--border)] rounded-xl p-3.5 text-xs flex flex-wrap items-center justify-between gap-2">
-          <div>
-            <strong class="text-emerald-400">Included in Your Standby Retainer:</strong> Pre-deployment plumbing &amp; cleanout survey • Custom 316SS camlock adapter kit stored on the trailer • Pre-written County Health Department Alternate-Water Operations Plan.
+          <div id="included-note">
+            <strong class="text-violet-400">Included in Your MWTP-50C Standby Retainer:</strong> Pre-deployment plumbing &amp; cleanout survey • Service-line tee &amp; 50A shore-plug check • Custom 316SS camlock adapter kit stored on the trailer • Pre-written County Health Department Alternate-Water Operations Plan (UF + 186 mJ/cm² Virus-Rated UV + Free Cl₂ Residual).
           </div>
         </div>
       </div>
     </div>
 
     <!-- Section 3: Printable Non-Binding Standby Letter of Intent (LOI) -->
-    <div class="border-2 border-emerald-500/40 bg-emerald-500/5 rounded-xl p-5 space-y-3">
-      <div class="flex flex-wrap items-center justify-between gap-2 border-b border-emerald-500/20 pb-2">
+    <div id="loi-box" class="border-2 border-violet-500/40 bg-violet-500/5 rounded-xl p-5 space-y-3">
+      <div class="flex flex-wrap items-center justify-between gap-2 border-b border-violet-500/20 pb-2">
         <div>
-          <span class="text-xs font-mono font-bold text-emerald-400 uppercase">3. NON-BINDING STANDBY LETTER OF INTENT (LOI)</span>
-          <h2 class="text-base font-bold">Enrollment Intent — AmeriPro KitchenShield-50 Emergency Water Continuity</h2>
+          <span class="text-xs font-mono font-bold text-violet-400 uppercase">3. NON-BINDING STANDBY LETTER OF INTENT (LOI)</span>
+          <h2 id="loi-heading" class="text-base font-bold">Enrollment Intent — AmeriPro MWTP-50C ("KitchenShield-50C") Emergency Water Continuity</h2>
         </div>
-        <span id="loi-plan-badge" class="px-3 py-1 rounded-lg bg-emerald-600 text-white text-xs font-mono font-bold">
+        <span id="loi-plan-badge" class="px-3 py-1 rounded-lg bg-violet-600 text-white text-xs font-mono font-bold">
           5-Store Group Plan: $125/mo per store ($7,500/yr)
         </span>
       </div>
 
       <p class="text-xs text-[var(--muted-foreground)] leading-relaxed">
-        <strong><span id="loi-company-txt" class="text-[var(--foreground)]">Peachtree Hospitality Group LLC</span></strong> expresses its non-binding intent to enroll <strong><span id="loi-stores-txt" class="text-[var(--foreground)]">5 commercial kitchen location(s)</span></strong> in the AmeriPro Environmental Services <strong>MWTP-50 ("KitchenShield-50") Standby Retainer Program</strong> at <strong><span id="loi-rate-txt" class="text-emerald-400">$125/month per store ($7,500/year)</span></strong>, subject to AmeriPro completing pre-deployment site surveys, obtaining state drinking-water emergency-use approval, and executing a formal Standby Service Agreement (with active emergency dispatches billed at <strong>$2,500 mobilization + $3,200 per 24-hour day</strong>, one location pressurized at a time in the call order written into the agreement; each MWTP-50 unit covers no more than 10 locations per region). This LOI may be presented to AmeriPro's commercial lending institution in support of fleet financing.
+        <strong><span id="loi-company-txt" class="text-[var(--foreground)]">Peachtree Hospitality Group LLC</span></strong> expresses its non-binding intent to enroll <strong><span id="loi-stores-txt" class="text-[var(--foreground)]">5 commercial kitchen location(s)</span></strong> in the AmeriPro Environmental Services <strong><span id="loi-model-txt" class="text-[var(--foreground)]">MWTP-50C ("KitchenShield-50C") Split-Power Standby Retainer Program</span></strong> at <strong><span id="loi-rate-txt" class="text-emerald-400">$125/month per store ($7,500/year)</span></strong>, subject to AmeriPro completing pre-deployment site surveys, obtaining state drinking-water emergency-use approval, and executing a formal Standby Service Agreement (with active emergency dispatches billed at <strong>$2,500 mobilization + <span id="loi-dayrate-txt">$3,200 per 24-hour day on building 50A shore power (+$400/day when the PWR-25 generator &amp; outage-kit trailer is deployed)</span></strong>, one location pressurized at a time in the call order written into the agreement; each water trailer covers no more than 10 locations per region). This LOI may be presented to AmeriPro's commercial lending institution in support of fleet financing.
       </p>
 
       <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 pt-3 text-xs">
@@ -297,13 +329,62 @@
   </div>
 
   <script>
+    let currentSystem = '50C'; // '50C' (Rev C Split-Power) or '50' (Rev B Self-Contained)
+
+    function setSystemModel(model) {
+      currentSystem = model;
+      const btnC = document.getElementById('btn-sys-50c');
+      const btnB = document.getElementById('btn-sys-50b');
+      const pwrSelect = document.getElementById('inp-pwr25');
+
+      if (model === '50C') {
+        btnC.className = 'px-3 py-1 rounded-md text-xs font-bold transition sys-btn-active-c';
+        btnB.className = 'px-3 py-1 rounded-md text-xs font-bold text-[var(--muted-foreground)] transition';
+        pwrSelect.disabled = false;
+        document.getElementById('hdr-kicker').className = 'text-xs font-mono uppercase text-violet-400 font-bold';
+        document.getElementById('hdr-kicker').textContent = 'AMERIPRO ENVIRONMENTAL SERVICES • KITCHENSHIELD-50C (REV C SPLIT-POWER) PROGRAM';
+        document.getElementById('hdr-sub').innerHTML = 'Powered by the <strong>MWTP-50C ("KitchenShield-50C") 20-ft Split-Power Water Trailer</strong> (35 GPM continuous / 50 GPM peak @ 65 PSI • 186 mJ/cm² Virus-Rated UV • Zero Ground Tanks on BWA Jobs • ~1.5-Hr Hookup on 240V 50A Shore Power + optional <strong>PWR-25</strong> Generator Trailer)';
+        document.getElementById('arch-banner').className = 'bg-violet-500/10 border border-violet-500/30 rounded-xl px-4 py-3 text-xs flex flex-col md:flex-row md:items-center justify-between gap-3';
+        document.getElementById('arch-summary').innerHTML = '<strong class="text-violet-400 uppercase font-mono">SELECTED SYSTEM — MWTP-50C (REV C SPLIT-POWER):</strong><span class="text-[var(--secondary-foreground)]"> 20-ft water trailer (<code>7,310 lb</code> road / <code>8,660 lb</code> site, non-CDL) plugs into your building\'s 240V 50A shore receptacle and achieves 4-log virus credit via <strong>186 mJ/cm² validated UV</strong> — <strong>zero ground bladders in your parking lot</strong> and water to the kitchen in <strong>~1.5 hours</strong>.</span>';
+        document.getElementById('opt-c-title').textContent = 'Option C: Full Service on MWTP-50C';
+        document.getElementById('opt-c-title').className = 'text-xs font-bold text-violet-300 uppercase';
+        document.getElementById('opt-c-badge').textContent = '~1.5-Hr Setup';
+        document.getElementById('out-setup-note').textContent = 'No ground tanks • ~1.5-hr BWA hookup';
+        document.getElementById('included-note').innerHTML = '<strong class="text-violet-400">Included in Your MWTP-50C Standby Retainer:</strong> Pre-deployment plumbing &amp; cleanout survey • Service-line tee &amp; 50A shore-plug check • Custom 316SS camlock adapter kit stored on the trailer • Pre-written County Health Department Alternate-Water Operations Plan (UF + 186 mJ/cm² Virus-Rated UV + Free Cl₂ Residual).';
+        document.getElementById('loi-heading').textContent = 'Enrollment Intent — AmeriPro MWTP-50C ("KitchenShield-50C") Emergency Water Continuity';
+        document.getElementById('loi-model-txt').textContent = 'MWTP-50C ("KitchenShield-50C") Split-Power Standby Retainer Program';
+        document.getElementById('loi-dayrate-txt').textContent = '$3,200 per 24-hour day on building 50A shore power (+$400/day when the PWR-25 generator & outage-kit trailer is deployed)';
+      } else {
+        btnB.className = 'px-3 py-1 rounded-md text-xs font-bold transition sys-btn-active-b';
+        btnC.className = 'px-3 py-1 rounded-md text-xs font-bold text-[var(--muted-foreground)] transition';
+        pwrSelect.value = 'shore';
+        pwrSelect.disabled = true;
+        document.getElementById('hdr-kicker').className = 'text-xs font-mono uppercase text-emerald-400 font-bold';
+        document.getElementById('hdr-kicker').textContent = 'AMERIPRO ENVIRONMENTAL SERVICES • KITCHENSHIELD-50 (REV B SELF-CONTAINED) PROGRAM';
+        document.getElementById('hdr-sub').innerHTML = 'Powered by the <strong>MWTP-50-GN22 ("KitchenShield-50") 22-ft Self-Contained Gooseneck Water Plant</strong> (35 GPM continuous / 50 GPM peak @ 65 PSI • Onboard 20 kW Diesel Gen + 240V 50A Shore Plug • 600-Gal Baffled Chlorine Contact Tank • ~2-Hr Hookup)';
+        document.getElementById('arch-banner').className = 'bg-emerald-500/10 border border-emerald-500/30 rounded-xl px-4 py-3 text-xs flex flex-col md:flex-row md:items-center justify-between gap-3';
+        document.getElementById('arch-summary').innerHTML = '<strong class="text-emerald-400 uppercase font-mono">SELECTED SYSTEM — MWTP-50 (REV B SELF-CONTAINED):</strong><span class="text-[var(--secondary-foreground)]"> Single 22-ft compact gooseneck (<code>8,670 lb</code> road / <code>9,820 lb</code> site, non-CDL) with onboard <strong>20 kW diesel generator</strong>, 240V 50A shore plug, 4-module UF rack, and a <strong>600-gal baffled chlorine contact tank</strong> (<code>TK-401</code>) for chemical 4-log virus CT credit (<strong>~2-hr setup</strong>).</span>';
+        document.getElementById('opt-c-title').textContent = 'Option C: Full Service on MWTP-50';
+        document.getElementById('opt-c-title').className = 'text-xs font-bold text-emerald-400 uppercase';
+        document.getElementById('opt-c-badge').textContent = '~2.0-Hr Setup';
+        document.getElementById('out-setup-note').textContent = 'Onboard 20 kW gen • ~2-hr setup';
+        document.getElementById('included-note').innerHTML = '<strong class="text-emerald-400">Included in Your MWTP-50 Standby Retainer:</strong> Pre-deployment plumbing &amp; cleanout survey • Custom 316SS camlock adapter kit stored on the trailer • Pre-written County Health Department Alternate-Water Operations Plan (UF + UV + 600-Gal Free Cl₂ CT Tank).';
+        document.getElementById('loi-heading').textContent = 'Enrollment Intent — AmeriPro MWTP-50 ("KitchenShield-50") Emergency Water Continuity';
+        document.getElementById('loi-model-txt').textContent = 'MWTP-50 ("KitchenShield-50") Self-Contained Standby Retainer Program';
+        document.getElementById('loi-dayrate-txt').textContent = '$3,200 per 24-hour day';
+      }
+      calcROI();
+    }
+
     function calcROI() {
       const company = document.getElementById('inp-company').value || 'Prospective Restaurant Client';
       const stores = parseInt(document.getElementById('inp-stores').value, 10);
+      const isFog = document.getElementById('inp-fog').value === 'yes';
       const sales = parseFloat(document.getElementById('inp-sales').value);
       const marginPct = parseFloat(document.getElementById('inp-margin').value);
       const days = parseInt(document.getElementById('inp-days').value, 10);
       const spoil = parseFloat(document.getElementById('inp-spoil').value);
+      const pwrMode = document.getElementById('inp-pwr25').value;
 
       const dailyMarginLost = Math.round(sales * (marginPct / 100));
       document.getElementById('lbl-sales').textContent = `$${sales.toLocaleString()} / day`;
@@ -311,10 +392,13 @@
       document.getElementById('lbl-days').textContent = `${days} ${days === 1 ? 'Day' : 'Days'}`;
       document.getElementById('lbl-spoil').textContent = `$${spoil.toLocaleString()}`;
 
-      // Retainer pricing
-      const annualRetainer = stores === 1 ? 1800 : 1500 * stores;
-      const monthlyPerStore = stores === 1 ? 150 : 125;
-      const dailyPerStore = (annualRetainer / 365 / stores).toFixed(2);
+      // Retainer pricing per MWTP-50 & MWTP-50C design docs:
+      // 1 store standalone = $2,500/yr; 1 store F.O.G./hood bundle = $2,000/yr; 2+ stores group = $1,500/yr per store ($125/mo/store)
+      const annualPerStore = stores === 1 ? (isFog ? 2000 : 2500) : 1500;
+      const annualRetainer = annualPerStore * stores;
+      const monthlyPerStore = Math.round(annualPerStore / 12);
+      const dailyPerStore = (annualPerStore / 365).toFixed(2);
+
       const retainedPct = parseFloat(document.getElementById('inp-retained').value);
       const wcost = parseFloat(document.getElementById('inp-wcost').value);
       document.getElementById('lbl-retained').textContent = `${retainedPct}%`;
@@ -325,19 +409,22 @@
       const marginLost = dailyMarginLost * days;
       const totalLoss = marginLost + spoil;
 
-      const activeFee = 3200 * days;
+      // Active daily rate: $3,200/day standard; +$400/day ($3,600/day) if MWTP-50C + PWR-25 outage mode selected
+      const dayRate = (currentSystem === '50C' && pwrMode === 'gen') ? 3600 : 3200;
+      const activeFee = dayRate * days;
       const totalFee = 2500 + activeFee;
+
       // Option B: stay open on workarounds (bottled water, bagged ice, disposables, limited menu)
       const wMargin = Math.round(sales * (1 - retainedPct / 100) * (marginPct / 100) * days);
       const wSupplies = wcost * days;
       const wTotal = wMargin + wSupplies;
       const bestAlt = Math.min(totalLoss, wTotal);
       const netSaved = bestAlt - totalFee;
-      const roiMultiple = (netSaved / (annualRetainer / stores)).toFixed(1);
+      const roiMultiple = (netSaved / annualPerStore).toFixed(1);
 
       // Break-even hours of avoided shutdown to pay for annual retainer (assuming 14 operating hours/day)
       const hourlyLoss = dailyMarginLost / 14;
-      const breakEvenHours = (annualRetainer / stores / hourlyLoss).toFixed(1);
+      const breakEvenHours = (annualPerStore / hourlyLoss).toFixed(1);
 
       document.getElementById('hero-breakeven').textContent = `${breakEvenHours} Hours`;
       document.getElementById('out-days-badge').textContent = `${days} ${days === 1 ? 'Day' : 'Days'} Closed`;
@@ -352,12 +439,13 @@
       document.getElementById('out-w-total').textContent = `$${wTotal.toLocaleString()}`;
       document.getElementById('out-gross-kept').textContent = `$${grossLost.toLocaleString()} (100%)`;
       document.getElementById('out-days-txt').textContent = String(days);
+      document.getElementById('out-day-rate-txt').textContent = `$${dayRate.toLocaleString()}`;
       document.getElementById('out-active-fee').textContent = `$${activeFee.toLocaleString()}`;
       document.getElementById('out-total-fee').textContent = `$${totalFee.toLocaleString()}`;
 
       document.getElementById('out-daily-retainer').textContent = `$${dailyPerStore} / day`;
       document.getElementById('out-retainer-sub').textContent = stores === 1
-        ? '$1,800/yr Single Store ($150/mo)'
+        ? `$${annualPerStore.toLocaleString()}/yr Single Store (${isFog ? 'F.O.G. Bundle' : 'Standalone'})`
         : `$${annualRetainer.toLocaleString()}/yr for ${stores} stores ($${monthlyPerStore}/mo/store)`;
 
       document.getElementById('out-sales-saved').textContent = `$${grossLost.toLocaleString()}`;
@@ -366,17 +454,18 @@
         : `-$${Math.abs(netSaved).toLocaleString()}`;
       document.getElementById('out-roi-pct').textContent = netSaved > 0
         ? `${roiMultiple}× the Annual Retainer per Store`
-        : 'Workarounds cost less for this kitchen — MWTP-50 fits higher-volume sites';
+        : 'Workarounds cost less for this kitchen — fits higher-volume sites';
 
       // LOI text updates
       document.getElementById('loi-company-txt').textContent = company;
       document.getElementById('loi-stores-txt').textContent = `${stores} commercial kitchen location(s)`;
+      const sysLabel = currentSystem === '50C' ? 'MWTP-50C' : 'MWTP-50';
       const planText = stores === 1
-        ? 'Single-Store Plan: $150/mo ($1,800/yr)'
-        : `${stores}-Store Group Plan: $125/mo per store ($${annualRetainer.toLocaleString()}/yr)`;
+        ? `${sysLabel} Single-Store Plan: $${annualPerStore.toLocaleString()}/yr`
+        : `${sysLabel} ${stores}-Store Group Plan: $125/mo per store ($${annualRetainer.toLocaleString()}/yr)`;
       document.getElementById('loi-plan-badge').textContent = planText;
       document.getElementById('loi-rate-txt').textContent = stores === 1
-        ? '$150/month ($1,800/year)'
+        ? `$${annualPerStore.toLocaleString()}/year (${isFog ? 'Bundled F.O.G./Hood Rate' : 'Single-Site Rate'})`
         : `$125/month per store ($${annualRetainer.toLocaleString()}/year)`;
     }
 
@@ -404,7 +493,7 @@
       calcROI();
     }
 
-    calcROI();
+    setSystemModel('50C');
   </script>
 </body>
 </html>

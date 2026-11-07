@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>MWTP-50 &amp; MWTP-250 Pre-Deployment Site Survey &amp; Health Department Alternate Water Packet</title>
+  <title>MWTP-50 (Rev B), MWTP-50C (Rev C) &amp; MWTP-250 Pre-Deployment Site Survey &amp; Health Department Packet</title>
   <script src="https://www.gstatic.com/antigravity/web/dev/tailwindcss.min.js"></script>
   <style>
     @media print {
@@ -15,6 +15,9 @@
     }
     :root { --background: #0b1120; --foreground: #f1f5f9; --card: #111827; --secondary: #1e293b; --secondary-foreground: #e2e8f0; --muted-foreground: #94a3b8; --border: #1e293b; --primary: #10b981; --primary-foreground: #ffffff; }
     html.light { --background: #f8fafc; --foreground: #0f172a; --card: #ffffff; --secondary: #f1f5f9; --secondary-foreground: #1e293b; --muted-foreground: #64748b; --border: #e2e8f0; --primary: #059669; --primary-foreground: #ffffff; }
+    .unit-pill-50c { background-color: #7c3aed !important; color: #ffffff !important; border-color: #8b5cf6 !important; }
+    .unit-pill-50b { background-color: #059669 !important; color: #ffffff !important; border-color: #10b981 !important; }
+    .unit-pill-250 { background-color: #2563eb !important; color: #ffffff !important; border-color: #3b82f6 !important; }
   </style>
 </head>
 <body class="bg-[var(--background)] text-[var(--foreground)] antialiased p-4 md:p-8 max-w-5xl mx-auto space-y-6">
@@ -22,18 +25,33 @@
   <!-- Top Action Bar (Hidden on Print) -->
   <div class="no-print bg-[var(--card)] border border-[var(--border)] rounded-xl px-4 py-3 flex flex-wrap items-center justify-between gap-3 shadow-sm">
     <div class="flex flex-wrap items-center gap-2.5">
-      <span class="px-2.5 py-0.5 rounded-full text-xs font-bold bg-emerald-500/15 text-emerald-400 border border-emerald-500/30">FILLABLE 2-PAGE FIELD &amp; REGULATORY PACKET</span>
-      <span class="text-xs text-[var(--muted-foreground)]">Page 1: Engineering Site Survey &amp; Tie-In Map • Page 2: Health Inspector Plan &amp; Standby LOI</span>
+      <a href="index.html" class="px-2.5 py-1 rounded text-xs font-mono font-semibold bg-[var(--secondary)] text-[var(--secondary-foreground)] border border-[var(--border)] hover:border-emerald-500 transition">← Portal Home</a>
+      <span class="px-2.5 py-0.5 rounded-full text-xs font-bold bg-emerald-500/15 text-emerald-400 border border-emerald-500/30">2-PAGE SITE SURVEY &amp; HEALTH PACKET</span>
+      <!-- System Toggle Pills: MWTP-50C (Rev C) vs MWTP-50 (Rev B) vs MWTP-250 -->
+      <div class="inline-flex rounded-lg border border-[var(--border)] bg-[var(--secondary)] p-0.5">
+        <button id="pill-50c" onclick="selectUnitToggle('MWTP-50C')" class="px-2.5 py-1 rounded-md text-xs font-bold transition unit-pill-50c">
+          MWTP-50C (Rev C • Split-Power)
+        </button>
+        <button id="pill-50b" onclick="selectUnitToggle('MWTP-50-GN22')" class="px-2.5 py-1 rounded-md text-xs font-bold text-[var(--muted-foreground)] transition">
+          MWTP-50 (Rev B • Self-Contained)
+        </button>
+        <button id="pill-250" onclick="selectUnitToggle('MWTP-250')" class="px-2.5 py-1 rounded-md text-xs font-bold text-[var(--muted-foreground)] transition">
+          MWTP-250 (Hospital)
+        </button>
+      </div>
     </div>
     <div class="flex items-center gap-2">
-      <button onclick="fillSampleRestaurant()" class="px-3 py-1.5 rounded-lg text-xs font-semibold bg-[var(--secondary)] text-[var(--secondary-foreground)] border border-[var(--border)] hover:border-emerald-500 transition">
-        Load Sample Restaurant
+      <button onclick="fillSampleRestaurant50C()" class="px-2.5 py-1.5 rounded-lg text-xs font-semibold bg-[var(--secondary)] text-violet-300 border border-violet-500/40 hover:border-violet-400 transition">
+        Sample 50C Restaurant
       </button>
-      <button onclick="fillSampleHospital()" class="px-3 py-1.5 rounded-lg text-xs font-semibold bg-[var(--secondary)] text-[var(--secondary-foreground)] border border-[var(--border)] hover:border-blue-500 transition">
-        Load Sample Hospital
+      <button onclick="fillSampleRestaurant50B()" class="px-2.5 py-1.5 rounded-lg text-xs font-semibold bg-[var(--secondary)] text-emerald-300 border border-emerald-500/40 hover:border-emerald-400 transition">
+        Sample 50 (Rev B)
+      </button>
+      <button onclick="fillSampleHospital()" class="px-2.5 py-1.5 rounded-lg text-xs font-semibold bg-[var(--secondary)] text-blue-300 border border-blue-500/40 hover:border-blue-400 transition">
+        Sample 250 Hospital
       </button>
       <button onclick="window.print()" class="px-3.5 py-1.5 rounded-lg text-xs font-semibold bg-emerald-600 text-white hover:bg-emerald-500 transition shadow-sm">
-        Print / Save 2-Page PDF Packet
+        Print / Save 2-Page PDF
       </button>
     </div>
   </div>
@@ -44,7 +62,9 @@
     <!-- Page 1 Header -->
     <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 border-b border-[var(--border)] pb-4">
       <div>
-        <div class="text-xs font-mono uppercase text-emerald-400 font-bold">AMERIPRO ENVIRONMENTAL SERVICES — EMERGENCY WATER DIVISION</div>
+        <div id="p1-kicker" class="text-xs font-mono uppercase text-violet-400 font-bold">
+          AMERIPRO ENVIRONMENTAL SERVICES — MWTP-50C ("KITCHENSHIELD-50C") SPLIT-POWER DIVISION
+        </div>
         <h1 class="text-xl md:text-2xl font-extrabold tracking-tight mt-0.5">
           Part 1: Pre-Deployment Site Survey &amp; Plumbing Tie-In Record
         </h1>
@@ -55,7 +75,7 @@
       <div class="bg-[var(--secondary)] border border-[var(--border)] rounded-xl px-3.5 py-2 text-xs font-mono shrink-0 space-y-1">
         <div class="flex items-center justify-between gap-3">
           <span class="text-[var(--muted-foreground)]">Survey ID:</span>
-          <input id="f-survey-id" type="text" value="APS-2026-014" class="bg-transparent border-b border-slate-600 px-1 w-28 text-right font-bold focus:outline-none">
+          <input id="f-survey-id" type="text" value="APS-2026-014C" class="bg-transparent border-b border-slate-600 px-1 w-28 text-right font-bold focus:outline-none">
         </div>
         <div class="flex items-center justify-between gap-3">
           <span class="text-[var(--muted-foreground)]">Survey Date:</span>
@@ -74,7 +94,7 @@
         </div>
         <div>
           <label class="block text-[11px] font-semibold text-[var(--muted-foreground)] mb-1">Facility Type</label>
-          <select id="f-type" onchange="syncUnitSelection()" class="w-full bg-[var(--secondary)] border border-[var(--border)] rounded-lg px-2.5 py-1.5 font-semibold">
+          <select id="f-type" onchange="onFacilityTypeChange()" class="w-full bg-[var(--secondary)] border border-[var(--border)] rounded-lg px-2.5 py-1.5 font-semibold">
             <option value="restaurant">Commercial Kitchen / Restaurant</option>
             <option value="hotel">Hotel / Multi-Unit Hospitality</option>
             <option value="hospital">Acute-Care Hospital / Clinic</option>
@@ -82,9 +102,10 @@
         </div>
         <div>
           <label class="block text-[11px] font-semibold text-[var(--muted-foreground)] mb-1">Assigned Mobile Unit</label>
-          <select id="f-unit" onchange="syncUnitSelection()" class="w-full bg-[var(--secondary)] border border-[var(--border)] rounded-lg px-2.5 py-1.5 font-bold text-emerald-400">
-            <option value="MWTP-50-GN22">MWTP-50-GN22 (35/50 GPM Gooseneck)</option>
-            <option value="MWTP-250">MWTP-250 (250 GPM Hospital Gooseneck)</option>
+          <select id="f-unit" onchange="selectUnitToggle(this.value)" class="w-full bg-[var(--secondary)] border border-[var(--border)] rounded-lg px-2.5 py-1.5 font-bold text-violet-400">
+            <option value="MWTP-50C" selected>MWTP-50C + PWR-25 (Rev C Split-Power 20-ft)</option>
+            <option value="MWTP-50-GN22">MWTP-50-GN22 (Rev B Self-Contained 22-ft)</option>
+            <option value="MWTP-250">MWTP-250 (250 GPM Hospital 36-ft)</option>
           </select>
         </div>
         <div class="sm:col-span-2">
@@ -110,21 +131,21 @@
         <!-- Checkpoint 1: Street Isolation Valve -->
         <div class="bg-[var(--secondary)]/50 border border-[var(--border)] rounded-xl p-4 space-y-2">
           <div class="flex items-center justify-between">
-            <span class="font-bold text-rose-400">1. Street Service Isolation Valve (SOP Rule 1)</span>
+            <span class="font-bold text-rose-400">1. Double-Block Building Isolation Valves (SOP Rule 1)</span>
             <span class="text-[10px] font-mono bg-rose-500/15 text-rose-300 px-2 py-0.5 rounded">MUST CLOSE FIRST</span>
           </div>
           <p class="text-[11px] text-[var(--muted-foreground)]">
-            Prevents treated water at 65–85 PSI from flowing backward into the depressurized street main.
+            Prevents treated water at 65–85 PSI from flowing backward into the municipal main (two valves in series when tapping upstream raw service-line tee).
           </p>
           <div class="grid grid-cols-2 gap-2">
             <div>
               <label class="block text-[10px] text-[var(--muted-foreground)]">Valve Type &amp; Size</label>
-              <input id="f-iso-type" type="text" value="2'' Ball Valve + Curb Stop" class="w-full bg-[var(--card)] border border-[var(--border)] rounded px-2 py-1 mt-0.5">
+              <input id="f-iso-type" type="text" value="2'' Double-Block Ball Valves" class="w-full bg-[var(--card)] border border-[var(--border)] rounded px-2 py-1 mt-0.5">
             </div>
             <div>
               <label class="block text-[10px] text-[var(--muted-foreground)]">Operated By</label>
               <select id="f-iso-op" class="w-full bg-[var(--card)] border border-[var(--border)] rounded px-2 py-1 mt-0.5">
-                <option>Customer Valve (Downstream of Meter)</option>
+                <option>Customer Valves (Downstream of Raw Tee)</option>
                 <option>Water Utility Only (Street Curb Stop)</option>
                 <option>Facility Engineer (Written Utility OK)</option>
               </select>
@@ -149,15 +170,15 @@
             <div>
               <label class="block text-[10px] text-[var(--muted-foreground)]">Tie-In Fitting Size &amp; Type</label>
               <select id="f-tie-size" class="w-full bg-[var(--card)] border border-[var(--border)] rounded px-2 py-1 mt-0.5 font-semibold">
-                <option value="1.5'' Male Camlock Tee (316SS Lead-Free)">1.5" Male Camlock Tee (Restaurant)</option>
-                <option value="2.0'' Male Camlock Tee (316SS Lead-Free)">2.0" Male Camlock Tee (Large Kitchen)</option>
+                <option value="2.0'' Male Camlock Tee (316SS Lead-Free)">2.0" Male Camlock Tee (Port C Restaurant)</option>
+                <option value="1.5'' Male Camlock Tee (316SS Lead-Free)">1.5" Male Camlock Tee (Compact Kitchen)</option>
                 <option value="3.0'' 316SS Flanged / Camlock Port">3.0" Flanged/Camlock Port (Hospital)</option>
                 <option value="Needs Plumber Installation Prior to Activation">Needs Plumber Tee Install (Pre-Activation)</option>
               </select>
             </div>
             <div>
               <label class="block text-[10px] text-[var(--muted-foreground)]">Hose Run &amp; Target PSI</label>
-              <input id="f-tie-psi" type="text" value="65 ft run • Setpoint: 65 PSI" class="w-full bg-[var(--card)] border border-[var(--border)] rounded px-2 py-1 mt-0.5">
+              <input id="f-tie-psi" type="text" value="50 ft × 2'' hose • Setpoint: 65 PSI" class="w-full bg-[var(--card)] border border-[var(--border)] rounded px-2 py-1 mt-0.5">
             </div>
           </div>
           <div>
@@ -166,31 +187,31 @@
           </div>
         </div>
 
-        <!-- Checkpoint 3: Raw Water Source (Upstream Tap / Hydrant / Tanker) -->
+        <!-- Checkpoint 3: Raw Water Source (Dynamically adapts for MWTP-50C Port A RPZ vs MWTP-50 TK-100) -->
         <div class="bg-[var(--secondary)]/50 border border-[var(--border)] rounded-xl p-4 space-y-2">
           <div class="flex items-center justify-between">
-            <span class="font-bold text-sky-400">3. Raw Water Supply to Air-Gap Tank TK-100 (SOP Rule 3)</span>
-            <span class="text-[10px] font-mono bg-sky-500/15 text-sky-300 px-2 py-0.5 rounded">HOLD ≥ 20 PSI</span>
+            <span id="cp3-title" class="font-bold text-sky-400">3. Raw Water Supply to Port A RPZ-100 (SOP Rule 3)</span>
+            <span id="cp3-badge" class="text-[10px] font-mono bg-sky-500/15 text-sky-300 px-2 py-0.5 rounded">NO BREAK TANK ON BWA</span>
           </div>
-          <p class="text-[11px] text-[var(--muted-foreground)]">
-            Flows through pressure-sustaining valve (<code>PSV-100</code> set at 20 PSI) into air-gap break tank <code>TK-100</code>.
+          <p id="cp3-desc" class="text-[11px] text-[var(--muted-foreground)]">
+            <strong>MWTP-50C (Rev C):</strong> Direct pressurized feed into <code>Port A (1.5")</code> → <code>PT-100</code> → <code>PSV-100 (≥20 PSI)</code> → <code>RPZ-100</code> (ASSE 1013). Outages use <code>Port B (2")</code> from tanker or <code>PWR-25</code> 550-gal folding tank.
           </p>
           <div class="grid grid-cols-2 gap-2">
             <div>
               <label class="block text-[10px] text-[var(--muted-foreground)]">Primary BWA Source (Main Pressurized)</label>
               <select id="f-raw-bwa" class="w-full bg-[var(--card)] border border-[var(--border)] rounded px-2 py-1 mt-0.5">
-                <option>Plumber-Installed 1.5&quot; Valved Service Tee (Meter Side of Building Valves)</option>
-                <option>Fire Hydrant (With Utility Meter &amp; Permit)</option>
+                <option>Plumber-Installed 1.5&quot; Valved Service Tee (Upstream of Double-Block)</option>
+                <option>Fire Hydrant (With Utility Meter &amp; RPZ / Air-Gap Permit)</option>
               </select>
             </div>
             <div>
               <label class="block text-[10px] text-[var(--muted-foreground)]">Outage Backup (Zero Main PSI)</label>
-              <input id="f-raw-outage" type="text" value="4,000-Gal Potable Tanker Drop (1/day)" class="w-full bg-[var(--card)] border border-[var(--border)] rounded px-2 py-1 mt-0.5">
+              <input id="f-raw-outage" type="text" value="Port B (2''): PWR-25 550-Gal Tank + Potable Tanker" class="w-full bg-[var(--card)] border border-[var(--border)] rounded px-2 py-1 mt-0.5">
             </div>
           </div>
           <div>
             <label class="block text-[10px] text-[var(--muted-foreground)]">Service Tee / Hydrant Location, Static Pressure &amp; Double-Isolation Valves</label>
-            <input id="f-raw-loc" type="text" value="1.5'' valved tee between meter and building valves (58 PSI static); 2 building valves in series + Hydrant 90 ft N" class="w-full bg-[var(--card)] border border-[var(--border)] rounded px-2 py-1 mt-0.5">
+            <input id="f-raw-loc" type="text" value="1.5'' valved tee between meter and building double-block valves (58 PSI static) + Hydrant 90 ft N" class="w-full bg-[var(--card)] border border-[var(--border)] rounded px-2 py-1 mt-0.5">
           </div>
         </div>
 
@@ -201,7 +222,7 @@
             <span class="text-[10px] font-mono bg-amber-500/15 text-amber-300 px-2 py-0.5 rounded">BYPASS GREASE TRAP</span>
           </div>
           <p class="text-[11px] text-[var(--muted-foreground)]">
-            UF backwash (35–60 GPM on MWTP-50; 300 GPM on MWTP-250) must enter the <strong>downstream</strong> sanitary sewer cleanout on the street side of the F.O.G. grease interceptor.
+            UF backwash &amp; RPZ relief discharge (35–60 GPM on MWTP-50/50C; 300 GPM on MWTP-250) must enter the <strong>downstream</strong> sanitary sewer cleanout on the street side of the F.O.G. grease interceptor.
           </p>
           <div class="grid grid-cols-2 gap-2">
             <div>
@@ -226,15 +247,16 @@
       <!-- Checkpoint 5: Trailer Parking Bay & 240V 50A Shore Power -->
       <div class="bg-[var(--secondary)]/50 border border-[var(--border)] rounded-xl p-4 grid grid-cols-1 md:grid-cols-3 gap-3 text-xs">
         <div>
-          <span class="font-bold text-purple-400">5. Trailer Staging &amp; Ground Tanks</span>
-          <input id="f-park-loc" type="text" value="2 rear alley stalls beside grease trap (level asphalt)" class="w-full bg-[var(--card)] border border-[var(--border)] rounded px-2 py-1 mt-1">
+          <span id="cp5-title" class="font-bold text-purple-400">5. Trailer Staging (Zero Ground Tanks on BWA)</span>
+          <input id="f-park-loc" type="text" value="2 rear stalls beside grease trap (20-ft trailer only; no ground tanks)" class="w-full bg-[var(--card)] border border-[var(--border)] rounded px-2 py-1 mt-1">
         </div>
         <div>
-          <span class="font-bold text-purple-400">Shore Power Receptacle (BWA Mode)</span>
+          <span class="font-bold text-purple-400">Shore Power / Generator Plan</span>
           <select id="f-shore" class="w-full bg-[var(--card)] border border-[var(--border)] rounded px-2 py-1 mt-1">
-            <option>240V 50A Twist-Lock / NEMA 14-50 Installed (MWTP-50 Silent Mode)</option>
-            <option>Use Onboard Tier-4 Diesel Generator (20 kW or 80 kW)</option>
-            <option>480V 100A 3-Phase Cam-Lok Pin &amp; Sleeve (Hospital Shore Power)</option>
+            <option>240V 50A Twist-Lock / NEMA 14-50 Building Shore Plug (MWTP-50C Primary / MWTP-50 Silent Mode)</option>
+            <option>Dispatch PWR-25 25 kVA Generator Trailer (MWTP-50C Power Outage Mode)</option>
+            <option>Use Onboard Tier-4 Diesel Generator (20 kW on MWTP-50 / 80 kW on MWTP-250)</option>
+            <option>480V 200A 3-Phase Cam-Lok Pin &amp; Sleeve (MWTP-250 Hospital Shore Power)</option>
           </select>
         </div>
         <div>
@@ -260,8 +282,8 @@
           For pre-review by the local Environmental Health Inspector (FDA Food Code §§ 5-101.13 / 5-104.12) and Hospital Emergency Water Supply Plan (CMS 42 CFR § 482.15).
         </p>
       </div>
-      <div class="px-3 py-1.5 rounded-lg bg-emerald-500/15 border border-emerald-500/30 text-xs font-mono font-bold text-emerald-400 shrink-0">
-        MULTI-BARRIER: UF + UV + Cl₂ CT
+      <div id="p2-badge" class="px-3 py-1.5 rounded-lg bg-violet-500/15 border border-violet-500/30 text-xs font-mono font-bold text-violet-300 shrink-0">
+        MWTP-50C: RPZ + UF + 186 mJ/cm² UV + Cl₂
       </div>
     </div>
 
@@ -273,41 +295,41 @@
           <thead>
             <tr class="bg-[var(--secondary)] text-[var(--secondary-foreground)]">
               <th class="py-2 px-3 border border-[var(--border)]">Treatment Barrier</th>
-              <th class="py-2 px-3 border border-[var(--border)]">Hardware Specification (MWTP-50 / MWTP-250)</th>
+              <th id="th-hw-spec" class="py-2 px-3 border border-[var(--border)]">Hardware Specification (MWTP-50C Rev C Split-Power)</th>
               <th class="py-2 px-3 border border-[var(--border)]">Pathogen Credit &amp; Online Verification</th>
-              <th class="py-2 px-3 border border-[var(--border)]">Automatic Divert / Shutoff Interlock (XV-602)</th>
+              <th class="py-2 px-3 border border-[var(--border)]">Automatic Divert / Shutoff Interlock</th>
             </tr>
           </thead>
           <tbody class="divide-y divide-[var(--border)]">
             <tr>
-              <td class="py-2 px-3 font-semibold border border-[var(--border)]">Air-Gap Break Tank &amp; Pre-Filtration</td>
-              <td class="py-2 px-3 border border-[var(--border)]">PSV-100 (holds street main ≥ 20 PSI) → Air-Gap Tank TK-100 (550 or 3,000 gal) → 200 μm Auto-Strainer → Duplex 25 μm Bag / Carbon Block</td>
-              <td class="py-2 px-3 border border-[var(--border)]">Physical air gap prevents back-siphonage; removes sediment &amp; pipe scale</td>
-              <td class="py-2 px-3 border border-[var(--border)]">XV-100 closes if upstream main drops &lt; 20 PSI; P-101 trips on low tank level (LIT-100)</td>
+              <td id="row1-col1" class="py-2 px-3 font-semibold border border-[var(--border)]">1. Raw Intake &amp; Backflow Protection</td>
+              <td id="row1-col2" class="py-2 px-3 border border-[var(--border)]">Port A (1.5"): PT-100 → PSV-100 (holds main ≥ 20 PSI) → RPZ-100 (1.5" ASSE 1013 w/ FS-100) → 100 μm Auto-Strainer → Duplex 5 μm Bag Filters (Port B 2" suction w/ 550-gal tank on outages)</td>
+              <td id="row1-col3" class="py-2 px-3 border border-[var(--border)]">ASSE 1013 RPZ containment prevents back-siphonage without a ground break tank on BWA jobs; removes sediment &amp; scale</td>
+              <td id="row1-col4" class="py-2 px-3 border border-[var(--border)]">XV-100 closes if upstream main drops &lt; 22 PSI or RPZ relief switch FS-100 trips</td>
             </tr>
             <tr>
-              <td class="py-2 px-3 font-semibold border border-[var(--border)]">0.02 μm Hollow-Fiber Ultrafiltration (UF)</td>
-              <td class="py-2 px-3 border border-[var(--border)]">NSF/ANSI 61 &amp; NSF 419 PVDF Modules (4 × 60" on MWTP-50; 14 × 79" on MWTP-250) + Automated DIT-201</td>
-              <td class="py-2 px-3 border border-[var(--border)]"><strong>≥ 4.0-Log Giardia &amp; Cryptosporidium</strong> removal credit; verified by daily 20 PSI pressure-decay Direct Integrity Test</td>
-              <td class="py-2 px-3 border border-[var(--border)]">Hach TU5300sc laser turbidimeter (AIT-201): normal &lt; 0.05 NTU; <strong>auto-diverts at &gt; 0.15 NTU</strong></td>
+              <td class="py-2 px-3 font-semibold border border-[var(--border)]">2. 0.02 μm Hollow-Fiber Ultrafiltration (UF)</td>
+              <td id="row2-col2" class="py-2 px-3 border border-[var(--border)]">NSF/ANSI 61 &amp; NSF 419 PVDF Modules (4 × 0.02 μm modules on MWTP-50C/50; 14 modules on MWTP-250) + Automated Daily Pressure-Decay DIT</td>
+              <td class="py-2 px-3 border border-[var(--border)]"><strong>≥ 4.0-Log Giardia &amp; Cryptosporidium</strong> removal credit; verified by daily 18–20 PSI pressure-decay Direct Integrity Test (≤ 0.15 PSI/min)</td>
+              <td class="py-2 px-3 border border-[var(--border)]">Online laser turbidimeter (AIT-201): normal &lt; 0.05 NTU; <strong>auto-diverts at &gt; 0.15 NTU</strong> (hardwired K-SAFE trip at &gt; 0.30 NTU)</td>
             </tr>
             <tr>
-              <td class="py-2 px-3 font-semibold border border-[var(--border)]">Redundant UV Disinfection</td>
-              <td class="py-2 px-3 border border-[var(--border)]">EPA UVDGM-Validated 316L SS Reactors (1 Duty + 1 Standby on MWTP-50; 2 Duty + 1 Standby on MWTP-250)</td>
-              <td class="py-2 px-3 border border-[var(--border)]"><strong>≥ 40 mJ/cm² validated dose</strong> + online UVT monitor (AIT-401); independent 2nd protozoa/bacteria barrier</td>
-              <td class="py-2 px-3 border border-[var(--border)]">Auto-starts standby reactor on low UV intensity; closes XV-602 if dose &lt; 40 mJ/cm²</td>
+              <td id="row3-col1" class="py-2 px-3 font-semibold border border-[var(--border)]">3. Virus-Rated UV Disinfection (186 mJ/cm²)</td>
+              <td id="row3-col2" class="py-2 px-3 border border-[var(--border)]">UV-401A (Duty) + UV-401B (Standby) 316L SS Amalgam Reactors UVDGM-validated at 40 GPM &amp; 85% UVT + AIT-401 UVT Analyzer + FO-401 Flow Orifice</td>
+              <td id="row3-col3" class="py-2 px-3 border border-[var(--border)]"><strong>≥ 186 mJ/cm² validated RED dose = 4.0-Log Virus Inactivation</strong> (per EPA LT2 Adenovirus table) + ≥ 4-log protozoa credit — <strong>eliminates 600-gal CT ground tank</strong></td>
+              <td id="row3-col4" class="py-2 px-3 border border-[var(--border)]">Auto-starts standby UV-401B at &gt;35 GPM or low intensity; opens XV-300 divert &amp; closes XV-601 if dose &lt; 186 mJ/cm²</td>
             </tr>
             <tr>
-              <td class="py-2 px-3 font-semibold border border-[var(--border)]">Free Chlorine Contact Time (CT)</td>
-              <td class="py-2 px-3 border border-[var(--border)]">NSF-60 12.5% NaOCl dosing + Baffled Ground Contact Tank TK-401 (600 gal T10 = 8.57 min on MWTP-50; 3,000 gal T10 = 6.0 min on MWTP-250)</td>
-              <td class="py-2 px-3 border border-[var(--border)]"><strong>≥ 4.0-Log Virus Inactivation</strong> (CT ≥ 12.0 mg·min/L even at 0.5 °C; ≥ 3.0× margin at 15 °C)</td>
-              <td class="py-2 px-3 border border-[var(--border)]">AIT-402 / AIT-601 closes XV-602 if Free Cl₂ &lt; 0.8 mg/L, &gt; 4.0 mg/L, or live CT &lt; 1.0× required</td>
+              <td id="row4-col1" class="py-2 px-3 font-semibold border border-[var(--border)]">4. Free Chlorine Residual &amp; Clearwell</td>
+              <td id="row4-col2" class="py-2 px-3 border border-[var(--border)]">NSF-60 12.5% NaOCl Dosing (P-502A/B) + Static Mixer SM-502 → 150-Gal Onboard Baffled Clearwell TK-601 + AIT-601 (Free Cl₂ / pH / °C)</td>
+              <td id="row4-col3" class="py-2 px-3 border border-[var(--border)]">Maintains <strong>1.5–2.0 mg/L Free Chlorine residual</strong> throughout the restaurant plumbing (4-log virus already achieved by UV-401A/B)</td>
+              <td id="row4-col4" class="py-2 px-3 border border-[var(--border)]">AIT-601 &amp; hardwired K-SAFE close XV-601 if Free Cl₂ &lt; 0.5 mg/L or &gt; 4.0 mg/L</td>
             </tr>
             <tr>
-              <td class="py-2 px-3 font-semibold border border-[var(--border)]">Potable Booster &amp; Backflow Protection</td>
-              <td class="py-2 px-3 border border-[var(--border)]">Onboard NSF-61 Clearwell (150 or 500 gal) + 316SS VFD Boosters + ASSE 1013 RPZ (RPZ-602) + 50 mg/L Sanitized Hose</td>
-              <td class="py-2 px-3 border border-[var(--border)]">Maintains 60–85 PSI domestic pressure; certified lab Bac-T (Total Coliform / E. coli) sample pulled at startup</td>
-              <td class="py-2 px-3 border border-[var(--border)]">High-pressure cutout at 90 PSI (PT-603); street shutoff closed &amp; tagged prior to tie-in</td>
+              <td class="py-2 px-3 font-semibold border border-[var(--border)]">5. Potable Booster &amp; Discharge RPZ</td>
+              <td id="row5-col2" class="py-2 px-3 border border-[var(--border)]">Duplex 3 HP 316SS VFD Boosters (P-601A/B) + 20-Gal Surge Tank + Fiscal Magmeter FIT-602 + Final Block XV-601 + 2" ASSE 1013 RPZ-602</td>
+              <td class="py-2 px-3 border border-[var(--border)]">Maintains 65 PSI domestic pressure; AWWA C651 50 mg/L hose disinfection + certified lab Bac-T sample pulled at startup</td>
+              <td class="py-2 px-3 border border-[var(--border)]">High-pressure cutout at 85–90 PSI; double-block building isolation closed &amp; tagged prior to tie-in</td>
             </tr>
           </tbody>
         </table>
@@ -318,10 +340,10 @@
     <div class="bg-[var(--secondary)]/40 border border-[var(--border)] rounded-xl p-4 space-y-2 text-xs">
       <div class="font-bold text-emerald-400 uppercase font-mono">2. ON-SITE HEALTH INSPECTOR &amp; OPERATOR VERIFICATION CHECKLIST DURING AN ADVISORY</div>
       <div class="grid grid-cols-1 sm:grid-cols-2 gap-2 text-[var(--secondary-foreground)]">
-        <div>☐ <strong>1. Street Shutoff Closed:</strong> Building isolated from municipal main before pressurization.</div>
-        <div>☐ <strong>2. Daily UF Integrity Test (DIT-201):</strong> Today's pressure-decay pass log printed at HMI.</div>
-        <div>☐ <strong>3. Online Analyzers Green:</strong> Filtrate turbidity &lt; 0.05 NTU, UV ≥ 40 mJ/cm², CT ratio ≥ 1.0×.</div>
-        <div>☐ <strong>4. Point-of-Use Residual:</strong> Farthest kitchen/clinic tap verified at 1.0–2.2 mg/L free chlorine.</div>
+        <div>☐ <strong>1. Building Double-Block Closed:</strong> Building isolated from municipal main before pressurization.</div>
+        <div>☐ <strong>2. Daily UF Integrity Test (DIT):</strong> Today's 18–20 PSI pressure-decay pass log printed at HMI.</div>
+        <div id="chk-3">☐ <strong>3. Online Analyzers Green:</strong> Turbidity &lt; 0.05 NTU, UV RED ≥ 186 mJ/cm² (UVT ≥ 85%), Free Cl₂ 1.5–2.0 mg/L.</div>
+        <div>☐ <strong>4. Point-of-Use Residual:</strong> Farthest kitchen/clinic tap verified at ≥ 1.0 mg/L free chlorine.</div>
         <div>☐ <strong>5. Certified Lab Bac-T Sample:</strong> Chain-of-custody submitted per state emergency approval.</div>
         <div>☐ <strong>6. Post-Advisory Flushing:</strong> Follow health department rules for ice/beverage lines when lifted.</div>
       </div>
@@ -335,14 +357,15 @@
           <h3 class="text-sm font-bold mt-0.5">Intent to Enroll in AmeriPro Emergency Water Continuity Standby Program</h3>
         </div>
         <select id="f-plan" class="bg-[var(--card)] border border-emerald-500/40 rounded-lg px-3 py-1.5 text-xs font-bold text-emerald-400">
-          <option>MWTP-50 Single Restaurant Retainer ($150/mo • $1,800/yr)</option>
-          <option selected>MWTP-50 Restaurant Group Retainer — Per Store, 2+ Stores ($125/mo • $1,500/yr per store)</option>
-          <option>MWTP-250 Hospital Priority Standby Retainer — Max 3/Region ($1,500/mo • $18,000/yr)</option>
+          <option>MWTP-50C / MWTP-50 Single Restaurant Standalone Retainer ($2,500/yr)</option>
+          <option>MWTP-50C / MWTP-50 Single Restaurant Bundled F.O.G./Hood Retainer ($2,000/yr)</option>
+          <option selected>MWTP-50C / MWTP-50 Restaurant Group Retainer — 2+ Stores ($125/mo • $1,500/yr per store)</option>
+          <option>MWTP-250 Hospital Priority Standby Retainer — Max 3/Trailer ($1,500/mo • $18,000/yr)</option>
         </select>
       </div>
 
-      <p class="text-xs text-[var(--muted-foreground)] leading-relaxed">
-        Subject to AmeriPro Environmental Services completing fabrication, receiving state emergency-use plan approval, and executing a formal Standby Service Agreement, the undersigned facility expresses its intent to enroll the location(s) listed in Section A under the selected Standby Retainer Plan above, with active emergency deployment billed at the schedule rate (<strong>$2,500 mobilization + $3,200/day for MWTP-50</strong>; or <strong>$6,500 mobilization + $7,500/day for MWTP-250</strong>). This Letter of Intent is non-binding and may be included in AmeriPro's commercial lender underwriting package.
+      <p id="loi-para" class="text-xs text-[var(--muted-foreground)] leading-relaxed">
+        Subject to AmeriPro Environmental Services completing fabrication, receiving state emergency-use plan approval, and executing a formal Standby Service Agreement, the undersigned facility expresses its intent to enroll the location(s) listed in Section A under the selected Standby Retainer Plan above (capped at <strong>max 10 restaurant locations per MWTP-50C / MWTP-50 trailer</strong> or <strong>max 3 hospitals per MWTP-250 trailer</strong>), with active emergency deployment billed at the schedule rate (<strong>$2,500 mobilization + $3,200/day for MWTP-50C / MWTP-50 on shore power, plus +$400/day when the PWR-25 generator trailer is dispatched</strong>; or <strong>$6,500 mobilization + $7,500/day for MWTP-250</strong>). This Letter of Intent is non-binding and may be included in AmeriPro's commercial lender underwriting package.
       </p>
 
       <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 pt-2 text-xs">
@@ -364,46 +387,138 @@
   </div>
 
   <script>
-    function syncUnitSelection() {
-      const fType = document.getElementById('f-type').value;
-      const unitEl = document.getElementById('f-unit');
-      if (fType === 'hospital') {
-        unitEl.value = 'MWTP-250';
+    function selectUnitToggle(unitVal) {
+      document.getElementById('f-unit').value = unitVal;
+      const p50c = document.getElementById('pill-50c');
+      const p50b = document.getElementById('pill-50b');
+      const p250 = document.getElementById('pill-250');
+
+      p50c.className = 'px-2.5 py-1 rounded-md text-xs font-bold text-[var(--muted-foreground)] transition';
+      p50b.className = 'px-2.5 py-1 rounded-md text-xs font-bold text-[var(--muted-foreground)] transition';
+      p250.className = 'px-2.5 py-1 rounded-md text-xs font-bold text-[var(--muted-foreground)] transition';
+
+      if (unitVal === 'MWTP-50C') {
+        p50c.className = 'px-2.5 py-1 rounded-md text-xs font-bold transition unit-pill-50c';
+        document.getElementById('p1-kicker').className = 'text-xs font-mono uppercase text-violet-400 font-bold';
+        document.getElementById('p1-kicker').textContent = 'AMERIPRO ENVIRONMENTAL SERVICES — MWTP-50C ("KITCHENSHIELD-50C") SPLIT-POWER DIVISION';
+        document.getElementById('cp3-title').textContent = '3. Raw Water Supply to Port A RPZ-100 (SOP Rule 3)';
+        document.getElementById('cp3-badge').textContent = 'NO BREAK TANK ON BWA';
+        document.getElementById('cp3-desc').innerHTML = '<strong>MWTP-50C (Rev C):</strong> Direct pressurized feed into <code>Port A (1.5")</code> → <code>PT-100</code> → <code>PSV-100 (≥20 PSI)</code> → <code>RPZ-100</code> (ASSE 1013). Outages use <code>Port B (2")</code> from tanker or <code>PWR-25</code> 550-gal folding tank.';
+        document.getElementById('cp5-title').textContent = '5. Trailer Staging (Zero Ground Tanks on BWA)';
+        document.getElementById('p2-badge').className = 'px-3 py-1.5 rounded-lg bg-violet-500/15 border border-violet-500/30 text-xs font-mono font-bold text-violet-300 shrink-0';
+        document.getElementById('p2-badge').textContent = 'MWTP-50C: RPZ + UF + 186 mJ/cm² UV + Cl₂';
+        document.getElementById('th-hw-spec').textContent = 'Hardware Specification (MWTP-50C Rev C Split-Power)';
+        document.getElementById('row1-col1').textContent = '1. Raw Intake & Backflow Protection';
+        document.getElementById('row1-col2').textContent = 'Port A (1.5"): PT-100 → PSV-100 (holds main ≥ 20 PSI) → RPZ-100 (1.5" ASSE 1013 w/ FS-100) → 100 μm Auto-Strainer → Duplex 5 μm Bag Filters (Port B 2" suction w/ 550-gal tank on outages)';
+        document.getElementById('row1-col3').textContent = 'ASSE 1013 RPZ containment prevents back-siphonage without a ground break tank on BWA jobs; removes sediment & scale';
+        document.getElementById('row1-col4').textContent = 'XV-100 closes if upstream main drops < 22 PSI or RPZ relief switch FS-100 trips';
+        document.getElementById('row3-col1').textContent = '3. Virus-Rated UV Disinfection (186 mJ/cm²)';
+        document.getElementById('row3-col2').textContent = 'UV-401A (Duty) + UV-401B (Standby) 316L SS Amalgam Reactors UVDGM-validated at 40 GPM & 85% UVT + AIT-401 UVT Analyzer + FO-401 Flow Orifice';
+        document.getElementById('row3-col3').innerHTML = '<strong>≥ 186 mJ/cm² validated RED dose = 4.0-Log Virus Inactivation</strong> (per EPA LT2 Adenovirus table) + ≥ 4-log protozoa credit — <strong>eliminates 600-gal CT ground tank</strong>';
+        document.getElementById('row3-col4').textContent = 'Auto-starts standby UV-401B at >35 GPM or low intensity; opens XV-300 divert & closes XV-601 if dose < 186 mJ/cm²';
+        document.getElementById('row4-col1').textContent = '4. Free Chlorine Residual & Clearwell';
+        document.getElementById('row4-col2').textContent = 'NSF-60 12.5% NaOCl Dosing (P-502A/B) + Static Mixer SM-502 → 150-Gal Onboard Baffled Clearwell TK-601 + AIT-601 (Free Cl₂ / pH / °C)';
+        document.getElementById('row4-col3').innerHTML = 'Maintains <strong>1.5–2.0 mg/L Free Chlorine residual</strong> throughout the restaurant plumbing (4-log virus already achieved by UV-401A/B)';
+        document.getElementById('row4-col4').textContent = 'AIT-601 & hardwired K-SAFE close XV-601 if Free Cl₂ < 0.5 mg/L or > 4.0 mg/L';
+        document.getElementById('chk-3').innerHTML = '☐ <strong>3. Online Analyzers Green:</strong> Turbidity &lt; 0.05 NTU, UV RED ≥ 186 mJ/cm² (UVT ≥ 85%), Free Cl₂ 1.5–2.0 mg/L.';
+      } else if (unitVal === 'MWTP-50-GN22') {
+        p50b.className = 'px-2.5 py-1 rounded-md text-xs font-bold transition unit-pill-50b';
+        document.getElementById('p1-kicker').className = 'text-xs font-mono uppercase text-emerald-400 font-bold';
+        document.getElementById('p1-kicker').textContent = 'AMERIPRO ENVIRONMENTAL SERVICES — MWTP-50 ("KITCHENSHIELD-50") SELF-CONTAINED DIVISION';
+        document.getElementById('cp3-title').textContent = '3. Raw Water Supply to Air-Gap Tank TK-100 (SOP Rule 3)';
+        document.getElementById('cp3-badge').textContent = 'HOLD ≥ 20 PSI TO TK-100';
+        document.getElementById('cp3-desc').innerHTML = '<strong>MWTP-50 (Rev B):</strong> Flows through pressure-sustaining valve (<code>PSV-100</code> set at 20 PSI) into 550-gal collapsible air-gap break tank <code>TK-100</code>.';
+        document.getElementById('cp5-title').textContent = '5. Trailer Staging & Ground Tanks (TK-100 + TK-401)';
+        document.getElementById('p2-badge').className = 'px-3 py-1.5 rounded-lg bg-emerald-500/15 border border-emerald-500/30 text-xs font-mono font-bold text-emerald-400 shrink-0';
+        document.getElementById('p2-badge').textContent = 'MWTP-50 (REV B): UF + UV + 600-GAL Cl₂ CT';
+        document.getElementById('th-hw-spec').textContent = 'Hardware Specification (MWTP-50-GN22 Rev B Self-Contained)';
+        document.getElementById('row1-col1').textContent = '1. Air-Gap Break Tank & Pre-Filtration';
+        document.getElementById('row1-col2').textContent = 'PSV-100 (holds street main ≥ 20 PSI) → 550-Gal Air-Gap Tank TK-100 → 200 μm Auto-Strainer → Duplex 25 μm Bag / Carbon Block';
+        document.getElementById('row1-col3').textContent = 'Physical ASME A112.1.2 air gap prevents back-siphonage; removes sediment & pipe scale';
+        document.getElementById('row1-col4').textContent = 'XV-100 closes if upstream main drops < 20 PSI; P-101 trips on low tank level (LIT-100)';
+        document.getElementById('row3-col1').textContent = '3. Redundant UV Disinfection';
+        document.getElementById('row3-col2').textContent = 'EPA UVDGM-Validated 316L SS Reactors (1 Duty + 1 Standby on MWTP-50) + online UVT monitor (AIT-401)';
+        document.getElementById('row3-col3').innerHTML = '<strong>≥ 40 mJ/cm² validated dose</strong>; independent 2nd protozoa/bacteria barrier';
+        document.getElementById('row3-col4').textContent = 'Auto-starts standby reactor on low UV intensity; closes XV-602 if dose < 40 mJ/cm²';
+        document.getElementById('row4-col1').textContent = '4. Free Chlorine Contact Time (600-Gal CT Tank)';
+        document.getElementById('row4-col2').textContent = 'NSF-60 12.5% NaOCl dosing + 600-Gal Baffled Ground Contact Tank TK-401 (T10 = 8.57 min at 50 GPM, Baffling Factor 0.61) + P-401 Transfer';
+        document.getElementById('row4-col3').innerHTML = '<strong>≥ 4.0-Log Virus Inactivation</strong> (CT ≥ 12.0 mg·min/L even at 0.5 °C; ≥ 3.0× margin at 15 °C)';
+        document.getElementById('row4-col4').textContent = 'AIT-402 / AIT-601 closes XV-602 if Free Cl₂ < 0.8 mg/L, > 4.0 mg/L, or live CT < 1.0× required';
+        document.getElementById('chk-3').innerHTML = '☐ <strong>3. Online Analyzers Green:</strong> Filtrate turbidity &lt; 0.05 NTU, UV ≥ 40 mJ/cm², 600-gal CT ratio ≥ 1.0×.';
       } else {
-        unitEl.value = 'MWTP-50-GN22';
+        p250.className = 'px-2.5 py-1 rounded-md text-xs font-bold transition unit-pill-250';
+        document.getElementById('p1-kicker').className = 'text-xs font-mono uppercase text-blue-400 font-bold';
+        document.getElementById('p1-kicker').textContent = 'AMERIPRO ENVIRONMENTAL SERVICES — MWTP-250 HOSPITAL & CRITICAL FACILITY DIVISION';
+        document.getElementById('cp3-title').textContent = '3. Raw Water Supply to 3,000-Gal Break Tank TK-100';
+        document.getElementById('cp3-badge').textContent = 'HOLD ≥ 20 PSI ON MAIN';
+        document.getElementById('cp3-desc').innerHTML = '<strong>MWTP-250 (Hospital):</strong> Hydrant or raw source feeds <code>PSV-100 (≥20 PSI)</code> into 3,000-gal air-gap break tank <code>TK-100</code>.';
+        document.getElementById('cp5-title').textContent = '5. Trailer Staging (36-ft Gooseneck + Two 3,000-Gal Tanks)';
+        document.getElementById('p2-badge').className = 'px-3 py-1.5 rounded-lg bg-blue-500/15 border border-blue-500/30 text-xs font-mono font-bold text-blue-400 shrink-0';
+        document.getElementById('p2-badge').textContent = 'MWTP-250: 14-MOD UF + 3×UV + 3,000-GAL CT';
+        document.getElementById('th-hw-spec').textContent = 'Hardware Specification (MWTP-250 36-ft Hospital Unit)';
+        document.getElementById('row1-col1').textContent = '1. Air-Gap Break Tank & Pre-Filtration';
+        document.getElementById('row1-col2').textContent = 'PSV-100 (holds main ≥ 20 PSI) → 3,000-Gal Air-Gap Tank TK-100 → 200 μm Auto-Strainer → Duplex 4-Bag 25 μm Filters';
+        document.getElementById('row1-col3').textContent = 'Physical air gap prevents back-siphonage; removes sediment & pipe scale at up to 265 GPM';
+        document.getElementById('row1-col4').textContent = 'XV-100 closes if upstream main drops < 20 PSI; P-101 trips on low tank level (LIT-100)';
+        document.getElementById('row3-col1').textContent = '3. Redundant UV Disinfection (2 Duty + 1 Stby)';
+        document.getElementById('row3-col2').textContent = '3 × 125 GPM Amalgam 316L SS UV Reactors (UV-401A/B/C) + online UVT monitor (AIT-401)';
+        document.getElementById('row3-col3').innerHTML = '<strong>≥ 40 mJ/cm² validated dose</strong> at 250 GPM; independent 2nd protozoa/bacteria barrier';
+        document.getElementById('row3-col4').textContent = 'Auto-starts standby reactor on low UV intensity; closes XV-602 if dose < 40 mJ/cm²';
+        document.getElementById('row4-col1').textContent = '4. Free Chlorine Contact Time (3,000-Gal CT Tank)';
+        document.getElementById('row4-col2').textContent = 'NSF-60 12.5% NaOCl dosing + 3,000-Gal Baffled Ground Contact Tank TK-401 (T10 = 6.0 min at 250 GPM) + 5 HP P-401 Transfer';
+        document.getElementById('row4-col3').innerHTML = '<strong>≥ 4.0-Log Virus Inactivation</strong> verified continuously by PLC CT algorithm (AIT-402 Cl₂ / pH / °C)';
+        document.getElementById('row4-col4').textContent = 'AIT-402 / AIT-601 closes XV-602 if Free Cl₂ < 0.8 mg/L, > 4.0 mg/L, or live CT < 1.0× required';
+        document.getElementById('chk-3').innerHTML = '☐ <strong>3. Online Analyzers Green:</strong> Filtrate turbidity &lt; 0.05 NTU, UV ≥ 40 mJ/cm², 3,000-gal CT ratio ≥ 1.0×.';
       }
     }
 
-    function fillSampleRestaurant() {
-      document.getElementById('f-survey-id').value = 'APS-2026-014';
+    function onFacilityTypeChange() {
+      const fType = document.getElementById('f-type').value;
+      if (fType === 'hospital') {
+        selectUnitToggle('MWTP-250');
+      } else {
+        selectUnitToggle('MWTP-50C');
+      }
+    }
+
+    function fillSampleRestaurant50C() {
+      document.getElementById('f-survey-id').value = 'APS-2026-014C';
       document.getElementById('f-name').value = 'Peachtree Grill & Oyster Bar (Store #104)';
       document.getElementById('f-type').value = 'restaurant';
-      document.getElementById('f-unit').value = 'MWTP-50-GN22';
+      selectUnitToggle('MWTP-50C');
       document.getElementById('f-addr').value = '2840 Peachtree Rd NW, Atlanta (Fulton County), GA';
       document.getElementById('f-contact').value = 'Marcus Vance (Operating Partner) • (404) 555-0192';
       document.getElementById('f-utility').value = 'Atlanta Dept of Watershed Mgmt • Fulton County Env Health';
-      document.getElementById('f-iso-type').value = '2" Lead-Free Ball Valve + Curb Stop';
+      document.getElementById('f-iso-type').value = '2" Double-Block Ball Valves';
       document.getElementById('f-iso-loc').value = 'Rear utility alcove inside back door, 3 ft above floor before RPZ';
       document.getElementById('f-tie-size').selectedIndex = 0;
-      document.getElementById('f-tie-psi').value = '65 ft run • Setpoint: 65 PSI (35/50 GPM)';
+      document.getElementById('f-tie-psi').value = '50 ft × 2" hose • Setpoint: 65 PSI (35/50 GPM)';
       document.getElementById('f-tie-loc').value = 'Exterior stainless lockbox on rear kitchen wall (downstream of RPZ)';
       document.getElementById('f-raw-bwa').selectedIndex = 0;
-      document.getElementById('f-raw-outage').value = '4,000-Gal Potable Tanker Drop (1/day)';
-      document.getElementById('f-raw-loc').value = '1.5" valved tee between meter and building valves (58 PSI static); 2 building valves in series + Hydrant 90 ft N';
+      document.getElementById('f-raw-outage').value = 'Port B (2"): PWR-25 550-Gal Tank + Potable Tanker';
+      document.getElementById('f-raw-loc').value = '1.5" valved tee between meter and building double-block valves (58 PSI static) + Hydrant 90 ft N';
       document.getElementById('f-sewer-size').value = '4" PVC Sanitary Cleanout (35 ft away)';
       document.getElementById('f-sewer-fog').selectedIndex = 0;
       document.getElementById('f-sewer-loc').value = 'Brass cap in asphalt 6 ft past the outlet sample box of the 1,500-gal grease trap';
-      document.getElementById('f-park-loc').value = '2 rear alley stalls beside grease trap (level asphalt)';
+      document.getElementById('f-park-loc').value = '2 rear stalls beside grease trap (20-ft trailer only; zero ground tanks on BWA)';
       document.getElementById('f-shore').selectedIndex = 0;
       document.getElementById('f-acct').value = 'AMERIPRO-FOG-GA-4412 (Monthly Grease & Quarterly Hood)';
-      document.getElementById('f-plan').selectedIndex = 1;
+      document.getElementById('f-plan').selectedIndex = 2;
+    }
+
+    function fillSampleRestaurant50B() {
+      fillSampleRestaurant50C();
+      document.getElementById('f-survey-id').value = 'APS-2026-014B';
+      selectUnitToggle('MWTP-50-GN22');
+      document.getElementById('f-raw-outage').value = '4,000-Gal Potable Tanker Drop into 550-Gal TK-100';
+      document.getElementById('f-park-loc').value = '2–3 rear alley stalls beside grease trap (22-ft gooseneck + 550-gal & 600-gal bladders)';
     }
 
     function fillSampleHospital() {
       document.getElementById('f-survey-id').value = 'APS-2026-002';
       document.getElementById('f-name').value = 'Piedmont Regional Medical Center (Main Tower)';
       document.getElementById('f-type').value = 'hospital';
-      document.getElementById('f-unit').value = 'MWTP-250';
+      selectUnitToggle('MWTP-250');
       document.getElementById('f-addr').value = '1968 Peachtree Rd NW, Atlanta (Fulton County), GA';
       document.getElementById('f-contact').value = 'David Chen, PE (Director of Facilities) • (404) 555-0148';
       document.getElementById('f-utility').value = 'Atlanta Watershed Mgmt • GA EPD / Joint Commission Plan';
@@ -419,12 +534,12 @@
       document.getElementById('f-sewer-fog').selectedIndex = 1;
       document.getElementById('f-sewer-loc').value = 'Central plant sanitary sewer cleanout (approved for 300 GPM dechlorinated backwash)';
       document.getElementById('f-park-loc').value = 'North ambulance/service apron (55 ft × 24 ft level concrete for 36-ft gooseneck + two 3,000-gal tanks)';
-      document.getElementById('f-shore').selectedIndex = 2;
+      document.getElementById('f-shore').selectedIndex = 3;
       document.getElementById('f-acct').value = 'HOSP-PRIORITY-GA-01 (First-Call Regional Priority)';
-      document.getElementById('f-plan').selectedIndex = 2;
+      document.getElementById('f-plan').selectedIndex = 3;
     }
 
-    fillSampleRestaurant();
+    fillSampleRestaurant50C();
   </script>
 </body>
 </html>
