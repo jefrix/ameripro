@@ -1,0 +1,467 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>MWTP-50C Split-Power Restaurant System — Pitch Deck</title>
+  <script src="https://www.gstatic.com/antigravity/web/dev/tailwindcss.min.js"></script>
+  <style>
+    .slide-frame {
+      display: none;
+      animation: fadeIn 0.25s ease-out;
+    }
+    .slide-frame.active {
+      display: flex;
+    }
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(6px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+  </style>
+<style>:root { --background: #0b1120; --foreground: #f1f5f9; --card: #111827; --secondary: #1e293b; --secondary-foreground: #e2e8f0; --muted-foreground: #94a3b8; --border: #1e293b; --primary: #8b5cf6; --primary-foreground: #ffffff; } html.light { --background: #f8fafc; --foreground: #0f172a; --card: #ffffff; --secondary: #f1f5f9; --secondary-foreground: #1e293b; --muted-foreground: #64748b; --border: #e2e8f0; --primary: #7c3aed; --primary-foreground: #ffffff; }</style>
+</head>
+<body class="bg-[var(--background)] text-[var(--foreground)] antialiased p-4 md:p-6 flex flex-col gap-4 select-none">
+
+  <!-- Top Presentation Control Header -->
+  <div class="bg-[var(--card)] border border-[var(--border)] rounded-xl px-5 py-3 shadow-sm flex flex-wrap items-center justify-between gap-3">
+    <div class="flex items-center gap-3">
+      <span class="px-2.5 py-0.5 rounded-full text-xs font-bold bg-violet-500/15 text-violet-400 border border-violet-500/30">REV C PITCH DECK</span>
+      <span class="text-sm font-semibold">MWTP-50C ("KitchenShield-50C"): Split-Power Restaurant Water System</span>
+    </div>
+    <div class="flex items-center gap-2">
+      <button onclick="prevSlide()" class="px-3 py-1.5 rounded-lg text-xs font-semibold bg-[var(--secondary)] text-[var(--secondary-foreground)] border border-[var(--border)] hover:border-violet-500 transition">← Prev</button>
+      <span id="slide-counter" class="text-xs font-mono font-bold px-3">Slide 1 / 10</span>
+      <button onclick="nextSlide()" class="px-3 py-1.5 rounded-lg text-xs font-semibold bg-violet-600 text-white shadow-sm hover:bg-violet-500 transition">Next →</button>
+    </div>
+  </div>
+
+  <div class="w-full h-1.5 bg-[var(--border)] rounded-full overflow-hidden">
+    <div id="slide-progress" class="h-full bg-violet-500 transition-all duration-300" style="width: 10%;"></div>
+  </div>
+
+  <div class="bg-[var(--card)] border border-[var(--border)] rounded-2xl shadow-md p-6 md:p-10 min-h-[560px] flex flex-col justify-between relative overflow-hidden">
+
+    <!-- ================= SLIDE 1: TITLE ================= -->
+    <div class="slide-frame active flex-col justify-between h-full gap-6" data-slide="1">
+      <div class="space-y-4 max-w-3xl">
+        <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full text-xs font-semibold bg-violet-500/15 text-violet-400 border border-violet-500/30">
+          TWO TRAILERS · BOTH UNDER 10,000 LB · NO CDL · NO GROUND TANKS ON BOIL WATER JOBS
+        </div>
+        <h1 class="text-3xl md:text-5xl font-extrabold tracking-tight leading-tight">
+          MWTP-50C: The Restaurant Water Plant <span class="text-violet-400">Without the Generator</span>
+        </h1>
+        <p class="text-base md:text-lg text-[var(--muted-foreground)] leading-relaxed">
+          A 20-ft water trailer that runs on the restaurant's own 50A power and treats water with ultrafiltration plus <strong class="text-[var(--foreground)]">virus-rated UV</strong> — paired with a separate <strong class="text-[var(--foreground)]">PWR-25</strong> generator trailer that only rolls when the power is out.
+        </p>
+      </div>
+
+      <!-- Side-view illustration -->
+      <svg viewBox="0 0 960 170" class="w-full h-auto" role="img" aria-label="Side view of the MWTP-50C water trailer behind a pickup, and the PWR-25 generator trailer behind a second pickup">
+        <line x1="0" y1="150" x2="960" y2="150" stroke="#334155" stroke-width="2"/>
+        <!-- Truck 1 -->
+        <g>
+          <rect x="20" y="88" width="62" height="40" rx="6" fill="#e2e8f0"/>
+          <rect x="82" y="70" width="70" height="58" rx="6" fill="#e2e8f0"/>
+          <rect x="92" y="78" width="26" height="20" rx="2" fill="#1e293b"/><rect x="122" y="78" width="24" height="20" rx="2" fill="#1e293b"/>
+          <rect x="152" y="104" width="78" height="14" rx="2" fill="#475569"/>
+          <circle cx="58" cy="132" r="17" fill="#0f172a"/><circle cx="58" cy="132" r="8" fill="#94a3b8"/>
+          <circle cx="195" cy="132" r="17" fill="#0f172a"/><circle cx="195" cy="132" r="8" fill="#94a3b8"/>
+        </g>
+        <!-- MWTP-50C water trailer -->
+        <g>
+          <path d="M 182 64 L 260 64 L 260 100 L 196 100 L 196 104 L 182 104 Z" fill="#7c3aed" opacity="0.9"/>
+          <rect x="260" y="40" width="230" height="88" rx="6" fill="#8b5cf6"/>
+          <text x="375" y="78" text-anchor="middle" font-size="16" font-weight="800" fill="#ffffff">MWTP-50C</text>
+          <text x="375" y="98" text-anchor="middle" font-size="11" fill="#ede9fe">UF · 186 mJ UV · 50A shore</text>
+          <text x="221" y="86" text-anchor="middle" font-size="9" fill="#ede9fe">PLC · CHEM</text>
+          <circle cx="400" cy="134" r="15" fill="#0f172a"/><circle cx="436" cy="134" r="15" fill="#0f172a"/>
+        </g>
+        <!-- Truck 2 -->
+        <g>
+          <rect x="560" y="96" width="50" height="34" rx="6" fill="#cbd5e1"/>
+          <rect x="610" y="80" width="58" height="50" rx="6" fill="#cbd5e1"/>
+          <rect x="618" y="86" width="22" height="17" rx="2" fill="#1e293b"/><rect x="643" y="86" width="20" height="17" rx="2" fill="#1e293b"/>
+          <rect x="668" y="108" width="62" height="12" rx="2" fill="#475569"/>
+          <circle cx="590" cy="134" r="15" fill="#0f172a"/><circle cx="705" cy="134" r="15" fill="#0f172a"/>
+          <line x1="730" y1="116" x2="752" y2="116" stroke="#94a3b8" stroke-width="3"/>
+        </g>
+        <!-- PWR-25 -->
+        <g>
+          <rect x="752" y="78" width="120" height="50" rx="5" fill="#eab308"/>
+          <text x="812" y="102" text-anchor="middle" font-size="14" font-weight="800" fill="#1c1917">PWR-25</text>
+          <text x="812" y="118" text-anchor="middle" font-size="10" fill="#422006">25 kVA · outage kit</text>
+          <rect x="845" y="64" width="6" height="14" fill="#57534e"/>
+          <circle cx="812" cy="134" r="15" fill="#0f172a"/>
+        </g>
+        <text x="260" y="22" font-size="11" fill="#a78bfa" font-weight="700">EVERY JOB</text>
+        <text x="752" y="54" font-size="11" fill="#facc15" font-weight="700">OUTAGE JOBS ONLY</text>
+      </svg>
+
+      <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+        <div class="bg-[var(--secondary)]/50 border border-[var(--border)] rounded-xl p-4">
+          <div class="text-xs text-[var(--muted-foreground)]">Kitchen Output</div>
+          <div class="text-2xl font-bold font-mono text-violet-400 mt-1">35 / 50 GPM</div>
+          <div class="text-xs text-[var(--muted-foreground)]">Continuous · peak, 60–75 PSI</div>
+        </div>
+        <div class="bg-[var(--secondary)]/50 border border-[var(--border)] rounded-xl p-4">
+          <div class="text-xs text-[var(--muted-foreground)]">Water Trailer Weight</div>
+          <div class="text-2xl font-bold font-mono text-blue-400 mt-1">7,310 lb</div>
+          <div class="text-xs text-[var(--muted-foreground)]">Road · 8,660 lb on site · 9,990 GVWR</div>
+        </div>
+        <div class="bg-[var(--secondary)]/50 border border-[var(--border)] rounded-xl p-4">
+          <div class="text-xs text-[var(--muted-foreground)]">Arrival to Water</div>
+          <div class="text-2xl font-bold font-mono text-emerald-400 mt-1">~1.5 hr</div>
+          <div class="text-xs text-[var(--muted-foreground)]">No ground tanks on BWA jobs</div>
+        </div>
+        <div class="bg-[var(--secondary)]/50 border border-[var(--border)] rounded-xl p-4">
+          <div class="text-xs text-[var(--muted-foreground)]">System Cost</div>
+          <div class="text-2xl font-bold font-mono text-amber-400 mt-1">$253,920</div>
+          <div class="text-xs text-[var(--muted-foreground)]">$219,420 water + $34,500 PWR-25</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ================= SLIDE 2: WHY SPLIT POWER ================= -->
+    <div class="slide-frame flex-col justify-between h-full gap-6" data-slide="2">
+      <div>
+        <span class="text-xs font-mono uppercase text-violet-400 font-bold">01 • WHY SPLIT THE POWER OFF</span>
+        <h2 class="text-2xl md:text-3xl font-bold mt-1">A Kitchen Without Power Is Closed Anyway</h2>
+        <p class="text-sm text-[var(--muted-foreground)] mt-1">Restaurants need city power to cook. On almost every restaurant job the building already has power — so an onboard generator mostly rides along unused.</p>
+      </div>
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-5">
+        <div class="bg-[var(--secondary)]/40 border border-violet-500/30 rounded-xl p-5 space-y-2.5">
+          <div class="text-sm font-bold text-violet-400">1. Lighter, Simpler Water Trailer</div>
+          <p class="text-xs text-[var(--muted-foreground)] leading-relaxed">No diesel, no fuel tank, no generator compartment, no transfer switch. On-site weight drops from 9,820 lb to <strong class="text-[var(--foreground)]">8,660 lb</strong> — a 1,330 lb margin under the 9,990 lb rating.</p>
+        </div>
+        <div class="bg-[var(--secondary)]/40 border border-amber-500/30 rounded-xl p-5 space-y-2.5">
+          <div class="text-sm font-bold text-amber-400">2. A Generator We Control</div>
+          <p class="text-xs text-[var(--muted-foreground)] leading-relaxed">Rental generators disappear right after hurricanes and ice storms. An owned <strong class="text-[var(--foreground)]">PWR-25</strong> is always available — and one generator trailer backs up two or three water trailers.</p>
+        </div>
+        <div class="bg-[var(--secondary)]/40 border border-emerald-500/30 rounded-xl p-5 space-y-2.5">
+          <div class="text-sm font-bold text-emerald-400">3. A Healthier Engine</div>
+          <p class="text-xs text-[var(--muted-foreground)] leading-relaxed">A diesel that runs a few weeks a year clogs its exhaust filter and won't start when needed. Between emergencies the PWR-25 works other AmeriPro jobs or runs monthly against a load bank.</p>
+        </div>
+      </div>
+      <div class="bg-violet-500/10 border border-violet-500/30 rounded-xl p-3.5 text-xs flex flex-wrap items-center justify-between gap-2">
+        <span><strong>Both trailers stay under 10,000 lb</strong>, each behind a standard 1-ton pickup — any trained AmeriPro technician with a regular license and DOT medical card can tow either one.</span>
+        <span class="font-mono font-bold text-violet-400 shrink-0">No Class A CDL</span>
+      </div>
+    </div>
+
+    <!-- ================= SLIDE 3: WHO BUYS ================= -->
+    <div class="slide-frame flex-col justify-between h-full gap-6" data-slide="3">
+      <div>
+        <span class="text-xs font-mono uppercase text-violet-400 font-bold">02 • THE CUSTOMER</span>
+        <h2 class="text-2xl md:text-3xl font-bold mt-1">Where Bottled Water and Bagged Ice Break Down</h2>
+        <p class="text-sm text-[var(--muted-foreground)] mt-1">During a Boil Water Advisory, most restaurants stay open on bottled water, bagged ice, disposables and a limited menu. The MWTP-50C is for the kitchens where that costs more than a deployment.</p>
+      </div>
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+        <div class="bg-[var(--secondary)]/50 border border-[var(--border)] rounded-xl p-4 space-y-1.5">
+          <div class="text-xs font-bold text-violet-400">High-Volume Full Service &amp; Hotels</div>
+          <p class="text-xs text-[var(--muted-foreground)]">Warewashing, ice and beverage volume that bottled water can't cover.</p>
+        </div>
+        <div class="bg-[var(--secondary)]/50 border border-[var(--border)] rounded-xl p-4 space-y-1.5">
+          <div class="text-xs font-bold text-blue-400">Multi-Unit Chains &amp; Groups</div>
+          <p class="text-xs text-[var(--muted-foreground)]">Brand standards that don't allow a degraded menu or paper service.</p>
+        </div>
+        <div class="bg-[var(--secondary)]/50 border border-[var(--border)] rounded-xl p-4 space-y-1.5">
+          <div class="text-xs font-bold text-emerald-400">Institutional Kitchens</div>
+          <p class="text-xs text-[var(--muted-foreground)]">Nursing homes, assisted living, schools and correctional facilities that can't send residents elsewhere.</p>
+        </div>
+        <div class="bg-[var(--secondary)]/50 border border-[var(--border)] rounded-xl p-4 space-y-1.5">
+          <div class="text-xs font-bold text-amber-400">Food Processors &amp; Commissaries</div>
+          <p class="text-xs text-[var(--muted-foreground)]">Production lines that stop without potable water.</p>
+        </div>
+      </div>
+      <div class="bg-[var(--secondary)]/40 border border-[var(--border)] rounded-xl p-4 text-xs leading-relaxed">
+        <strong class="text-violet-400">Built-in sales channel:</strong> AmeriPro already services these kitchens for F.O.G. grease-trap pumping and exhaust hood cleaning. Route technicians know the owner, the back alley, the water shutoff and the downstream sewer cleanout — and the 50A outlet and service-line tee go in during the same site survey.
+      </div>
+    </div>
+
+    <!-- ================= SLIDE 4: PROCESS ================= -->
+    <div class="slide-frame flex-col justify-between h-full gap-5" data-slide="4">
+      <div>
+        <span class="text-xs font-mono uppercase text-violet-400 font-bold">03 • REV C TREATMENT TRAIN</span>
+        <h2 class="text-2xl md:text-3xl font-bold mt-1">Six Stages, Nothing on the Ground</h2>
+        <p class="text-sm text-[var(--muted-foreground)] mt-1">City water feeds the plant directly through a backflow preventer, and UV carries the virus kill — so the break tank and contact tank stay home on Boil Water Advisory jobs.</p>
+      </div>
+      <div class="grid grid-cols-2 md:grid-cols-6 gap-2.5 items-stretch">
+        <div class="rounded-xl p-3 bg-amber-500/10 border border-amber-500/40 space-y-1">
+          <div class="text-[10px] font-mono font-bold text-amber-400">STAGE 1</div>
+          <div class="text-xs font-bold">Direct Feed</div>
+          <p class="text-[11px] text-[var(--muted-foreground)]">Service-line tee or hydrant → PSV-100 (holds ≥ 20 PSI) → 1.5" RPZ-100</p>
+        </div>
+        <div class="rounded-xl p-3 bg-orange-500/10 border border-orange-500/40 space-y-1">
+          <div class="text-[10px] font-mono font-bold text-orange-400">STAGE 2</div>
+          <div class="text-xs font-bold">Pre-Filtration</div>
+          <p class="text-[11px] text-[var(--muted-foreground)]">3 HP boost pump, 200 µm auto-strainer, duplex 25 µm bags</p>
+        </div>
+        <div class="rounded-xl p-3 bg-cyan-500/10 border border-cyan-500/40 space-y-1">
+          <div class="text-[10px] font-mono font-bold text-cyan-400">STAGE 3</div>
+          <div class="text-xs font-bold">Ultrafiltration</div>
+          <p class="text-[11px] text-[var(--muted-foreground)]">4 × 60" PVDF modules, 0.02 µm, daily integrity test</p>
+        </div>
+        <div class="rounded-xl p-3 bg-violet-500/15 border border-violet-500/50 space-y-1">
+          <div class="text-[10px] font-mono font-bold text-violet-300">STAGE 4 · NEW</div>
+          <div class="text-xs font-bold">Virus-Rated UV</div>
+          <p class="text-[11px] text-[var(--muted-foreground)]">186 mJ/cm² validated, duty + standby, live dose calculation</p>
+        </div>
+        <div class="rounded-xl p-3 bg-pink-500/10 border border-pink-500/40 space-y-1">
+          <div class="text-[10px] font-mono font-bold text-pink-400">STAGE 5</div>
+          <div class="text-xs font-bold">Chlorine Residual</div>
+          <p class="text-[11px] text-[var(--muted-foreground)]">1.5–2.0 mg/L to protect the building's pipes — no contact tank</p>
+        </div>
+        <div class="rounded-xl p-3 bg-blue-500/10 border border-blue-500/40 space-y-1">
+          <div class="text-[10px] font-mono font-bold text-blue-400">STAGE 6</div>
+          <div class="text-xs font-bold">Kitchen Booster</div>
+          <p class="text-[11px] text-[var(--muted-foreground)]">150-gal clearwell, duplex 3 HP VFD, 2" RPZ-602 → 60–75 PSI</p>
+        </div>
+      </div>
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-xs">
+        <div class="bg-[var(--secondary)]/40 border border-[var(--border)] rounded-xl p-4">
+          <strong class="text-violet-400">Automatic lockouts:</strong> turbidity above 0.15 NTU, UV dose below 186 mJ/cm², chlorine outside 0.5–4.0 mg/L, or loss of power all close the building outlet <code>XV-602</code>.
+        </div>
+        <div class="bg-[var(--secondary)]/40 border border-[var(--border)] rounded-xl p-4">
+          <strong class="text-violet-400">Grease-trap rule:</strong> backwash and flush water always go to the sanitary cleanout <em>downstream</em> of the grease interceptor — never through it.
+        </div>
+      </div>
+    </div>
+
+    <!-- ================= SLIDE 5: DISINFECTION ================= -->
+    <div class="slide-frame flex-col justify-between h-full gap-5" data-slide="5">
+      <div>
+        <span class="text-xs font-mono uppercase text-violet-400 font-bold">04 • DISINFECTION CREDIT</span>
+        <h2 class="text-2xl md:text-3xl font-bold mt-1">UV at 186 mJ/cm² Replaces the Contact Tank</h2>
+        <p class="text-sm text-[var(--muted-foreground)] mt-1">EPA's LT2 UV dose table credits 4-log virus inactivation at 186 mJ/cm², based on adenovirus — the most UV-resistant virus. Rev B's 40 mJ/cm² only covered Giardia and Cryptosporidium.</p>
+      </div>
+      <div class="overflow-x-auto">
+        <table class="w-full text-left border-collapse text-xs">
+          <thead>
+            <tr class="border-b border-[var(--border)] text-[var(--muted-foreground)]">
+              <th class="py-2.5 px-3">Target</th>
+              <th class="py-2.5 px-3">MWTP-50 (Rev B)</th>
+              <th class="py-2.5 px-3 bg-violet-500/10 text-violet-400 font-bold">MWTP-50C (Rev C)</th>
+              <th class="py-2.5 px-3">How It's Proven</th>
+            </tr>
+          </thead>
+          <tbody class="divide-y divide-[var(--border)]">
+            <tr><td class="py-2.5 px-3 font-semibold">Crypto / Giardia</td><td class="py-2.5 px-3">UF + UV 40 mJ/cm²</td><td class="py-2.5 px-3 bg-violet-500/5 font-semibold">UF + UV 186 mJ/cm²</td><td class="py-2.5 px-3">NSF 419 modules, daily pressure-decay test</td></tr>
+            <tr><td class="py-2.5 px-3 font-semibold">Bacteria</td><td class="py-2.5 px-3">UF + chlorine</td><td class="py-2.5 px-3 bg-violet-500/5 font-semibold">UF + UV + chlorine residual</td><td class="py-2.5 px-3">Online turbidity, Bac-T samples</td></tr>
+            <tr><td class="py-2.5 px-3 font-semibold">Viruses (4-log)</td><td class="py-2.5 px-3">Chlorine CT in 600-gal ground tank</td><td class="py-2.5 px-3 bg-violet-500/5 font-bold text-violet-300">UV validated at 186 mJ/cm²</td><td class="py-2.5 px-3">Live dose from intensity, UVT and flow</td></tr>
+            <tr><td class="py-2.5 px-3 font-semibold">Building residual</td><td class="py-2.5 px-3">Chlorine 1.5–2.2 mg/L</td><td class="py-2.5 px-3 bg-violet-500/5 font-semibold">Chlorine 1.5–2.0 mg/L</td><td class="py-2.5 px-3">≥ 1.0 mg/L at the farthest tap</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-4 text-xs">
+        <div class="bg-[var(--secondary)]/40 border border-[var(--border)] rounded-xl p-4"><strong class="text-violet-400">Sizing:</strong> 186 mJ/cm² at 40 GPM and 85% UVT. City water during an advisory typically runs 90–98% UVT.</div>
+        <div class="bg-[var(--secondary)]/40 border border-[var(--border)] rounded-xl p-4"><strong class="text-violet-400">Redundancy:</strong> two identical reactors, each able to carry full flow; the standby starts automatically on low dose.</div>
+        <div class="bg-[var(--secondary)]/40 border border-[var(--border)] rounded-xl p-4"><strong class="text-violet-400">Approval:</strong> Georgia EPD confirms UV as the virus barrier at the pre-application meeting.</div>
+      </div>
+    </div>
+
+    <!-- ================= SLIDE 6: SUPPLY MODES ================= -->
+    <div class="slide-frame flex-col justify-between h-full gap-5" data-slide="6">
+      <div>
+        <span class="text-xs font-mono uppercase text-violet-400 font-bold">05 • WATER SUPPLY</span>
+        <h2 class="text-2xl md:text-3xl font-bold mt-1">Port A for Boil Water Jobs, Port B for Outages</h2>
+        <p class="text-sm text-[var(--muted-foreground)] mt-1">The trailer never pulls the city main below 20 PSI, and two closed building valves always separate raw water from treated water.</p>
+      </div>
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
+        <div class="bg-blue-500/10 border border-blue-500/40 rounded-xl p-5 space-y-2.5">
+          <span class="px-2 py-0.5 rounded text-[10px] bg-blue-500/20 text-blue-300 font-bold">PORT A · BOIL WATER ADVISORY (MOST JOBS)</span>
+          <h3 class="text-base font-bold">Pressurized Direct Feed</h3>
+          <ul class="text-xs text-[var(--muted-foreground)] space-y-1.5 list-disc pl-4">
+            <li>1.5" valved tee installed on the service line by the restaurant's plumber at the site survey, or a permitted hydrant with the utility's meter and backflow device.</li>
+            <li><code>PSV-100</code> holds the upstream line at 20 PSI or more.</li>
+            <li><code>RPZ-100</code> (ASSE 1013) replaces the air gap; a flow switch alarms if its relief port discharges.</li>
+            <li>The intake pump only boosts what the UF needs — less power than drafting from a tank.</li>
+          </ul>
+        </div>
+        <div class="bg-amber-500/10 border border-amber-500/40 rounded-xl p-5 space-y-2.5">
+          <span class="px-2 py-0.5 rounded text-[10px] bg-amber-500/20 text-amber-300 font-bold">PORT B · ZERO MAIN PRESSURE</span>
+          <h3 class="text-base font-bold">Tanker or Folding Break Tank</h3>
+          <ul class="text-xs text-[var(--muted-foreground)] space-y-1.5 list-disc pl-4">
+            <li>The intake pump drafts straight from a potable tanker — the tanker is the break tank.</li>
+            <li>If the tanker can't stay, the 550-gal folding tank from the PWR-25 kit box is set up and filled by drops.</li>
+            <li>A restaurant uses 4,000–8,000 gal/day, so one 4,000-gal drop covers most of a service day.</li>
+            <li>Port A stays closed and capped.</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <!-- ================= SLIDE 7: TWO TRAILERS ================= -->
+    <div class="slide-frame flex-col justify-between h-full gap-5" data-slide="7">
+      <div>
+        <span class="text-xs font-mono uppercase text-violet-400 font-bold">06 • THE TWO TRAILERS</span>
+        <h2 class="text-2xl md:text-3xl font-bold mt-1">20-ft Water Trailer + PWR-25 Generator Trailer</h2>
+        <p class="text-sm text-[var(--muted-foreground)] mt-1">With the generator gone, the gooseneck nose holds the control panel, air and chemical cabinets — outside the operator space and over the hitch.</p>
+      </div>
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-5">
+        <div class="lg:col-span-7 space-y-2 text-xs">
+          <div class="text-xs font-bold uppercase text-[var(--muted-foreground)]">MWTP-50C Water Trailer (14-ft main + 6-ft gooseneck)</div>
+          <div class="p-2.5 rounded bg-violet-500/10 border border-violet-500/30 flex justify-between gap-3"><span><strong>Gooseneck (exterior doors):</strong> PLC panel, duplex air, segregated chemical cabinets + exhaust</span><span class="font-mono font-semibold shrink-0">870 lb</span></div>
+          <div class="p-2.5 rounded bg-orange-500/10 border border-orange-500/30 flex justify-between gap-3"><span><strong>Front:</strong> PSV-100, RPZ-100, intake pump, strainer, bags · UF skid + integrity test</span><span class="font-mono font-semibold shrink-0">1,340 lb</span></div>
+          <div class="p-2.5 rounded bg-blue-500/10 border border-blue-500/30 flex justify-between gap-3"><span><strong>Over axles:</strong> 150-gal clearwell, duplex booster, test bench, eyewash</span><span class="font-mono font-semibold shrink-0">840 lb</span></div>
+          <div class="p-2.5 rounded bg-pink-500/10 border border-pink-500/30 flex justify-between gap-3"><span><strong>Rear &amp; frame:</strong> UV ×2, dosing, piping, cord reel, 3,300 lb max aluminum tare</span><span class="font-mono font-semibold shrink-0">4,260 lb</span></div>
+          <div class="grid grid-cols-2 gap-2 pt-1">
+            <div class="p-3 rounded-lg bg-blue-500/15 border border-blue-500/30"><div class="text-blue-300 font-semibold">Road</div><div class="text-xl font-bold font-mono">7,310 lb</div><div class="text-[var(--muted-foreground)]">27% margin · ~1,170 lb pin (16%)</div></div>
+            <div class="p-3 rounded-lg bg-emerald-500/15 border border-emerald-500/30"><div class="text-emerald-300 font-semibold">On site</div><div class="text-xl font-bold font-mono">8,660 lb</div><div class="text-[var(--muted-foreground)]">1,330 lb under 9,990 GVWR</div></div>
+          </div>
+        </div>
+        <div class="lg:col-span-5 bg-amber-500/10 border border-amber-500/40 rounded-xl p-4 space-y-2 text-xs">
+          <div class="text-xs font-bold uppercase text-amber-400">PWR-25 Generator &amp; Outage-Kit Trailer</div>
+          <div class="flex justify-between"><span class="text-[var(--muted-foreground)]">25 kVA diesel, Tier 4 Final, sound-attenuated</span><span class="font-mono">~3,100 lb</span></div>
+          <div class="flex justify-between"><span class="text-[var(--muted-foreground)]">50A panel, 2 × 50 ft cords, ground rod</span><span class="font-mono">120 lb</span></div>
+          <div class="flex justify-between"><span class="text-[var(--muted-foreground)]">Kit box: 550-gal folding tank, suction hoses</span><span class="font-mono">260 lb</span></div>
+          <div class="flex justify-between"><span class="text-[var(--muted-foreground)]">Fuel transfer pump &amp; spill kit</span><span class="font-mono">60 lb</span></div>
+          <div class="flex justify-between pt-2 border-t border-amber-500/30 font-bold"><span>Total</span><span class="font-mono">~3,540 lb</span></div>
+          <p class="text-[var(--muted-foreground)] pt-1">Integrated fuel tank and 110% spill base. Delivered by a second pickup and left on site — the driver doesn't stay.</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- ================= SLIDE 8: POWER ================= -->
+    <div class="slide-frame flex-col justify-between h-full gap-5" data-slide="8">
+      <div>
+        <span class="text-xs font-mono uppercase text-violet-400 font-bold">07 • POWER</span>
+        <h2 class="text-2xl md:text-3xl font-bold mt-1">One 50A Cord Runs the Whole Plant</h2>
+        <p class="text-sm text-[var(--muted-foreground)] mt-1">Every motor is 3 HP or smaller on a VFD that takes 240V single-phase power, so the plant runs from the same cord whether it's plugged into the restaurant or the PWR-25.</p>
+      </div>
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+        <div class="bg-[var(--secondary)]/50 border border-[var(--border)] rounded-xl p-4">
+          <div class="text-xs text-[var(--muted-foreground)]">Average Load</div>
+          <div class="text-2xl font-bold font-mono text-violet-400 mt-1">7.45 kW</div>
+          <div class="text-xs text-[var(--muted-foreground)]">~31 A at 240V</div>
+        </div>
+        <div class="bg-[var(--secondary)]/50 border border-[var(--border)] rounded-xl p-4">
+          <div class="text-xs text-[var(--muted-foreground)]">Peak, With HVAC Shed</div>
+          <div class="text-2xl font-bold font-mono text-blue-400 mt-1">9.55 kW</div>
+          <div class="text-xs text-[var(--muted-foreground)]">Under the 9.6 kW (40 A) continuous limit</div>
+        </div>
+        <div class="bg-[var(--secondary)]/50 border border-[var(--border)] rounded-xl p-4">
+          <div class="text-xs text-[var(--muted-foreground)]">On PWR-25</div>
+          <div class="text-2xl font-bold font-mono text-amber-400 mt-1">~0.8 gal/hr</div>
+          <div class="text-xs text-[var(--muted-foreground)]">~37% load · about 19 gal/day</div>
+        </div>
+      </div>
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-xs">
+        <div class="bg-blue-500/10 border border-blue-500/30 rounded-xl p-4 space-y-1.5">
+          <strong class="text-blue-300">Boil Water Advisory (restaurant has power)</strong>
+          <p class="text-[var(--muted-foreground)]">Plug into a 240V 50A receptacle installed at the site survey ($800–$2,000 by the restaurant's electrician). Silent, no exhaust, no fuel. Roughly 180 kWh/day on the restaurant's bill.</p>
+        </div>
+        <div class="bg-amber-500/10 border border-amber-500/30 rounded-xl p-4 space-y-1.5">
+          <strong class="text-amber-300">Power Outage</strong>
+          <p class="text-[var(--muted-foreground)]">PWR-25 parks 10 ft or more from building openings and the dining area, ground rod driven, 50A cord to the same inlet. Its fuel tank covers more than two days between refuelings.</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- ================= SLIDE 9: COST ================= -->
+    <div class="slide-frame flex-col justify-between h-full gap-5" data-slide="9">
+      <div>
+        <span class="text-xs font-mono uppercase text-violet-400 font-bold">08 • BUILD COST</span>
+        <h2 class="text-2xl md:text-3xl font-bold mt-1">$219,420 Water Trailer + $34,500 PWR-25</h2>
+        <p class="text-sm text-[var(--muted-foreground)] mt-1">Water trailer price includes PE engineering, UV validation submittal, integration and 15% contingency.</p>
+      </div>
+      <div class="grid grid-cols-1 lg:grid-cols-2 gap-5 text-xs">
+        <div class="space-y-1.5">
+          <div class="flex justify-between py-1 border-b border-[var(--border)]"><span>1. 20-ft aluminum gooseneck, HVAC, jacks, nose cabinet</span><span class="font-mono font-semibold">$28,500</span></div>
+          <div class="flex justify-between py-1 border-b border-[var(--border)]"><span>2. PSV-100, RPZ-100, intake pump, strainer, bags</span><span class="font-mono font-semibold">$14,400</span></div>
+          <div class="flex justify-between py-1 border-b border-[var(--border)]"><span>3. UF skid (4 modules) + integrity test</span><span class="font-mono font-semibold">$26,500</span></div>
+          <div class="flex justify-between py-1 border-b border-[var(--border)]"><span>4. UV ×2 at 186 mJ/cm², UVT, dosing, chem cabinets</span><span class="font-mono font-semibold">$30,200</span></div>
+          <div class="flex justify-between py-1 border-b border-[var(--border)]"><span>5. Clearwell, duplex booster, RPZ-602</span><span class="font-mono font-semibold">$14,800</span></div>
+          <div class="flex justify-between py-1 border-b border-[var(--border)]"><span>6. Piping, 17 valves, bulkhead, hoses</span><span class="font-mono font-semibold">$15,500</span></div>
+          <div class="flex justify-between py-1 border-b border-[var(--border)]"><span>7. PLC/HMI, telemetry, analyzers, safety</span><span class="font-mono font-semibold">$19,900</span></div>
+          <div class="flex justify-between py-1 border-b border-[var(--border)]"><span>8. 50A shore inlet, cord reel, duplex air</span><span class="font-mono font-semibold">$6,000</span></div>
+          <div class="flex justify-between py-1 border-b border-[var(--border)]"><span>Integration $22,000 · Engineering $13,000 · Contingency $28,620</span><span class="font-mono font-semibold">$63,620</span></div>
+          <div class="flex justify-between py-1.5 font-bold text-sm text-violet-300"><span>Water trailer turnkey</span><span class="font-mono">$219,420</span></div>
+        </div>
+        <div class="space-y-3">
+          <div class="bg-amber-500/10 border border-amber-500/30 rounded-xl p-4 space-y-1.5">
+            <div class="font-bold text-amber-300">PWR-25 — $34,500</div>
+            <p class="text-[var(--muted-foreground)]">25 kVA towable generator $27,500 · 50A panel &amp; cords $1,800 · folding break tank $2,400 · hoses &amp; adapters $1,200 · kit box $900 · fuel pump &amp; spill kit $700</p>
+          </div>
+          <table class="w-full text-left border-collapse">
+            <thead><tr class="border-b border-[var(--border)] text-[var(--muted-foreground)]"><th class="py-2 px-2">Configuration</th><th class="py-2 px-2 text-right">1 Unit</th><th class="py-2 px-2 text-right">2 Units</th></tr></thead>
+            <tbody class="divide-y divide-[var(--border)]">
+              <tr><td class="py-2 px-2">MWTP-50 (generator on board)</td><td class="py-2 px-2 text-right font-mono">$238,625</td><td class="py-2 px-2 text-right font-mono">$477,250</td></tr>
+              <tr class="bg-violet-500/10"><td class="py-2 px-2 font-semibold">MWTP-50C + one shared PWR-25</td><td class="py-2 px-2 text-right font-mono">$253,920</td><td class="py-2 px-2 text-right font-mono font-bold text-violet-300">$473,340</td></tr>
+            </tbody>
+          </table>
+          <p class="text-[var(--muted-foreground)]">About $15,000 more for one unit; less from the second unit on, because one PWR-25 backs up the whole restaurant fleet.</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- ================= SLIDE 10: ECONOMICS ================= -->
+    <div class="slide-frame flex-col justify-between h-full gap-5" data-slide="10">
+      <div>
+        <span class="text-xs font-mono uppercase text-violet-400 font-bold">09 • ECONOMICS &amp; RECOMMENDATION</span>
+        <h2 class="text-2xl md:text-3xl font-bold mt-1">Same Loan Coverage, Better Field Unit, Cheaper to Grow</h2>
+        <p class="text-sm text-[var(--muted-foreground)] mt-1">Same pricing as the MWTP-50 — $1,800/yr single store or $1,500/yr per group store (max 10 per unit), $2,500 mobilization, $3,200/day — plus a generator add-on of $750 delivery + $400/day on outage jobs.</p>
+      </div>
+      <div class="grid grid-cols-2 md:grid-cols-4 gap-4 text-center">
+        <div class="bg-[var(--secondary)]/60 border border-[var(--border)] rounded-xl p-4"><div class="text-xs text-[var(--muted-foreground)]">Year 1 Revenue</div><div class="text-lg font-bold font-mono text-blue-400">$111,800</div><div class="text-[10px] text-[var(--muted-foreground)]">8 locations · 6 events · 25 days</div></div>
+        <div class="bg-[var(--secondary)]/60 border border-[var(--border)] rounded-xl p-4"><div class="text-xs text-[var(--muted-foreground)]">Year 1 EBITDA</div><div class="text-lg font-bold font-mono text-emerald-400">$60,819</div><div class="text-[10px] text-[var(--muted-foreground)]">After direct and fixed costs</div></div>
+        <div class="bg-[var(--secondary)]/60 border border-[var(--border)] rounded-xl p-4"><div class="text-xs text-[var(--muted-foreground)]">Loan (Existing Trucks)</div><div class="text-lg font-bold font-mono">$234,001</div><div class="text-[10px] text-[var(--muted-foreground)]">$2,933/mo · 8.75% · 10 yr</div></div>
+        <div class="bg-[var(--secondary)]/60 border border-[var(--border)] rounded-xl p-4"><div class="text-xs text-[var(--muted-foreground)]">Year 1 DSCR</div><div class="text-lg font-bold font-mono text-amber-400">1.73×</div><div class="text-[10px] text-[var(--muted-foreground)]">1.40× with a new truck</div></div>
+      </div>
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-4 text-xs">
+        <div class="bg-violet-500/10 border border-violet-500/30 rounded-xl p-4 space-y-1"><div class="font-bold text-violet-300">Build the MWTP-50C when…</div><p class="text-[var(--muted-foreground)]">AmeriPro plans to grow past one restaurant unit, or can use the PWR-25 on other work between emergencies.</p></div>
+        <div class="bg-[var(--secondary)]/40 border border-[var(--border)] rounded-xl p-4 space-y-1"><div class="font-bold">For a single unit…</div><p class="text-[var(--muted-foreground)]">Costs and loan coverage are about even with the MWTP-50; the lighter trailer and 1.5-hour setup make the MWTP-50C the better field unit.</p></div>
+        <div class="bg-[var(--secondary)]/40 border border-[var(--border)] rounded-xl p-4 space-y-1"><div class="font-bold">The hospital MWTP-250…</div><p class="text-[var(--muted-foreground)]">Keeps its onboard 80 kW generator and contact tank — hospital jobs are where power and water fail together.</p></div>
+      </div>
+      <div class="bg-violet-500/10 border border-violet-500/30 rounded-xl p-3.5 flex flex-col sm:flex-row items-center justify-between gap-4">
+        <div class="text-xs"><strong class="text-violet-400">Next steps:</strong> Georgia EPD pre-application (UV virus credit + RPZ direct feed) • UV reactor validation quotes • builder's certified tare • 50A outlet and service-tee scope in site surveys.</div>
+        <button onclick="goToSlide(1)" class="px-4 py-2 rounded-lg text-xs font-bold bg-violet-600 text-white shrink-0 hover:bg-violet-500 transition">Restart Presentation ↺</button>
+      </div>
+    </div>
+
+  </div>
+
+  <div class="grid grid-cols-5 md:grid-cols-10 gap-1.5" id="thumb-strip"></div>
+
+  <script>
+    let currentSlide = 1;
+    const totalSlides = 10;
+    const slideTitles = [
+      "1. Title", "2. Why Split", "3. Customers", "4. Rev C Train", "5. UV Credit",
+      "6. Port A / B", "7. Two Trailers", "8. 50A Power", "9. Build Cost", "10. Economics"
+    ];
+
+    const thumbStrip = document.getElementById('thumb-strip');
+    slideTitles.forEach((t, idx) => {
+      const n = idx + 1;
+      const btn = document.createElement('button');
+      btn.id = 'thumb-' + n;
+      btn.onclick = () => goToSlide(n);
+      btn.textContent = t;
+      thumbStrip.appendChild(btn);
+    });
+
+    function goToSlide(n) {
+      currentSlide = Math.max(1, Math.min(totalSlides, n));
+      document.querySelectorAll('.slide-frame').forEach(el => {
+        el.classList.toggle('active', parseInt(el.dataset.slide, 10) === currentSlide);
+      });
+      document.getElementById('slide-counter').textContent = `Slide ${currentSlide} / ${totalSlides}`;
+      document.getElementById('slide-progress').style.width = `${(currentSlide / totalSlides) * 100}%`;
+      for (let i = 1; i <= totalSlides; i++) {
+        document.getElementById('thumb-' + i).className = i === currentSlide
+          ? 'px-2 py-1.5 rounded text-xs font-bold truncate border border-violet-500 bg-violet-600 text-white transition text-center'
+          : 'px-2 py-1.5 rounded text-xs font-medium truncate border border-[var(--border)] bg-[var(--card)] text-[var(--muted-foreground)] hover:text-[var(--foreground)] transition text-center';
+      }
+    }
+    function nextSlide() { if (currentSlide < totalSlides) goToSlide(currentSlide + 1); }
+    function prevSlide() { if (currentSlide > 1) goToSlide(currentSlide - 1); }
+
+    window.addEventListener('keydown', (e) => {
+      if (e.key === 'ArrowRight' || e.key === ' ') { e.preventDefault(); nextSlide(); }
+      else if (e.key === 'ArrowLeft') { e.preventDefault(); prevSlide(); }
+    });
+
+    goToSlide(1);
+  </script>
+</body>
+</html>
