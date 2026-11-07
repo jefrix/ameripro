@@ -1,0 +1,1034 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>MWTP-50 ("KitchenShield-50") 3D Explodable CAD &amp; Water Flow Visualizer</title>
+  <script src="https://www.gstatic.com/antigravity/web/dev/tailwindcss.min.js"></script>
+  <script type="importmap">
+  {
+    "imports": {
+      "three": "https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js",
+      "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/"
+    }
+  }
+  </script>
+  <style>
+    #viewport-container canvas { display: block; }
+    #viewport-container { cursor: grab; }
+    #viewport-container.dragging { cursor: grabbing; }
+    #viewport-container.hovering { cursor: pointer; }
+    .label-wrap { pointer-events: none; }
+    .label-pill {
+      pointer-events: auto;
+      transform: translateY(-70%);
+      transition: box-shadow 0.15s ease, transform 0.15s ease;
+    }
+    .label-pill:hover { transform: translateY(-70%) scale(1.06); }
+    .label-pill.selected { transform: translateY(-70%) scale(1.08); }
+  </style>
+<style>:root { --background: #0b1120; --foreground: #f1f5f9; --card: #111827; --secondary: #1e293b; --secondary-foreground: #e2e8f0; --muted-foreground: #94a3b8; --border: #1e293b; --primary: #10b981; --primary-foreground: #ffffff; } html.light { --background: #f8fafc; --foreground: #0f172a; --card: #ffffff; --secondary: #f1f5f9; --secondary-foreground: #1e293b; --muted-foreground: #64748b; --border: #e2e8f0; --primary: #059669; --primary-foreground: #ffffff; }</style>
+</head>
+<body class="bg-[var(--background)] text-[var(--foreground)] antialiased p-4 md:p-6 space-y-4 select-none">
+
+  <!-- Top Control Bar -->
+  <div class="bg-[var(--card)] border border-[var(--border)] rounded-xl p-4 shadow-sm flex flex-col xl:flex-row xl:items-center xl:justify-between gap-4">
+    <div>
+      <div class="flex flex-wrap items-center gap-2">
+        <span class="px-2.5 py-0.5 rounded-full text-xs font-semibold bg-emerald-500/15 text-emerald-400 border border-emerald-500/30">MWTP-50-GN22 3D DIGITAL TWIN</span>
+        <span class="text-xs font-mono text-[var(--muted-foreground)]">22-FT COMPACT GOOSENECK • 9,990 LB GVWR NON-CDL • 35/50 GPM</span>
+        <a href="mwtp_250_3d_explodable_view.html" class="px-2 py-0.5 rounded text-xs font-semibold bg-blue-500/15 text-blue-400 border border-blue-500/30 hover:bg-blue-500/25 transition">Switch to MWTP-250 (36-ft Hospital 3D) ↗</a>
+      </div>
+      <h1 class="text-lg font-bold mt-1">MWTP-50 ("KitchenShield-50") Interactive 3D Explodable View &amp; Water Flow</h1>
+      <p class="text-xs text-[var(--muted-foreground)]">Drag to orbit • Scroll / pinch to zoom • Right-drag or Shift+drag to pan • Click equipment or a label to inspect • Double-click to focus</p>
+    </div>
+
+    <div class="flex flex-wrap items-center gap-2.5">
+      <div class="bg-[var(--secondary)]/60 border border-[var(--border)] rounded-lg px-3.5 py-2 flex items-center gap-3">
+        <label class="text-xs font-semibold whitespace-nowrap" for="explode-slider">Explode:</label>
+        <input id="explode-slider" type="range" min="0" max="100" value="0" class="w-28 sm:w-36 accent-emerald-500 cursor-pointer" oninput="onExplodeSlider(this.value)">
+        <span id="explode-pct" class="text-xs font-mono font-bold text-emerald-400 w-9 text-right">0%</span>
+      </div>
+      <button onclick="toggleExplodePreset()" id="btn-explode" class="px-3 py-2 rounded-lg text-xs font-semibold bg-emerald-600 text-white shadow-sm hover:bg-emerald-500 transition">Explode Assembly</button>
+      <button onclick="toggleLabels()" id="btn-labels" class="px-3 py-2 rounded-lg text-xs font-semibold bg-emerald-600 text-white shadow-sm transition">Labels: ON</button>
+      <button onclick="toggleFlow()" id="btn-flow" class="px-3 py-2 rounded-lg text-xs font-semibold bg-cyan-600 text-white shadow-sm transition">Water Flow: ON</button>
+      <button onclick="toggleShell()" id="btn-shell" class="px-3 py-2 rounded-lg text-xs font-semibold bg-[var(--secondary)] text-[var(--secondary-foreground)] border border-[var(--border)] transition">Walls: Glass</button>
+      <button onclick="toggleTruck()" id="btn-truck" class="px-3 py-2 rounded-lg text-xs font-semibold bg-slate-600 text-white shadow-sm transition">1-Ton Pickup: ON</button>
+      <button onclick="toggleSpin()" id="btn-spin" class="px-3 py-2 rounded-lg text-xs font-semibold bg-[var(--secondary)] text-[var(--secondary-foreground)] border border-[var(--border)] transition">Auto-Rotate: OFF</button>
+    </div>
+  </div>
+
+  <div class="grid grid-cols-1 lg:grid-cols-12 gap-4">
+
+    <div class="lg:col-span-8 bg-[var(--card)] border border-[var(--border)] rounded-xl overflow-hidden relative shadow-sm" style="height: 620px; position: relative;" id="viewport-container">
+
+      <div id="loading" class="absolute inset-0 flex items-center justify-center text-sm text-[var(--muted-foreground)] z-10 px-6 text-center">Loading MWTP-50 3D model…</div>
+
+      <div class="absolute top-3 left-3 flex flex-wrap gap-1.5 z-20">
+        <button onclick="setCameraPreset('iso')" class="px-2.5 py-1 rounded text-xs font-semibold bg-[var(--card)]/90 border border-[var(--border)] hover:border-emerald-500 backdrop-blur transition">Isometric 3D</button>
+        <button onclick="setCameraPreset('side')" class="px-2.5 py-1 rounded text-xs font-semibold bg-[var(--card)]/90 border border-[var(--border)] hover:border-emerald-500 backdrop-blur transition">Side Profile</button>
+        <button onclick="setCameraPreset('top')" class="px-2.5 py-1 rounded text-xs font-semibold bg-[var(--card)]/90 border border-[var(--border)] hover:border-emerald-500 backdrop-blur transition">Top Plan View</button>
+        <button onclick="setCameraPreset('rear')" class="px-2.5 py-1 rounded text-xs font-semibold bg-[var(--card)]/90 border border-[var(--border)] hover:border-emerald-500 backdrop-blur transition">Rear Bulkhead</button>
+        <button onclick="setCameraPreset('inside')" class="px-2.5 py-1 rounded text-xs font-semibold bg-[var(--card)]/90 border border-[var(--border)] hover:border-emerald-500 backdrop-blur transition">Walk the Aisle</button>
+      </div>
+
+      <div class="absolute bottom-3 left-3 right-3 bg-[var(--card)]/90 border border-[var(--border)] backdrop-blur rounded-lg px-3 py-2 flex flex-wrap items-center gap-x-3 gap-y-1 text-xs z-20" style="width: fit-content;">
+        <span class="font-semibold text-[var(--muted-foreground)]">Flow:</span>
+        <span class="flex items-center gap-1.5"><span class="w-2.5 h-2.5 rounded-full bg-amber-500 inline-block"></span> Raw (BWA tap/hydrant → 550-gal TK-100 → UF)</span>
+        <span class="flex items-center gap-1.5"><span class="w-2.5 h-2.5 rounded-full bg-cyan-400 inline-block"></span> 0.02 µm UF permeate → 1+1 UV</span>
+        <span class="flex items-center gap-1.5"><span class="w-2.5 h-2.5 rounded-full bg-emerald-400 inline-block"></span> 600-gal Contact Tank (TK-401) → 150-gal Clearwell</span>
+        <span class="flex items-center gap-1.5"><span class="w-2.5 h-2.5 rounded-full bg-blue-500 inline-block"></span> 50 GPM Booster (60–75 PSI) to Kitchen</span>
+        <span class="flex items-center gap-1.5"><span class="w-2.5 h-2.5 rounded-full bg-rose-500 inline-block"></span> Dechlor Waste (bypasses grease trap)</span>
+      </div>
+    </div>
+
+    <div class="lg:col-span-4 flex flex-col gap-4">
+      <div class="bg-[var(--card)] border border-[var(--border)] rounded-xl p-4 shadow-sm flex-1 flex flex-col justify-between">
+        <div>
+          <div class="flex items-center justify-between border-b border-[var(--border)] pb-2.5 gap-2">
+            <div>
+              <span id="detail-tag" class="text-xs font-mono font-bold text-emerald-400 uppercase"></span>
+              <h2 id="detail-title" class="text-base font-bold mt-0.5"></h2>
+            </div>
+            <span id="detail-badge" class="px-2 py-0.5 rounded text-xs font-mono bg-[var(--secondary)] text-[var(--secondary-foreground)] shrink-0"></span>
+          </div>
+          <p id="detail-desc" class="text-xs text-[var(--muted-foreground)] mt-2.5 leading-relaxed"></p>
+          <div id="detail-specs" class="mt-3 space-y-1.5"></div>
+        </div>
+        <div class="mt-4 pt-3 border-t border-[var(--border)]">
+          <div class="text-xs font-semibold text-[var(--muted-foreground)] mb-2">Click to highlight &amp; focus in 3D:</div>
+          <div class="grid grid-cols-2 gap-1.5" id="stage-buttons"></div>
+        </div>
+      </div>
+
+      <div class="bg-[var(--card)] border border-[var(--border)] rounded-xl p-4 shadow-sm space-y-2">
+        <div class="flex items-center justify-between">
+          <span class="text-xs font-bold uppercase tracking-wider text-[var(--muted-foreground)]">Flow Path Filter</span>
+          <span class="text-xs font-mono text-emerald-400" id="flow-speed-label">35 GPM Cont. / 50 GPM Peak</span>
+        </div>
+        <div class="grid grid-cols-3 gap-1.5">
+          <button onclick="setFlowHighlight('all')" id="fl-all" class="px-2 py-1.5 rounded text-xs font-semibold bg-emerald-600 text-white transition">All Streams</button>
+          <button onclick="setFlowHighlight('raw')" id="fl-raw" class="px-2 py-1.5 rounded text-xs font-semibold bg-[var(--secondary)] text-[var(--secondary-foreground)] border border-[var(--border)] transition">Raw &amp; UF</button>
+          <button onclick="setFlowHighlight('potable')" id="fl-potable" class="px-2 py-1.5 rounded text-xs font-semibold bg-[var(--secondary)] text-[var(--secondary-foreground)] border border-[var(--border)] transition">UV, CT &amp; Out</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script type="module">
+    import * as THREE from 'three';
+    import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
+    import { CSS2DRenderer, CSS2DObject } from 'three/addons/renderers/CSS2DRenderer.js';
+    import { RoomEnvironment } from 'three/addons/environments/RoomEnvironment.js';
+
+    // Units: feet.
+    // MWTP-50-GN22: 22-ft Compact Tandem-Axle Gooseneck (16-ft Main Deck [X = -5 to +11] + 6-ft Gooseneck Deck [X = -11 to -5])
+    // Width = 8.0 ft (W = 4.0), Clear interior height = 7.5 ft (clears restaurant drive-thru canopies!)
+    const G = -1.75;      // ground plane
+    const D = 0.55;       // main deck top
+    const GD = 2.85;      // gooseneck deck top
+    const ROOF = D + 7.5; // 7.5 ft clear interior height
+    const W = 4.0;        // half exterior width (8.0 ft total)
+
+    // ---------------- Skid metadata (inspector text) ----------------
+    const skids = {
+      chassis: {
+        short: '22-ft Non-CDL Gooseneck', color: '#64748b',
+        tag: 'MWTP-50-GN22 • 9,990 LB GVWR PLATFORM', title: '22-ft Compact Tandem-Axle Gooseneck & 1-Ton SRW Pickup', weight: '8,350 lb road / 9,550 lb wet',
+        desc: '16-ft main treatment deck (7.5-ft interior height) plus a 6-ft elevated gooseneck power deck behind a 1-hour firewall. Dual 5,200-lb torsion axles factory-plated at 9,990 lb GVWR, towed by a standard 1-ton single-rear-wheel (SRW) pickup (~21,490 lb GCWR) — staying under the 26,001 lb Class A CDL threshold while pivoting 90° into tight restaurant grease-trap alleys.',
+        specs: [['Dimensions', '22 ft × 8.0 ft (16 ft main + 6 ft neck)'], ['Axles & GVWR', '2 × 5,200 lb Torsion (Plated 9,990 lb)'], ['Pin Weight', '1,670 lbs (20%) over 1-ton truck axle'], ['Driver License', 'Standard License + DOT Med Card (No CDL)']],
+        explode: [0, -5.0, 0], label: [3.0, D + 0.2, W + 0.5]
+      },
+      gen: {
+        short: '20 kW Gen + 50A Shore ATS', color: '#f59e0b',
+        tag: 'GEN-801 / ATS-802 / CMP-801A/B • GOOSENECK DECK', title: '20 kW Tier-4 Diesel Gen, 240V 50A Shore Plug & Duplex Air', weight: '1,420 lbs',
+        desc: 'Elevated on the 6-ft gooseneck deck behind a 1-hour fire and acoustic bulkhead wall. Because all motors are ≤ 3 HP with 240V 1-phase-in / 230V 3-phase-out VFDs, average load is only 8.25 kW (34.4 Amps). During a Boil Water Advisory with grid power on, it runs silently on a 240V 50A restaurant shore cord ($0 fuel); during power outages, the 20 kW diesel generator runs 47 hours on its 40-gal belly tank.',
+        specs: [['Shore Power (BWA)', '240V 50A Twist-Lock / NEMA 14-50 ($0 fuel)'], ['Diesel Generator', '20 kW Tier-4 Final (1,800 RPM, 62 dBA)'], ['Fuel Autonomy', '47 Hours @ 0.85 gal/hr (40-Gal Tank)'], ['Instrument Air', 'Duplex 1.5 HP Oil-Less + 20-Gal Receiver']],
+        explode: [-6.5, 4.5, -3.5], label: [-8.2, GD + 3.6, -1.0]
+      },
+      plc: {
+        short: 'PLC/HMI, Lab & Eyewash', color: '#a855f7',
+        tag: 'CP-701 / AIT-201 • ROADSIDE FRONT (6–11 FT)', title: 'UL-508A PLC/HMI, Online Analyzers, Wet Bench & Eyewash', weight: '420 lbs',
+        desc: 'Automated fail-safe PLC control panel with 12" HMI, Hach TU5300sc online laser turbidimeter (AIT-201), online UVT (AIT-401), free chlorine/pH (AIT-402/601), fold-down stainless test bench, and ANSI Z358.1 plumbed eyewash/drench hose. Exports 1-click PDF compliance logs for the county health inspector.',
+        specs: [['Laser Turbidimeter', 'Hach TU5300sc (<0.05 NTU; trips >0.15)'], ['Live CT Lockout', 'Calculates T10 & Cl₂ CT continuously'], ['Health Dept Log', '1-Click PDF / USB / Cellular export'], ['Operator Safety', 'ANSI Z358.1 eyewash + AIT-901 Cl₂ sensor']],
+        explode: [-3.0, 4.0, -7.0], label: [-2.5, D + 5.8, -2.6]
+      },
+      intake: {
+        short: '1. 3 HP Intake & #2 Bag/Carbon', color: '#d97706',
+        tag: 'P-101 / STR-101 / BF-101A/B • CURBSIDE FRONT', title: '3 HP VFD Intake Pump, 200 µm Auto-Strainer & Duplex #2 Housings', weight: '450 lbs wet',
+        desc: 'Draws 35–40 GPM from the 550-gal air-gap break tank (TK-100) through a 1.5" motorized 200 µm brush strainer and duplex #2 316L SS housings (25 µm bags or radial-flow activated carbon block cartridges to polish off pipe odors for coffee, tea, and ice), followed by inline PACl dosing.',
+        specs: [['Intake Pump P-101', '3 HP 316SS VFD (40 GPM @ 55 PSI)'], ['Auto-Strainer', '1.5" Motorized 200 µm 316SS Brush'], ['Duplex #2 Housings', '25 µm Bags OR Radial Carbon Blocks'], ['Coagulant Dosing', 'P-501 PACl downstream of bags + SM-101']],
+        explode: [-2.5, 1.5, 7.5], label: [-2.5, D + 4.4, 2.5]
+      },
+      rawtank: {
+        short: 'TK-100 550-Gal Break Tank', color: '#fbbf24',
+        tag: 'TK-100 / PSV-100 • GROUND DEPLOYED (STAGE 1)', title: '550-Gallon Collapsible Air-Gap Break Tank & 3 Feed Modes', weight: '75 lbs dry / 4,660 lbs wet on ground',
+        desc: '5 ft × 5 ft folding frame tank deployed on the pavement beside the trailer. Supports 3 raw-water feed modes: (1) Restaurant upstream exterior tap during a Boil Water Advisory (before the closed building shutoff, no hydrant needed!), (2) Permitted fire hydrant, or (3) Single 4,000-gal potable tanker drop per day during a zero-pressure outage. PSV-100 holds upstream city pressure ≥ 20 PSI.',
+        specs: [['Footprint & Volume', '5.0 ft × 5.0 ft (550 Gal NSF-61)'], ['BWA Mode 1A', 'Restaurant upstream tap via PSV-100'], ['BWA Mode 1B', 'Fire hydrant via meter & PSV-100 (≥20 PSI)'], ['Outage Mode 1C', 'Single 4,000-gal tanker drop / day']],
+        explode: [-1.5, -4.8, 3.0], label: [-2.5, G + 4.2, 8.2]
+      },
+      uf: {
+        short: '2. Compact UF (4 × 60" PVDF)', color: '#06b6d4',
+        tag: 'UF-201A/B / DIT-201 • CURBSIDE OVER AXLES', title: 'Compact Hollow-Fiber UF Skid (4 × 60" Modules) & Daily DIT', weight: '890 lbs road (wet preserved) / 1,020 lbs wet',
+        desc: 'Four 60-inch vertical 0.02-micron PVDF modules (2 sub-trains of 2 modules = 2,200 sq.ft.) stand 6.5 ft tall to fit comfortably under the 7.5-ft trailer roof. Operates at a conservative 24.2 GFD flux at 35 GPM, with an automated daily 20 PSI pressure-decay Direct Integrity Test (DIT-201) proving ≥ 4-log Cryptosporidium and Giardia removal.',
+        specs: [['Membrane Array', '4 × 60" PVDF 0.02 µm (2,200 sq.ft.)'], ['Flux @ 35 GPM', '24.2 GFD (2 sub-trains of 2 modules)'], ['Daily Integrity Test', 'Automated 20 PSI pressure-decay DIT-201'], ['Transit Preservation', 'Kept wet in bisulfite / propylene glycol']],
+        explode: [0.5, 5.5, 7.5], label: [3.2, D + 6.4, 2.5]
+      },
+      clearwell: {
+        short: '3. 150-Gal Clearwell & 1+1 UV', color: '#3b82f6',
+        tag: 'TK-601 / UV-401A/B • ROADSIDE OVER AXLES', title: '150-Gallon Surge Clearwell & Duty/Standby 40 GPM UV Reactors', weight: '590 lbs dry / 1,840 lbs full',
+        desc: 'Positioned directly over the dual 5,200-lb torsion axles. Two EPA UVDGM-validated 40 GPM amalgam UV reactors (1 Duty + 100% Standby, ≥ 40 mJ/cm²) disinfect UF permeate before chlorination, while the 150-gal baffled HDPE clearwell buffers 50 GPM peak kitchen dish-machine and flushometer bursts so the contact tank is never over-pulled.',
+        specs: [['UV Disinfection', '2 × 40 GPM LPHO Amalgam (1 Duty + 1 Stby)'], ['Validated UV Dose', '≥ 40 mJ/cm² (EPA UVDGM) + AIT-401 UVT'], ['Onboard Clearwell', '150-Gal Baffled NSF-61 HDPE over axles'], ['Peak Surge Buffer', 'Absorbs 50 GPM dish + restroom bursts']],
+        explode: [0.5, 5.0, -7.5], label: [3.2, D + 5.8, -2.5]
+      },
+      ct: {
+        short: '4. TK-401 600-Gal Contact Tank', color: '#10b981',
+        tag: 'TK-401 • GROUND DEPLOYED (STAGE 5)', title: '600-Gallon Baffled Chlorine Contact Tank (4-Log Virus CT)', weight: '85 lbs dry / 5,090 lbs wet on ground',
+        desc: '5.5 ft × 5.5 ft collapsible baffled NSF-61 tank deployed on the pavement beside the trailer. At 35 GPM continuous treatment flow, hydraulic detention time is 17.1 min and effective contact time (T10 at 0.50 serpentine baffle factor) is 8.57 min — delivering 12.85 mg·min/L CT at 1.5 mg/L free Cl₂ (exceeding 4-log virus requirements down to 0.5 °C).',
+        specs: [['Footprint & Volume', '5.5 ft × 5.5 ft (600 Gal Baffled NSF-61)'], ['Residence Time', 'HDT = 17.1 min • T10 = 8.57 min @ 35 GPM'], ['Achieved Virus CT', '12.85 mg·min/L @ 1.5 mg/L Cl₂ (≥4-Log)'], ['Transfer Pump P-401', '1.5 HP 316SS VFD returns water to TK-601']],
+        explode: [2.0, -4.8, 3.0], label: [7.8, G + 4.2, 8.2]
+      },
+      chem: {
+        short: '5. Segregated Vented Chem Bay', color: '#ec4899',
+        tag: 'CHEM-501 / P-502 / P-503 • CURBSIDE REAR', title: 'Segregated Chemical Cabinets, NaOCl Dosing & Cl₂ Gas Interlock', weight: '420 lbs (w/ materials-of-trade chems)',
+        desc: 'Two physically separated, bunded polyethylene safety cabinets at the rear curbside wall: Cabinet A houses the 15-gal 12.5% sodium hypochlorite day tank and duty/standby dosing pumps (P-502A/B); Cabinet B houses citric acid (CIP) and sodium bisulfite (P-503 waste dechlorination) so oxidizer and acid can never mix. Monitored by AIT-901 Cl₂ gas sensor and 150 CFM exhaust fan.',
+        specs: [['Oxidizer Cabinet A', '15-gal 12.5% NaOCl + P-502A/B Duty/Stby'], ['Acid/Dechlor Cab B', '5-gal Citric Acid + 5-gal Bisulfite (P-503)'], ['Gas Interlock', 'AIT-901 Cl₂ gas sensor + 150 CFM fan'], ['DOT Transport', 'Materials-of-Trade compliant containers']],
+        explode: [5.5, 1.5, 7.5], label: [8.4, D + 4.6, 2.5]
+      },
+      booster: {
+        short: '6. Duplex 50 GPM Booster & RPZ', color: '#2563eb',
+        tag: 'P-601A/B, P-401 & RPZ-602 • ROADSIDE REAR', title: 'Duplex 3 HP VFD Kitchen Booster, CT Pump & 2" ASSE 1013 RPZ', weight: '460 lbs',
+        desc: 'Two 3 HP vertical multi-stage 316SS VFD booster pumps (P-601A/B) draw from the 150-gal clearwell to deliver up to 50 GPM peak bursts at 60–75 PSI through a 2" ASSE 1013 Reduced Pressure Zone backflow preventer (RPZ-602) and fail-safe block valve XV-602 out to the restaurant domestic tie-in.',
+        specs: [['Duplex Boosters', '2 × 3 HP 316SS VFD (50 GPM @ 60–75 PSI)'], ['CT Return Pump', 'P-401 (1.5 HP 316SS VFD from TK-401)'], ['Backflow Preventer', '2" Lead-Free ASSE 1013 RPZ-602'], ['Rear Bulkhead', '5 Camlock Ports + Sanitized Hose Reels']],
+        explode: [5.5, 1.5, -7.5], label: [8.4, D + 4.8, -2.5]
+      }
+    };
+
+    // ---------------- Renderer, scene, camera ----------------
+    const container = document.getElementById('viewport-container');
+    const loadingEl = document.getElementById('loading');
+    let renderer;
+    try {
+      renderer = new THREE.WebGLRenderer({ antialias: true });
+    } catch (e) {
+      loadingEl.textContent = 'WebGL is not available in this browser, so the 3D model cannot be shown.';
+      throw e;
+    }
+    renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 2));
+    renderer.shadowMap.enabled = true;
+    renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+    renderer.toneMapping = THREE.ACESFilmicToneMapping;
+    renderer.toneMappingExposure = 1.05;
+    renderer.outputColorSpace = THREE.SRGBColorSpace;
+    container.appendChild(renderer.domElement);
+
+    const labelRenderer = new CSS2DRenderer();
+    labelRenderer.domElement.style.position = 'absolute';
+    labelRenderer.domElement.style.inset = '0';
+    labelRenderer.domElement.style.pointerEvents = 'none';
+    container.appendChild(labelRenderer.domElement);
+
+    const scene = new THREE.Scene();
+    const BG = new THREE.Color('#0b1120');
+    scene.background = BG;
+    scene.fog = new THREE.Fog(BG, 100, 210);
+    const pmrem = new THREE.PMREMGenerator(renderer);
+    scene.environment = pmrem.fromScene(new RoomEnvironment(), 0.04).texture;
+
+    const camera = new THREE.PerspectiveCamera(38, 1, 0.5, 500);
+    const controls = new OrbitControls(camera, renderer.domElement);
+    controls.enableDamping = true;
+    controls.dampingFactor = 0.08;
+    controls.minDistance = 4;
+    controls.maxDistance = 140;
+    controls.maxPolarAngle = Math.PI * 0.495;
+    controls.screenSpacePanning = true;
+
+    scene.add(new THREE.HemisphereLight('#cbd5e1', '#1e293b', 0.55));
+    const sun = new THREE.DirectionalLight('#ffffff', 1.6);
+    sun.position.set(-25, 50, 35);
+    sun.castShadow = true;
+    sun.shadow.mapSize.set(2048, 2048);
+    Object.assign(sun.shadow.camera, { left: -45, right: 35, top: 35, bottom: -35, near: 1, far: 180 });
+    sun.shadow.bias = -0.0005;
+    scene.add(sun);
+    const fill = new THREE.DirectionalLight('#6ee7b7', 0.35);
+    fill.position.set(35, 18, -35);
+    scene.add(fill);
+
+    const groundGroup = new THREE.Group();
+    scene.add(groundGroup);
+    const ground = new THREE.Mesh(new THREE.PlaneGeometry(220, 140), new THREE.MeshStandardMaterial({ color: '#111827', roughness: 0.95, metalness: 0 }));
+    ground.rotation.x = -Math.PI / 2;
+    ground.position.y = G;
+    ground.receiveShadow = true;
+    groundGroup.add(ground);
+    const grid = new THREE.GridHelper(140, 35, '#334155', '#1f2937');
+    grid.position.y = G + 0.01;
+    grid.material.transparent = true;
+    grid.material.opacity = 0.5;
+    groundGroup.add(grid);
+
+    // ---------------- Geometry helpers ----------------
+    const pickables = [];
+    function mat(color, o = {}) {
+      return new THREE.MeshStandardMaterial({
+        color, metalness: o.m ?? 0.15, roughness: o.r ?? 0.55,
+        transparent: o.t != null, opacity: o.t ?? 1, depthWrite: o.t == null || o.t > 0.6,
+        emissive: new THREE.Color(o.e || '#000000'), emissiveIntensity: o.ei ?? 1,
+        side: o.ds ? THREE.DoubleSide : THREE.FrontSide
+      });
+    }
+    const SS = () => mat('#cfd5dc', { m: 0.85, r: 0.28 });
+    const DARK = () => mat('#334155', { m: 0.5, r: 0.5 });
+    function add(g, mesh, pick = true) {
+      mesh.castShadow = !mesh.material.transparent;
+      mesh.receiveShadow = true;
+      g.add(mesh);
+      const skid = g.userData.skid;
+      if (skid) mesh.userData.skid = skid;
+      if (pick && skid) pickables.push(mesh);
+      return mesh;
+    }
+    function box(g, w, h, d, x, yb, z, m, pick) {
+      const mesh = new THREE.Mesh(new THREE.BoxGeometry(w, h, d), m);
+      mesh.position.set(x, yb + h / 2, z);
+      return add(g, mesh, pick);
+    }
+    function cylV(g, r, h, x, yb, z, m, seg = 28, pick) {
+      const mesh = new THREE.Mesh(new THREE.CylinderGeometry(r, r, h, seg), m);
+      mesh.position.set(x, yb + h / 2, z);
+      return add(g, mesh, pick);
+    }
+    function cylH(g, r, len, x, y, z, m, axis = 'x', seg = 24, pick) {
+      const mesh = new THREE.Mesh(new THREE.CylinderGeometry(r, r, len, seg), m);
+      if (axis === 'x') mesh.rotation.z = Math.PI / 2; else mesh.rotation.x = Math.PI / 2;
+      mesh.position.set(x, y, z);
+      return add(g, mesh, pick);
+    }
+    function dome(g, r, x, y, z, m) {
+      const mesh = new THREE.Mesh(new THREE.SphereGeometry(r, 24, 12, 0, Math.PI * 2, 0, Math.PI / 2), m);
+      mesh.position.set(x, y, z);
+      return add(g, mesh);
+    }
+    function pipe(g, a, b, r, m, pick = true) {
+      const A = new THREE.Vector3(...a), B = new THREE.Vector3(...b);
+      const mesh = new THREE.Mesh(new THREE.CylinderGeometry(r, r, A.distanceTo(B), 12), m);
+      mesh.position.copy(A).add(B).multiplyScalar(0.5);
+      mesh.quaternion.setFromUnitVectors(new THREE.Vector3(0, 1, 0), B.clone().sub(A).normalize());
+      return add(g, mesh, pick);
+    }
+    function cage(g, w, h, d, x, yb, z, t, m) {
+      const hx = w / 2, hz = d / 2;
+      [[-hx, -hz], [hx, -hz], [-hx, hz], [hx, hz]].forEach(([dx, dz]) => box(g, t, h, t, x + dx, yb, z + dz, m));
+      [yb, yb + h - t].forEach(y => {
+        box(g, w + t, t, t, x, y, z - hz, m); box(g, w + t, t, t, x, y, z + hz, m);
+        box(g, t, t, d + t, x - hx, y, z, m); box(g, t, t, d + t, x + hx, y, z, m);
+      });
+    }
+    function motorPump(g, x, y, z, axis, motorColor, pumpColor, s = 1) {
+      if (axis === 'x') {
+        const motor = mat(motorColor, { m: 0.35, r: 0.45 });
+        cylH(g, 0.38 * s, 1.25 * s, x, y, z, motor, 'x');
+        cylH(g, 0.42 * s, 0.4 * s, x + 0.85 * s, y - 0.04, z, mat(pumpColor, { m: 0.6, r: 0.35 }), 'z');
+        box(g, 1.8 * s, 0.1, 0.75 * s, x + 0.25 * s, y - 0.42 * s - 0.1, z, DARK());
+      } else {
+        cylV(g, 0.3 * s, 1.9 * s, x, y, z, SS());
+        cylV(g, 0.42 * s, 0.22, x, y + 1.9 * s, z, DARK());
+        cylV(g, 0.4 * s, 1.05 * s, x, y + 2.12 * s, z, mat(motorColor, { m: 0.35, r: 0.45 }));
+      }
+    }
+
+    // ---------------- Skid groups ----------------
+    const groups = {};
+    Object.keys(skids).forEach(id => {
+      const g = new THREE.Group();
+      g.userData.skid = id;
+      groups[id] = g;
+      scene.add(g);
+    });
+
+    // 1. CHASSIS: 22-ft Compact Tandem-Axle Gooseneck (16-ft main deck [X = -5 to +11] + 6-ft gooseneck [X = -11 to -5])
+    (function buildChassis() {
+      const g = groups.chassis;
+      const deck = mat('#9ca3af', { m: 0.7, r: 0.4 });
+      const frame = mat('#1f2937', { m: 0.6, r: 0.45 });
+      // 16-ft Main deck (centered at X = 3.0, length = 16)
+      box(g, 16, 0.22, 2 * W, 3.0, D - 0.22, 0, deck);
+      // 6-ft Gooseneck deck (centered at X = -8.0, length = 6)
+      box(g, 6, 0.22, 2 * W, -8.0, GD - 0.22, 0, deck);
+      // Vertical riser at X = -5.0
+      box(g, 0.28, GD - D, 2 * W, -5.0, D, 0, frame);
+      // Longitudinal frame rails
+      [-1.5, 1.5].forEach(z => {
+        box(g, 16, 0.6, 0.3, 3.0, D - 0.82, z, frame);
+        box(g, 6.4, 0.6, 0.3, -8.0, GD - 0.82, z, frame);
+      });
+      for (let x = -4; x <= 10; x += 2) box(g, 0.2, 0.35, 2 * W - 0.4, x, D - 0.55, 0, frame);
+      // Gooseneck coupler neck down to truck bed ball at X = -11.5
+      box(g, 1.8, GD - 1.3, 1.6, -11.4, 1.3, 0, frame);
+      cylV(g, 0.22, 0.65, -11.6, 0.7, 0, mat('#111827', { m: 0.6 }));
+
+      // TANDEM AXLES (2 × 5,200 lb Torsion Axles plated at 9,990 lb GVWR) at X = 2.2 and X = 4.8
+      const tire = mat('#0b0f14', { m: 0, r: 0.9 });
+      const rim = mat('#d1d5db', { m: 0.9, r: 0.25 });
+      [2.2, 4.8].forEach(ax => {
+        cylH(g, 0.11, 2 * W - 0.5, ax, -0.68, 0, frame, 'z');
+        [-1, 1].forEach(sd => {
+          cylH(g, 1.08, 0.68, ax, -0.68, sd * (W - 0.65), tire, 'z', 32);
+          cylH(g, 0.56, 0.71, ax, -0.68, sd * (W - 0.65), rim, 'z', 24);
+        });
+      });
+      // Tandem fenders
+      [-1, 1].forEach(sd => box(g, 6.0, 0.12, 0.82, 3.5, D - 0.18, sd * (W - 0.5), mat('#475569', { m: 0.7, r: 0.35 })));
+
+      // 4 Corner Stabilizer Jacks
+      [[-4.5, -1], [-4.5, 1], [10.4, -1], [10.4, 1]].forEach(([x, sd]) => {
+        box(g, 0.5, 0.45, 0.5, x, D - 0.65, sd * (W + 0.12), mat('#10b981', { m: 0.4 }));
+        cylV(g, 0.15, D - 0.65 - G - 0.12, x, G + 0.12, sd * (W + 0.12), mat('#10b981', { m: 0.5, r: 0.35 }));
+        box(g, 0.9, 0.12, 0.9, x, G, sd * (W + 0.12), frame);
+      });
+
+      // Rear 5-Port Camlock Bulkhead Panel at X = 11.05
+      box(g, 0.18, 3.2, 5.2, 11.05, D + 0.3, 0, mat('#475569', { m: 0.7, r: 0.35 }));
+      [[-2.0, '#0ea5e9'], [-1.0, '#f59e0b'], [0.0, '#10b981'], [1.0, '#3b82f6'], [2.0, '#f43f5e']].forEach(([z, c]) => {
+        cylH(g, 0.18, 0.45, 11.25, D + 1.8, z, mat(c, { m: 0.5, r: 0.35 }), 'x');
+      });
+
+      // Rear Sanitary Hose Reels (Blue Raw & White Potable)
+      [[D + 1.1, '#2563eb'], [D + 3.2, '#e5e7eb']].forEach(([y, c]) => {
+        cylH(g, 0.85, 1.0, 9.8, y, 2.7, mat(c, { m: 0.1, r: 0.8 }), 'z');
+      });
+    })();
+
+    // 1B. 1-TON SRW PICKUP TRUCK (F-350 / Ram 3500 SRW — Non-CDL Tow Rig)
+    const truck = new THREE.Group();
+    truck.userData.skid = 'chassis';
+    groups.chassis.add(truck);
+    (function buildTruck() {
+      const g = truck;
+      const paint = mat('#0f172a', { m: 0.6, r: 0.25 });
+      const stripe = mat('#10b981', { m: 0.4, r: 0.3, e: '#059669', ei: 0.2 });
+      const glass = mat('#1e293b', { m: 0.9, r: 0.08 });
+      const tire = mat('#0b0f14', { m: 0, r: 0.9 });
+      const rim = mat('#cbd5e1', { m: 0.9, r: 0.25 });
+      const dark = mat('#1f2937', { m: 0.5, r: 0.5 });
+      const RA = -12.0, FA = -24.5, wr = 1.25, wy = G + wr;
+
+      // Frame
+      box(g, 19.0, 0.6, 2.4, -18.0, wy - 0.25, 0, dark);
+      // Pickup Bed (with side walls around gooseneck ball at X = -11.6)
+      box(g, 8.0, 0.35, 6.6, -12.2, wy + 0.55, 0, dark);
+      [-3.15, 3.15].forEach(z => {
+        box(g, 8.0, 1.8, 0.3, -12.2, wy + 0.55, z, paint);
+        box(g, 8.0, 0.18, 0.32, -12.2, wy + 1.5, z, stripe);
+      });
+      dome(g, 0.2, -11.6, wy + 0.92, 0, mat('#9ca3af', { m: 0.9, r: 0.2 }));
+
+      // Crew Cab
+      box(g, 6.8, 4.5, 6.6, -19.8, wy + 0.2, 0, paint);
+      box(g, 6.82, 0.2, 6.64, -19.8, wy + 1.5, 0, stripe);
+      // Hood & Grille
+      box(g, 4.0, 2.3, 6.4, -25.2, wy + 0.2, 0, paint);
+      box(g, 0.22, 2.0, 5.6, -27.25, wy + 0.25, 0, mat('#94a3b8', { m: 0.8, r: 0.3 }));
+      [-2.3, 2.3].forEach(z => box(g, 0.18, 0.45, 0.9, -27.3, wy + 1.7, z, mat('#fef3c7', { e: '#fde68a', ei: 0.6 })));
+      // Windshield & Side Windows
+      box(g, 0.1, 1.8, 5.8, -23.22, wy + 2.5, 0, glass);
+      [-1, 1].forEach(sd => {
+        box(g, 2.6, 1.5, 0.1, -21.4, wy + 2.7, sd * 3.32, glass);
+        box(g, 2.6, 1.5, 0.1, -18.2, wy + 2.7, sd * 3.32, glass);
+      });
+
+      // Single Rear Wheel (SRW) 1-Ton Axles (4 tires total — no dually needed!)
+      [FA, RA].forEach(ax => {
+        [-1, 1].forEach(sd => {
+          const z = sd * 2.95;
+          cylH(g, wr, 0.72, ax, wy, z, tire, 'z', 32);
+          cylH(g, 0.65, 0.75, ax, wy, z, rim, 'z', 24);
+        });
+      });
+    })();
+
+    // 2. GOOSENECK POWER & AIR DECK (X = -11 to -5)
+    (function buildGen() {
+      const g = groups.gen;
+      // 40-Gal Diesel Belly Tank + Base
+      box(g, 3.6, 0.55, 3.6, -8.4, GD, -1.2, mat('#78350f', { m: 0.5, r: 0.5 }));
+      // 20 kW Tier-4 Sound-Attenuated Diesel Generator Enclosure
+      box(g, 3.4, 2.5, 3.4, -8.4, GD + 0.55, -1.2, mat('#eab308', { m: 0.35, r: 0.4 }));
+      for (let i = 0; i < 5; i++) box(g, 0.05, 1.6, 0.05, -9.6 + i * 0.5, GD + 0.9, -2.92, mat('#713f12'));
+      // Exhaust stack
+      cylV(g, 0.12, ROOF - (GD + 3.05) + 0.5, -7.2, GD + 3.05, -2.2, mat('#57534e', { m: 0.8, r: 0.4 }));
+      // 240V 50A Shore Power ATS & Inlet Box (Curbside front of gooseneck)
+      box(g, 1.2, 1.8, 0.8, -9.6, GD + 0.4, 2.4, mat('#10b981', { m: 0.4, r: 0.4 }));
+      // Duplex Oil-Less Air Compressors (CMP-801A/B) + 20-Gal Vertical Receiver
+      [-8.0, -6.5].forEach(x => {
+        box(g, 1.2, 0.95, 1.1, x, GD, 2.2, mat('#f59e0b', { m: 0.3, r: 0.45 }));
+        cylH(g, 0.26, 0.7, x + 0.3, GD + 0.5, 2.2, mat('#1e40af', { m: 0.35 }), 'x');
+      });
+      cylV(g, 0.52, 2.6, -5.6, GD, 1.4, mat('#ea580c', { m: 0.45, r: 0.4 }));
+      dome(g, 0.52, -5.6, GD + 2.6, 1.4, mat('#ea580c', { m: 0.45, r: 0.4 }));
+    })();
+
+    // 3. PLC/HMI, ANALYZERS, FOLD-DOWN LAB & EYEWASH (Roadside Front: X = -4.5 to 0.0, Z < 0)
+    (function buildPlc() {
+      const g = groups.plc;
+      // UL-508A PLC Cabinet CP-701 with 12" HMI
+      box(g, 1.8, 5.4, 1.3, -3.6, D, -3.1, mat('#9ca3af', { m: 0.55, r: 0.4 }));
+      box(g, 1.05, 0.72, 0.05, -3.6, D + 3.6, -2.43, mat('#0f172a', { e: '#10b981', ei: 0.9 }));
+      // Analyzer Backpanel (AIT-201 Laser Turbidimeter, AIT-401 UVT, AIT-402/601 Cl2 & pH)
+      box(g, 1.9, 2.4, 0.35, -1.6, D + 2.8, -3.6, mat('#f8fafc', { m: 0.1, r: 0.6 }));
+      [['#22c55e', -2.1], ['#3b82f6', -1.6], ['#f59e0b', -1.1]].forEach(([c, x]) => box(g, 0.38, 0.5, 0.18, x, D + 4.1, -3.38, mat(c, { e: c, ei: 0.25 })));
+      // Fold-Down Stainless Wet Test Bench
+      box(g, 2.0, 2.6, 1.6, -1.6, D, -2.9, mat('#6d28d9', { m: 0.2, r: 0.6 }));
+      box(g, 2.1, 0.1, 1.7, -1.6, D + 2.6, -2.9, SS());
+      // ANSI Z358.1 Plumbed Eyewash Station
+      cylV(g, 0.06, 3.2, -0.2, D, -3.4, mat('#facc15', { m: 0.4 }));
+      cylV(g, 0.34, 0.1, -0.2, D + 3.2, -3.2, mat('#16a34a', { m: 0.3, r: 0.4 }));
+      box(g, 0.65, 0.65, 0.04, -0.2, D + 4.4, -3.85, mat('#16a34a', { e: '#16a34a', ei: 0.4 }));
+    })();
+
+    // 4. STAGE 1 & 2 INTAKE PUMP (3 HP), AUTO-STRAINER & DUPLEX #2 BAG/CARBON HOUSINGS (Curbside Front: X = -4.5 to 0.0, Z > 0)
+    (function buildIntake() {
+      const g = groups.intake;
+      box(g, 4.4, 0.25, 2.2, -2.3, D, 2.6, mat('#78350f', { m: 0.4, r: 0.5 }));
+      // P-101 3 HP VFD Pump
+      motorPump(g, -1.2, D + 0.75, 2.3, 'x', '#1e3a8a', '#d97706', 0.85);
+      // STR-101 1.5" Motorized Auto-Strainer
+      cylV(g, 0.42, 2.3, -2.6, D + 0.25, 2.7, SS());
+      cylV(g, 0.26, 0.65, -2.6, D + 2.55, 2.7, mat('#d97706', { m: 0.35 }));
+      // BF-101A/B Duplex #2 Bag / Radial Carbon Block Housings
+      [2.05, 3.15].forEach(z => {
+        cylV(g, 0.38, 2.3, -3.9, D + 0.25, z, SS());
+        dome(g, 0.38, -3.9, D + 2.55, z, SS());
+      });
+      // Header + SM-101 Static Mixer
+      pipe(g, [-3.9, D + 3.1, 2.05], [-0.4, D + 3.1, 2.05], 0.13, SS());
+      cylH(g, 0.19, 1.2, -1.8, D + 3.1, 2.05, mat('#94a3b8', { m: 0.8, r: 0.3 }), 'x');
+    })();
+
+    // 5. COMPACT HOLLOW-FIBER UF SKID (4 × 60" PVDF Modules + DIT-201, Curbside Over Axles: X = 0.5 to 6.0, Z > 0)
+    (function buildUf() {
+      const g = groups.uf;
+      const frame = mat('#0e7490', { m: 0.5, r: 0.45 });
+      box(g, 5.2, 0.25, 2.3, 3.2, D, 2.6, frame);
+      cage(g, 5.2, 6.2, 2.1, 3.2, D + 0.25, 2.6, 0.15, frame);
+      const housingA = mat('#f1f5f9', { m: 0.05, r: 0.35 });
+      const housingB = mat('#e0f2fe', { m: 0.05, r: 0.35 });
+      const cap = mat('#64748b', { m: 0.5, r: 0.4 });
+      // 4 × 60-inch (5.0 ft) vertical PVDF UF modules arranged in 2 sub-trains (Train A & Train B)
+      [1.4, 2.6, 3.8, 5.0].forEach((x, idx) => {
+        const m = idx < 2 ? housingA : housingB;
+        cylV(g, 0.38, 4.8, x, D + 0.85, 2.6, m, 24);
+        cylV(g, 0.43, 0.24, x, D + 0.62, 2.6, cap, 24);
+        cylV(g, 0.43, 0.24, x, D + 5.65, 2.6, cap, 24);
+      });
+      // Lower feed & upper permeate 316L SS manifolds
+      cylH(g, 0.16, 4.6, 3.2, D + 0.5, 2.6, SS(), 'x');
+      cylH(g, 0.16, 4.6, 3.2, D + 6.05, 2.6, SS(), 'x');
+      // Automated DIT-201 Direct Integrity Test Manifold Box
+      box(g, 0.85, 1.4, 0.25, 5.4, D + 2.6, 1.55, mat('#e2e8f0', { m: 0.2 }));
+      [0, 1].forEach(i => cylH(g, 0.15, 0.06, 5.4, D + 3.5 - i * 0.5, 1.42, mat('#10b981', { e: '#10b981', ei: 0.4 }), 'z'));
+    })();
+
+    // 6. 150-GAL ONBOARD SURGE CLEARWELL (TK-601) + DUTY/STANDBY 40 GPM UV (UV-401A/B) (Roadside Over Axles: X = 0.5 to 6.0, Z < 0)
+    (function buildClearwellAndUv() {
+      const g = groups.clearwell;
+      // 150-Gal Baffled HDPE Clearwell (TK-601) in Steel Cage over axles
+      box(g, 3.2, 4.4, 2.1, 3.6, D + 0.25, -2.7, mat('#e2e8f0', { t: 0.34, r: 0.3, ds: true }));
+      box(g, 3.05, 4.4 * 0.82, 1.95, 3.6, D + 0.3, -2.7, mat('#2563eb', { t: 0.58, r: 0.15 }), false);
+      [-0.7, 0.7].forEach(dx => box(g, 0.05, 3.5, 1.85, 3.6 + dx, D + 0.35, -2.7, mat('#93c5fd', { t: 0.5 }), false));
+      cage(g, 3.4, 4.7, 2.25, 3.6, D, -2.7, 0.12, mat('#475569', { m: 0.6, r: 0.4 }));
+      // UV-401A (Duty) & UV-401B (100% Standby) 40 GPM LPHO Amalgam Reactors mounted above/forward
+      [5.2, 5.9].forEach((y, i) => {
+        cylH(g, 0.26, 3.2, 3.2, D + y, -2.5, SS(), 'x');
+        [-1.65, 1.65].forEach(dx => cylH(g, 0.29, 0.12, 3.2 + dx, D + y, -2.5, mat(i === 1 ? '#64748b' : '#7c3aed', { e: i === 1 ? '#000000' : '#a855f7', ei: 0.8 }), 'x'));
+      });
+    })();
+
+    // 7. SEGREGATED VENTED CHEMICAL BAY (Curbside Rear: X = 6.2 to 10.5, Z > 0)
+    (function buildChem() {
+      const g = groups.chem;
+      box(g, 4.2, 0.25, 2.2, 8.3, D, 2.6, mat('#3f3f46', { m: 0.4 }));
+      // Cabinet A (Oxidizer: 15-gal 12.5% NaOCl + P-502A/B) & Cabinet B (Acid/Dechlor: Citric + Bisulfite P-503)
+      [['#f472b6', 7.3], ['#f59e0b', 9.2]].forEach(([c, x]) => {
+        box(g, 1.6, 3.4, 1.6, x, D + 0.25, 2.75, mat(c, { m: 0.25, r: 0.5 }));
+        box(g, 0.55, 0.55, 0.02, x, D + 2.7, 1.94, mat('#ffffff', { e: '#ffffff', ei: 0.15 }));
+      });
+      // AIT-901 Cl2 Gas Sensor + Exterior Exhaust Fan Louver
+      cylH(g, 0.38, 0.25, 8.3, D + 5.2, W - 0.18, mat('#475569', { m: 0.6 }), 'z');
+      box(g, 0.35, 0.45, 0.15, 9.2, D + 4.5, W - 0.22, mat('#fde047', { e: '#facc15', ei: 0.4 }));
+    })();
+
+    // 8. DUPLEX 3 HP VFD KITCHEN BOOSTER (P-601A/B), CT PUMP (P-401) & 2" RPZ-602 (Roadside Rear: X = 6.2 to 10.5, Z < 0)
+    (function buildBooster() {
+      const g = groups.booster;
+      box(g, 4.4, 0.25, 2.3, 8.3, D, -2.6, mat('#1e3a8a', { m: 0.4 }));
+      // Duplex 3 HP Vertical Multi-Stage Boosters (P-601A & P-601B)
+      [6.9, 8.1].forEach(x => motorPump(g, x, D + 0.25, -2.4, 'v', '#1d4ed8', '#cbd5e1', 0.9));
+      // Suction & Discharge 316L SS Manifolds
+      cylH(g, 0.16, 2.6, 7.5, D + 0.6, -3.1, SS(), 'x');
+      cylH(g, 0.16, 3.6, 8.2, D + 2.1, -3.1, SS(), 'x');
+      // Bladder Surge Arrestor Tank
+      cylV(g, 0.5, 2.2, 9.3, D + 0.25, -2.5, mat('#60a5fa', { m: 0.35, r: 0.4 }));
+      dome(g, 0.5, 9.3, D + 2.45, -2.5, mat('#60a5fa', { m: 0.35, r: 0.4 }));
+      // 2" ASSE 1013 RPZ Backflow Preventer (RPZ-602)
+      cylH(g, 0.22, 1.9, 9.6, D + 3.0, -3.2, mat('#a16207', { m: 0.75, r: 0.35 }), 'x');
+      [9.0, 10.2].forEach(x => cylV(g, 0.14, 0.45, x, D + 3.15, -3.2, mat('#ca8a04', { m: 0.7 })));
+      // P-401 Contact Tank Return Transfer Pump (1.5 HP)
+      motorPump(g, 9.6, D + 0.75, -1.8, 'x', '#047857', '#94a3b8', 0.72);
+    })();
+
+    // Ground frame tanks (550-Gal TK-100 & 600-Gal Baffled TK-401)
+    function frameTank(g, cx, cz, w, d, h, tint, baffles) {
+      const post = mat('#334155', { m: 0.6, r: 0.4 });
+      box(g, w, h, d, cx, G, cz, mat(tint, { t: 0.28, r: 0.4, ds: true }));
+      box(g, w - 0.1, h * 0.82, d - 0.1, cx, G + 0.02, cz, mat('#1d4ed8', { t: 0.5, r: 0.1 }), false);
+      const water = new THREE.Mesh(new THREE.PlaneGeometry(w - 0.12, d - 0.12), mat('#38bdf8', { t: 0.7, r: 0.05, m: 0.1 }));
+      water.rotation.x = -Math.PI / 2;
+      water.position.set(cx, G + h * 0.82 + 0.03, cz);
+      add(g, water);
+      [[-w/2, -d/2], [w/2, -d/2], [-w/2, d/2], [w/2, d/2], [0, -d/2], [0, d/2]].forEach(([dx, dz]) => {
+        box(g, 0.16, h + 0.15, 0.16, cx + dx, G, cz + dz, post);
+      });
+      box(g, w + 0.16, 0.12, 0.16, cx, G + h + 0.04, cz - d / 2, post);
+      box(g, w + 0.16, 0.12, 0.16, cx, G + h + 0.04, cz + d / 2, post);
+      box(g, 0.16, 0.12, d + 0.16, cx - w / 2, G + h + 0.04, cz, post);
+      box(g, 0.16, 0.12, d + 0.16, cx + w / 2, G + h + 0.04, cz, post);
+      (baffles || []).forEach((bx, i) => {
+        const len = d * 0.78;
+        box(g, 0.06, h * 0.88, len, cx - w / 2 + bx, G, cz + (i % 2 ? 1 : -1) * (d - len) / 2, mat('#d1fae5', { t: 0.6 }), false);
+      });
+    }
+
+    // 9. GROUND-DEPLOYED 550-GAL RAW BREAK TANK (TK-100) + PSV-100 HYDRANT/TAP KIT
+    (function buildRaw() {
+      const g = groups.rawtank;
+      frameTank(g, -2.5, 8.2, 5.2, 5.2, 3.2, '#fbbf24');
+      // Fire Hydrant / Restaurant Upstream BWA Tap + PSV-100 Assembly
+      const red = mat('#dc2626', { m: 0.4, r: 0.45 });
+      cylV(g, 0.34, 2.0, -8.5, G, 10.5, red);
+      dome(g, 0.34, -8.5, G + 2.0, 10.5, red);
+      // PSV-100 Pressure-Sustaining Valve (20 PSI) + Air-Gap Fill Pipe over TK-100 rim
+      box(g, 0.9, 0.65, 0.6, -6.5, G, 9.6, mat('#0ea5e9', { m: 0.4 }));
+      pipe(g, [-6.2, G + 0.4, 9.4], [-5.2, G + 3.7, 8.6], 0.14, mat('#1d4ed8', { m: 0.2, r: 0.8 }));
+      pipe(g, [-5.2, G + 3.7, 8.6], [-4.2, G + 3.7, 8.2], 0.14, mat('#1d4ed8', { m: 0.2, r: 0.8 }));
+    })();
+
+    // 10. GROUND-DEPLOYED 600-GAL BAFFLED CHLORINE CONTACT TANK (TK-401)
+    (function buildCt() {
+      frameTank(groups.ct, 7.8, 8.2, 5.6, 5.6, 3.2, '#10b981', [1.4, 2.8, 4.2]);
+    })();
+
+    // ---------------- Trailer shell (22-ft Compact Gooseneck) ----------------
+    const shell = new THREE.Group();
+    scene.add(shell);
+    const glassMat = new THREE.MeshPhysicalMaterial({ color: '#6ee7b7', transparent: true, opacity: 0.08, roughness: 0.1, metalness: 0, side: THREE.DoubleSide, depthWrite: false });
+    const edgeMat = new THREE.LineBasicMaterial({ color: '#94a3b8', transparent: true, opacity: 0.55 });
+    function withEdges(mesh, parent) {
+      parent.add(mesh);
+      const e = new THREE.LineSegments(new THREE.EdgesGeometry(mesh.geometry), edgeMat);
+      e.position.copy(mesh.position); e.rotation.copy(mesh.rotation);
+      parent.add(e);
+      return mesh;
+    }
+    function panel(w, h, x, y, z, ry = 0, m = glassMat) {
+      const mesh = new THREE.Mesh(new THREE.PlaneGeometry(w, h), m);
+      mesh.position.set(x, y, z); mesh.rotation.y = ry;
+      return withEdges(mesh, shell);
+    }
+    [-W, W].forEach(z => {
+      panel(16, ROOF - D, 3.0, (ROOF + D) / 2, z);
+      panel(6, ROOF - GD, -8.0, (ROOF + GD) / 2, z);
+    });
+    panel(2 * W, ROOF - GD, -11.0, (ROOF + GD) / 2, 0, Math.PI / 2);
+    const roof = new THREE.Mesh(new THREE.PlaneGeometry(22, 2 * W), glassMat);
+    roof.rotation.x = -Math.PI / 2; roof.position.set(0, ROOF, 0);
+    withEdges(roof, shell);
+    // 1-Hour Fire & Acoustic Bulkhead Wall at X = -5.0
+    panel(2 * W, ROOF - GD, -5.0, (ROOF + GD) / 2, 0, Math.PI / 2,
+      new THREE.MeshStandardMaterial({ color: '#f97316', transparent: true, opacity: 0.22, side: THREE.DoubleSide, depthWrite: false }));
+    // Open Rear Barn Doors at X = 11.0
+    [-1, 1].forEach(sd => {
+      const hinge = new THREE.Group();
+      hinge.position.set(11.0, 0, sd * W);
+      hinge.rotation.y = -sd * 1.35;
+      const door = new THREE.Mesh(new THREE.PlaneGeometry(W, ROOF - D), glassMat);
+      door.position.set(W / 2, (ROOF + D) / 2, 0);
+      withEdges(door, hinge);
+      shell.add(hinge);
+    });
+
+    // ---------------- Animated 3D Water Flow Routes ----------------
+    const flowRoutes = [
+      // 1. Upstream Tap / Hydrant through PSV-100 into TK-100 Air Gap
+      { stream: 'raw', color: '#f59e0b', nodes: [
+        ['rawtank', -8.5, G + 1.2, 10.5], ['rawtank', -6.5, G + 0.4, 9.6], ['rawtank', -5.2, G + 3.7, 8.6], ['rawtank', -4.2, G + 3.7, 8.2] ] },
+      // 2. TK-100 Suction -> P-101 -> Auto-Strainer -> Duplex #2 Bags -> UF-201A/B
+      { stream: 'raw', color: '#f59e0b', nodes: [
+        ['rawtank', -2.0, G + 0.4, 5.6], ['intake', -1.8, G + 0.4, W + 0.3], ['intake', -1.2, D + 0.75, 2.3],
+        ['intake', -2.6, D + 1.5, 2.7], ['intake', -3.9, D + 1.5, 2.6], ['intake', -3.9, D + 3.1, 2.05],
+        ['intake', -0.4, D + 3.1, 2.05], ['uf', 1.2, D + 0.5, 2.6], ['uf', 5.0, D + 0.5, 2.6] ] },
+      // 3. UF Permeate -> UV-401A/B Reactors
+      { stream: 'raw', color: '#06b6d4', nodes: [
+        ['uf', 1.4, D + 6.05, 2.6], ['uf', 5.0, D + 6.05, 2.6], ['clearwell', 4.8, D + 5.9, -2.5], ['clearwell', 1.6, D + 5.2, -2.5] ] },
+      // 4. UV -> NaOCl Dosing -> Ground Baffled Contact Tank TK-401
+      { stream: 'potable', color: '#10b981', nodes: [
+        ['clearwell', 4.8, D + 5.2, -2.5], ['chem', 7.3, D + 2.0, 2.2], ['ct', 6.2, G + 0.4, 5.6], ['ct', 6.2, G + 3.2, 6.2] ] },
+      // 5. TK-401 Contact Tank -> P-401 Transfer Pump -> Onboard 150-Gal Clearwell TK-601
+      { stream: 'potable', color: '#10b981', nodes: [
+        ['ct', 9.4, G + 0.4, 5.6], ['booster', 9.6, D + 0.75, -1.8], ['clearwell', 4.8, D + 4.4, -2.7], ['clearwell', 3.6, D + 3.8, -2.7] ] },
+      // 6. 150-Gal Clearwell -> Duplex 3 HP Booster P-601A/B -> 2" RPZ-602 -> Kitchen Potable Outlet (60-75 PSI)
+      { stream: 'potable', color: '#3b82f6', nodes: [
+        ['clearwell', 3.6, D + 0.6, -2.7], ['booster', 6.9, D + 0.6, -3.1], ['booster', 8.1, D + 2.1, -3.1],
+        ['booster', 9.6, D + 3.0, -3.2], ['chassis', 11.25, D + 1.8, 1.0], ['chassis', 14.5, G + 0.25, 1.0], ['chassis', 20.0, G + 0.25, 2.0] ] },
+      // 7. Dechlorinated Backwash Waste -> Downstream Sanitary Cleanout (Bypassing Grease Trap)
+      { stream: 'waste', color: '#f43f5e', nodes: [
+        ['uf', 5.0, D + 0.5, 3.4], ['chem', 9.2, D + 0.6, 3.4], ['chassis', 11.25, D + 1.8, 2.0], ['chassis', 14.5, G + 0.25, 2.0], ['chassis', 20.0, G + 0.25, -3.0] ] }
+    ];
+
+    const flowGroup = new THREE.Group();
+    scene.add(flowGroup);
+    const dropGeo = new THREE.SphereGeometry(0.14, 12, 8);
+    flowRoutes.forEach(r => {
+      r.tube = new THREE.Mesh(new THREE.BufferGeometry(), new THREE.MeshStandardMaterial({ color: r.color, transparent: true, opacity: 0.55, roughness: 0.3, emissive: r.color, emissiveIntensity: 0.25, depthWrite: false }));
+      flowGroup.add(r.tube);
+      r.dropMat = new THREE.MeshStandardMaterial({ color: '#ffffff', emissive: r.color, emissiveIntensity: 1.2 });
+      r.count = 0; r.drops = null;
+    });
+
+    // ---------------- State ----------------
+    let explodeFactor = 0, explodeGoal = 0;
+    let showLabels = true, showFlow = true, shellMode = 'glass', showTruck = true, spin = false;
+    let flowFilter = 'all', selectedId = 'uf', hoverId = null;
+
+    function skidBox(id) {
+      const b = new THREE.Box3();
+      groups[id].traverse(o => { if (o.isMesh && o.userData.skid === id && !(id === 'chassis' && !showTruck && isTruck(o))) b.expandByObject(o); });
+      return b;
+    }
+    function isTruck(m) { let o = m; while (o) { if (o === truck) return true; o = o.parent; } return false; }
+
+    const baseCenters = {};
+    Object.keys(groups).forEach(id => { baseCenters[id] = skidBox(id).getCenter(new THREE.Vector3()); });
+
+    const leaders = {};
+    Object.keys(skids).forEach(id => {
+      if (id === 'chassis') return;
+      const line = new THREE.Line(new THREE.BufferGeometry().setFromPoints([new THREE.Vector3(), new THREE.Vector3()]),
+        new THREE.LineDashedMaterial({ color: skids[id].color, dashSize: 0.45, gapSize: 0.3, transparent: true, opacity: 0.7 }));
+      line.visible = false;
+      scene.add(line);
+      leaders[id] = line;
+    });
+
+    const labelEls = {};
+    Object.entries(skids).forEach(([id, s]) => {
+      const wrap = document.createElement('div');
+      wrap.className = 'label-wrap';
+      const pill = document.createElement('div');
+      pill.className = 'label-pill px-2.5 py-1 rounded-md text-xs font-semibold shadow-md border cursor-pointer whitespace-nowrap flex items-center gap-1.5';
+      pill.style.backgroundColor = 'rgba(15, 23, 42, 0.88)';
+      pill.style.color = '#f8fafc';
+      pill.style.borderColor = s.color;
+      pill.innerHTML = `<span class="w-2 h-2 rounded-full" style="background:${s.color}"></span><span>${s.short}</span>`;
+      pill.addEventListener('pointerdown', e => e.stopPropagation());
+      pill.addEventListener('click', e => { e.stopPropagation(); selectSkid3D(id, true); });
+      pill.addEventListener('mouseenter', () => setHover(id));
+      pill.addEventListener('mouseleave', () => setHover(null));
+      wrap.appendChild(pill);
+      const obj = new CSS2DObject(wrap);
+      obj.position.set(...s.label);
+      groups[id].add(obj);
+      labelEls[id] = { obj, pill };
+    });
+
+    function applyExplode() {
+      Object.entries(skids).forEach(([id, s]) => {
+        groups[id].position.set(s.explode[0] * explodeFactor, s.explode[1] * explodeFactor, s.explode[2] * explodeFactor);
+        const l = leaders[id];
+        if (l) {
+          const a = baseCenters[id], b = a.clone().add(groups[id].position);
+          l.geometry.setFromPoints([a, b]);
+          l.computeLineDistances();
+          l.visible = explodeFactor > 0.03;
+        }
+      });
+      groundGroup.position.y = -5.0 * explodeFactor;
+      shell.position.y = 13.0 * explodeFactor;
+      rebuildFlows();
+    }
+
+    function rebuildFlows() {
+      flowRoutes.forEach(r => {
+        const pts = r.nodes.map(([skid, x, y, z]) => new THREE.Vector3(x, y, z).add(groups[skid].position));
+        const path = new THREE.CurvePath();
+        for (let i = 0; i < pts.length - 1; i++) path.add(new THREE.LineCurve3(pts[i], pts[i + 1]));
+        r.path = path;
+        r.length = path.getLength();
+        r.tube.geometry.dispose();
+        r.tube.geometry = new THREE.TubeGeometry(path, Math.max(20, pts.length * 12), 0.11, 8, false);
+        const n = Math.max(3, Math.round(r.length / 1.5));
+        if (n !== r.count) {
+          if (r.drops) { flowGroup.remove(r.drops); r.drops.dispose(); }
+          r.drops = new THREE.InstancedMesh(dropGeo, r.dropMat, n);
+          r.drops.frustumCulled = false;
+          flowGroup.add(r.drops);
+          r.count = n;
+        }
+      });
+      updateFlowVisibility();
+    }
+
+    function updateFlowVisibility() {
+      flowRoutes.forEach(r => {
+        const on = showFlow && (flowFilter === 'all' || r.stream === flowFilter);
+        r.tube.visible = on;
+        if (r.drops) r.drops.visible = on;
+      });
+    }
+
+    const tmpM = new THREE.Matrix4(), tmpV = new THREE.Vector3();
+    function animateDrops(t) {
+      flowRoutes.forEach(r => {
+        if (!r.drops || !r.drops.visible) return;
+        const speed = 3.8 / r.length;
+        for (let i = 0; i < r.count; i++) {
+          r.path.getPointAt(((t * speed) + i / r.count) % 1, tmpV);
+          tmpM.makeTranslation(tmpV.x, tmpV.y, tmpV.z);
+          r.drops.setMatrixAt(i, tmpM);
+        }
+        r.drops.instanceMatrix.needsUpdate = true;
+      });
+    }
+
+    // ---------------- Selection & hover ----------------
+    const selBox = new THREE.Box3Helper(new THREE.Box3(), new THREE.Color('#10b981'));
+    selBox.material.transparent = true;
+    selBox.material.opacity = 0.65;
+    scene.add(selBox);
+
+    function tint(id, intensity) {
+      const c = new THREE.Color(skids[id].color);
+      groups[id].traverse(o => {
+        if (!(o.isMesh && o.userData.skid === id && o.material && o.material.emissive)) return;
+        const m = o.material;
+        if (m.userData.baseE === undefined) { m.userData.baseE = m.emissive.clone(); m.userData.baseI = m.emissiveIntensity; }
+        if (intensity > 0) { m.emissive.copy(c); m.emissiveIntensity = intensity; }
+        else { m.emissive.copy(m.userData.baseE); m.emissiveIntensity = m.userData.baseI; }
+      });
+    }
+    function refreshTints() {
+      Object.keys(groups).forEach(id => tint(id, id === selectedId ? 0.22 : (id === hoverId ? 0.12 : 0)));
+      Object.entries(labelEls).forEach(([id, { pill }]) => {
+        const on = id === selectedId;
+        pill.classList.toggle('selected', on);
+        pill.style.boxShadow = on ? `0 0 12px ${skids[id].color}` : 'none';
+      });
+    }
+    function setHover(id) {
+      if (id === hoverId) return;
+      hoverId = id;
+      container.classList.toggle('hovering', !!id);
+      refreshTints();
+    }
+    function updateSelBox() {
+      if (!selectedId || selectedId === 'chassis') { selBox.visible = false; return; }
+      selBox.box.copy(skidBox(selectedId).expandByScalar(0.22));
+      selBox.visible = true;
+    }
+
+    // ---------------- Inspector ----------------
+    const stageBtnContainer = document.getElementById('stage-buttons');
+    Object.entries(skids).forEach(([id, s]) => {
+      const btn = document.createElement('button');
+      btn.id = 'stbtn-' + id;
+      btn.innerHTML = `<span class="w-2 h-2 rounded-full shrink-0" style="background:${s.color}"></span><span class="truncate">${s.short}</span>`;
+      btn.onclick = () => selectSkid3D(id, true);
+      stageBtnContainer.appendChild(btn);
+    });
+
+    function selectSkid3D(id, focus = false) {
+      selectedId = id;
+      const s = skids[id];
+      document.getElementById('detail-tag').textContent = s.tag;
+      document.getElementById('detail-title').textContent = s.title;
+      document.getElementById('detail-badge').textContent = s.weight;
+      document.getElementById('detail-desc').textContent = s.desc;
+      document.getElementById('detail-specs').innerHTML = s.specs.map(([k, v]) => `
+        <div class="flex justify-between items-center gap-3 text-xs py-1 px-2 rounded bg-[var(--secondary)]/60 border border-[var(--border)]">
+          <span class="text-[var(--muted-foreground)]">${k}</span>
+          <span class="font-mono font-semibold text-right">${v}</span>
+        </div>`).join('');
+      Object.keys(skids).forEach(k => {
+        document.getElementById('stbtn-' + k).className = k === id
+          ? 'px-2.5 py-1.5 rounded text-xs font-semibold text-left truncate border border-emerald-500 bg-emerald-500/15 text-emerald-400 transition flex items-center gap-1.5'
+          : 'px-2.5 py-1.5 rounded text-xs font-medium text-left truncate border border-[var(--border)] bg-[var(--secondary)]/40 hover:bg-[var(--secondary)] transition flex items-center gap-1.5';
+      });
+      refreshTints();
+      updateSelBox();
+      if (focus) focusOn(id);
+    }
+
+    // ---------------- Camera ----------------
+    let camGoal = null;
+    function flyTo(pos, target) { camGoal = { pos: new THREE.Vector3(...pos), target: new THREE.Vector3(...target) }; }
+    controls.addEventListener('start', () => { camGoal = null; container.classList.add('dragging'); });
+    controls.addEventListener('end', () => container.classList.remove('dragging'));
+
+    function focusOn(id) {
+      const b = skidBox(id);
+      const c = b.getCenter(new THREE.Vector3());
+      const size = b.getSize(new THREE.Vector3()).length();
+      const dir = camera.position.clone().sub(controls.target).normalize();
+      if (dir.y < 0.25) { dir.y = 0.35; dir.normalize(); }
+      const dist = Math.max(10, Math.min(55, size * 1.7));
+      flyTo(c.clone().add(dir.multiplyScalar(dist)).toArray(), c.toArray());
+    }
+
+    const PRESETS = {
+      iso:    () => explodeGoal > 0.3 ? [[26, 28, 50], [-3, 2, 2]] : [[18, 16, 38], [-4, 1, 2]],
+      side:   () => [[-4, 3, 46], [-4, 2, 0]],
+      top:    () => [[-4, 58, 2.5], [-4, 0, 2]],
+      rear:   () => [[32, 8, 10], [8, 2.5, 0]],
+      inside: () => [[10.8, D + 4.5, 0], [-4, D + 3.8, 0]]
+    };
+    function setCameraPreset(p) {
+      const [pos, tgt] = PRESETS[p]();
+      flyTo(pos, tgt);
+    }
+
+    // ---------------- Picking ----------------
+    const raycaster = new THREE.Raycaster();
+    const ndc = new THREE.Vector2();
+    let down = null, hoverQueued = null;
+    function pick(e) {
+      const r = renderer.domElement.getBoundingClientRect();
+      ndc.set(((e.clientX - r.left) / r.width) * 2 - 1, -((e.clientY - r.top) / r.height) * 2 + 1);
+      raycaster.setFromCamera(ndc, camera);
+      const hits = raycaster.intersectObjects(pickables.filter(m => showTruck || !isTruck(m)), false);
+      return hits.length ? hits[0].object.userData.skid : null;
+    }
+    renderer.domElement.addEventListener('pointerdown', e => { down = { x: e.clientX, y: e.clientY }; });
+    renderer.domElement.addEventListener('pointerup', e => {
+      if (down && Math.hypot(e.clientX - down.x, e.clientY - down.y) < 5) {
+        const id = pick(e);
+        if (id) selectSkid3D(id, false);
+      }
+      down = null;
+    });
+    renderer.domElement.addEventListener('dblclick', e => { const id = pick(e); if (id) selectSkid3D(id, true); });
+    renderer.domElement.addEventListener('pointermove', e => { if (!e.buttons) hoverQueued = e; });
+    renderer.domElement.addEventListener('pointerleave', () => { hoverQueued = null; setHover(null); });
+
+    // ---------------- Resize ----------------
+    function resize() {
+      const w = container.clientWidth, h = container.clientHeight;
+      if (!w || !h) return;
+      renderer.setSize(w, h);
+      labelRenderer.setSize(w, h);
+      camera.aspect = w / h;
+      camera.updateProjectionMatrix();
+    }
+    new ResizeObserver(resize).observe(container);
+    resize();
+
+    // ---------------- UI callbacks ----------------
+    const OFF_CLASS = 'px-3 py-2 rounded-lg text-xs font-semibold bg-[var(--secondary)] text-[var(--secondary-foreground)] border border-[var(--border)] transition';
+    function btnStyle(id, on, onClass) {
+      document.getElementById(id).className = on ? `px-3 py-2 rounded-lg text-xs font-semibold ${onClass} text-white shadow-sm transition` : OFF_CLASS;
+    }
+    function onExplodeSlider(val) {
+      explodeGoal = parseInt(val, 10) / 100;
+      document.getElementById('explode-pct').textContent = val + '%';
+      document.getElementById('btn-explode').textContent = explodeGoal > 0.5 ? 'Collapse Assembly' : 'Explode Assembly';
+    }
+    function toggleExplodePreset() {
+      const v = explodeGoal > 0.3 ? 0 : 85;
+      document.getElementById('explode-slider').value = v;
+      onExplodeSlider(v);
+      setCameraPreset('iso');
+    }
+    function toggleLabels() {
+      showLabels = !showLabels;
+      document.getElementById('btn-labels').textContent = showLabels ? 'Labels: ON' : 'Labels: OFF';
+      btnStyle('btn-labels', showLabels, 'bg-emerald-600');
+    }
+    function toggleFlow() {
+      showFlow = !showFlow;
+      document.getElementById('btn-flow').textContent = showFlow ? 'Water Flow: ON' : 'Water Flow: OFF';
+      btnStyle('btn-flow', showFlow, 'bg-cyan-600');
+      document.getElementById('flow-speed-label').textContent = showFlow ? '35 GPM Cont. / 50 GPM Peak' : 'Flow hidden';
+      updateFlowVisibility();
+    }
+    function toggleShell() {
+      shellMode = { glass: 'wire', wire: 'hidden', hidden: 'glass' }[shellMode];
+      document.getElementById('btn-shell').textContent = 'Walls: ' + { glass: 'Glass', wire: 'Wireframe', hidden: 'Hidden' }[shellMode];
+      shell.visible = shellMode !== 'hidden';
+      shell.traverse(o => { if (o.isMesh) o.visible = shellMode === 'glass'; });
+    }
+    function toggleTruck() {
+      showTruck = !showTruck;
+      truck.visible = showTruck;
+      document.getElementById('btn-truck').textContent = showTruck ? '1-Ton Pickup: ON' : '1-Ton Pickup: OFF';
+      btnStyle('btn-truck', showTruck, 'bg-slate-600');
+    }
+    function toggleSpin() {
+      spin = !spin;
+      controls.autoRotate = spin;
+      controls.autoRotateSpeed = 0.8;
+      document.getElementById('btn-spin').textContent = spin ? 'Auto-Rotate: ON' : 'Auto-Rotate: OFF';
+      btnStyle('btn-spin', spin, 'bg-violet-600');
+    }
+    function setFlowHighlight(mode) {
+      flowFilter = mode;
+      ['all', 'raw', 'potable'].forEach(m => {
+        document.getElementById('fl-' + m).className = m === mode
+          ? 'px-2 py-1.5 rounded text-xs font-semibold bg-emerald-600 text-white transition'
+          : 'px-2 py-1.5 rounded text-xs font-semibold bg-[var(--secondary)] text-[var(--secondary-foreground)] border border-[var(--border)] transition';
+      });
+      updateFlowVisibility();
+    }
+    Object.assign(window, { onExplodeSlider, toggleExplodePreset, toggleLabels, toggleFlow, toggleShell, toggleTruck, toggleSpin, setFlowHighlight, setCameraPreset, selectSkid3D });
+
+    // ---------------- Init & loop ----------------
+    const [p0, t0] = PRESETS.iso();
+    camera.position.set(...p0);
+    controls.target.set(...t0);
+    applyExplode();
+    selectSkid3D('uf', false);
+    loadingEl.remove();
+
+    const clock = new THREE.Clock();
+    function loop() {
+      requestAnimationFrame(loop);
+      const dt = Math.min(clock.getDelta(), 0.05);
+      const t = clock.elapsedTime;
+
+      if (explodeFactor !== explodeGoal) {
+        explodeFactor += (explodeGoal - explodeFactor) * Math.min(1, dt * 7);
+        if (Math.abs(explodeGoal - explodeFactor) < 0.0005) explodeFactor = explodeGoal;
+        applyExplode();
+        updateSelBox();
+      }
+      if (camGoal) {
+        const k = Math.min(1, dt * 4);
+        camera.position.lerp(camGoal.pos, k);
+        controls.target.lerp(camGoal.target, k);
+        if (camera.position.distanceTo(camGoal.pos) < 0.05 && controls.target.distanceTo(camGoal.target) < 0.05) camGoal = null;
+      }
+      controls.update();
+
+      if (hoverQueued) { setHover(pick(hoverQueued)); hoverQueued = null; }
+      if (showFlow) animateDrops(t);
+      Object.entries(labelEls).forEach(([id, { obj }]) => {
+        obj.visible = showLabels && !(id === 'chassis' && explodeFactor < 0.25);
+      });
+
+      renderer.render(scene, camera);
+      labelRenderer.render(scene, camera);
+    }
+    loop();
+  </script>
+</body>
+</html>
