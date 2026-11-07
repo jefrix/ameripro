@@ -1,0 +1,354 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>MWTP-50 ("KitchenShield-50") — Restaurant Downtime ROI &amp; Standby LOI Generator</title>
+  <script src="https://www.gstatic.com/antigravity/web/dev/tailwindcss.min.js"></script>
+  <style>
+    @media print {
+      .no-print { display: none !important; }
+      body { background: #ffffff !important; color: #0f172a !important; padding: 0 !important; }
+      .print-card { border: 1px solid #cbd5e1 !important; background: #ffffff !important; color: #0f172a !important; box-shadow: none !important; }
+    }
+    :root { --background: #0b1120; --foreground: #f1f5f9; --card: #111827; --secondary: #1e293b; --secondary-foreground: #e2e8f0; --muted-foreground: #94a3b8; --border: #1e293b; --primary: #10b981; --primary-foreground: #ffffff; }
+    html.light { --background: #f8fafc; --foreground: #0f172a; --card: #ffffff; --secondary: #f1f5f9; --secondary-foreground: #1e293b; --muted-foreground: #64748b; --border: #e2e8f0; --primary: #059669; --primary-foreground: #ffffff; }
+  </style>
+</head>
+<body class="bg-[var(--background)] text-[var(--foreground)] antialiased p-4 md:p-6 max-w-6xl mx-auto space-y-6">
+
+  <!-- Top Sales Action Bar (Hidden when printing) -->
+  <div class="no-print bg-[var(--card)] border border-[var(--border)] rounded-xl px-4 py-3 flex flex-wrap items-center justify-between gap-3 shadow-sm">
+    <div class="flex flex-wrap items-center gap-2.5">
+      <span class="px-2.5 py-0.5 rounded-full text-xs font-bold bg-emerald-500/15 text-emerald-400 border border-emerald-500/30">INTERACTIVE ROI &amp; LOI GENERATOR</span>
+      <span class="text-xs text-[var(--muted-foreground)]">Calculate Boil Water Advisory Shutdown Losses vs. MWTP-50 Standby Protection &amp; Print a Signed LOI</span>
+    </div>
+    <div class="flex items-center gap-2">
+      <button onclick="presetSingle()" class="px-3 py-1.5 rounded-lg text-xs font-semibold bg-[var(--secondary)] text-[var(--secondary-foreground)] border border-[var(--border)] hover:border-emerald-500 transition">
+        Single High-Volume Restaurant
+      </button>
+      <button onclick="presetGroup()" class="px-3 py-1.5 rounded-lg text-xs font-semibold bg-[var(--secondary)] text-[var(--secondary-foreground)] border border-[var(--border)] hover:border-blue-500 transition">
+        5-Store Franchise Group
+      </button>
+      <button onclick="window.print()" class="px-3.5 py-1.5 rounded-lg text-xs font-semibold bg-emerald-600 text-white hover:bg-emerald-500 transition shadow-sm">
+        Print / Save Proposal &amp; LOI PDF
+      </button>
+    </div>
+  </div>
+
+  <!-- Main Printable Proposal & Calculator Container -->
+  <div class="print-card bg-[var(--card)] border border-[var(--border)] rounded-2xl shadow-lg p-6 md:p-8 space-y-6">
+
+    <!-- Header -->
+    <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-4 border-b border-[var(--border)] pb-4">
+      <div>
+        <div class="text-xs font-mono uppercase text-emerald-400 font-bold">AMERIPRO ENVIRONMENTAL SERVICES • KITCHENSHIELD-50 PROGRAM</div>
+        <h1 class="text-2xl md:text-3xl font-extrabold tracking-tight mt-0.5">
+          Commercial Kitchen Boil Water Advisory ROI &amp; Standby Proposal
+        </h1>
+        <p class="text-xs text-[var(--muted-foreground)] mt-1">
+          Powered by the <strong>MWTP-50-GN22 Compact Gooseneck Water Treatment Plant</strong> (35 GPM continuous / 50 GPM peak @ 60–75 PSI • 2-Parking-Space Footprint • 240V 50A Shore Plug or 20 kW Diesel Gen)
+        </p>
+      </div>
+      <div class="bg-emerald-500/10 border border-emerald-500/30 rounded-xl px-4 py-2.5 text-center shrink-0">
+        <div class="text-[10px] font-mono uppercase text-emerald-400 font-bold">Break-Even Shutdown Time</div>
+        <div id="hero-breakeven" class="text-2xl font-extrabold font-mono text-emerald-400">3.5 Hours</div>
+        <div class="text-[10px] text-[var(--muted-foreground)]">of avoided closure pays for 1 full year of Standby</div>
+      </div>
+    </div>
+
+    <!-- Calculator Grid: Left Inputs (5 Cols) + Right Financial Output (7 Cols) -->
+    <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
+
+      <!-- Left 5 Cols: Customer Inputs -->
+      <div class="lg:col-span-5 bg-[var(--secondary)]/40 border border-[var(--border)] rounded-xl p-5 space-y-4">
+        <div class="text-xs font-mono uppercase text-blue-400 font-bold">1. RESTAURANT / HOSPITALITY GROUP PROFILE</div>
+
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs">
+          <div class="sm:col-span-2">
+            <label class="block text-[11px] font-semibold text-[var(--muted-foreground)] mb-1">Restaurant or Franchise Group Name</label>
+            <input id="inp-company" type="text" value="Peachtree Hospitality Group LLC" oninput="calcROI()" class="w-full bg-[var(--card)] border border-[var(--border)] rounded-lg px-3 py-1.5 font-semibold">
+          </div>
+          <div>
+            <label class="block text-[11px] font-semibold text-[var(--muted-foreground)] mb-1">Locations Covered</label>
+            <select id="inp-stores" onchange="calcROI()" class="w-full bg-[var(--card)] border border-[var(--border)] rounded-lg px-2.5 py-1.5 font-semibold text-emerald-400">
+              <option value="1">1 Location ($150/mo • $1,800/yr)</option>
+              <option value="2">2 Locations ($295/mo • $3,500/yr Group)</option>
+              <option value="3">3 Locations ($295/mo • $3,500/yr Group)</option>
+              <option value="4">4 Locations ($295/mo • $3,500/yr Group)</option>
+              <option value="5" selected>5 Locations ($295/mo • $3,500/yr Group)</option>
+            </select>
+          </div>
+          <div>
+            <label class="block text-[11px] font-semibold text-[var(--muted-foreground)] mb-1">AmeriPro F.O.G. / Hood Client?</label>
+            <select id="inp-fog" onchange="calcROI()" class="w-full bg-[var(--card)] border border-[var(--border)] rounded-lg px-2.5 py-1.5 font-semibold">
+              <option value="yes" selected>Yes — Existing Account ($0 Survey)</option>
+              <option value="new">New Account (Bundle w/ F.O.G.)</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="space-y-3 pt-2 border-t border-[var(--border)] text-xs">
+          <div>
+            <div class="flex justify-between font-semibold mb-1">
+              <span>Avg Daily Gross Sales (Per Store):</span>
+              <span id="lbl-sales" class="font-mono text-emerald-400 font-bold">$12,000 / day</span>
+            </div>
+            <input id="inp-sales" type="range" min="3000" max="35000" step="500" value="12000" oninput="calcROI()" class="no-print w-full accent-emerald-500">
+            <div class="flex justify-between text-[10px] text-[var(--muted-foreground)]">
+              <span>$3,000/day (Fast Casual)</span>
+              <span>$12,000/day (Full Service)</span>
+              <span>$35,000/day (High-Vol/Hotel)</span>
+            </div>
+          </div>
+
+          <div>
+            <div class="flex justify-between font-semibold mb-1">
+              <span>Gross Margin + Fixed Overhead Lost When Closed:</span>
+              <span id="lbl-margin" class="font-mono text-blue-400 font-bold">60% ($7,200/day)</span>
+            </div>
+            <input id="inp-margin" type="range" min="45" max="75" step="5" value="60" oninput="calcROI()" class="no-print w-full accent-blue-500">
+            <div class="text-[10px] text-[var(--muted-foreground)]">
+              Covers lost food/beverage gross profit + unrecovered rent, salaried staff, and utility overhead.
+            </div>
+          </div>
+
+          <div class="grid grid-cols-2 gap-3">
+            <div>
+              <div class="flex justify-between font-semibold mb-1">
+                <span>Advisory Duration:</span>
+                <span id="lbl-days" class="font-mono text-amber-400 font-bold">3 Days</span>
+              </div>
+              <input id="inp-days" type="range" min="1" max="7" step="1" value="3" oninput="calcROI()" class="no-print w-full accent-amber-500">
+            </div>
+            <div>
+              <div class="flex justify-between font-semibold mb-1">
+                <span>Spoiled Prep / Ice Loss:</span>
+                <span id="lbl-spoil" class="font-mono text-rose-400 font-bold">$3,000</span>
+              </div>
+              <input id="inp-spoil" type="range" min="500" max="10000" step="500" value="3000" oninput="calcROI()" class="no-print w-full accent-rose-500">
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Right 7 Cols: Side-by-Side Financial Impact & Net Savings -->
+      <div class="lg:col-span-7 flex flex-col justify-between space-y-4">
+        <div>
+          <div class="text-xs font-mono uppercase text-emerald-400 font-bold mb-2">2. FINANCIAL COMPARISON: SINGLE BOIL WATER ADVISORY EVENT</div>
+
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <!-- Box A: Closing the Kitchen -->
+            <div class="bg-rose-500/10 border border-rose-500/30 rounded-xl p-4 space-y-2.5">
+              <div class="flex items-center justify-between">
+                <span class="text-xs font-bold text-rose-400 uppercase">Option A: Close Restaurant</span>
+                <span id="out-days-badge" class="text-[10px] font-mono bg-rose-500/20 text-rose-300 px-2 py-0.5 rounded">3 Days Closed</span>
+              </div>
+              <div class="space-y-1.5 text-xs">
+                <div class="flex justify-between">
+                  <span class="text-[var(--muted-foreground)]">Lost Gross F&amp;B Revenue:</span>
+                  <span id="out-gross-lost" class="font-mono font-bold text-rose-400">$36,000</span>
+                </div>
+                <div class="flex justify-between">
+                  <span class="text-[var(--muted-foreground)]">Lost Margin &amp; Uncovered Fixed Cost:</span>
+                  <span id="out-margin-lost" class="font-mono font-semibold">$21,600</span>
+                </div>
+                <div class="flex justify-between">
+                  <span class="text-[var(--muted-foreground)]">Spoiled Prep, Thawed Stock &amp; Sanitization:</span>
+                  <span id="out-spoil-lost" class="font-mono font-semibold">$3,000</span>
+                </div>
+                <div class="pt-2 border-t border-rose-500/30 flex justify-between text-sm font-extrabold text-rose-400">
+                  <span>Direct Bottom-Line Loss:</span>
+                  <span id="out-total-loss" class="font-mono">$24,600</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- Box B: Operating on MWTP-50 -->
+            <div class="bg-emerald-500/10 border border-emerald-500/40 rounded-xl p-4 space-y-2.5">
+              <div class="flex items-center justify-between">
+                <span class="text-xs font-bold text-emerald-400 uppercase">Option B: Open on MWTP-50</span>
+                <span class="text-[10px] font-mono bg-emerald-500/20 text-emerald-300 px-2 py-0.5 rounded">Health Dept Approved</span>
+              </div>
+              <div class="space-y-1.5 text-xs">
+                <div class="flex justify-between">
+                  <span class="text-[var(--muted-foreground)]">Gross F&amp;B Revenue Retained:</span>
+                  <span id="out-gross-kept" class="font-mono font-bold text-emerald-400">$36,000 (100%)</span>
+                </div>
+                <div class="flex justify-between">
+                  <span class="text-[var(--muted-foreground)]">Emergency Mobilization &amp; Sanitization:</span>
+                  <span class="font-mono font-semibold">$2,500</span>
+                </div>
+                <div class="flex justify-between">
+                  <span class="text-[var(--muted-foreground)]">Active Treatment (<span id="out-days-txt">3</span> d × $3,200/d):</span>
+                  <span id="out-active-fee" class="font-mono font-semibold">$9,600</span>
+                </div>
+                <div class="pt-2 border-t border-emerald-500/30 flex justify-between text-sm font-extrabold text-emerald-400">
+                  <span>Total Deployment Invoice:</span>
+                  <span id="out-total-fee" class="font-mono">$12,100</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Summary KPI Strip -->
+        <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
+          <div class="bg-[var(--secondary)]/60 border border-[var(--border)] rounded-xl p-3.5 text-center">
+            <div class="text-[11px] text-[var(--muted-foreground)] uppercase">Daily Retainer Cost / Store</div>
+            <div id="out-daily-retainer" class="text-xl font-extrabold font-mono text-blue-400 mt-1">$1.92 / day</div>
+            <div id="out-retainer-sub" class="text-[10px] text-[var(--muted-foreground)] mt-0.5">$3,500/yr ÷ 5 stores ($58/mo/store)</div>
+          </div>
+
+          <div class="bg-[var(--secondary)]/60 border border-[var(--border)] rounded-xl p-3.5 text-center">
+            <div class="text-[11px] text-[var(--muted-foreground)] uppercase">Gross Sales Protected</div>
+            <div id="out-sales-saved" class="text-xl font-extrabold font-mono text-emerald-400 mt-1">$36,000</div>
+            <div class="text-[10px] text-[var(--muted-foreground)] mt-0.5">+ Guest loyalty &amp; staff shifts preserved</div>
+          </div>
+
+          <div class="bg-emerald-500/15 border border-emerald-500/40 rounded-xl p-3.5 text-center">
+            <div class="text-[11px] text-emerald-300 uppercase font-bold">Net Profit Saved (1 Event)</div>
+            <div id="out-net-saved" class="text-xl font-extrabold font-mono text-emerald-400 mt-1">+$12,500</div>
+            <div id="out-roi-pct" class="text-[10px] text-emerald-300 font-semibold mt-0.5">3.6× Return on Annual Retainer</div>
+          </div>
+        </div>
+
+        <!-- Included in Standby Membership Box -->
+        <div class="bg-[var(--secondary)]/40 border border-[var(--border)] rounded-xl p-3.5 text-xs flex flex-wrap items-center justify-between gap-2">
+          <div>
+            <strong class="text-emerald-400">Included in Your Standby Retainer:</strong> Pre-deployment plumbing &amp; cleanout survey • Custom 316SS camlock adapter kit stored on the trailer • Pre-written County Health Department Alternate-Water Operations Plan.
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Section 3: Printable Non-Binding Standby Letter of Intent (LOI) -->
+    <div class="border-2 border-emerald-500/40 bg-emerald-500/5 rounded-xl p-5 space-y-3">
+      <div class="flex flex-wrap items-center justify-between gap-2 border-b border-emerald-500/20 pb-2">
+        <div>
+          <span class="text-xs font-mono font-bold text-emerald-400 uppercase">3. NON-BINDING STANDBY LETTER OF INTENT (LOI)</span>
+          <h2 class="text-base font-bold">Enrollment Intent — AmeriPro KitchenShield-50 Emergency Water Continuity</h2>
+        </div>
+        <span id="loi-plan-badge" class="px-3 py-1 rounded-lg bg-emerald-600 text-white text-xs font-mono font-bold">
+          5-Store Group Plan: $295/mo ($3,500/yr)
+        </span>
+      </div>
+
+      <p class="text-xs text-[var(--muted-foreground)] leading-relaxed">
+        <strong><span id="loi-company-txt" class="text-[var(--foreground)]">Peachtree Hospitality Group LLC</span></strong> expresses its non-binding intent to enroll <strong><span id="loi-stores-txt" class="text-[var(--foreground)]">5 commercial kitchen location(s)</span></strong> in the AmeriPro Environmental Services <strong>MWTP-50 ("KitchenShield-50") Standby Retainer Program</strong> at <strong><span id="loi-rate-txt" class="text-emerald-400">$295/month ($3,500/year)</span></strong>, subject to AmeriPro completing pre-deployment site surveys, obtaining state drinking-water emergency-use approval, and executing a formal Standby Service Agreement (with active emergency dispatches billed at <strong>$2,500 mobilization + $3,200 per 24-hour day</strong>, one location pressurized at a time in call order). This LOI may be presented to AmeriPro's commercial lending institution in support of fleet financing.
+      </p>
+
+      <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 pt-3 text-xs">
+        <div>
+          <div class="border-b border-slate-500 pb-5 font-mono text-[var(--muted-foreground)]">Authorized Signature:</div>
+          <div class="text-[11px] text-[var(--muted-foreground)] mt-1">Owner / Operating Partner / Director of Ops</div>
+        </div>
+        <div>
+          <div class="border-b border-slate-500 pb-5 font-mono text-[var(--muted-foreground)]">Printed Name, Title &amp; Phone:</div>
+          <div class="text-[11px] text-[var(--muted-foreground)] mt-1">Email / Billing Address</div>
+        </div>
+        <div>
+          <div class="border-b border-slate-500 pb-5 font-mono text-[var(--muted-foreground)]">Date &amp; AmeriPro Rep:</div>
+          <div class="text-[11px] text-[var(--muted-foreground)] mt-1">F.O.G. / Hood Account Bundle Verified</div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <script>
+    function calcROI() {
+      const company = document.getElementById('inp-company').value || 'Prospective Restaurant Client';
+      const stores = parseInt(document.getElementById('inp-stores').value, 10);
+      const sales = parseFloat(document.getElementById('inp-sales').value);
+      const marginPct = parseFloat(document.getElementById('inp-margin').value);
+      const days = parseInt(document.getElementById('inp-days').value, 10);
+      const spoil = parseFloat(document.getElementById('inp-spoil').value);
+
+      const dailyMarginLost = Math.round(sales * (marginPct / 100));
+      document.getElementById('lbl-sales').textContent = `$${sales.toLocaleString()} / day`;
+      document.getElementById('lbl-margin').textContent = `${marginPct}% ($${dailyMarginLost.toLocaleString()}/day)`;
+      document.getElementById('lbl-days').textContent = `${days} ${days === 1 ? 'Day' : 'Days'}`;
+      document.getElementById('lbl-spoil').textContent = `$${spoil.toLocaleString()}`;
+
+      // Retainer pricing
+      const annualRetainer = stores === 1 ? 1800 : 3500;
+      const monthlyRetainer = stores === 1 ? 150 : 295;
+      const dailyPerStore = (annualRetainer / 365 / stores).toFixed(2);
+      const monthlyPerStore = Math.round(monthlyRetainer / stores);
+
+      // Event calculations
+      const grossLost = sales * days;
+      const marginLost = dailyMarginLost * days;
+      const totalLoss = marginLost + spoil;
+
+      const activeFee = 3200 * days;
+      const totalFee = 2500 + activeFee;
+      const netSaved = totalLoss - totalFee;
+      const roiMultiple = (netSaved / annualRetainer).toFixed(1);
+
+      // Break-even hours of avoided shutdown to pay for annual retainer (assuming 14 operating hours/day)
+      const hourlyLoss = dailyMarginLost / 14;
+      const breakEvenHours = (annualRetainer / hourlyLoss).toFixed(1);
+
+      document.getElementById('hero-breakeven').textContent = `${breakEvenHours} Hours`;
+      document.getElementById('out-days-badge').textContent = `${days} ${days === 1 ? 'Day' : 'Days'} Closed`;
+      document.getElementById('out-gross-lost').textContent = `$${grossLost.toLocaleString()}`;
+      document.getElementById('out-margin-lost').textContent = `$${marginLost.toLocaleString()}`;
+      document.getElementById('out-spoil-lost').textContent = `$${spoil.toLocaleString()}`;
+      document.getElementById('out-total-loss').textContent = `$${totalLoss.toLocaleString()}`;
+
+      document.getElementById('out-gross-kept').textContent = `$${grossLost.toLocaleString()} (100%)`;
+      document.getElementById('out-days-txt').textContent = String(days);
+      document.getElementById('out-active-fee').textContent = `$${activeFee.toLocaleString()}`;
+      document.getElementById('out-total-fee').textContent = `$${totalFee.toLocaleString()}`;
+
+      document.getElementById('out-daily-retainer').textContent = `$${dailyPerStore} / day`;
+      document.getElementById('out-retainer-sub').textContent = stores === 1
+        ? '$1,800/yr Single Store ($150/mo)'
+        : `$3,500/yr ÷ ${stores} stores ($${monthlyPerStore}/mo/store)`;
+
+      document.getElementById('out-sales-saved').textContent = `$${grossLost.toLocaleString()}`;
+      document.getElementById('out-net-saved').textContent = netSaved >= 0
+        ? `+$${netSaved.toLocaleString()}`
+        : `-$${Math.abs(netSaved).toLocaleString()}`;
+      document.getElementById('out-roi-pct').textContent = netSaved > 0
+        ? `${roiMultiple}× Return on Annual Retainer`
+        : 'Protects Brand, Staff Shifts & Guest Loyalty';
+
+      // LOI text updates
+      document.getElementById('loi-company-txt').textContent = company;
+      document.getElementById('loi-stores-txt').textContent = `${stores} commercial kitchen location(s)`;
+      const planText = stores === 1
+        ? 'Single-Store Plan: $150/mo ($1,800/yr)'
+        : `${stores}-Store Group Plan: $295/mo ($3,500/yr)`;
+      document.getElementById('loi-plan-badge').textContent = planText;
+      document.getElementById('loi-rate-txt').textContent = stores === 1
+        ? '$150/month ($1,800/year)'
+        : '$295/month ($3,500/year)';
+    }
+
+    function presetSingle() {
+      document.getElementById('inp-company').value = 'Buckhead Prime Steakhouse';
+      document.getElementById('inp-stores').value = '1';
+      document.getElementById('inp-sales').value = '16000';
+      document.getElementById('inp-margin').value = '60';
+      document.getElementById('inp-days').value = '3';
+      document.getElementById('inp-spoil').value = '4000';
+      calcROI();
+    }
+
+    function presetGroup() {
+      document.getElementById('inp-company').value = 'Peachtree Hospitality Group LLC';
+      document.getElementById('inp-stores').value = '5';
+      document.getElementById('inp-sales').value = '12000';
+      document.getElementById('inp-margin').value = '60';
+      document.getElementById('inp-days').value = '3';
+      document.getElementById('inp-spoil').value = '3000';
+      calcROI();
+    }
+
+    calcROI();
+  </script>
+</body>
+</html>
