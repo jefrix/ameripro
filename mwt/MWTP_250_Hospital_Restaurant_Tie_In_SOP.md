@@ -1,4 +1,4 @@
-# Field Standard Operating Procedure (SOP): Hospital (MWTP-250) & Restaurant (MWTP-50) Emergency Water Tie-In
+# MWTP-250 & MWTP-50 Field Standard Operating Procedure (SOP): Hospital & Restaurant Emergency Water Tie-In
 
 **Document ID:** `SOP-MWTP-FIELD-01` — **Revision B (November 2026)**  
 **Applicable Fleet Units:**

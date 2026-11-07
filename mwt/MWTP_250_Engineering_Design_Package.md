@@ -1,4 +1,4 @@
-# Engineering Design Package: 36-ft Gooseneck Emergency Mobile Water Treatment Facility (MWTP-250)
+# MWTP-250 Engineering Design Package: 36-ft Gooseneck Emergency Mobile Water Treatment Facility
 
 **Revision B — November 2026.** Changes from Rev A: raw-water break tank (no pumping from a depressurized main), measured chlorine contact time (CT), daily UF integrity testing, onboard GAC removed, pumps and generator resized, membranes kept wet in storage, segregated chemical room, Class A CDL tow configuration, corrected weights and loads.
 

@@ -1,4 +1,4 @@
-# Bill of Materials (BOM) & Capital Cost Breakdown (MWTP-250)
+# MWTP-250 Bill of Materials (BOM) & Capital Cost Breakdown
 
 **Revision B — November 2026.** Reflects the Rev B design: break tank and hydrant kit, contact tank and transfer pump, UF integrity testing, third UV reactor, larger pumps and generator, duplex instrument air, segregated chemical room and safety station; onboard GAC removed. Adds engineering, and a 15% contingency for a first-of-a-kind build.
 

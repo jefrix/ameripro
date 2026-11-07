@@ -1,4 +1,4 @@
-# Detailed Piping & Instrumentation Diagram (P&ID) & Automated Valve Matrix (MWTP-250)
+# MWTP-250 Detailed Piping & Instrumentation Diagram (P&ID) & Automated Valve Matrix
 
 **Revision B — November 2026.** Adds the raw break tank, contact tank, UF direct integrity test, third UV reactor, and duplex instrument air; removes the GAC vessels (`XV-301`, `XV-302`); reorders coagulant injection after the bag filters; moves dechlorination to the common waste header.
 
