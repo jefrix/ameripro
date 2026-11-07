@@ -9,7 +9,7 @@ scoping item. Detailed concept pages retain their existing `/mwt/` URLs.
 The grease-recovery study is at `/mwt/grease-to-energy.html`; its mass-balance
 calculator models candidate feedstock recovery, not certified fuel production.
 Concept equipment tags use the 1100–1600 series (MFP-500 11xx, DryForce 12xx,
-HybridForce-60 13xx, Reclaim-25 14xx, SmartTrap 15xx, GREX-1000 16xx) so they
+HybridForce-60 13xx, Reclaim-25 14xx, SmartTrap 15xx, GREX-1000 16xx, PPS-200 17xx) so they
 never collide with MWTP tags (100–900 series). Concept illustrations are WebP in
 `mwt/assets/`.
 Run `npm run build:concept-docs` after editing concept Markdown documents to
@@ -35,6 +35,10 @@ battery, inverter and dedicated charger package with an engine-off / recharge
 planner, an SOC-cycle chart and JSON scenario export. Design and preliminary
 cost assumptions are recorded in `mwt/HybridForce_60_Concept_Design.md` and
 `mwt/HybridForce_60_BOM_and_Cost_Basis.md`. All targets remain provisional.
+
+The `/mwt/pump-skid.html` concept adds PPS-200, a forklift- and crane-placeable
+duplex centrifugal pump skid with a hydraulic / NPSH / power planner. See
+`mwt/Pump_Skid_Concept_Design.md` and `mwt/Pump_Skid_BOM_and_Cost_Basis.md`.
 
 The `/mwt/wastewater-recycling.html` concept adds Reclaim-25 / WWR-25 for known
 washwater sources and qualified nonpotable reuse. It includes a treatment-stage

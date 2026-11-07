@@ -14,7 +14,9 @@ const docs = [
   ['Flood_Response_Design_Development', 'Flood Response — Design Development', 'flood-design-studio.html'],
   ['Flood_Response_Deployment_and_Controls', 'Flood Response — Deployment & Controls', 'flood-deployment.html'],
   ['Grease_to_Energy_Concept_Design', 'SmartTrap + GREX-1000 — Concept Design', 'grease-to-energy.html'],
-  ['Grease_to_Energy_BOM_and_Cost_Basis', 'SmartTrap + GREX-1000 — Preliminary BOM & Costs', 'grease-to-energy.html']
+  ['Grease_to_Energy_BOM_and_Cost_Basis', 'SmartTrap + GREX-1000 — Preliminary BOM & Costs', 'grease-to-energy.html'],
+  ['Pump_Skid_Concept_Design', 'PPS-200 — Concept Design', 'pump-skid.html'],
+  ['Pump_Skid_BOM_and_Cost_Basis', 'PPS-200 — Preliminary BOM & Costs', 'pump-skid.html']
 ];
 const generated = new Set(docs.map(([name]) => `${name}.md`));
 const escape = text => text.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;').replace(/'/g, '&#39;');
