@@ -1,0 +1,430 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Pre-Deployment Site Survey &amp; Health Department Alternate Water Packet</title>
+  <script src="https://www.gstatic.com/antigravity/web/dev/tailwindcss.min.js"></script>
+  <style>
+    @media print {
+      .no-print { display: none !important; }
+      body { background: #ffffff !important; color: #0f172a !important; padding: 0 !important; }
+      .print-page { border: 1px solid #cbd5e1 !important; background: #ffffff !important; color: #0f172a !important; box-shadow: none !important; margin-bottom: 16px !important; }
+      .page-break { page-break-before: always; }
+      input, select, textarea { border: 1px solid #94a3b8 !important; background: #f8fafc !important; color: #0f172a !important; }
+    }
+    :root { --background: #0b1120; --foreground: #f1f5f9; --card: #111827; --secondary: #1e293b; --secondary-foreground: #e2e8f0; --muted-foreground: #94a3b8; --border: #1e293b; --primary: #10b981; --primary-foreground: #ffffff; }
+    html.light { --background: #f8fafc; --foreground: #0f172a; --card: #ffffff; --secondary: #f1f5f9; --secondary-foreground: #1e293b; --muted-foreground: #64748b; --border: #e2e8f0; --primary: #059669; --primary-foreground: #ffffff; }
+  </style>
+</head>
+<body class="bg-[var(--background)] text-[var(--foreground)] antialiased p-4 md:p-8 max-w-5xl mx-auto space-y-6">
+
+  <!-- Top Action Bar (Hidden on Print) -->
+  <div class="no-print bg-[var(--card)] border border-[var(--border)] rounded-xl px-4 py-3 flex flex-wrap items-center justify-between gap-3 shadow-sm">
+    <div class="flex flex-wrap items-center gap-2.5">
+      <span class="px-2.5 py-0.5 rounded-full text-xs font-bold bg-emerald-500/15 text-emerald-400 border border-emerald-500/30">FILLABLE 2-PAGE FIELD &amp; REGULATORY PACKET</span>
+      <span class="text-xs text-[var(--muted-foreground)]">Page 1: Engineering Site Survey &amp; Tie-In Map • Page 2: Health Inspector Plan &amp; Standby LOI</span>
+    </div>
+    <div class="flex items-center gap-2">
+      <button onclick="fillSampleRestaurant()" class="px-3 py-1.5 rounded-lg text-xs font-semibold bg-[var(--secondary)] text-[var(--secondary-foreground)] border border-[var(--border)] hover:border-emerald-500 transition">
+        Load Sample Restaurant
+      </button>
+      <button onclick="fillSampleHospital()" class="px-3 py-1.5 rounded-lg text-xs font-semibold bg-[var(--secondary)] text-[var(--secondary-foreground)] border border-[var(--border)] hover:border-blue-500 transition">
+        Load Sample Hospital
+      </button>
+      <button onclick="window.print()" class="px-3.5 py-1.5 rounded-lg text-xs font-semibold bg-emerald-600 text-white hover:bg-emerald-500 transition shadow-sm">
+        Print / Save 2-Page PDF Packet
+      </button>
+    </div>
+  </div>
+
+  <!-- ==================== PAGE 1: ENGINEERING SITE SURVEY & TIE-IN CHECKLIST ==================== -->
+  <div class="print-page bg-[var(--card)] border border-[var(--border)] rounded-2xl shadow-lg p-6 md:p-8 space-y-6">
+
+    <!-- Page 1 Header -->
+    <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 border-b border-[var(--border)] pb-4">
+      <div>
+        <div class="text-xs font-mono uppercase text-emerald-400 font-bold">AMERIPRO ENVIRONMENTAL SERVICES — EMERGENCY WATER DIVISION</div>
+        <h1 class="text-xl md:text-2xl font-extrabold tracking-tight mt-0.5">
+          Part 1: Pre-Deployment Site Survey &amp; Plumbing Tie-In Record
+        </h1>
+        <p class="text-xs text-[var(--muted-foreground)]">
+          Completed in advance with the facility manager, licensed plumber, and water utility. One copy stored in the trailer binder; one copy kept on site.
+        </p>
+      </div>
+      <div class="bg-[var(--secondary)] border border-[var(--border)] rounded-xl px-3.5 py-2 text-xs font-mono shrink-0 space-y-1">
+        <div class="flex items-center justify-between gap-3">
+          <span class="text-[var(--muted-foreground)]">Survey ID:</span>
+          <input id="f-survey-id" type="text" value="APS-2026-014" class="bg-transparent border-b border-slate-600 px-1 w-28 text-right font-bold focus:outline-none">
+        </div>
+        <div class="flex items-center justify-between gap-3">
+          <span class="text-[var(--muted-foreground)]">Survey Date:</span>
+          <input id="f-date" type="date" value="2026-11-07" class="bg-transparent border-b border-slate-600 px-1 text-right focus:outline-none">
+        </div>
+      </div>
+    </div>
+
+    <!-- Section A: Facility & Assigned Fleet Unit -->
+    <div class="space-y-3">
+      <div class="text-xs font-mono uppercase text-blue-400 font-bold">SECTION A • FACILITY PROFILE &amp; ASSIGNED MOBILE TREATMENT UNIT</div>
+      <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-3 text-xs">
+        <div class="sm:col-span-2">
+          <label class="block text-[11px] font-semibold text-[var(--muted-foreground)] mb-1">Facility / Restaurant / Hospital Name</label>
+          <input id="f-name" type="text" placeholder="e.g., Peachtree Grill &amp; Oyster Bar (#104)" class="w-full bg-[var(--secondary)] border border-[var(--border)] rounded-lg px-3 py-1.5 font-semibold">
+        </div>
+        <div>
+          <label class="block text-[11px] font-semibold text-[var(--muted-foreground)] mb-1">Facility Type</label>
+          <select id="f-type" onchange="syncUnitSelection()" class="w-full bg-[var(--secondary)] border border-[var(--border)] rounded-lg px-2.5 py-1.5 font-semibold">
+            <option value="restaurant">Commercial Kitchen / Restaurant</option>
+            <option value="hotel">Hotel / Multi-Unit Hospitality</option>
+            <option value="hospital">Acute-Care Hospital / Clinic</option>
+          </select>
+        </div>
+        <div>
+          <label class="block text-[11px] font-semibold text-[var(--muted-foreground)] mb-1">Assigned Mobile Unit</label>
+          <select id="f-unit" onchange="syncUnitSelection()" class="w-full bg-[var(--secondary)] border border-[var(--border)] rounded-lg px-2.5 py-1.5 font-bold text-emerald-400">
+            <option value="MWTP-50-GN22">MWTP-50-GN22 (35/50 GPM Gooseneck)</option>
+            <option value="MWTP-250">MWTP-250 (250 GPM Hospital Gooseneck)</option>
+          </select>
+        </div>
+        <div class="sm:col-span-2">
+          <label class="block text-[11px] font-semibold text-[var(--muted-foreground)] mb-1">Street Address, City, County &amp; State</label>
+          <input id="f-addr" type="text" placeholder="Street Address, City, County, GA" class="w-full bg-[var(--secondary)] border border-[var(--border)] rounded-lg px-3 py-1.5">
+        </div>
+        <div>
+          <label class="block text-[11px] font-semibold text-[var(--muted-foreground)] mb-1">24/7 Facility Contact &amp; Phone</label>
+          <input id="f-contact" type="text" placeholder="GM / Chief Engineer + Cell" class="w-full bg-[var(--secondary)] border border-[var(--border)] rounded-lg px-3 py-1.5">
+        </div>
+        <div>
+          <label class="block text-[11px] font-semibold text-[var(--muted-foreground)] mb-1">Water Utility &amp; County Health Dept</label>
+          <input id="f-utility" type="text" placeholder="Water Authority / County Env. Health" class="w-full bg-[var(--secondary)] border border-[var(--border)] rounded-lg px-3 py-1.5">
+        </div>
+      </div>
+    </div>
+
+    <!-- Section B: The 5 Critical Field Connection Checkpoints -->
+    <div class="space-y-3">
+      <div class="text-xs font-mono uppercase text-emerald-400 font-bold">SECTION B • FIVE CRITICAL CONNECTION &amp; ISOLATION CHECKPOINTS</div>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-xs">
+        <!-- Checkpoint 1: Street Isolation Valve -->
+        <div class="bg-[var(--secondary)]/50 border border-[var(--border)] rounded-xl p-4 space-y-2">
+          <div class="flex items-center justify-between">
+            <span class="font-bold text-rose-400">1. Street Service Isolation Valve (SOP Rule 1)</span>
+            <span class="text-[10px] font-mono bg-rose-500/15 text-rose-300 px-2 py-0.5 rounded">MUST CLOSE FIRST</span>
+          </div>
+          <p class="text-[11px] text-[var(--muted-foreground)]">
+            Prevents treated water at 65–85 PSI from flowing backward into the depressurized street main.
+          </p>
+          <div class="grid grid-cols-2 gap-2">
+            <div>
+              <label class="block text-[10px] text-[var(--muted-foreground)]">Valve Type &amp; Size</label>
+              <input id="f-iso-type" type="text" value="2'' Ball Valve + Curb Stop" class="w-full bg-[var(--card)] border border-[var(--border)] rounded px-2 py-1 mt-0.5">
+            </div>
+            <div>
+              <label class="block text-[10px] text-[var(--muted-foreground)]">Operated By</label>
+              <select id="f-iso-op" class="w-full bg-[var(--card)] border border-[var(--border)] rounded px-2 py-1 mt-0.5">
+                <option>Customer Valve (Downstream of Meter)</option>
+                <option>Water Utility Only (Street Curb Stop)</option>
+                <option>Facility Engineer (Written Utility OK)</option>
+              </select>
+            </div>
+          </div>
+          <div>
+            <label class="block text-[10px] text-[var(--muted-foreground)]">Exact Valve Location &amp; Access Notes</label>
+            <input id="f-iso-loc" type="text" value="Rear utility alcove inside back door, 3 ft above floor before RPZ" class="w-full bg-[var(--card)] border border-[var(--border)] rounded px-2 py-1 mt-0.5">
+          </div>
+        </div>
+
+        <!-- Checkpoint 2: Domestic Potable Tie-In Port -->
+        <div class="bg-[var(--secondary)]/50 border border-[var(--border)] rounded-xl p-4 space-y-2">
+          <div class="flex items-center justify-between">
+            <span class="font-bold text-emerald-400">2. Domestic Potable Tie-In Port (SOP Rule 2 — NOT FDC)</span>
+            <span class="text-[10px] font-mono bg-emerald-500/15 text-emerald-300 px-2 py-0.5 rounded">WHITE NSF-61 HOSE</span>
+          </div>
+          <p class="text-[11px] text-[var(--muted-foreground)]">
+            Pre-installed tee with isolation valve on the <strong>building side</strong> of the closed street shutoff and meter/RPZ, upstream of ice, dish, and sinks.
+          </p>
+          <div class="grid grid-cols-2 gap-2">
+            <div>
+              <label class="block text-[10px] text-[var(--muted-foreground)]">Tie-In Fitting Size &amp; Type</label>
+              <select id="f-tie-size" class="w-full bg-[var(--card)] border border-[var(--border)] rounded px-2 py-1 mt-0.5 font-semibold">
+                <option value="1.5'' Male Camlock Tee (316SS Lead-Free)">1.5" Male Camlock Tee (Restaurant)</option>
+                <option value="2.0'' Male Camlock Tee (316SS Lead-Free)">2.0" Male Camlock Tee (Large Kitchen)</option>
+                <option value="3.0'' 316SS Flanged / Camlock Port">3.0" Flanged/Camlock Port (Hospital)</option>
+                <option value="Needs Plumber Installation Prior to Activation">Needs Plumber Tee Install (Pre-Activation)</option>
+              </select>
+            </div>
+            <div>
+              <label class="block text-[10px] text-[var(--muted-foreground)]">Hose Run &amp; Target PSI</label>
+              <input id="f-tie-psi" type="text" value="65 ft run • Setpoint: 65 PSI" class="w-full bg-[var(--card)] border border-[var(--border)] rounded px-2 py-1 mt-0.5">
+            </div>
+          </div>
+          <div>
+            <label class="block text-[10px] text-[var(--muted-foreground)]">Tie-In Location &amp; Wall Sleeve / Door Route</label>
+            <input id="f-tie-loc" type="text" value="Exterior stainless lockbox on rear kitchen wall (downstream of RPZ)" class="w-full bg-[var(--card)] border border-[var(--border)] rounded px-2 py-1 mt-0.5">
+          </div>
+        </div>
+
+        <!-- Checkpoint 3: Raw Water Source (Upstream Tap / Hydrant / Tanker) -->
+        <div class="bg-[var(--secondary)]/50 border border-[var(--border)] rounded-xl p-4 space-y-2">
+          <div class="flex items-center justify-between">
+            <span class="font-bold text-sky-400">3. Raw Water Supply to Air-Gap Tank TK-100 (SOP Rule 3)</span>
+            <span class="text-[10px] font-mono bg-sky-500/15 text-sky-300 px-2 py-0.5 rounded">HOLD ≥ 20 PSI</span>
+          </div>
+          <p class="text-[11px] text-[var(--muted-foreground)]">
+            Flows through pressure-sustaining valve (<code>PSV-100</code> set at 20 PSI) into air-gap break tank <code>TK-100</code>.
+          </p>
+          <div class="grid grid-cols-2 gap-2">
+            <div>
+              <label class="block text-[10px] text-[var(--muted-foreground)]">Primary BWA Source (Main Pressurized)</label>
+              <select id="f-raw-bwa" class="w-full bg-[var(--card)] border border-[var(--border)] rounded px-2 py-1 mt-0.5">
+                <option>Upstream Exterior Tap (Before Shutoff Valve)</option>
+                <option>Fire Hydrant (With Utility Meter &amp; Permit)</option>
+              </select>
+            </div>
+            <div>
+              <label class="block text-[10px] text-[var(--muted-foreground)]">Outage Backup (Zero Main PSI)</label>
+              <input id="f-raw-outage" type="text" value="4,000-Gal Potable Tanker Drop (1/day)" class="w-full bg-[var(--card)] border border-[var(--border)] rounded px-2 py-1 mt-0.5">
+            </div>
+          </div>
+          <div>
+            <label class="block text-[10px] text-[var(--muted-foreground)]">Upstream Tap / Hydrant Location &amp; Static Pressure</label>
+            <input id="f-raw-loc" type="text" value="1'' upstream test port before building shutoff (58 PSI static) + Hydrant 90 ft N" class="w-full bg-[var(--card)] border border-[var(--border)] rounded px-2 py-1 mt-0.5">
+          </div>
+        </div>
+
+        <!-- Checkpoint 4: Sanitary Sewer & F.O.G. Grease Trap Bypass -->
+        <div class="bg-[var(--secondary)]/50 border border-[var(--border)] rounded-xl p-4 space-y-2">
+          <div class="flex items-center justify-between">
+            <span class="font-bold text-amber-400">4. Dechlorinated Waste &amp; Grease Trap Bypass (SOP Rule 4)</span>
+            <span class="text-[10px] font-mono bg-amber-500/15 text-amber-300 px-2 py-0.5 rounded">BYPASS GREASE TRAP</span>
+          </div>
+          <p class="text-[11px] text-[var(--muted-foreground)]">
+            UF backwash (35–60 GPM on MWTP-50; 300 GPM on MWTP-250) must enter the <strong>downstream</strong> sanitary sewer cleanout on the street side of the F.O.G. grease interceptor.
+          </p>
+          <div class="grid grid-cols-2 gap-2">
+            <div>
+              <label class="block text-[10px] text-[var(--muted-foreground)]">Cleanout Size &amp; Distance</label>
+              <input id="f-sewer-size" type="text" value="4'' PVC Sanitary Cleanout (35 ft away)" class="w-full bg-[var(--card)] border border-[var(--border)] rounded px-2 py-1 mt-0.5">
+            </div>
+            <div>
+              <label class="block text-[10px] text-[var(--muted-foreground)]">Verified Downstream of F.O.G. Trap?</label>
+              <select id="f-sewer-fog" class="w-full bg-[var(--card)] border border-[var(--border)] rounded px-2 py-1 mt-0.5 font-bold text-emerald-400">
+                <option>YES — Street Side of 1,500-Gal Grease Trap</option>
+                <option>YES — Direct Sanitary Manhole / Cleanout</option>
+              </select>
+            </div>
+          </div>
+          <div>
+            <label class="block text-[10px] text-[var(--muted-foreground)]">Cleanout Location Notes</label>
+            <input id="f-sewer-loc" type="text" value="Brass cap in asphalt 6 ft past the outlet sample box of the grease interceptor" class="w-full bg-[var(--card)] border border-[var(--border)] rounded px-2 py-1 mt-0.5">
+          </div>
+        </div>
+      </div>
+
+      <!-- Checkpoint 5: Trailer Parking Bay & 240V 50A Shore Power -->
+      <div class="bg-[var(--secondary)]/50 border border-[var(--border)] rounded-xl p-4 grid grid-cols-1 md:grid-cols-3 gap-3 text-xs">
+        <div>
+          <span class="font-bold text-purple-400">5. Trailer Staging &amp; Ground Tanks</span>
+          <input id="f-park-loc" type="text" value="2 rear alley stalls beside grease trap (level asphalt)" class="w-full bg-[var(--card)] border border-[var(--border)] rounded px-2 py-1 mt-1">
+        </div>
+        <div>
+          <span class="font-bold text-purple-400">Shore Power Receptacle (BWA Mode)</span>
+          <select id="f-shore" class="w-full bg-[var(--card)] border border-[var(--border)] rounded px-2 py-1 mt-1">
+            <option>240V 50A Twist-Lock / NEMA 14-50 Installed (MWTP-50 Silent Mode)</option>
+            <option>Use Onboard Tier-4 Diesel Generator (20 kW or 80 kW)</option>
+            <option>480V 100A 3-Phase Cam-Lok Pin &amp; Sleeve (Hospital Shore Power)</option>
+          </select>
+        </div>
+        <div>
+          <span class="font-bold text-purple-400">AmeriPro Route Account # (F.O.G. / Hood)</span>
+          <input id="f-acct" type="text" value="AMERIPRO-FOG-GA-4412 (Monthly Service)" class="w-full bg-[var(--card)] border border-[var(--border)] rounded px-2 py-1 mt-1">
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- ==================== PAGE 2: HEALTH DEPARTMENT PACKET & STANDBY LOI ==================== -->
+  <div class="print-page page-break bg-[var(--card)] border border-[var(--border)] rounded-2xl shadow-lg p-6 md:p-8 space-y-6">
+
+    <!-- Page 2 Header -->
+    <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 border-b border-[var(--border)] pb-4">
+      <div>
+        <div class="text-xs font-mono uppercase text-emerald-400 font-bold">COUNTY HEALTH DEPARTMENT &amp; STATE DRINKING WATER COMPLIANCE PACKET</div>
+        <h2 class="text-xl md:text-2xl font-extrabold tracking-tight mt-0.5">
+          Part 2: Emergency Alternate Water Supply Plan &amp; Standby LOI
+        </h2>
+        <p class="text-xs text-[var(--muted-foreground)]">
+          For pre-review by the local Environmental Health Inspector (FDA Food Code §§ 5-101.13 / 5-104.12) and Hospital Emergency Water Supply Plan (CMS 42 CFR § 482.15).
+        </p>
+      </div>
+      <div class="px-3 py-1.5 rounded-lg bg-emerald-500/15 border border-emerald-500/30 text-xs font-mono font-bold text-emerald-400 shrink-0">
+        MULTI-BARRIER: UF + UV + Cl₂ CT
+      </div>
+    </div>
+
+    <!-- Summary Table of Disinfection Credits & Interlocks for the Health Inspector -->
+    <div class="space-y-2">
+      <div class="text-xs font-mono uppercase text-blue-400 font-bold">1. TREATMENT TRAIN, PATHOGEN REMOVAL CREDITS &amp; AUTOMATIC SHUTOFF INTERLOCKS</div>
+      <div class="overflow-x-auto">
+        <table class="w-full text-left border-collapse text-xs border border-[var(--border)]">
+          <thead>
+            <tr class="bg-[var(--secondary)] text-[var(--secondary-foreground)]">
+              <th class="py-2 px-3 border border-[var(--border)]">Treatment Barrier</th>
+              <th class="py-2 px-3 border border-[var(--border)]">Hardware Specification (MWTP-50 / MWTP-250)</th>
+              <th class="py-2 px-3 border border-[var(--border)]">Pathogen Credit &amp; Online Verification</th>
+              <th class="py-2 px-3 border border-[var(--border)]">Automatic Divert / Shutoff Interlock (XV-602)</th>
+            </tr>
+          </thead>
+          <tbody class="divide-y divide-[var(--border)]">
+            <tr>
+              <td class="py-2 px-3 font-semibold border border-[var(--border)]">Air-Gap Break Tank &amp; Pre-Filtration</td>
+              <td class="py-2 px-3 border border-[var(--border)]">PSV-100 (holds street main ≥ 20 PSI) → Air-Gap Tank TK-100 (550 or 3,000 gal) → 200 μm Auto-Strainer → Duplex 25 μm Bag / Carbon Block</td>
+              <td class="py-2 px-3 border border-[var(--border)]">Physical air gap prevents back-siphonage; removes sediment &amp; pipe scale</td>
+              <td class="py-2 px-3 border border-[var(--border)]">XV-100 closes if upstream main drops &lt; 20 PSI; P-101 trips on low tank level (LIT-100)</td>
+            </tr>
+            <tr>
+              <td class="py-2 px-3 font-semibold border border-[var(--border)]">0.02 μm Hollow-Fiber Ultrafiltration (UF)</td>
+              <td class="py-2 px-3 border border-[var(--border)]">NSF/ANSI 61 &amp; NSF 419 PVDF Modules (4 × 60" on MWTP-50; 14 × 79" on MWTP-250) + Automated DIT-201</td>
+              <td class="py-2 px-3 border border-[var(--border)]"><strong>≥ 4.0-Log Giardia &amp; Cryptosporidium</strong> removal credit; verified by daily 20 PSI pressure-decay Direct Integrity Test</td>
+              <td class="py-2 px-3 border border-[var(--border)]">Hach TU5300sc laser turbidimeter (AIT-201): normal &lt; 0.05 NTU; <strong>auto-diverts at &gt; 0.15 NTU</strong></td>
+            </tr>
+            <tr>
+              <td class="py-2 px-3 font-semibold border border-[var(--border)]">Redundant UV Disinfection</td>
+              <td class="py-2 px-3 border border-[var(--border)]">EPA UVDGM-Validated 316L SS Reactors (1 Duty + 1 Standby on MWTP-50; 2 Duty + 1 Standby on MWTP-250)</td>
+              <td class="py-2 px-3 border border-[var(--border)]"><strong>≥ 40 mJ/cm² validated dose</strong> + online UVT monitor (AIT-401); independent 2nd protozoa/bacteria barrier</td>
+              <td class="py-2 px-3 border border-[var(--border)]">Auto-starts standby reactor on low UV intensity; closes XV-602 if dose &lt; 40 mJ/cm²</td>
+            </tr>
+            <tr>
+              <td class="py-2 px-3 font-semibold border border-[var(--border)]">Free Chlorine Contact Time (CT)</td>
+              <td class="py-2 px-3 border border-[var(--border)]">NSF-60 12.5% NaOCl dosing + Baffled Ground Contact Tank TK-401 (600 gal T10 = 8.57 min on MWTP-50; 3,000 gal T10 = 6.0 min on MWTP-250)</td>
+              <td class="py-2 px-3 border border-[var(--border)]"><strong>≥ 4.0-Log Virus Inactivation</strong> (CT ≥ 12.0 mg·min/L even at 0.5 °C; ≥ 3.0× margin at 15 °C)</td>
+              <td class="py-2 px-3 border border-[var(--border)]">AIT-402 / AIT-601 closes XV-602 if Free Cl₂ &lt; 0.8 mg/L, &gt; 4.0 mg/L, or live CT &lt; 1.0× required</td>
+            </tr>
+            <tr>
+              <td class="py-2 px-3 font-semibold border border-[var(--border)]">Potable Booster &amp; Backflow Protection</td>
+              <td class="py-2 px-3 border border-[var(--border)]">Onboard NSF-61 Clearwell (150 or 500 gal) + 316SS VFD Boosters + ASSE 1013 RPZ (RPZ-602) + 50 mg/L Sanitized Hose</td>
+              <td class="py-2 px-3 border border-[var(--border)]">Maintains 60–85 PSI domestic pressure; certified lab Bac-T (Total Coliform / E. coli) sample pulled at startup</td>
+              <td class="py-2 px-3 border border-[var(--border)]">High-pressure cutout at 90 PSI (PT-603); street shutoff closed &amp; tagged prior to tie-in</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- Health Inspector On-Site Verification Protocol -->
+    <div class="bg-[var(--secondary)]/40 border border-[var(--border)] rounded-xl p-4 space-y-2 text-xs">
+      <div class="font-bold text-emerald-400 uppercase font-mono">2. ON-SITE HEALTH INSPECTOR &amp; OPERATOR VERIFICATION CHECKLIST DURING AN ADVISORY</div>
+      <div class="grid grid-cols-1 sm:grid-cols-2 gap-2 text-[var(--secondary-foreground)]">
+        <div>☐ <strong>1. Street Shutoff Closed:</strong> Building isolated from municipal main before pressurization.</div>
+        <div>☐ <strong>2. Daily UF Integrity Test (DIT-201):</strong> Today's pressure-decay pass log printed at HMI.</div>
+        <div>☐ <strong>3. Online Analyzers Green:</strong> Filtrate turbidity &lt; 0.05 NTU, UV ≥ 40 mJ/cm², CT ratio ≥ 1.0×.</div>
+        <div>☐ <strong>4. Point-of-Use Residual:</strong> Farthest kitchen/clinic tap verified at 1.0–2.2 mg/L free chlorine.</div>
+        <div>☐ <strong>5. Certified Lab Bac-T Sample:</strong> Chain-of-custody submitted per state emergency approval.</div>
+        <div>☐ <strong>6. Post-Advisory Flushing:</strong> Follow health department rules for ice/beverage lines when lifted.</div>
+      </div>
+    </div>
+
+    <!-- Section 3: Non-Binding Standby Letter of Intent (LOI) for Bank Underwriting -->
+    <div class="border-2 border-emerald-500/40 bg-emerald-500/5 rounded-xl p-5 space-y-4">
+      <div class="flex flex-wrap items-center justify-between gap-2">
+        <div>
+          <span class="text-xs font-mono font-bold text-emerald-400 uppercase">3. CUSTOMER STANDBY RETAINER LETTER OF INTENT (LOI — FOR BANK LOAN UNDERWRITING)</span>
+          <h3 class="text-sm font-bold mt-0.5">Intent to Enroll in AmeriPro Emergency Water Continuity Standby Program</h3>
+        </div>
+        <select id="f-plan" class="bg-[var(--card)] border border-emerald-500/40 rounded-lg px-3 py-1.5 text-xs font-bold text-emerald-400">
+          <option>MWTP-50 Single Restaurant Retainer ($150/mo • $1,800/yr)</option>
+          <option selected>MWTP-50 Restaurant Group Retainer — Up to 5 Stores ($295/mo • $3,500/yr)</option>
+          <option>MWTP-250 Hospital Priority Standby Retainer — Max 3/Region ($1,500/mo • $18,000/yr)</option>
+        </select>
+      </div>
+
+      <p class="text-xs text-[var(--muted-foreground)] leading-relaxed">
+        Subject to AmeriPro Environmental Services completing fabrication, receiving state emergency-use plan approval, and executing a formal Standby Service Agreement, the undersigned facility expresses its intent to enroll the location(s) listed in Section A under the selected Standby Retainer Plan above, with active emergency deployment billed at the schedule rate (<strong>$2,500 mobilization + $3,200/day for MWTP-50</strong>; or <strong>$6,500 mobilization + $7,500/day for MWTP-250</strong>). This Letter of Intent is non-binding and may be included in AmeriPro's commercial lender underwriting package.
+      </p>
+
+      <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 pt-2 text-xs">
+        <div>
+          <div class="border-b border-slate-500 pb-5 font-mono text-[var(--muted-foreground)]">Authorized Customer Signature:</div>
+          <div class="text-[11px] text-[var(--muted-foreground)] mt-1">Owner / GM / Facilities Director</div>
+        </div>
+        <div>
+          <div class="border-b border-slate-500 pb-5 font-mono text-[var(--muted-foreground)]">Printed Name &amp; Title:</div>
+          <div class="text-[11px] text-[var(--muted-foreground)] mt-1">Company / Franchise Entity</div>
+        </div>
+        <div>
+          <div class="border-b border-slate-500 pb-5 font-mono text-[var(--muted-foreground)]">AmeriPro Surveyor &amp; Date:</div>
+          <div class="text-[11px] text-[var(--muted-foreground)] mt-1">Pre-Survey &amp; Adapter Kit Logged</div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <script>
+    function syncUnitSelection() {
+      const fType = document.getElementById('f-type').value;
+      const unitEl = document.getElementById('f-unit');
+      if (fType === 'hospital') {
+        unitEl.value = 'MWTP-250';
+      } else {
+        unitEl.value = 'MWTP-50-GN22';
+      }
+    }
+
+    function fillSampleRestaurant() {
+      document.getElementById('f-survey-id').value = 'APS-2026-014';
+      document.getElementById('f-name').value = 'Peachtree Grill & Oyster Bar (Store #104)';
+      document.getElementById('f-type').value = 'restaurant';
+      document.getElementById('f-unit').value = 'MWTP-50-GN22';
+      document.getElementById('f-addr').value = '2840 Peachtree Rd NW, Atlanta (Fulton County), GA';
+      document.getElementById('f-contact').value = 'Marcus Vance (Operating Partner) • (404) 555-0192';
+      document.getElementById('f-utility').value = 'Atlanta Dept of Watershed Mgmt • Fulton County Env Health';
+      document.getElementById('f-iso-type').value = '2" Lead-Free Ball Valve + Curb Stop';
+      document.getElementById('f-iso-loc').value = 'Rear utility alcove inside back door, 3 ft above floor before RPZ';
+      document.getElementById('f-tie-size').selectedIndex = 0;
+      document.getElementById('f-tie-psi').value = '65 ft run • Setpoint: 65 PSI (35/50 GPM)';
+      document.getElementById('f-tie-loc').value = 'Exterior stainless lockbox on rear kitchen wall (downstream of RPZ)';
+      document.getElementById('f-raw-bwa').selectedIndex = 0;
+      document.getElementById('f-raw-outage').value = '4,000-Gal Potable Tanker Drop (1/day)';
+      document.getElementById('f-raw-loc').value = '1" upstream test port before building shutoff (58 PSI static) + Hydrant 90 ft N';
+      document.getElementById('f-sewer-size').value = '4" PVC Sanitary Cleanout (35 ft away)';
+      document.getElementById('f-sewer-fog').selectedIndex = 0;
+      document.getElementById('f-sewer-loc').value = 'Brass cap in asphalt 6 ft past the outlet sample box of the 1,500-gal grease trap';
+      document.getElementById('f-park-loc').value = '2 rear alley stalls beside grease trap (level asphalt)';
+      document.getElementById('f-shore').selectedIndex = 0;
+      document.getElementById('f-acct').value = 'AMERIPRO-FOG-GA-4412 (Monthly Grease & Quarterly Hood)';
+      document.getElementById('f-plan').selectedIndex = 1;
+    }
+
+    function fillSampleHospital() {
+      document.getElementById('f-survey-id').value = 'APS-2026-002';
+      document.getElementById('f-name').value = 'Piedmont Regional Medical Center (Main Tower)';
+      document.getElementById('f-type').value = 'hospital';
+      document.getElementById('f-unit').value = 'MWTP-250';
+      document.getElementById('f-addr').value = '1968 Peachtree Rd NW, Atlanta (Fulton County), GA';
+      document.getElementById('f-contact').value = 'David Chen, PE (Director of Facilities) • (404) 555-0148';
+      document.getElementById('f-utility').value = 'Atlanta Watershed Mgmt • GA EPD / Joint Commission Plan';
+      document.getElementById('f-iso-type').value = '6" OS&Y Gate Valve in Meter Vault';
+      document.getElementById('f-iso-loc').value = 'North mechanical courtyard vault (operated w/ utility & hospital eng)';
+      document.getElementById('f-tie-size').selectedIndex = 2;
+      document.getElementById('f-tie-psi').value = '110 ft 3" hose • Setpoint: 80 PSI (250 GPM)';
+      document.getElementById('f-tie-loc').value = 'Pre-installed 3" 316SS Camlock emergency domestic header in loading dock bay';
+      document.getElementById('f-raw-bwa').selectedIndex = 1;
+      document.getElementById('f-raw-outage').value = 'Scheduled Potable Tanker Shuttle into 3,000-Gal TK-100';
+      document.getElementById('f-raw-loc').value = 'Dedicated 4.5" steamer hydrant 65 ft from loading dock (62 PSI static)';
+      document.getElementById('f-sewer-size').value = '6" Sanitary Manhole / Cleanout (80 ft away)';
+      document.getElementById('f-sewer-fog').selectedIndex = 1;
+      document.getElementById('f-sewer-loc').value = 'Central plant sanitary sewer cleanout (approved for 300 GPM dechlorinated backwash)';
+      document.getElementById('f-park-loc').value = 'North ambulance/service apron (55 ft × 24 ft level concrete for 36-ft gooseneck + two 3,000-gal tanks)';
+      document.getElementById('f-shore').selectedIndex = 2;
+      document.getElementById('f-acct').value = 'HOSP-PRIORITY-GA-01 (First-Call Regional Priority)';
+      document.getElementById('f-plan').selectedIndex = 2;
+    }
+
+    fillSampleRestaurant();
+  </script>
+</body>
+</html>
