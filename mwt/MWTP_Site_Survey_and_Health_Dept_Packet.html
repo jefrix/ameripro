@@ -179,7 +179,7 @@
             <div>
               <label class="block text-[10px] text-[var(--muted-foreground)]">Primary BWA Source (Main Pressurized)</label>
               <select id="f-raw-bwa" class="w-full bg-[var(--card)] border border-[var(--border)] rounded px-2 py-1 mt-0.5">
-                <option>Upstream Exterior Tap (Before Shutoff Valve)</option>
+                <option>Plumber-Installed 1.5&quot; Valved Service Tee (Meter Side of Building Valves)</option>
                 <option>Fire Hydrant (With Utility Meter &amp; Permit)</option>
               </select>
             </div>
@@ -189,8 +189,8 @@
             </div>
           </div>
           <div>
-            <label class="block text-[10px] text-[var(--muted-foreground)]">Upstream Tap / Hydrant Location &amp; Static Pressure</label>
-            <input id="f-raw-loc" type="text" value="1'' upstream test port before building shutoff (58 PSI static) + Hydrant 90 ft N" class="w-full bg-[var(--card)] border border-[var(--border)] rounded px-2 py-1 mt-0.5">
+            <label class="block text-[10px] text-[var(--muted-foreground)]">Service Tee / Hydrant Location, Static Pressure &amp; Double-Isolation Valves</label>
+            <input id="f-raw-loc" type="text" value="1.5'' valved tee between meter and building valves (58 PSI static); 2 building valves in series + Hydrant 90 ft N" class="w-full bg-[var(--card)] border border-[var(--border)] rounded px-2 py-1 mt-0.5">
           </div>
         </div>
 
@@ -336,7 +336,7 @@
         </div>
         <select id="f-plan" class="bg-[var(--card)] border border-emerald-500/40 rounded-lg px-3 py-1.5 text-xs font-bold text-emerald-400">
           <option>MWTP-50 Single Restaurant Retainer ($150/mo • $1,800/yr)</option>
-          <option selected>MWTP-50 Restaurant Group Retainer — Up to 5 Stores ($295/mo • $3,500/yr)</option>
+          <option selected>MWTP-50 Restaurant Group Retainer — Per Store, 2+ Stores ($125/mo • $1,500/yr per store)</option>
           <option>MWTP-250 Hospital Priority Standby Retainer — Max 3/Region ($1,500/mo • $18,000/yr)</option>
         </select>
       </div>
@@ -389,7 +389,7 @@
       document.getElementById('f-tie-loc').value = 'Exterior stainless lockbox on rear kitchen wall (downstream of RPZ)';
       document.getElementById('f-raw-bwa').selectedIndex = 0;
       document.getElementById('f-raw-outage').value = '4,000-Gal Potable Tanker Drop (1/day)';
-      document.getElementById('f-raw-loc').value = '1" upstream test port before building shutoff (58 PSI static) + Hydrant 90 ft N';
+      document.getElementById('f-raw-loc').value = '1.5" valved tee between meter and building valves (58 PSI static); 2 building valves in series + Hydrant 90 ft N';
       document.getElementById('f-sewer-size').value = '4" PVC Sanitary Cleanout (35 ft away)';
       document.getElementById('f-sewer-fog').selectedIndex = 0;
       document.getElementById('f-sewer-loc').value = 'Brass cap in asphalt 6 ft past the outlet sample box of the 1,500-gal grease trap';

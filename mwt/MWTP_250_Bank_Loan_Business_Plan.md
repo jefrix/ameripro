@@ -3,7 +3,7 @@
 **Prepared For:** Commercial Lending & SBA 7(a) / Equipment Finance Underwriting  
 **Asset Platforms:**
 * **Phase 1 / Restaurant Fleet Unit (`MWTP-50-GN22` "KitchenShield-50"):** 35 GPM continuous / 50 GPM peak, 22-ft Compact Gooseneck (`9,990 lb GVWR` — **No Class A CDL Required**)
-* **Phase 2 / Hospital Flagship Unit (`MWTP-250`):** 250 GPM rated, 36-ft Triple-Axle Gooseneck (`24,500 lb GVWR` — **Class A CDL Required**)  
+* **Phase 2 / Hospital Flagship Unit (`MWTP-250`):** 250 GPM rated, 36-ft Triple-Axle Gooseneck (`30,000 lb GVWR` — **Class A CDL Required**)  
 **Date:** November 2026 (Revision B)
 
 ---
@@ -22,15 +22,15 @@ Unlike bulk water tankers, which deliver unpressurized water into storage, both 
 ### 1.2 Phased Loan Request Options & Debt Service Highlights
 To give the lender and borrower maximum flexibility, this plan underwrites **two modular equipment tiers** that can be financed sequentially (**Phase 1 `MWTP-50` first**, then **Phase 2 `MWTP-250`**) or together:
 
-| Underwriting Option | Target Market & CDL Status | Total Project Cost | Borrower Equity (15%) | SBA 7(a) Loan Request (85%) | Annual Debt Service (8.75%, 10 Yr) | Year 1 DSCR (EBITDA / After Draw) | Retainer Debt Coverage |
+| Underwriting Option | Target Market & CDL Status | Total Project Cost | Borrower Equity (15%) | SBA 7(a) Loan Request (85%) | Annual Debt Service (8.75%, 10 Yr) | Year 1 DSCR (EBITDA / After Draw) | Year 1 Retainers vs. Fixed Costs + Debt |
 | :--- | :--- | :---: | :---: | :---: | :---: | :---: | :---: |
-| **Option 1A: `MWTP-50-GN22` (Using Existing Fleet 1-Ton Pickup)** | AmeriPro F.O.G. & Hood Restaurant Accounts (**No CDL**) | **$260,000** | **$39,000** | **$221,000** | **$33,238 / yr** ($2,770/mo) | **2.68×** *(1.93× after $25k draw)* | **126%** covered by 15 retainers alone |
-| **Option 1B: `MWTP-50-GN22` (With New F-350 SRW Gooseneck Truck)** | AmeriPro F.O.G. & Hood Restaurant Accounts (**No CDL**) | **$325,000** | **$48,750** | **$276,250** | **$41,547 / yr** ($3,462/mo) | **2.14×** *(1.54× after $25k draw)* | **101%** covered by 15 retainers alone |
-| **Option 2: `MWTP-250` Hospital Flagship (With Class 5 Truck)** | Acute-Care Hospitals & Municipalities (**Class A CDL**) | **$769,150** | **$115,370** | **$653,780** | **$98,328 / yr** ($8,194/mo) | **1.58×** *(1.03× after $55k draw)* | **65%** covered by Yr-1 retainers |
+| **Option 1A: `MWTP-50-GN22` (Using Existing Fleet 1-Ton Pickup)** | AmeriPro F.O.G. & Hood Restaurant Accounts (**No CDL**) | **$260,000** | **$39,000** | **$221,000** | **$33,238 / yr** ($2,770/mo) | **1.76×** *(1.01× after $25k draw)* | **21%** of fixed costs + debt (10-location cap) |
+| **Option 1B: `MWTP-50-GN22` (With New F-350 SRW Gooseneck Truck)** | AmeriPro F.O.G. & Hood Restaurant Accounts (**No CDL**) | **$325,000** | **$48,750** | **$276,250** | **$41,547 / yr** ($3,462/mo) | **1.41×** *(0.81× after $25k draw)* | **19%** of fixed costs + debt (10-location cap) |
+| **Option 2: `MWTP-250` Hospital Flagship (With Class 5 Truck)** | Acute-Care Hospitals & Municipalities (**Class A CDL**) | **$769,150** | **$115,370** | **$653,780** | **$98,328 / yr** ($8,194/mo) | **1.58×** *(1.03× after $55k draw)* | **32%** of fixed costs + debt |
 
 * **Why Option 1 (`MWTP-50-GN22`) Is the Lowest-Risk Entry for Lender & Borrower:**
-  1. **Existing Customer Base:** AmeriPro already services commercial kitchens for F.O.G. (grease traps) and exhaust hood cleaning. Bundling a $150/month single-store ($1,800/yr) or $295/month 5-store group ($3,500/yr) standby membership into existing accounts requires zero cold-calling.
-  2. **101%–126% Retainer Debt Coverage:** Just 15 restaurant group retainers ($42,000/yr) cover **more than 100% of the entire annual SBA loan payment** ($33,238–$41,547/yr) before the trailer ever deploys.
+  1. **Existing Customer Base:** AmeriPro already services commercial kitchens for F.O.G. (grease traps) and exhaust hood cleaning. Bundling a $150/month single-store ($1,800/yr) or $125/month-per-store group ($1,500/yr per location) standby membership into existing accounts requires little cold-calling.
+  2. **Low Break-Even:** About **seven 3-day restaurant deployments a year** cover all fixed costs and the loan payment on Option 1A even with no retainers (§5.3). Retainers — capped at 10 covered locations per unit so every customer's call order is honest — add steady cash on top.
   3. **No Class A CDL Bottleneck:** At `9,990 lb GVWR` behind a 1-ton pickup (`GCWR < 26,001 lbs`), any AmeriPro technician with a standard license and DOT medical card can tow it.
   4. **Regulatory Track Record:** Establishes AmeriPro's Georgia EPD emergency-use approval and field logs on low-complexity commercial kitchens before or alongside launching the $769k `MWTP-250` hospital flagship.
 
@@ -65,8 +65,8 @@ To give the lender and borrower maximum flexibility, this plan underwrites **two
 
 ### 3.1 Why Commercial Kitchens & Hospitals Pay for This Service
 1. **Commercial Kitchens & AmeriPro Account Synergy (`MWTP-50` Primary Market):**
-   * Under state and county food codes (FDA Food Code adoption), a restaurant under a Boil Water Advisory must halt tap-water food prep, ice production, beverage dispensing, and warewashing — or close completely — unless operating on an **approved alternate water source** accepted by the local health authority.
-   * Closing a high-volume restaurant or hotel kitchen for a 3-day Boil Water Advisory costs **$25,000 to $75,000+ in lost gross sales** plus spoiled prep inventory. Paying **$2,500 mobilization + $3,200/day** for the `MWTP-50` saves the restaurant 70%–85% of that loss.
+   * Under state and county food codes (FDA Food Code adoption), a restaurant under a Boil Water Advisory must stop using tap water for food prep, ice, beverages, and warewashing unless it has an **approved alternate water source**. Most restaurants stay open on workarounds — bottled water, bagged ice, disposable service ware, and a limited menu — rather than closing.
+   * The `MWTP-50` is worth the most where those workarounds break down: **high-volume full-service restaurants and hotel kitchens**, **multi-unit chains** with brand standards, **institutional kitchens** (nursing homes, assisted living, schools, correctional facilities), and **food processors and commissaries**. For these customers, a 3-day deployment ($2,500 mobilization + $3,200/day) costs less than the lost margin, workaround supplies, and spoiled inventory of running degraded or closing.
    * Because AmeriPro already visits commercial kitchens on recurring schedules for **F.O.G. (grease trap pumping)** and **exhaust hood cleaning**, AmeriPro has warm relationships with restaurant owners and direct access to map their water shutoffs and downstream sanitary cleanouts at virtually zero customer-acquisition cost.
 2. **Hospital Emergency Preparedness Requirements (`MWTP-250` Primary Market):**
    * The **CMS Emergency Preparedness Rule (42 CFR § 482.15)** requires hospitals to have an emergency plan, including policies for subsistence needs such as water and for alternate sources of energy and utilities.
@@ -84,7 +84,7 @@ To give the lender and borrower maximum flexibility, this plan underwrites **two
 ```mermaid
 flowchart LR
     subgraph M50["Option 1: MWTP-50 Compact Restaurant Unit"]
-        K_RET["KitchenShield Retainers ($1,800/yr single or $3,500/yr 5-store group)"]
+        K_RET["KitchenShield Retainers ($1,800/yr single or $1,500/yr per group store, max 10 per unit)"]
         K_DEP["Restaurant Dispatches ($2,500 Mob + $3,200/day)"]
     end
 
@@ -99,17 +99,17 @@ flowchart LR
 
 ### 4.1 Capacity Discipline
 One storm or main break can affect multiple customers at once, and each trailer can serve **one** connection at a time:
-* **`MWTP-50` Restaurant Unit:** Dedicated strictly to commercial kitchens and hospitality accounts (never pulled off a restaurant job for a hospital). Multi-unit franchise group retainers ($3,500/yr covering up to 5 locations) specify that one location is pressurized at a time in call order.
+* **`MWTP-50` Restaurant Unit:** Dedicated strictly to commercial kitchens and hospitality accounts (never pulled off a restaurant job for a hospital). Each unit carries **no more than 10 covered locations per region**, ranked in a call order written into every agreement; group stores count toward the cap. One kitchen is pressurized at a time, and coverage grows by adding units rather than selling more retainers on the same trailer.
 * **`MWTP-250` Hospital Unit:** **No more than 3 hospital priority retainers per trailer per region**, ranked first-call / second-call / third-call in the contract, with that ranking disclosed to each hospital. Commercial retainers on the `MWTP-250` are "served as available" after hospital commitments.
 
 ### 4.2 Pricing Schedule & Unit Economics Comparison
 
 | Revenue Stream | Unit | Target Client | Pricing Structure | Direct Variable Cost | Gross Margin |
 | :--- | :---: | :--- | :--- | :--- | :---: |
-| **1A. KitchenShield Single-Store Retainer** | `MWTP-50` | Independent high-volume restaurants | **$1,800 / yr** ($150/mo bundled w/ F.O.G./hood invoice) | ~$100/yr (survey check) | ~94% |
-| **1B. KitchenShield Group Retainer (≤5 Stores)** | `MWTP-50` | Multi-unit restaurant groups & hotels | **$3,500 / yr** ($295/mo — 1 store served at a time) | ~$150/yr | ~96% |
+| **1A. KitchenShield Single-Store Retainer** | `MWTP-50` | High-volume restaurants & institutional kitchens | **$1,800 / yr** ($150/mo bundled w/ F.O.G./hood invoice) | ~$100/yr (survey check) | ~94% |
+| **1B. KitchenShield Group Retainer (2+ Stores)** | `MWTP-50` | Multi-unit restaurant groups & hotels | **$1,500 / yr per store** ($125/mo per store; counts toward 10-location cap) | ~$100/yr per store | ~93% |
 | **2A. Restaurant Emergency Mobilization** | `MWTP-50` | Restaurant & kitchen dispatches | **$2,500 / event** — tow, ground tanks, DIT, hose sanitization | ~$450 / event | ~82% |
-| **2B. Restaurant 24-Hr Treatment Day** | `MWTP-50` | Commercial kitchens (35–50 GPM) | **$3,200 / day** | **$609/day** (shore) to **$689/day** (diesel gen) | **78.5%–81%** |
+| **2B. Restaurant 24-Hr Treatment Day** | `MWTP-50` | Commercial kitchens (35–50 GPM) | **$3,200 / day** | **$669/day** (shore) to **$749/day** (diesel gen) | **76.6%–79.1%** |
 | **3A. Hospital Priority Retainer (Max 3)** | `MWTP-250` | Regional hospitals (ranked 1st/2nd/3rd) | **$18,000 / yr** — site survey, tie-in design, annual drill | ~$1,200/yr | ~93% |
 | **3B. Hospital / Municipal Mobilization** | `MWTP-250` | Hospital & municipal dispatches | **$6,500 / event** | ~$1,200 / event | ~82% |
 | **3C. Hospital 24-Hr Treatment Day** | `MWTP-250` | Hospitals, municipalities (250 GPM) | **$7,500 / day** | **~$1,911 / day** (2 operators + fuel/chems) | ~75% |
@@ -120,47 +120,49 @@ One storm or main break can affect multiple customers at once, and each trailer 
 ## 5. Option 1 Financial Projections: `MWTP-50-GN22` Compact Restaurant Unit (Years 1–3)
 
 ### 5.1 Utilization & Retainer Assumptions (`MWTP-50-GN22`)
-* **Year 1:** Equivalent of **15 restaurant retainers** ($42,000 total = e.g., 8 multi-unit group retainers @ $3,500 + 8 single-store retainers @ $1,750–$1,800 from AmeriPro's existing F.O.G./hood accounts) + **6 emergency events / 25 active treatment days** (~7% utilization).
-* **Year 2:** Equivalent of **25 restaurant retainers** ($70,000) + **10 emergency events / 45 active treatment days** (~12% utilization).
-* **Year 3:** Equivalent of **35 restaurant retainers** ($98,000) + **14 emergency events / 60 active treatment days** (~16% utilization).
+* **Year 1:** **8 covered locations** ($12,900 = 3 single stores @ $1,800 + 5 group stores @ $1,500, from AmeriPro's existing F.O.G./hood accounts) + **6 emergency events / 25 active treatment days** (~7% utilization). Deployments include non-retainer customers served at the same rates when the unit is free.
+* **Year 2:** **10 covered locations — the per-unit cap** ($16,200 = 4 single + 6 group stores) + **10 emergency events / 45 active treatment days** (~12% utilization).
+* **Year 3:** **10 covered locations** ($16,200) + **14 emergency events / 60 active treatment days** (~16% utilization). Demand beyond the cap is the trigger for a second unit.
+* **Staffing:** a certified operator attends through the restaurant's service hours (~12 hours); overnight the unit runs on cellular telemetry with automatic outlet lockout and a one-hour on-call response, subject to the state's emergency-use approval.
 
 ### 5.2 `MWTP-50-GN22` Income Statement & Debt Service Coverage (Years 1–3)
 
 | Financial Line Item (`MWTP-50-GN22` Single Unit) | Year 1 (25 Active Days) | Year 2 (45 Active Days) | Year 3 (60 Active Days) |
 | :--- | :---: | :---: | :---: |
 | **REVENUE** | | | |
-| KitchenShield Standby Retainers (Bundled w/ F.O.G. & Hood Accounts) | $42,000 *(15 eq.)* | $70,000 *(25 eq.)* | $98,000 *(35 eq.)* |
+| KitchenShield Standby Retainers (Bundled w/ F.O.G. & Hood Accounts) | $12,900 *(8 locations)* | $16,200 *(10 — cap)* | $16,200 *(10 — cap)* |
 | Emergency Mobilization & Sanitization Fees ($2,500/event) | $15,000 *(6 events)* | $25,000 *(10 events)* | $35,000 *(14 events)* |
 | Active Restaurant Treatment Days ($3,200/day) | $80,000 *(25 days)* | $144,000 *(45 days)* | $192,000 *(60 days)* |
-| **TOTAL GROSS REVENUE** | **$137,000** | **$239,000** | **$325,000** |
+| **TOTAL GROSS REVENUE** | **$107,900** | **$185,200** | **$243,200** |
 | **DIRECT COST OF GOODS SOLD (COGS)** | | | |
 | Diesel / Shore Power, Chemicals, Bags & Bac-T Lab ($169/day avg) | $4,225 | $7,605 | $10,140 |
-| Certified Operator Shift + Non-CDL Tech Check-In ($520/active day) | $13,000 | $23,400 | $31,200 |
+| Attended Operator Shift + Overnight On-Call/Telemetry ($580/active day) | $14,500 | $26,100 | $34,800 |
 | Truck Fuel & Mobilization Consumables ($450/event) | $2,700 | $4,500 | $6,300 |
-| **TOTAL DIRECT COGS** | **$19,925** | **$35,505** | **$47,640** |
-| **GROSS PROFIT** | **$117,075 (85.5%)** | **$203,495 (85.1%)** | **$277,360 (85.3%)** |
+| **TOTAL DIRECT COGS** | **$21,425** | **$38,205** | **$51,240** |
+| **GROSS PROFIT** | **$86,475 (80.1%)** | **$146,995 (79.4%)** | **$191,960 (78.9%)** |
 | **FIXED OPERATING EXPENSES (OPEX)** | | | |
 | Commercial Auto, GL, Pollution & Inland Marine Insurance *(Non-CDL tier)* | $14,500 | $15,200 | $16,000 |
 | Preventive Maintenance, CIP Chemicals & Analyzer Calibration | $4,200 | $4,500 | $4,800 |
 | UF Membrane (4 modules) & UV Lamp Replacement Reserve | $3,200 | $3,200 | $3,200 |
 | Operator On-Call Stipend, Licensing, Telemetry & Accounting | $6,100 | $6,600 | $7,000 |
 | **TOTAL FIXED OPEX** | **$28,000** | **$29,500** | **$31,000** |
-| **EBITDA (Cash Flow Available for Debt Service)** | **$89,075** | **$173,995** | **$246,360** |
+| **EBITDA (Cash Flow Available for Debt Service)** | **$58,475** | **$117,495** | **$160,960** |
 | Less: Division Manager Allocation / Owner Draw | ($25,000) | ($35,000) | ($45,000) |
-| **NET CASH AVAILABLE FOR DEBT SERVICE (After Draw)** | **$64,075** | **$138,995** | **$201,360** |
+| **NET CASH AVAILABLE FOR DEBT SERVICE (After Draw)** | **$33,475** | **$82,495** | **$115,960** |
 | **Option 1A Debt Service ($221,000 Loan — Existing Fleet Truck)** | **$33,238** | **$33,238** | **$33,238** |
 | **Option 1B Debt Service ($276,250 Loan — With New 1-Ton Truck)** | **$41,547** | **$41,547** | **$41,547** |
-| **OPTION 1A DSCR (Existing Truck: EBITDA / After Draw)** | **2.68×** *(1.93×)* | **5.23×** *(4.18×)* | **7.41×** *(6.06×)* |
-| **OPTION 1B DSCR (With New Truck: EBITDA / After Draw)** | **2.14×** *(1.54×)* | **4.19×** *(3.35×)* | **5.93×** *(4.85×)* |
+| **OPTION 1A DSCR (Existing Truck: EBITDA / After Draw)** | **1.76×** *(1.01×)* | **3.53×** *(2.48×)* | **4.84×** *(3.49×)* |
+| **OPTION 1B DSCR (With New Truck: EBITDA / After Draw)** | **1.41×** *(0.81×)* | **2.83×** *(1.99×)* | **3.87×** *(2.79×)* |
+
+**Year 1 note:** after the owner draw, Year 1 coverage is thin (1.01× on Option 1A, 0.81× on Option 1B). Use the existing fleet truck (Option 1A), defer the Year 1 draw, or request interest-only payments during the build to keep Year 1 above the lender's minimum.
 
 ### 5.3 `MWTP-50-GN22` Break-Even & Downside Stress Tests
 * **Annual fixed costs + debt service (Year 1):**
   * **Option 1A (Existing Truck):** $28,000 Fixed OpEx + $33,238 Debt = **$61,238 / year**.
   * **Option 1B (With New Truck):** $28,000 Fixed OpEx + $41,547 Debt = **$69,547 / year**.
-* **Stress Test 1 — Zero Deployments All Year (Retainers Only):**
-  * With just 15 group retainers ($42,000) and zero Boil Water Advisories, the business covers **100% of Fixed OpEx ($28,000)** plus **$14,000 toward debt service** — requiring only **8 active deployment days all year** (at $2,511/day net margin + mobilization) to break even on Option 1A, or **11 active days all year** on Option 1B!
-* **Stress Test 2 — Zero Retainers (Deployments Only):**
-  * Even with $0 in retainers, each 3-day restaurant Boil Water Advisory deployment nets **$9,583** ($2,500 mob + 3 × $3,200 − $450 mob cost − 3 × $689 daily cost). Just **7 three-day deployments per year (21 active days)** cover 100% of Fixed OpEx and Debt Service.
+* **Each 3-day restaurant deployment nets $9,403** ($2,500 mob + 3 × $3,200 − $450 mob cost − 3 × $749 daily cost).
+* **Stress Test 1 — Year 1 Retainers, Few Deployments:** Year 1 retainers ($12,900) cover **46% of fixed OpEx**. The rest of fixed costs plus debt takes **six 3-day deployments (18 active days)** on Option 1A or **seven (21 days)** on Option 1B.
+* **Stress Test 2 — Zero Retainers (Deployments Only):** With no retainers, **seven 3-day deployments (21 active days)** cover all fixed OpEx and debt service on Option 1A ($65,821 vs. $61,238), and **eight (24 days)** on Option 1B ($75,224 vs. $69,547).
 
 ---
 
@@ -241,8 +243,8 @@ Personal and corporate financial statements and resumes accompany the loan appli
 
 ### 8.2 Phased Launch Timeline
 * **Phase 1 — `MWTP-50-GN22` Restaurant Unit (Months 0–6):**
-  1. **Months 0–2:** PE basis of design for `MWTP-50-GN22`; Georgia EPD pre-application meeting; vendor quotes; sign 15+ restaurant standby LOIs from AmeriPro's existing F.O.G. and hood accounts; close Option 1 SBA loan ($221k–$276k).
+  1. **Months 0–2:** PE basis of design for `MWTP-50-GN22`; Georgia EPD pre-application meeting; vendor quotes; sign standby LOIs for 8–10 covered locations from AmeriPro's existing F.O.G. and hood accounts; close Option 1 SBA loan ($221k–$276k).
   2. **Months 2–5:** Fabricate 22-ft compact gooseneck, integrate 4-module UF, UV, and booster skids; perform Factory Acceptance Test (FAT) and Georgia EPD inspection.
-  3. **Month 6:** Complete restaurant site surveys (mapping shutoffs, adapter tees, downstream cleanouts, and 50A shore plugs); activate monthly retainer billing ($42,000/yr run rate) and 24/7 dispatch readiness.
+  3. **Month 6:** Complete restaurant site surveys (mapping shutoffs, adapter tees, downstream cleanouts, and 50A shore plugs); activate monthly retainer billing (~$13,000–$16,000/yr run rate) and 24/7 dispatch readiness.
 * **Phase 2 — `MWTP-250` Hospital Flagship Unit (Months 6–15):**
   1. Leverage Phase 1 state approval, operator team, and cash flow to secure 2–3 Hospital Priority LOIs ($18,000/yr each) and close Option 2 financing ($653.8k loan) for the 36-ft `MWTP-250`.

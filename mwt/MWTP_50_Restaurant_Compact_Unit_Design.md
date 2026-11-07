@@ -17,17 +17,18 @@ Building the **MWTP-50 ("KitchenShield-50")** first — or alongside the MWTP-25
 1. **No Class A CDL Required (Under 10,000 lb Trailer GVWR & Under 26,001 lb GCWR):**
    * Federal FMCSA regulations (`49 CFR § 383.91`) require a **Class A CDL** only when the combined Gross Combination Weight Rating (`GCWR`) is **26,001 lbs or more** inclusive of a towed unit with a `GVWR` of **more than 10,000 lbs**.
    * By packaging the MWTP-50 on a **22-ft tandem-axle compact gooseneck trailer (`16-ft` main deck + `6-ft` gooseneck deck)** factory-plated at **9,990 lb GVWR** and towing it with a standard **3/4-ton or 1-ton single-rear-wheel (SRW) pickup truck** (`F-250/F-350` or `Ram 2500/3500`, `10,000–11,500 lb GVWR` with factory gooseneck ball), the combined `GCWR` is **19,990 to 21,490 lbs**.
+   * Federal rules count the truck's GCWR as the greater of the manufacturer's rating or the sum of the two GVWRs, and some 1-ton pickups carry a manufacturer GCWR above 26,000 lbs. That's still fine: a Class A CDL is only triggered when the towed unit is rated **over 10,000 lbs**, and this trailer is plated at 9,990 lbs.
    * **Result:** Any trained AmeriPro service technician or water operator with a **standard driver's license** and a basic **DOT medical card** (required for commercial combinations over 10,001 lb GCWR) can legally tow and position the trailer — eliminating the Class A CDL driver bottleneck.
 2. **Tight Alley & Drive-Thru Maneuverability (Compact Gooseneck Advantage):**
    * Because the gooseneck coupler pivots directly over the 1-ton pickup's rear axle, the truck can make **near-90° jackknife turns** to back the 16-ft main box into tight restaurant service alleys, grease-trap lanes, and drive-thru corridors where a bumper-pull trailer would bind or swing wide.
-   * Putting the **20 kW diesel generator, 40-gal fuel tank, and air compressors** on the **6-ft elevated gooseneck deck** behind a **1-hour fire and acoustic bulkhead wall** places **1,670 lbs (20%)** directly over the pickup's rear axle for sway-free highway handling and keeps engine noise and heat out of the treatment room.
-3. **Fits in 2 Restaurant Parking Spaces:**
-   * A 36-ft hospital trailer plus two 3,000-gallon pillow tanks takes up 4–6 parking stalls. The MWTP-50 and its compact 550-gal / 600-gal folding ground tanks fit neatly into **two standard parking spaces** behind the kitchen next to the grease trap and backflow preventer.
+   * Putting the **20 kW diesel generator, 40-gal fuel tank, and air compressors** on the **6-ft elevated gooseneck deck** behind a **1-hour fire and acoustic bulkhead wall** places **1,730 lbs (20%)** directly over the pickup's rear axle for sway-free highway handling and keeps engine noise and heat out of the treatment room.
+3. **Fits in 2–3 Restaurant Parking Spaces:**
+   * A 36-ft hospital trailer plus two 3,000-gallon pillow tanks takes up 4–6 parking stalls. The MWTP-50 and its compact 550-gal / 600-gal folding ground tanks fit into **two to three standard parking spaces** behind the kitchen next to the grease trap and backflow preventer.
 4. **Can Run on Restaurant 240V 50A Shore Power OR Its Own 20 kW Generator:**
    * Because the MWTP-50's average electrical draw is only **8.25 kW (~34 Amps at 240V single-phase)**, during a **Boil Water Advisory** (when grid power is still on) the trailer can plug directly into a **240V 50A NEMA 14-50 / CS6365 receptacle** installed during the site survey — running silently with **zero diesel exhaust and zero fuel cost** right outside the dining patio. When grid power is out, the onboard **20 kW Tier-4 diesel generator** on the gooseneck deck carries the full load automatically.
 5. **Direct Cross-Sell to Existing AmeriPro Restaurant Accounts:**
    * AmeriPro already services commercial kitchens for **F.O.G. (grease trap pumping)** and **exhaust hood cleaning**. The general manager, kitchen layout, back alley, sewer cleanout, and water shutoff are already known to AmeriPro's route teams.
-6. **61% Lower Capital Cost ($235,750 vs. $601,450):**
+6. **60% Lower Capital Cost ($238,625 vs. $601,450):**
    * Lower capital risk makes it easy to finance, faster to build, and an ideal platform to establish AmeriPro's **state drinking-water emergency-use approval** and operating track record.
 
 ---
@@ -48,22 +49,24 @@ Building the **MWTP-50 ("KitchenShield-50")** first — or alongside the MWTP-25
 
 > [!IMPORTANT]
 > **How the MWTP-50 Stays Under 10,000 lb GVWR Both on the Road and On-Site:**
-> Just like the MWTP-250, the raw-water break tank (`TK-100`, 550 gal) and the baffled chlorine contact tank (`TK-401`, 600 gal) are **collapsible NSF-61 ground tanks deployed beside the trailer**, so 9,590 lbs of water weight rests on the pavement rather than on the trailer frame. Even with the onboard **150-gal HDPE clearwell (`TK-601`) full of water (1,250 lbs)** on site, the total trailer weight is **9,550 lbs** — staying safely inside the **9,990 lb structural rating** without overloading the axles.
+> The raw-water break tank (`TK-100`, 550 gal) and the baffled chlorine contact tank (`TK-401`, 600 gal) are **collapsible NSF-61 ground tanks deployed beside the trailer**, so 9,590 lbs of water rests on the pavement rather than on the trailer frame. On site, the onboard **150-gal clearwell (`TK-601`)** runs at its 85% control level (about 1,060 lbs of water), bringing the trailer to **9,820 lbs** — inside the **9,990 lb rating**. On the road the trailer weighs **8,670 lbs**, a 1,320 lb (13%) margin.
+>
+> **Builder spec:** the trailer's certified empty (tare) weight, including insulation, firewall, HVAC and jacks, must not exceed **3,600 lbs** (aluminum frame and skin). The builder's certified tare is checked before any equipment is ordered, and the rig is weighed on a certified scale after fit-out.
 
 | Subsystem / Component | Road Transport Weight (lbs) | On-Site Operating Weight (lbs) | Location in Trailer |
 | :--- | :---: | :---: | :--- |
-| **22-ft Custom Aluminum/Steel-Frame Gooseneck Trailer (`16-ft` Main + `6-ft` Neck, Dual 5,200 lb Torsion Axles Plated at 9,990 lb GVWR)** | 3,150 | 3,150 | Full Frame + 4 Corners |
-| **Gooseneck Power & Air Deck: 20 kW Tier-4 Diesel Gen + 40-Gal Fuel + Duplex Air + 1-Hr Firewall** | 1,420 | 1,420 | Gooseneck Deck (`0–6 ft`) |
+| **22-ft Aluminum Gooseneck Trailer (`16-ft` Main + `6-ft` Neck, Insulation, 1-Hr Firewall, HVAC & Jacks; Dual 5,200 lb Torsion Axles Plated at 9,990 lb GVWR)** | 3,600 | 3,600 | Full Frame + 4 Corners |
+| **Gooseneck Power & Air Deck: 20 kW Tier-4 Diesel Gen + 40-Gal Fuel + Duplex Air** | 1,450 | 1,450 | Gooseneck Deck (`0–6 ft`) |
 | **Stage 1 & 2: Raw Intake Pump (`P-101`), Auto-Strainer (`STR-101`) & Duplex Bag Filters (`BF-101A/B`)** | 380 | 450 | Front Curbside (`6–11 ft`) |
 | **Stage 3: Compact Hollow-Fiber UF Skid (4 × 60" Modules, Preserved Wet in Transit) + `DIT-201`** | 890 | 1,020 | Mid Curbside (`11–16 ft`) |
-| **Stage 4 & 5: Duty/Standby 40 GPM UV (`UV-401A/B`), Segregated Chem Cabinets & Dosing Skid** | 580 | 530 | Mid Roadside (`11–16 ft`) |
-| **Stage 6: 150-Gal Onboard Clearwell (`TK-601`), Duplex 3 HP Booster (`P-601A/B`) & 2" RPZ (`RPZ-602`)** | 590 | 1,840 | Over Axles (`12–17 ft`) |
-| **316L SS Schedule 10/40 Piping, 12 Actuated Valves (`XV`), Hoses & Stowed Ground Tanks** | 720 | 520 | Distributed / Rear Reels |
+| **Stage 4 & 5: Duty/Standby 40 GPM UV (`UV-401A/B`), Segregated Chem Cabinets & Dosing Skid** | 420 | 470 | Mid Roadside (`11–16 ft`) |
+| **Stage 6: 150-Gal Onboard Clearwell (`TK-601`), Duplex 3 HP Booster (`P-601A/B`) & 2" RPZ (`RPZ-602`)** | 590 | 1,650 | Over Axles (`12–17 ft`) |
+| **316L SS Schedule 10/40 Piping, 12 Actuated Valves (`XV`), Hoses & Stowed Ground Tanks** | 720 | 560 | Distributed / Rear Reels |
 | **Control Panel (`CP-701`), Analyzers (`AIT-201/401/402/601/901`), Fold-Down Test Bench & Eyewash** | 420 | 420 | Front Roadside (`6–11 ft`) |
 | **Chemicals (Materials-of-Trade Limits: 15 gal 12.5% NaOCl, 5 gal Citric, 5 gal Bisulfite)** | 200 | 200 | Rear Curbside (`17–21 ft`) |
-| **TOTAL ON-TRAILER WEIGHT** | **8,350 lbs** | **9,550 lbs** | **9,990 lb Max GVWR** |
-| *Gooseneck Coupler Pin Weight (20% Road)* | *1,670 lbs* | *Supported by 4 Jacks* | *1-Ton SRW Truck Bed Ball* |
-| *Tandem Axle Load (2 × 5,200 lb Axles = 10,400 lb Raw Capacity, Plated at 9,990 lb GVWR)* | *6,680 lbs* | *Supported by 4 Jacks* | *3,340 lbs per axle on road* |
+| **TOTAL ON-TRAILER WEIGHT** | **8,670 lbs** | **9,820 lbs** | **9,990 lb Max GVWR** |
+| *Gooseneck Coupler Pin Weight (20% Road)* | *1,730 lbs* | *Supported by 4 Jacks* | *1-Ton SRW Truck Bed Ball* |
+| *Tandem Axle Load (2 × 5,200 lb Axles = 10,400 lb Raw Capacity, Plated at 9,990 lb GVWR)* | *6,940 lbs* | *Supported by 4 Jacks* | *3,470 lbs per axle on road* |
 | **Ground-Deployed Tanks (`TK-100` 550 gal + `TK-401` 600 gal)** | *(Stowed above: 160 lbs)* | **9,590 lbs (On Ground)** | **Next to Trailer on Pavement** |
 
 ---
@@ -110,9 +113,11 @@ flowchart LR
 ```
 
 ### Stage 1: Raw Water Supply (Three Restaurant Feed Options)
-1. **Option 1A — Boil Water Advisory via Restaurant's Own Upstream Tap (No Hydrant Required):**
+1. **Option 1A — Boil Water Advisory via a Pre-Installed Service-Line Tap (No Hydrant Required):**
    * During a Boil Water Advisory where the street main still has normal pressure (`40–70 PSI`), a restaurant only needs **15–35 GPM** (5,000–10,000 gal/day).
-   * Once the restaurant's main interior isolation valve is closed (preventing treated water from flowing back to the street), the MWTP-50 can draw raw city water from an **upstream exterior hose bibb, irrigation tap, or the upstream test cock/port before the building shutoff** (with utility/plumber approval), routed through the trailer's **1.5" Pressure-Sustaining Valve (`PSV-100`, set at 20 PSI)** into the **550-gal Air-Gap Break Tank (`TK-100`)**.
+   * During the site survey, the restaurant's licensed plumber installs a **1.5" valved tee with a capped camlock** on the service line **between the meter and the building isolation valves**, with the water utility's approval. Hose bibbs and backflow test cocks are not used — test cocks can't pass 35 GPM, and most exterior bibbs sit downstream of the building shutoff.
+   * **Double isolation:** the tie-in design puts **two closed valves** between the raw supply tee and the treated-water tie-in (the building isolation valve plus a second valve, or one valve leak-tested closed on each deployment), so raw advisory water and treated water can't mix through a single leaking valve.
+   * Raw water from the tee runs through the trailer's **1.5" Pressure-Sustaining Valve (`PSV-100`, set at 20 PSI)** into the **550-gal Air-Gap Break Tank (`TK-100`)**.
 2. **Option 1B — Fire Hydrant Supply (≥ 20 PSI Residual):**
    * Uses a 2.5" hydrant adapter, utility meter/backflow assembly, and `PSV-100` (set at 20 PSI) feeding `TK-100` through an air gap.
 3. **Option 1C — Potable Tanker Delivery (When Main Has Zero Pressure):**
@@ -161,7 +166,7 @@ flowchart LR
 
 ## 5. Trailer Layout (`MWTP-50-GN22`: 16-ft Main Deck + 6-ft Gooseneck Deck)
 
-* **Main Box Dimensions:** `16 ft` main deck length × `8.0 ft` exterior width (`7.5 ft` interior width) × `7.5 ft` interior ceiling height (`9.5 ft` overall road height — clears every restaurant drive-thru canopy and low tree branch!).
+* **Main Box Dimensions:** `16 ft` main deck length × `8.0 ft` exterior width (`7.5 ft` interior width) × `7.5 ft` interior ceiling height (about `10 ft 3 in` overall road height). Many drive-thru clearance bars are 9'0"–9'6", so the trailer stays out of drive-thru lanes and covered canopies; overhead clearance is checked on every site survey.
 * **Gooseneck Nose Deck (`0–6 ft`):** `6 ft` elevated deck over the pickup bed (`22 ft` total trailer length), separated from the main treatment room by a **1-hour fire-rated & acoustic bulkhead wall** (`< 65 dBA` inside the treatment bay).
 * **Stabilization:** Four heavy-duty 5,000-lb electric/hydraulic corner stabilizer jacks + dual 12,000-lb gooseneck landing gear.
 
@@ -265,34 +270,42 @@ Because AmeriPro may already have 3/4-ton or 1-ton pickups in its fleet, we show
 | **Option A: With Dedicated New 1-Ton Truck** | $238,625 | $62,000 | $24,375 | **$325,000** | $48,750 | $276,250 | **$41,547 / yr** ($3,462/mo) |
 | **Option B: Using Existing AmeriPro Pickup** | $238,625 | $0 (Fleet) | $21,375 | **$260,000** | $39,000 | $221,000 | **$33,238 / yr** ($2,770/mo) |
 
-### 8.2 Restaurant-Friendly Pricing Structure
-Whereas hospitals pay $7,500/day for a 250 GPM plant, a full-service restaurant generating $8,000–$25,000/day in food & beverage sales needs a price point that makes staying open an immediate financial win:
+### 8.2 Who Buys This, and Restaurant-Friendly Pricing
+**Most restaurants don't have to close during a Boil Water Advisory.** Health departments usually let them stay open on workarounds — bottled water, bagged ice, disposable service ware, and a limited menu — with ice machines, fountain drinks and some prep shut down. The `MWTP-50` is worth the most where those workarounds break down or cost more than the deployment:
+* **High-volume full-service restaurants and hotel kitchens** (warewashing, ice and beverage volume that bottled water can't cover).
+* **Multi-unit chains and franchise groups** with brand standards that don't allow a degraded menu.
+* **Institutional kitchens** — nursing homes, assisted living, schools, and correctional facilities — that can't send residents elsewhere.
+* **Food processors and commissaries** whose production lines stop without potable water.
 
-1. **Annual "KitchenShield" Standby Retainer ( Bundled with AmeriPro F.O.G. / Hood Accounts):**
-   * **$1,800 / year** for a single independent high-volume restaurant ($150/month added to their monthly hood/grease invoice).
-   * **$3,500 / year** for a multi-unit restaurant franchise group (covers up to 5 local stores; first-called gets the trailer).
-   * *Includes:* Initial plumbing & backflow site survey, custom camlock tee adapter kit stored on the trailer, pre-written Health Department Alternate Water Operations Plan, and annual check.
+1. **Annual "KitchenShield" Standby Retainer (Bundled with AmeriPro F.O.G. / Hood Accounts):**
+   * **$1,800 / year** per single location ($150/month added to the monthly hood/grease invoice).
+   * **$1,500 / year per location** for multi-unit groups of 2 or more stores ($125/month per store).
+   * **Capacity cap:** each `MWTP-50` unit carries **no more than 10 covered locations per region**, ranked in call order that is written into every agreement. One unit serves one kitchen at a time, so a regional advisory reaches retainer holders in that order; more covered locations means another unit (§8.4).
+   * *Includes:* Initial plumbing & backflow site survey, pre-installed raw-supply tee and camlock adapter kit, pre-written Health Department Alternate Water Operations Plan, and annual check.
 2. **Emergency Mobilization & Hose Sanitization Fee:**
    * **$2,500 flat fee** (covers towing, ground tank setup, 50 mg/L hose disinfection, DIT test, and initial Bac-T lab sample).
 3. **Active Emergency Treatment Rate:**
-   * **$3,200 per 24-hour day** (versus losing $10,000–$25,000/day in gross sales + spoiled prep inventory during a 3-day Boil Water Advisory).
-   * **Direct Daily Operating Cost to AmeriPro:** **$689 / day** (1 certified operator shift + 1 non-CDL field tech check-in = $520/day labor; 20 gal diesel = $80/day [or $0 on shore power]; chemicals & Bac-T lab = $89/day) → **78.5% Direct Gross Margin ($2,511/day net contribution)**.
+   * **$3,200 per 24-hour day.** Non-retainer customers can also call for service at the same rates when a unit is free.
+   * **Staffing model:** a state-certified operator is on site through the restaurant's service hours (about 12 hours). Overnight, when the kitchen is closed, the unit runs **unattended on cellular telemetry** with automatic outlet lockout (`XV-602`) on any alarm and an on-call operator who responds within one hour. The state's emergency-use approval sets the final attendance requirement.
+   * **Direct Daily Operating Cost to AmeriPro:** **$749 / day** on generator ($480 attended operator shift + $100 overnight on-call/telemetry = $580/day labor; 20 gal diesel = $80/day; chemicals & Bac-T lab = $89/day), or **$669 / day** on restaurant shore power → **76.6%–79.1% direct margin ($2,451–$2,531/day net contribution)**.
 
 ### 8.3 Standalone 3-Year Pro-Forma & DSCR (Single `MWTP-50-GN22` Unit)
 
-| Financial Metric | Year 1 (Conservative: 15 Retainers, 25 Active Days) | Year 2 (25 Retainers, 45 Active Days) | Year 3 (35 Retainers, 60 Active Days) |
+| Financial Metric | Year 1 (8 Covered Locations, 25 Active Days) | Year 2 (10 Locations — Cap, 45 Active Days) | Year 3 (10 Locations — Cap, 60 Active Days) |
 | :--- | :---: | :---: | :---: |
-| **Annual Standby Retainers ($3,500 avg group / $1,800 single)** | $42,000 | $70,000 | $98,000 |
+| **Annual Standby Retainers ($1,800 single / $1,500 per group store)** | $12,900 *(3 single + 5 group)* | $16,200 *(4 single + 6 group)* | $16,200 *(4 single + 6 group)* |
 | **Mobilization Fees ($2,500 × deployments)** | $15,000 (6 events) | $25,000 (10 events) | $35,000 (14 events) |
 | **Active Treatment Days ($3,200 / day)** | $80,000 (25 days) | $144,000 (45 days) | $192,000 (60 days) |
-| **GROSS REVENUE** | **$137,000** | **$239,000** | **$325,000** |
-| **Direct Deployment COGS ($689/day + $450/mob)** | ($19,925) | ($35,505) | ($47,640) |
+| **GROSS REVENUE** | **$107,900** | **$185,200** | **$243,200** |
+| **Direct Deployment COGS ($749/day + $450/mob)** | ($21,425) | ($38,205) | ($51,240) |
 | **Fixed Overhead (Insurance, Storage, Annual Membrane/UV Service)** | ($28,000) | ($29,500) | ($31,000) |
-| **NET OPERATING INCOME (EBITDA)** | **$89,075** | **$173,995** | **$246,360** |
+| **NET OPERATING INCOME (EBITDA)** | **$58,475** | **$117,495** | **$160,960** |
 | **Annual Debt Service (Option A w/ New Truck: $276.25k Loan)** | $41,547 | $41,547 | $41,547 |
-| **DEBT SERVICE COVERAGE RATIO (DSCR — Option A)** | **2.14×** | **4.19×** | **5.93×** |
-| **DEBT SERVICE COVERAGE RATIO (DSCR — Option B Existing Truck)** | **2.68×** | **5.23×** | **7.41×** |
+| **DEBT SERVICE COVERAGE RATIO (DSCR — Option A)** | **1.41×** | **2.83×** | **3.87×** |
+| **DEBT SERVICE COVERAGE RATIO (DSCR — Option B Existing Truck)** | **1.76×** | **3.53×** | **4.84×** |
 
 > [!TIP]
-> **De-Risked Path to the MWTP-250:**
-> Even in Year 1 with just **15 restaurant group retainers** from AmeriPro's existing F.O.G./hood customer list, the $42,000 in annual standby fees alone covers **101% of the entire annual SBA loan payment ($41,547)** before the trailer ever rolls out of the yard! Every single Boil Water Advisory deployment is pure cash flow that builds AmeriPro's state regulatory track record to launch the hospital-grade `MWTP-250`.
+> **What carries the loan:** Retainers are steady, but with the 10-location cap they cover about **20% of fixed costs plus debt service** — deployments carry the rest. About **seven 3-day restaurant deployments a year** (Option B, existing truck) cover all fixed costs and the loan payment with no retainers at all. Every deployment also builds AmeriPro's state regulatory track record toward the hospital-grade `MWTP-250`.
+
+### 8.4 Growing Into a Fleet
+Because one unit serves one kitchen at a time, coverage grows by adding units, not by selling more retainers on the same trailer. Each additional `MWTP-50` ($238,625 turnkey, towed by an existing fleet pickup) adds **10 more covered locations** and its own deployment capacity, and can be financed on its own track record. A fleet of two or three units also lets AmeriPro keep one unit available for walk-in emergency calls during a regional advisory.

@@ -47,7 +47,7 @@
           Commercial Kitchen Boil Water Advisory ROI &amp; Standby Proposal
         </h1>
         <p class="text-xs text-[var(--muted-foreground)] mt-1">
-          Powered by the <strong>MWTP-50-GN22 Compact Gooseneck Water Treatment Plant</strong> (35 GPM continuous / 50 GPM peak @ 60–75 PSI • 2-Parking-Space Footprint • 240V 50A Shore Plug or 20 kW Diesel Gen)
+          Powered by the <strong>MWTP-50-GN22 Compact Gooseneck Water Treatment Plant</strong> (35 GPM continuous / 50 GPM peak @ 60–75 PSI • 2–3 Parking-Space Footprint • 240V 50A Shore Plug or 20 kW Diesel Gen)
         </p>
       </div>
       <div class="bg-emerald-500/10 border border-emerald-500/30 rounded-xl px-4 py-2.5 text-center shrink-0">
@@ -73,10 +73,10 @@
             <label class="block text-[11px] font-semibold text-[var(--muted-foreground)] mb-1">Locations Covered</label>
             <select id="inp-stores" onchange="calcROI()" class="w-full bg-[var(--card)] border border-[var(--border)] rounded-lg px-2.5 py-1.5 font-semibold text-emerald-400">
               <option value="1">1 Location ($150/mo • $1,800/yr)</option>
-              <option value="2">2 Locations ($295/mo • $3,500/yr Group)</option>
-              <option value="3">3 Locations ($295/mo • $3,500/yr Group)</option>
-              <option value="4">4 Locations ($295/mo • $3,500/yr Group)</option>
-              <option value="5" selected>5 Locations ($295/mo • $3,500/yr Group)</option>
+              <option value="2">2 Locations ($125/mo per store • $3,000/yr)</option>
+              <option value="3">3 Locations ($125/mo per store • $4,500/yr)</option>
+              <option value="4">4 Locations ($125/mo per store • $6,000/yr)</option>
+              <option value="5" selected>5 Locations ($125/mo per store • $7,500/yr)</option>
             </select>
           </div>
           <div>
@@ -128,6 +128,24 @@
               </div>
               <input id="inp-spoil" type="range" min="500" max="10000" step="500" value="3000" oninput="calcROI()" class="no-print w-full accent-rose-500">
             </div>
+          <div class="grid grid-cols-2 gap-3 pt-2 border-t border-[var(--border)]">
+            <div>
+              <div class="flex justify-between font-semibold mb-1">
+                <span>Sales Kept on Workarounds:</span>
+                <span id="lbl-retained" class="font-mono text-sky-400 font-bold">50%</span>
+              </div>
+              <input id="inp-retained" type="range" min="0" max="95" step="5" value="50" oninput="calcROI()" class="no-print w-full accent-sky-500">
+            </div>
+            <div>
+              <div class="flex justify-between font-semibold mb-1">
+                <span>Workaround Cost / Day:</span>
+                <span id="lbl-wcost" class="font-mono text-sky-400 font-bold">$1,000</span>
+              </div>
+              <input id="inp-wcost" type="range" min="100" max="3000" step="100" value="1000" oninput="calcROI()" class="no-print w-full accent-sky-500">
+            </div>
+            <div class="col-span-2 text-[10px] text-[var(--muted-foreground)]">
+              Most health departments let restaurants stay open during an advisory on bottled water, bagged ice, disposable service ware and a limited menu. Set how much of normal sales that keeps, and what the supplies cost per day.
+            </div>
           </div>
         </div>
       </div>
@@ -137,7 +155,7 @@
         <div>
           <div class="text-xs font-mono uppercase text-emerald-400 font-bold mb-2">2. FINANCIAL COMPARISON: SINGLE BOIL WATER ADVISORY EVENT</div>
 
-          <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+          <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
             <!-- Box A: Closing the Kitchen -->
             <div class="bg-rose-500/10 border border-rose-500/30 rounded-xl p-4 space-y-2.5">
               <div class="flex items-center justify-between">
@@ -164,10 +182,32 @@
               </div>
             </div>
 
+            <!-- Box W: Stay Open on Workarounds -->
+            <div class="bg-sky-500/10 border border-sky-500/30 rounded-xl p-4 space-y-2.5">
+              <div class="flex items-center justify-between">
+                <span class="text-xs font-bold text-sky-400 uppercase">Option B: Open on Workarounds</span>
+                <span id="out-w-badge" class="text-[10px] font-mono bg-sky-500/20 text-sky-300 px-2 py-0.5 rounded">70% of Sales</span>
+              </div>
+              <div class="space-y-1.5 text-xs">
+                <div class="flex justify-between">
+                  <span class="text-[var(--muted-foreground)]">Lost Margin on Reduced Sales:</span>
+                  <span id="out-w-margin" class="font-mono font-semibold">$6,480</span>
+                </div>
+                <div class="flex justify-between">
+                  <span class="text-[var(--muted-foreground)]">Bottled Water, Ice &amp; Disposables:</span>
+                  <span id="out-w-supplies" class="font-mono font-semibold">$1,800</span>
+                </div>
+                <div class="pt-2 border-t border-sky-500/30 flex justify-between text-sm font-extrabold text-sky-400">
+                  <span>Direct Bottom-Line Loss:</span>
+                  <span id="out-w-total" class="font-mono">$8,280</span>
+                </div>
+              </div>
+            </div>
+
             <!-- Box B: Operating on MWTP-50 -->
             <div class="bg-emerald-500/10 border border-emerald-500/40 rounded-xl p-4 space-y-2.5">
               <div class="flex items-center justify-between">
-                <span class="text-xs font-bold text-emerald-400 uppercase">Option B: Open on MWTP-50</span>
+                <span class="text-xs font-bold text-emerald-400 uppercase">Option C: Full Service on MWTP-50</span>
                 <span class="text-[10px] font-mono bg-emerald-500/20 text-emerald-300 px-2 py-0.5 rounded">Health Dept Approved</span>
               </div>
               <div class="space-y-1.5 text-xs">
@@ -197,7 +237,7 @@
           <div class="bg-[var(--secondary)]/60 border border-[var(--border)] rounded-xl p-3.5 text-center">
             <div class="text-[11px] text-[var(--muted-foreground)] uppercase">Daily Retainer Cost / Store</div>
             <div id="out-daily-retainer" class="text-xl font-extrabold font-mono text-blue-400 mt-1">$1.92 / day</div>
-            <div id="out-retainer-sub" class="text-[10px] text-[var(--muted-foreground)] mt-0.5">$3,500/yr ÷ 5 stores ($58/mo/store)</div>
+            <div id="out-retainer-sub" class="text-[10px] text-[var(--muted-foreground)] mt-0.5">$1,500/yr per store ($125/mo/store)</div>
           </div>
 
           <div class="bg-[var(--secondary)]/60 border border-[var(--border)] rounded-xl p-3.5 text-center">
@@ -207,7 +247,7 @@
           </div>
 
           <div class="bg-emerald-500/15 border border-emerald-500/40 rounded-xl p-3.5 text-center">
-            <div class="text-[11px] text-emerald-300 uppercase font-bold">Net Profit Saved (1 Event)</div>
+            <div class="text-[11px] text-emerald-300 uppercase font-bold">Saved vs. Best Alternative (1 Event)</div>
             <div id="out-net-saved" class="text-xl font-extrabold font-mono text-emerald-400 mt-1">+$12,500</div>
             <div id="out-roi-pct" class="text-[10px] text-emerald-300 font-semibold mt-0.5">3.6× Return on Annual Retainer</div>
           </div>
@@ -230,12 +270,12 @@
           <h2 class="text-base font-bold">Enrollment Intent — AmeriPro KitchenShield-50 Emergency Water Continuity</h2>
         </div>
         <span id="loi-plan-badge" class="px-3 py-1 rounded-lg bg-emerald-600 text-white text-xs font-mono font-bold">
-          5-Store Group Plan: $295/mo ($3,500/yr)
+          5-Store Group Plan: $125/mo per store ($7,500/yr)
         </span>
       </div>
 
       <p class="text-xs text-[var(--muted-foreground)] leading-relaxed">
-        <strong><span id="loi-company-txt" class="text-[var(--foreground)]">Peachtree Hospitality Group LLC</span></strong> expresses its non-binding intent to enroll <strong><span id="loi-stores-txt" class="text-[var(--foreground)]">5 commercial kitchen location(s)</span></strong> in the AmeriPro Environmental Services <strong>MWTP-50 ("KitchenShield-50") Standby Retainer Program</strong> at <strong><span id="loi-rate-txt" class="text-emerald-400">$295/month ($3,500/year)</span></strong>, subject to AmeriPro completing pre-deployment site surveys, obtaining state drinking-water emergency-use approval, and executing a formal Standby Service Agreement (with active emergency dispatches billed at <strong>$2,500 mobilization + $3,200 per 24-hour day</strong>, one location pressurized at a time in call order). This LOI may be presented to AmeriPro's commercial lending institution in support of fleet financing.
+        <strong><span id="loi-company-txt" class="text-[var(--foreground)]">Peachtree Hospitality Group LLC</span></strong> expresses its non-binding intent to enroll <strong><span id="loi-stores-txt" class="text-[var(--foreground)]">5 commercial kitchen location(s)</span></strong> in the AmeriPro Environmental Services <strong>MWTP-50 ("KitchenShield-50") Standby Retainer Program</strong> at <strong><span id="loi-rate-txt" class="text-emerald-400">$125/month per store ($7,500/year)</span></strong>, subject to AmeriPro completing pre-deployment site surveys, obtaining state drinking-water emergency-use approval, and executing a formal Standby Service Agreement (with active emergency dispatches billed at <strong>$2,500 mobilization + $3,200 per 24-hour day</strong>, one location pressurized at a time in the call order written into the agreement; each MWTP-50 unit covers no more than 10 locations per region). This LOI may be presented to AmeriPro's commercial lending institution in support of fleet financing.
       </p>
 
       <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 pt-3 text-xs">
@@ -272,10 +312,13 @@
       document.getElementById('lbl-spoil').textContent = `$${spoil.toLocaleString()}`;
 
       // Retainer pricing
-      const annualRetainer = stores === 1 ? 1800 : 3500;
-      const monthlyRetainer = stores === 1 ? 150 : 295;
+      const annualRetainer = stores === 1 ? 1800 : 1500 * stores;
+      const monthlyPerStore = stores === 1 ? 150 : 125;
       const dailyPerStore = (annualRetainer / 365 / stores).toFixed(2);
-      const monthlyPerStore = Math.round(monthlyRetainer / stores);
+      const retainedPct = parseFloat(document.getElementById('inp-retained').value);
+      const wcost = parseFloat(document.getElementById('inp-wcost').value);
+      document.getElementById('lbl-retained').textContent = `${retainedPct}%`;
+      document.getElementById('lbl-wcost').textContent = `$${wcost.toLocaleString()}`;
 
       // Event calculations
       const grossLost = sales * days;
@@ -284,12 +327,17 @@
 
       const activeFee = 3200 * days;
       const totalFee = 2500 + activeFee;
-      const netSaved = totalLoss - totalFee;
-      const roiMultiple = (netSaved / annualRetainer).toFixed(1);
+      // Option B: stay open on workarounds (bottled water, bagged ice, disposables, limited menu)
+      const wMargin = Math.round(sales * (1 - retainedPct / 100) * (marginPct / 100) * days);
+      const wSupplies = wcost * days;
+      const wTotal = wMargin + wSupplies;
+      const bestAlt = Math.min(totalLoss, wTotal);
+      const netSaved = bestAlt - totalFee;
+      const roiMultiple = (netSaved / (annualRetainer / stores)).toFixed(1);
 
       // Break-even hours of avoided shutdown to pay for annual retainer (assuming 14 operating hours/day)
       const hourlyLoss = dailyMarginLost / 14;
-      const breakEvenHours = (annualRetainer / hourlyLoss).toFixed(1);
+      const breakEvenHours = (annualRetainer / stores / hourlyLoss).toFixed(1);
 
       document.getElementById('hero-breakeven').textContent = `${breakEvenHours} Hours`;
       document.getElementById('out-days-badge').textContent = `${days} ${days === 1 ? 'Day' : 'Days'} Closed`;
@@ -298,6 +346,10 @@
       document.getElementById('out-spoil-lost').textContent = `$${spoil.toLocaleString()}`;
       document.getElementById('out-total-loss').textContent = `$${totalLoss.toLocaleString()}`;
 
+      document.getElementById('out-w-badge').textContent = `${retainedPct}% of Sales`;
+      document.getElementById('out-w-margin').textContent = `$${wMargin.toLocaleString()}`;
+      document.getElementById('out-w-supplies').textContent = `$${wSupplies.toLocaleString()}`;
+      document.getElementById('out-w-total').textContent = `$${wTotal.toLocaleString()}`;
       document.getElementById('out-gross-kept').textContent = `$${grossLost.toLocaleString()} (100%)`;
       document.getElementById('out-days-txt').textContent = String(days);
       document.getElementById('out-active-fee').textContent = `$${activeFee.toLocaleString()}`;
@@ -306,26 +358,26 @@
       document.getElementById('out-daily-retainer').textContent = `$${dailyPerStore} / day`;
       document.getElementById('out-retainer-sub').textContent = stores === 1
         ? '$1,800/yr Single Store ($150/mo)'
-        : `$3,500/yr ÷ ${stores} stores ($${monthlyPerStore}/mo/store)`;
+        : `$${annualRetainer.toLocaleString()}/yr for ${stores} stores ($${monthlyPerStore}/mo/store)`;
 
       document.getElementById('out-sales-saved').textContent = `$${grossLost.toLocaleString()}`;
       document.getElementById('out-net-saved').textContent = netSaved >= 0
         ? `+$${netSaved.toLocaleString()}`
         : `-$${Math.abs(netSaved).toLocaleString()}`;
       document.getElementById('out-roi-pct').textContent = netSaved > 0
-        ? `${roiMultiple}× Return on Annual Retainer`
-        : 'Protects Brand, Staff Shifts & Guest Loyalty';
+        ? `${roiMultiple}× the Annual Retainer per Store`
+        : 'Workarounds cost less for this kitchen — MWTP-50 fits higher-volume sites';
 
       // LOI text updates
       document.getElementById('loi-company-txt').textContent = company;
       document.getElementById('loi-stores-txt').textContent = `${stores} commercial kitchen location(s)`;
       const planText = stores === 1
         ? 'Single-Store Plan: $150/mo ($1,800/yr)'
-        : `${stores}-Store Group Plan: $295/mo ($3,500/yr)`;
+        : `${stores}-Store Group Plan: $125/mo per store ($${annualRetainer.toLocaleString()}/yr)`;
       document.getElementById('loi-plan-badge').textContent = planText;
       document.getElementById('loi-rate-txt').textContent = stores === 1
         ? '$150/month ($1,800/year)'
-        : '$295/month ($3,500/year)';
+        : `$125/month per store ($${annualRetainer.toLocaleString()}/year)`;
     }
 
     function presetSingle() {
@@ -335,6 +387,8 @@
       document.getElementById('inp-margin').value = '60';
       document.getElementById('inp-days').value = '3';
       document.getElementById('inp-spoil').value = '4000';
+      document.getElementById('inp-retained').value = '45';
+      document.getElementById('inp-wcost').value = '1200';
       calcROI();
     }
 
@@ -345,6 +399,8 @@
       document.getElementById('inp-margin').value = '60';
       document.getElementById('inp-days').value = '3';
       document.getElementById('inp-spoil').value = '3000';
+      document.getElementById('inp-retained').value = '50';
+      document.getElementById('inp-wcost').value = '1000';
       calcROI();
     }
 

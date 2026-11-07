@@ -123,7 +123,7 @@
 
     // Units: feet.
     // MWTP-50-GN22: 22-ft Compact Tandem-Axle Gooseneck (16-ft Main Deck [X = -5 to +11] + 6-ft Gooseneck Deck [X = -11 to -5])
-    // Width = 8.0 ft (W = 4.0), Clear interior height = 7.5 ft (clears restaurant drive-thru canopies!)
+    // Width = 8.0 ft (W = 4.0), Clear interior height = 7.5 ft (about 10 ft 3 in overall road height)
     const G = -1.75;      // ground plane
     const D = 0.55;       // main deck top
     const GD = 2.85;      // gooseneck deck top
@@ -134,9 +134,9 @@
     const skids = {
       chassis: {
         short: '22-ft Non-CDL Gooseneck', color: '#64748b',
-        tag: 'MWTP-50-GN22 • 9,990 LB GVWR PLATFORM', title: '22-ft Compact Tandem-Axle Gooseneck & 1-Ton SRW Pickup', weight: '8,350 lb road / 9,550 lb wet',
-        desc: '16-ft main treatment deck (7.5-ft interior height) plus a 6-ft elevated gooseneck power deck behind a 1-hour firewall. Dual 5,200-lb torsion axles factory-plated at 9,990 lb GVWR, towed by a standard 1-ton single-rear-wheel (SRW) pickup (~21,490 lb GCWR) — staying under the 26,001 lb Class A CDL threshold while pivoting 90° into tight restaurant grease-trap alleys.',
-        specs: [['Dimensions', '22 ft × 8.0 ft (16 ft main + 6 ft neck)'], ['Axles & GVWR', '2 × 5,200 lb Torsion (Plated 9,990 lb)'], ['Pin Weight', '1,670 lbs (20%) over 1-ton truck axle'], ['Driver License', 'Standard License + DOT Med Card (No CDL)']],
+        tag: 'MWTP-50-GN22 • 9,990 LB GVWR PLATFORM', title: '22-ft Compact Tandem-Axle Gooseneck & 1-Ton SRW Pickup', weight: '8,670 lb road / 9,820 lb wet',
+        desc: '16-ft main treatment deck (7.5-ft interior height, about 10 ft 3 in overall) plus a 6-ft elevated gooseneck power deck behind a 1-hour firewall. Dual 5,200-lb torsion axles factory-plated at 9,990 lb GVWR, towed by a standard 1-ton single-rear-wheel (SRW) pickup (~21,490 lb GCWR) — staying under the 26,001 lb Class A CDL threshold while pivoting 90° into tight restaurant grease-trap alleys.',
+        specs: [['Dimensions', '22 ft × 8.0 ft (16 ft main + 6 ft neck)'], ['Axles & GVWR', '2 × 5,200 lb Torsion (Plated 9,990 lb)'], ['Pin Weight', '1,730 lbs (20%) over 1-ton truck axle'], ['Driver License', 'Standard License + DOT Med Card (No CDL)']],
         explode: [0, -5.0, 0], label: [3.0, D + 0.2, W + 0.5]
       },
       gen: {
@@ -163,8 +163,8 @@
       rawtank: {
         short: 'TK-100 550-Gal Break Tank', color: '#fbbf24',
         tag: 'TK-100 / PSV-100 • GROUND DEPLOYED (STAGE 1)', title: '550-Gallon Collapsible Air-Gap Break Tank & 3 Feed Modes', weight: '75 lbs dry / 4,660 lbs wet on ground',
-        desc: '5 ft × 5 ft folding frame tank deployed on the pavement beside the trailer. Supports 3 raw-water feed modes: (1) Restaurant upstream exterior tap during a Boil Water Advisory (before the closed building shutoff, no hydrant needed!), (2) Permitted fire hydrant, or (3) Single 4,000-gal potable tanker drop per day during a zero-pressure outage. PSV-100 holds upstream city pressure ≥ 20 PSI.',
-        specs: [['Footprint & Volume', '5.0 ft × 5.0 ft (550 Gal NSF-61)'], ['BWA Mode 1A', 'Restaurant upstream tap via PSV-100'], ['BWA Mode 1B', 'Fire hydrant via meter & PSV-100 (≥20 PSI)'], ['Outage Mode 1C', 'Single 4,000-gal tanker drop / day']],
+        desc: '5 ft × 5 ft folding frame tank deployed on the pavement beside the trailer. Supports 3 raw-water feed modes: (1) A plumber-installed 1.5" valved tee on the restaurant service line, between the meter and the double-isolated building valves (no hydrant needed), (2) Permitted fire hydrant, or (3) Single 4,000-gal potable tanker drop per day during a zero-pressure outage. PSV-100 holds upstream city pressure ≥ 20 PSI.',
+        specs: [['Footprint & Volume', '5.0 ft × 5.0 ft (550 Gal NSF-61)'], ['BWA Mode 1A', 'Service-line tee via PSV-100'], ['BWA Mode 1B', 'Fire hydrant via meter & PSV-100 (≥20 PSI)'], ['Outage Mode 1C', 'Single 4,000-gal tanker drop / day']],
         explode: [-1.5, -4.8, 3.0], label: [-2.5, G + 4.2, 8.2]
       },
       uf: {

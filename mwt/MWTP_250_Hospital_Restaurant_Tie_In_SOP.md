@@ -2,7 +2,7 @@
 
 **Document ID:** `SOP-MWTP-FIELD-01` — **Revision B (November 2026)**  
 **Applicable Fleet Units:**
-* **`MWTP-250` (Hospital Flagship):** 36-ft Triple-Axle Gooseneck (`24,500 lb GVWR`, 250 GPM rated, 80 kW generator, towed by Class 5 truck — **Class A CDL required**).
+* **`MWTP-250` (Hospital Flagship):** 36-ft Triple-Axle Gooseneck (`30,000 lb GVWR`, 250 GPM rated, 80 kW generator, towed by Class 5 truck — **Class A CDL required**).
 * **`MWTP-50-GN22` ("KitchenShield-50" Restaurant Unit):** 22-ft Tandem-Axle Compact Gooseneck (`16-ft` main deck + `6-ft` gooseneck deck, **`9,990 lb GVWR`**, 35 GPM continuous / 50 GPM peak booster, 20 kW generator or 240V 50A shore power, towed by 1-ton SRW pickup — **No Class A CDL required**; standard driver's license + DOT medical card).
 
 **References:** CDC/AWWA *Emergency Water Supply Planning Guide for Hospitals and Healthcare Facilities*, ASSE 1013 (RPZ backflow prevention), NSF/ANSI 61, the state drinking water program's emergency-use approval for these units, OSHA 29 CFR 1910 (HazCom, PPE, eyewash 1910.151(c)), MUTCD (temporary traffic control).
@@ -56,9 +56,10 @@
 
 ### 2.3B Restaurant Upstream Service Tap (Boil Water Advisory — `MWTP-50` Only)
 When deploying the **`MWTP-50`** to a restaurant during a Boil Water Advisory where the city main has pressure (`40–70 PSI`) and no fire hydrant is immediately adjacent:
-1. Once the restaurant's main interior/downstream isolation valve is closed (preventing treated water from flowing back to the street), locate the pre-surveyed **upstream exterior tap** (an exterior hose bibb, irrigation tap, or test port located on the **street side** of the closed building shutoff valve, approved by the utility/plumber).
-2. Connect a 1.5" or 1" blue raw-water hose from the upstream tap through the trailer's **`HYDRANT / TAP INLET`** (`PT-100` + **`PSV-100` set at 20 PSI** + `XV-100`) into the **air-gap fill nozzle on the 550-gal break tank (`TK-100`)**.
-3. Verify on the HMI that upstream street pressure (`PT-100`) holds **≥ 20 PSI** at 15–35 GPM.
+1. Close the restaurant's building isolation valves and confirm **double isolation** between raw and treated water: either **two closed valves** in series, or one valve leak-tested closed (open a downstream drain and confirm no flow for 2 minutes). Tag both.
+2. Locate the **pre-installed 1.5" valved service-line tee** that the restaurant's licensed plumber installed during the site survey, between the meter and the building isolation valves, with the utility's approval. Never draw from a hose bibb or a backflow test cock — test cocks can't pass 35 GPM, and most bibbs sit downstream of the building shutoff.
+3. Connect a 1.5" blue raw-water hose from the tee through the trailer's **`HYDRANT / TAP INLET`** (`PT-100` + **`PSV-100` set at 20 PSI** + `XV-100`) into the **air-gap fill nozzle on the 550-gal break tank (`TK-100`)**.
+4. Verify on the HMI that upstream street pressure (`PT-100`) holds **≥ 20 PSI** at 15–35 GPM.
 
 ### 2.4 Tanker Supply (water outage, or main can't hold 20 PSI)
 1. Tankers must be potable-water haulers per the state's approval. Record each tanker's source and chlorine residual.
