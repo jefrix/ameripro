@@ -31,6 +31,9 @@
       --primary: #2563eb;
       --primary-foreground: #ffffff;
     }
+    html {
+      scroll-behavior: smooth;
+    }
     body {
       background-color: var(--background);
       color: var(--foreground);
@@ -63,27 +66,38 @@
     </div>
   </div>
 
-  <!-- Top Navigation Header -->
-  <header class="bg-[var(--card)] border-b border-[var(--border)] sticky top-0 z-30 px-4 md:px-8 py-3.5 flex flex-wrap items-center justify-between gap-4 shadow-sm">
+  <!-- Sticky Navigation Header with System Section Jump Links -->
+  <header class="bg-[var(--card)]/95 backdrop-blur border-b border-[var(--border)] sticky top-0 z-30 px-4 md:px-8 py-3 flex flex-wrap items-center justify-between gap-3 shadow-sm">
     <div class="flex items-center gap-3">
       <a href="../index.html" class="px-2.5 py-1 rounded text-xs font-mono font-semibold bg-[var(--secondary)] text-[var(--muted-foreground)] hover:text-[var(--foreground)] border border-[var(--border)] transition">
         ← AMERIPRO MAP
       </a>
       <div>
-        <div class="flex items-center gap-2">
-          <span class="text-base font-extrabold tracking-tight">MWTP-250, MWTP-50 &amp; MWTP-50C PORTAL</span>
-          <span class="px-2 py-0.5 rounded-full text-xs font-semibold bg-blue-500/15 text-blue-400 border border-blue-500/30">250 GPM HOSPITAL</span>
-          <span class="px-2 py-0.5 rounded-full text-xs font-semibold bg-emerald-500/15 text-emerald-400 border border-emerald-500/30">35–50 GPM RESTAURANT</span>
+        <div class="flex flex-wrap items-center gap-2">
+          <span class="text-base font-extrabold tracking-tight">MOBILE WATER TREATMENT FLEET PORTAL</span>
+          <span class="hidden sm:inline-block px-2 py-0.5 rounded-full text-[11px] font-bold bg-violet-500/15 text-violet-400 border border-violet-500/30">MWTP-50C</span>
+          <span class="hidden sm:inline-block px-2 py-0.5 rounded-full text-[11px] font-bold bg-emerald-500/15 text-emerald-400 border border-emerald-500/30">MWTP-50</span>
+          <span class="hidden sm:inline-block px-2 py-0.5 rounded-full text-[11px] font-bold bg-blue-500/15 text-blue-400 border border-blue-500/30">MWTP-250</span>
         </div>
-        <p class="text-xs text-[var(--muted-foreground)]">36-ft Gooseneck Emergency Mobile Water Treatment Facility — Complete Engineering & Commercial Suite</p>
+        <p class="text-xs text-[var(--muted-foreground)] hidden md:block">3 Purpose-Built Configurations — Organized by System Architecture &amp; Shared Engineering Trades</p>
       </div>
     </div>
 
-    <div class="flex items-center gap-2">
-      <button onclick="showDashboard()" id="btn-home" class="px-3.5 py-1.5 rounded-lg text-xs font-semibold bg-blue-600 text-white shadow-sm hover:bg-blue-500 transition">
-        All Artifacts Grid
-      </button>
-      <a id="btn-open-new" href="mwtp_250_3d_explodable_view.html" target="_blank" class="hidden px-3.5 py-1.5 rounded-lg text-xs font-semibold bg-[var(--secondary)] text-[var(--secondary-foreground)] border border-[var(--border)] hover:border-blue-500 transition">
+    <!-- Quick Jump Pills + Theme Toggle -->
+    <div class="flex flex-wrap items-center gap-2">
+      <a href="#system-50c" onclick="showDashboard()" class="px-2.5 py-1.5 rounded-lg text-xs font-bold bg-violet-500/15 text-violet-400 border border-violet-500/40 hover:bg-violet-600 hover:text-white transition">
+        1. MWTP-50C (Split-Power)
+      </a>
+      <a href="#system-50" onclick="showDashboard()" class="px-2.5 py-1.5 rounded-lg text-xs font-bold bg-emerald-500/15 text-emerald-400 border border-emerald-500/40 hover:bg-emerald-600 hover:text-white transition">
+        2. MWTP-50 (Self-Contained)
+      </a>
+      <a href="#system-250" onclick="showDashboard()" class="px-2.5 py-1.5 rounded-lg text-xs font-bold bg-blue-500/15 text-blue-400 border border-blue-500/40 hover:bg-blue-600 hover:text-white transition">
+        3. MWTP-250 (Hospital)
+      </a>
+      <a href="#shared-suite" onclick="showDashboard()" class="px-2.5 py-1.5 rounded-lg text-xs font-bold bg-amber-500/15 text-amber-400 border border-amber-500/40 hover:bg-amber-600 hover:text-white transition">
+        4. Trades, SOP &amp; Loan Plan
+      </a>
+      <a id="btn-open-new" href="mwtp_250_3d_explodable_view.html" target="_blank" class="hidden px-3 py-1.5 rounded-lg text-xs font-semibold bg-[var(--secondary)] text-[var(--secondary-foreground)] border border-[var(--border)] hover:border-blue-500 transition">
         Open Fullscreen ↗
       </a>
       <button onclick="toggleTheme()" class="px-3 py-1.5 rounded-lg text-xs font-semibold bg-[var(--secondary)] text-[var(--secondary-foreground)] border border-[var(--border)] transition" id="theme-btn">
@@ -93,113 +107,180 @@
   </header>
 
   <!-- Main Content Container -->
-  <main class="flex-1 max-w-7xl w-full mx-auto p-4 md:p-8 space-y-8" id="dashboard-view">
+  <main class="flex-1 max-w-7xl w-full mx-auto p-4 md:p-8 space-y-10" id="dashboard-view">
 
-    <!-- Hero Banner -->
-    <div class="bg-gradient-to-r from-blue-950 via-slate-900 to-cyan-950 border border-blue-500/30 rounded-2xl p-6 md:p-8 text-white shadow-lg flex flex-col lg:flex-row lg:items-center lg:justify-between gap-6">
-      <div class="space-y-2.5 max-w-3xl">
-        <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full text-xs font-bold bg-cyan-500/20 text-cyan-300 border border-cyan-400/30">
-          ULTRAFILTRATION • VALIDATED UV • CHLORINE CONTACT TIME • VFD BUILDING PRESSURIZATION
+    <!-- ========================================================================= -->
+    <!-- TOP AT-A-GLANCE 3-SYSTEM SELECTOR BANNER                                  -->
+    <!-- ========================================================================= -->
+    <div class="space-y-4">
+      <div class="flex flex-col md:flex-row md:items-end justify-between gap-2">
+        <div>
+          <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full text-xs font-bold bg-cyan-500/15 text-cyan-400 border border-cyan-500/30 mb-2">
+            SELECT A SYSTEM ARCHITECTURE BELOW OR JUMP DIRECTLY TO ITS SUITE
+          </div>
+          <h1 class="text-2xl md:text-3xl font-extrabold tracking-tight">
+            AmeriPro Mobile Water Treatment Fleet — Three System Architectures
+          </h1>
         </div>
-        <h1 class="text-2xl md:text-4xl font-extrabold tracking-tight">
-          Emergency Mobile Water Treatment Fleet (MWTP-250, MWTP-50 &amp; MWTP-50C)
-        </h1>
-        <p class="text-sm text-slate-300 leading-relaxed">
-          Three purpose-built configurations: the <strong>MWTP-250</strong> (36-ft triple-axle gooseneck, <strong>250 GPM</strong>, Class A CDL) for acute-care hospitals; the <strong>MWTP-50 (&quot;KitchenShield-50&quot;)</strong> (22-ft compact gooseneck, <strong>35–50 GPM</strong>, <strong>9,990 lb GVWR non-CDL</strong>) for AmeriPro&apos;s commercial kitchen and restaurant accounts; and the <strong>MWTP-50C</strong> split-power restaurant system (20-ft water trailer with virus-rated UV and no ground tanks on BWA jobs, plus a separate <strong>PWR-25</strong> generator trailer for outages).
-        </p>
+        <div class="text-xs text-[var(--muted-foreground)] font-mono">
+          21 Total Artifacts • 14 Interactive Apps • 7 Engineering &amp; Financial Docs
+        </div>
       </div>
 
-      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-2.5 shrink-0">
-        <button onclick="openArtifact('mwtp_250_3d_explodable_view.html', 'html', 'MWTP-250 3D Explodable CAD & Water Flow')" class="px-3.5 py-2.5 rounded-xl bg-blue-600 hover:bg-blue-500 text-white text-xs font-bold shadow transition text-left">
-          <div class="text-cyan-200 font-mono">MWTP-250 3D CAD</div>
-          <div class="text-sm mt-0.5">Hospital 3D View →</div>
-        </button>
-        <button onclick="openArtifact('mwtp_50_3d_explodable_view.html', 'html', 'MWTP-50 3D Explodable CAD & Water Flow')" class="px-3.5 py-2.5 rounded-xl bg-teal-600 hover:bg-teal-500 text-white text-xs font-bold shadow transition text-left">
-          <div class="text-teal-200 font-mono">MWTP-50 3D CAD</div>
-          <div class="text-sm mt-0.5">Restaurant 3D View →</div>
-        </button>
-        <button onclick="openArtifact('mwtp_250_slide_deck.html', 'html', 'MWTP-250 Executive Presentation')" class="px-3.5 py-2.5 rounded-xl bg-purple-600 hover:bg-purple-500 text-white text-xs font-bold shadow transition text-left">
-          <div class="text-purple-200 font-mono">MWTP-250 DECK</div>
-          <div class="text-sm mt-0.5">Hospital Pitch Deck →</div>
-        </button>
-        <button onclick="openArtifact('mwtp_50_slide_deck.html', 'html', 'MWTP-50 Compact Restaurant Pitch Deck')" class="px-3.5 py-2.5 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-bold shadow transition text-left">
-          <div class="text-emerald-200 font-mono">MWTP-50 DECK</div>
-          <div class="text-sm mt-0.5">Restaurant Pitch Deck →</div>
-        </button>
-        <button onclick="openArtifact('mwtp_50c_slide_deck.html', 'html', 'MWTP-50C Split-Power Pitch Deck')" class="px-3.5 py-2.5 rounded-xl bg-violet-600 hover:bg-violet-500 text-white text-xs font-bold shadow transition text-left">
-          <div class="text-violet-200 font-mono">MWTP-50C DECK</div>
-          <div class="text-sm mt-0.5">Split-Power Pitch Deck →</div>
-        </button>
-        <button onclick="openArtifact('MWTP_Electrical_Schematics.html', 'html', 'Electrical Schematics & Panel Schedules (E-101 to E-104)')" class="px-3.5 py-2.5 rounded-xl bg-amber-600 hover:bg-amber-500 text-white text-xs font-bold shadow transition text-left">
-          <div class="text-amber-200 font-mono">DWG E-101..E-104</div>
-          <div class="text-sm mt-0.5">Electrical Schematics →</div>
-        </button>
-        <button onclick="openArtifact('MWTP_Piping_and_Plumbing_Diagrams.html', 'html', 'Piping Diagrams & Plumber Tie-In Details (P-101 to P-104)')" class="px-3.5 py-2.5 rounded-xl bg-cyan-600 hover:bg-cyan-500 text-white text-xs font-bold shadow transition text-left">
-          <div class="text-cyan-200 font-mono">DWG P-101..P-104</div>
-          <div class="text-sm mt-0.5">Piping &amp; Plumbing →</div>
-        </button>
+      <!-- 3 Prominent System Cards Side-by-Side -->
+      <div class="grid grid-cols-1 lg:grid-cols-3 gap-5">
+
+        <!-- SYSTEM 1 SUMMARY CARD: MWTP-50C (VIOLET) -->
+        <div class="bg-gradient-to-b from-violet-950/50 via-[var(--card)] to-[var(--card)] border-2 border-violet-500/50 hover:border-violet-400 rounded-2xl p-5 flex flex-col justify-between gap-4 shadow-lg transition">
+          <div class="space-y-3">
+            <div class="flex items-center justify-between gap-2">
+              <span class="px-2.5 py-1 rounded-md text-xs font-extrabold bg-violet-600 text-white tracking-wide">SYSTEM 1 • MWTP-50C (REV C)</span>
+              <span class="text-xs font-mono font-bold text-violet-300">35–50 GPM • NON-CDL</span>
+            </div>
+            <div>
+              <h2 class="text-xl font-extrabold text-white">MWTP-50C ("KitchenShield-50C") + PWR-25</h2>
+              <p class="text-xs text-violet-300 font-semibold mt-0.5">Split-Power 20-ft Water Trailer + Separate 25 kVA Generator Trailer</p>
+            </div>
+            <p class="text-xs text-[var(--muted-foreground)] leading-relaxed">
+              Built for Boil Water Advisories where building electricity is still on: plugs into a 240V 50A shore receptacle, takes direct pressurized feed via RPZ (<code class="text-violet-300">Port A</code>), and achieves 4-log virus credit via <strong class="text-[var(--foreground)]">186 mJ/cm² validated UV</strong> — <strong class="text-emerald-400">zero ground tanks &amp; ~1.5-hr setup</strong>. Pair with <strong class="text-[var(--foreground)]">PWR-25</strong> for outage jobs.
+            </p>
+            <div class="grid grid-cols-3 gap-2 pt-1 text-center">
+              <div class="bg-[var(--secondary)]/80 border border-[var(--border)] rounded-lg p-2">
+                <div class="text-[10px] text-[var(--muted-foreground)] uppercase">Road / Site Wt</div>
+                <div class="text-xs font-bold font-mono text-violet-300">7,310 / 8,660 lb</div>
+              </div>
+              <div class="bg-[var(--secondary)]/80 border border-[var(--border)] rounded-lg p-2">
+                <div class="text-[10px] text-[var(--muted-foreground)] uppercase">Turnkey Cost</div>
+                <div class="text-xs font-bold font-mono text-emerald-400">$219.4k + $34.5k</div>
+              </div>
+              <div class="bg-[var(--secondary)]/80 border border-[var(--border)] rounded-lg p-2">
+                <div class="text-[10px] text-[var(--muted-foreground)] uppercase">Yr-1 DSCR</div>
+                <div class="text-xs font-bold font-mono text-amber-300">1.40x – 1.73x</div>
+              </div>
+            </div>
+          </div>
+          <div class="grid grid-cols-2 gap-2 pt-3 border-t border-[var(--border)]">
+            <button onclick="openArtifact('mwtp_50c_3d_explodable_view.html', 'html', 'MWTP-50C Split-Power 3D Explodable View')" class="px-3 py-2 rounded-lg text-xs font-bold bg-violet-600 text-white hover:bg-violet-500 transition">
+              Launch 3D View →
+            </button>
+            <a href="#system-50c" class="px-3 py-2 rounded-lg text-xs font-bold text-center bg-[var(--secondary)] text-violet-300 border border-violet-500/40 hover:bg-violet-500/20 transition">
+              View All 4 Artifacts ↓
+            </a>
+          </div>
+        </div>
+
+        <!-- SYSTEM 2 SUMMARY CARD: MWTP-50 (EMERALD) -->
+        <div class="bg-gradient-to-b from-emerald-950/50 via-[var(--card)] to-[var(--card)] border-2 border-emerald-500/50 hover:border-emerald-400 rounded-2xl p-5 flex flex-col justify-between gap-4 shadow-lg transition">
+          <div class="space-y-3">
+            <div class="flex items-center justify-between gap-2">
+              <span class="px-2.5 py-1 rounded-md text-xs font-extrabold bg-emerald-600 text-white tracking-wide">SYSTEM 2 • MWTP-50 (REV B)</span>
+              <span class="text-xs font-mono font-bold text-emerald-300">35–50 GPM • NON-CDL</span>
+            </div>
+            <div>
+              <h2 class="text-xl font-extrabold text-white">MWTP-50 ("KitchenShield-50")</h2>
+              <p class="text-xs text-emerald-300 font-semibold mt-0.5">Self-Contained 22-ft Compact Gooseneck Restaurant Unit</p>
+            </div>
+            <p class="text-xs text-[var(--muted-foreground)] leading-relaxed">
+              Single-trailer all-in-one restaurant unit with onboard <strong class="text-[var(--foreground)]">20 kW diesel generator</strong> + 240V 50A shore plug (switched-neutral ATS), 4-module UF rack, and a <strong class="text-[var(--foreground)]">600-gal deployable baffled chlorine contact tank</strong> (<code class="text-emerald-300">TK-401</code>) for chemical 4-log virus CT credit.
+            </p>
+            <div class="grid grid-cols-3 gap-2 pt-1 text-center">
+              <div class="bg-[var(--secondary)]/80 border border-[var(--border)] rounded-lg p-2">
+                <div class="text-[10px] text-[var(--muted-foreground)] uppercase">Road / Site Wt</div>
+                <div class="text-xs font-bold font-mono text-emerald-300">8,670 / 9,820 lb</div>
+              </div>
+              <div class="bg-[var(--secondary)]/80 border border-[var(--border)] rounded-lg p-2">
+                <div class="text-[10px] text-[var(--muted-foreground)] uppercase">Turnkey Cost</div>
+                <div class="text-xs font-bold font-mono text-emerald-400">$238,625</div>
+              </div>
+              <div class="bg-[var(--secondary)]/80 border border-[var(--border)] rounded-lg p-2">
+                <div class="text-[10px] text-[var(--muted-foreground)] uppercase">Yr-1 DSCR</div>
+                <div class="text-xs font-bold font-mono text-amber-300">1.41x – 1.76x</div>
+              </div>
+            </div>
+          </div>
+          <div class="grid grid-cols-2 gap-2 pt-3 border-t border-[var(--border)]">
+            <button onclick="openArtifact('mwtp_50_3d_explodable_view.html', 'html', 'MWTP-50 3D Explodable CAD & Water Flow')" class="px-3 py-2 rounded-lg text-xs font-bold bg-emerald-600 text-white hover:bg-emerald-500 transition">
+              Launch 3D View →
+            </button>
+            <a href="#system-50" class="px-3 py-2 rounded-lg text-xs font-bold text-center bg-[var(--secondary)] text-emerald-300 border border-emerald-500/40 hover:bg-emerald-500/20 transition">
+              View All 5 Artifacts ↓
+            </a>
+          </div>
+        </div>
+
+        <!-- SYSTEM 3 SUMMARY CARD: MWTP-250 (BLUE) -->
+        <div class="bg-gradient-to-b from-blue-950/50 via-[var(--card)] to-[var(--card)] border-2 border-blue-500/50 hover:border-blue-400 rounded-2xl p-5 flex flex-col justify-between gap-4 shadow-lg transition">
+          <div class="space-y-3">
+            <div class="flex items-center justify-between gap-2">
+              <span class="px-2.5 py-1 rounded-md text-xs font-extrabold bg-blue-600 text-white tracking-wide">SYSTEM 3 • MWTP-250</span>
+              <span class="text-xs font-mono font-bold text-blue-300">250 GPM • CLASS A CDL</span>
+            </div>
+            <div>
+              <h2 class="text-xl font-extrabold text-white">MWTP-250 Hospital &amp; Institutional</h2>
+              <p class="text-xs text-blue-300 font-semibold mt-0.5">36-ft Triple-Axle Gooseneck Critical Facility Plant</p>
+            </div>
+            <p class="text-xs text-[var(--muted-foreground)] leading-relaxed">
+              Heavy-duty institutional plant for acute-care hospitals (up to 360,000 GPD): <strong class="text-[var(--foreground)]">80 kW onboard diesel generator</strong>, 16-module PVDF UF skid, 300-gal clearwell + 3,000-gal baffled CT bladder, and triplex 15 HP VFD building boosters (<code class="text-blue-300">65–85 PSI</code>).
+            </p>
+            <div class="grid grid-cols-3 gap-2 pt-1 text-center">
+              <div class="bg-[var(--secondary)]/80 border border-[var(--border)] rounded-lg p-2">
+                <div class="text-[10px] text-[var(--muted-foreground)] uppercase">Road / Site Wt</div>
+                <div class="text-xs font-bold font-mono text-blue-300">24.1k / 28.4k lb</div>
+              </div>
+              <div class="bg-[var(--secondary)]/80 border border-[var(--border)] rounded-lg p-2">
+                <div class="text-[10px] text-[var(--muted-foreground)] uppercase">Turnkey Cost</div>
+                <div class="text-xs font-bold font-mono text-emerald-400">$601,450</div>
+              </div>
+              <div class="bg-[var(--secondary)]/80 border border-[var(--border)] rounded-lg p-2">
+                <div class="text-[10px] text-[var(--muted-foreground)] uppercase">Yr-1 DSCR</div>
+                <div class="text-xs font-bold font-mono text-amber-300">1.58x</div>
+              </div>
+            </div>
+          </div>
+          <div class="grid grid-cols-2 gap-2 pt-3 border-t border-[var(--border)]">
+            <button onclick="openArtifact('mwtp_250_3d_explodable_view.html', 'html', 'MWTP-250 3D Explodable CAD & Water Flow')" class="px-3 py-2 rounded-lg text-xs font-bold bg-blue-600 text-white hover:bg-blue-500 transition">
+              Launch 3D View →
+            </button>
+            <a href="#system-250" class="px-3 py-2 rounded-lg text-xs font-bold text-center bg-[var(--secondary)] text-blue-300 border border-blue-500/40 hover:bg-blue-500/20 transition">
+              View All 7 Artifacts ↓
+            </a>
+          </div>
+        </div>
+
       </div>
     </div>
 
-    <!-- SECTION 1: INTERACTIVE VISUALIZERS, SIMULATORS & SALES BROCHURES -->
-    <div class="space-y-4">
-      <div class="flex items-center justify-between border-b border-[var(--border)] pb-2">
-        <h2 class="text-lg font-bold">1. Interactive 3D/2D Visualizers, Presentations & Sales Brochures</h2>
-        <span class="text-xs font-mono text-[var(--muted-foreground)]">14 Interactive HTML Apps</span>
+    <!-- ========================================================================= -->
+    <!-- SECTION 1: SYSTEM 1 — MWTP-50C ("KITCHENSHIELD-50C") + PWR-25 (REV C)     -->
+    <!-- ========================================================================= -->
+    <section id="system-50c" class="scroll-mt-24 rounded-2xl border-2 border-violet-500/40 bg-violet-950/10 p-5 md:p-7 space-y-5">
+      <div class="flex flex-col lg:flex-row lg:items-center justify-between gap-4 border-b border-violet-500/30 pb-4">
+        <div class="space-y-1">
+          <div class="flex flex-wrap items-center gap-2">
+            <span class="px-3 py-1 rounded-md text-xs font-extrabold bg-violet-600 text-white uppercase tracking-wider">SYSTEM 1 • MWTP-50C + PWR-25 (REV C)</span>
+            <span class="px-2.5 py-0.5 rounded-full text-xs font-semibold bg-violet-500/20 text-violet-300 border border-violet-500/30">20-ft Water Trailer + Separate 25 kVA Gen Trailer</span>
+            <span class="px-2.5 py-0.5 rounded-full text-xs font-semibold bg-emerald-500/20 text-emerald-300 border border-emerald-500/30">No Ground Tanks on BWA Jobs • ~1.5-Hr Setup</span>
+          </div>
+          <h2 class="text-xl md:text-2xl font-extrabold">
+            MWTP-50C ("KitchenShield-50C") Split-Power Restaurant System Suite
+          </h2>
+          <p class="text-xs md:text-sm text-[var(--muted-foreground)]">
+            All artifacts below refer specifically to the <strong>MWTP-50C</strong> 20-ft split-power water trailer (240V 50A shore power, RPZ direct feed, 186 mJ/cm² virus-rated UV) and its companion <strong>PWR-25</strong> generator &amp; outage-kit trailer.
+          </p>
+        </div>
+        <div class="shrink-0 text-xs font-mono text-violet-300 bg-violet-950/60 border border-violet-500/40 rounded-xl px-3.5 py-2">
+          4 Dedicated MWTP-50C Artifacts (3 Interactive Apps + 1 Design Spec)
+        </div>
       </div>
 
-      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
 
-        <!-- Card 1: 3D Explodable View -->
-        <div class="bg-[var(--card)] border border-[var(--border)] hover:border-blue-500/60 rounded-xl p-5 flex flex-col justify-between gap-4 shadow-sm transition">
+        <!-- 50C Card 1: 3D Explodable View -->
+        <div class="bg-[var(--card)] border border-violet-500/40 hover:border-violet-400 rounded-xl p-5 flex flex-col justify-between gap-4 shadow-sm transition">
           <div class="space-y-2">
             <div class="flex items-center justify-between">
-              <span class="px-2.5 py-0.5 rounded text-xs font-bold bg-blue-500/15 text-blue-400">MWTP-250 3D CAD</span>
-              <span class="text-xs font-mono text-[var(--muted-foreground)]">Three/Canvas3D</span>
-            </div>
-            <h3 class="text-base font-bold">MWTP-250 (36-ft Hospital) 3D Explodable View &amp; Water Flow</h3>
-            <p class="text-xs text-[var(--muted-foreground)] leading-relaxed">
-              Orbit 360°, explode the 36-ft gooseneck assembly from 0% to 100%, toggle 3D callout labels, and trace animated water droplets through all 6 treatment stages.
-            </p>
-          </div>
-          <div class="flex items-center gap-2 pt-2 border-t border-[var(--border)]">
-            <button onclick="openArtifact('mwtp_250_3d_explodable_view.html', 'html', 'MWTP-250 3D Explodable CAD & Water Flow')" class="flex-1 px-3 py-2 rounded-lg text-xs font-semibold bg-blue-600 text-white hover:bg-blue-500 transition">
-              Launch in Viewer
-            </button>
-            <a href="mwtp_250_3d_explodable_view.html" target="_blank" class="px-3 py-2 rounded-lg text-xs font-semibold bg-[var(--secondary)] text-[var(--secondary-foreground)] border border-[var(--border)] hover:border-blue-500 transition">
-              New Tab ↗
-            </a>
-          </div>
-        </div>
-
-        <!-- Card 1B: MWTP-50 3D Explodable View -->
-        <div class="bg-[var(--card)] border border-emerald-500/40 hover:border-emerald-500 rounded-xl p-5 flex flex-col justify-between gap-4 shadow-sm transition">
-          <div class="space-y-2">
-            <div class="flex items-center justify-between">
-              <span class="px-2.5 py-0.5 rounded text-xs font-bold bg-emerald-500/20 text-emerald-400">MWTP-50 3D CAD (NEW)</span>
+              <span class="px-2.5 py-0.5 rounded text-xs font-bold bg-violet-500/20 text-violet-300">MWTP-50C • 3D CAD</span>
               <span class="text-xs font-mono text-[var(--muted-foreground)]">Three.js WebGL</span>
-            </div>
-            <h3 class="text-base font-bold">MWTP-50 ("KitchenShield-50") 3D Explodable View</h3>
-            <p class="text-xs text-[var(--muted-foreground)] leading-relaxed">
-              Interactive Three.js 3D digital twin of the non-CDL 22-ft compact gooseneck behind a 1-ton SRW pickup: 4-module UF rack, 150-gal clearwell, 600-gal baffled CT tank, and duplex VFD boosters.
-            </p>
-          </div>
-          <div class="flex items-center gap-2 pt-2 border-t border-[var(--border)]">
-            <button onclick="openArtifact('mwtp_50_3d_explodable_view.html', 'html', 'MWTP-50 3D Explodable CAD & Water Flow')" class="flex-1 px-3 py-2 rounded-lg text-xs font-semibold bg-emerald-600 text-white hover:bg-emerald-500 transition">
-              Launch in Viewer
-            </button>
-            <a href="mwtp_50_3d_explodable_view.html" target="_blank" class="px-3 py-2 rounded-lg text-xs font-semibold bg-[var(--secondary)] text-[var(--secondary-foreground)] border border-[var(--border)] hover:border-emerald-500 transition">
-              New Tab ↗
-            </a>
-          </div>
-        </div>
-
-        <!-- Card 1C: MWTP-50C 3D Explodable View -->
-        <div class="bg-[var(--card)] border border-violet-500/40 hover:border-violet-500 rounded-xl p-5 flex flex-col justify-between gap-4 shadow-sm transition">
-          <div class="space-y-2">
-            <div class="flex items-center justify-between">
-              <span class="px-2.5 py-0.5 rounded text-xs font-bold bg-violet-500/20 text-violet-400">MWTP-50C 3D VIEW (REV C)</span>
-              <span class="text-xs font-mono text-[var(--muted-foreground)]">Three.js</span>
             </div>
             <h3 class="text-base font-bold">MWTP-50C Split-Power 3D Explodable View</h3>
             <p class="text-xs text-[var(--muted-foreground)] leading-relaxed">
@@ -208,7 +289,7 @@
           </div>
           <div class="flex items-center gap-2 pt-2 border-t border-[var(--border)]">
             <button onclick="openArtifact('mwtp_50c_3d_explodable_view.html', 'html', 'MWTP-50C Split-Power 3D Explodable View')" class="flex-1 px-3 py-2 rounded-lg text-xs font-semibold bg-violet-600 text-white hover:bg-violet-500 transition">
-              Launch in Viewer
+              Launch 3D View
             </button>
             <a href="mwtp_50c_3d_explodable_view.html" target="_blank" class="px-3 py-2 rounded-lg text-xs font-semibold bg-[var(--secondary)] text-[var(--secondary-foreground)] border border-[var(--border)] hover:border-violet-500 transition">
               New Tab ↗
@@ -216,100 +297,128 @@
           </div>
         </div>
 
-        <!-- Card 2: 2D Floorplan & SCADA Simulator -->
-        <div class="bg-[var(--card)] border border-[var(--border)] hover:border-cyan-500/60 rounded-xl p-5 flex flex-col justify-between gap-4 shadow-sm transition">
+        <!-- 50C Card 2: Simulator -->
+        <div class="bg-[var(--card)] border border-violet-500/40 hover:border-violet-400 rounded-xl p-5 flex flex-col justify-between gap-4 shadow-sm transition">
           <div class="space-y-2">
             <div class="flex items-center justify-between">
-              <span class="px-2.5 py-0.5 rounded text-xs font-bold bg-cyan-500/15 text-cyan-400">MWTP-250 SCADA SIMULATOR</span>
+              <span class="px-2.5 py-0.5 rounded text-xs font-bold bg-violet-500/20 text-violet-300">MWTP-50C • SIMULATOR</span>
               <span class="text-xs font-mono text-[var(--muted-foreground)]">Interactive HMI</span>
             </div>
-            <h3 class="text-base font-bold">MWTP-250 Interactive Floorplan &amp; Process Simulator</h3>
+            <h3 class="text-base font-bold">MWTP-50C Split-Power System Simulator</h3>
             <p class="text-xs text-[var(--muted-foreground)] leading-relaxed">
-              Click any skid on the top-down trailer blueprint, switch between Normal Filtration, UF Backwash, and Drain &amp; Preserve transport modes, and simulate hospital/restaurant demand.
+              Clickable 20-ft water trailer layout plus live PLC logic: city pressure and Port A/B supply, 186 mJ/cm² UV dose vs. UVT and lamp output, 50A shore-current HVAC shed, PWR-25 fuel burn, and daily margin across 5 job presets.
             </p>
           </div>
           <div class="flex items-center gap-2 pt-2 border-t border-[var(--border)]">
-            <button onclick="openArtifact('mwtp_250_interactive_simulator.html', 'html', 'MWTP-250 Interactive Floorplan & Process Simulator')" class="flex-1 px-3 py-2 rounded-lg text-xs font-semibold bg-cyan-600 text-white hover:bg-cyan-500 transition">
-              Launch in Viewer
+            <button onclick="openArtifact('mwtp_50c_simulator.html', 'html', 'MWTP-50C Split-Power System Simulator')" class="flex-1 px-3 py-2 rounded-lg text-xs font-semibold bg-violet-600 text-white hover:bg-violet-500 transition">
+              Launch Simulator
             </button>
-            <a href="mwtp_250_interactive_simulator.html" target="_blank" class="px-3 py-2 rounded-lg text-xs font-semibold bg-[var(--secondary)] text-[var(--secondary-foreground)] border border-[var(--border)] hover:border-cyan-500 transition">
+            <a href="mwtp_50c_simulator.html" target="_blank" class="px-3 py-2 rounded-lg text-xs font-semibold bg-[var(--secondary)] text-[var(--secondary-foreground)] border border-[var(--border)] hover:border-violet-500 transition">
               New Tab ↗
             </a>
           </div>
         </div>
 
-        <!-- Card 3: 10-Slide Executive Presentation -->
-        <div class="bg-[var(--card)] border border-[var(--border)] hover:border-purple-500/60 rounded-xl p-5 flex flex-col justify-between gap-4 shadow-sm transition">
+        <!-- 50C Card 3: Pitch Deck -->
+        <div class="bg-[var(--card)] border border-violet-500/40 hover:border-violet-400 rounded-xl p-5 flex flex-col justify-between gap-4 shadow-sm transition">
           <div class="space-y-2">
             <div class="flex items-center justify-between">
-              <span class="px-2.5 py-0.5 rounded text-xs font-bold bg-purple-500/15 text-purple-400">MWTP-250 SLIDE DECK</span>
+              <span class="px-2.5 py-0.5 rounded text-xs font-bold bg-violet-500/20 text-violet-300">MWTP-50C • PITCH DECK</span>
               <span class="text-xs font-mono text-[var(--muted-foreground)]">10 Slides</span>
             </div>
-            <h3 class="text-base font-bold">MWTP-250 Hospital Executive Presentation Slide Deck</h3>
+            <h3 class="text-base font-bold">MWTP-50C ("KitchenShield-50C") Split-Power Pitch Deck</h3>
             <p class="text-xs text-[var(--muted-foreground)] leading-relaxed">
-              10-slide interactive presentation explaining the problem, why UF beats RO, the 6-stage train, weight and CDL requirements, safety interlocks, CapEx/OpEx, and bank DSCR.
+              10-slide executive presentation for the two-trailer system: 20-ft water trailer on 50A shore power, 186 mJ/cm² virus-rated UV with no ground tanks, PWR-25 generator trailer for outages, $253.9k system cost, and 1.40x–1.73x Yr-1 DSCR.
             </p>
           </div>
           <div class="flex items-center gap-2 pt-2 border-t border-[var(--border)]">
-            <button onclick="openArtifact('mwtp_250_slide_deck.html', 'html', 'MWTP-250 10-Slide Executive Presentation')" class="flex-1 px-3 py-2 rounded-lg text-xs font-semibold bg-purple-600 text-white hover:bg-purple-500 transition">
-              Launch in Viewer
+            <button onclick="openArtifact('mwtp_50c_slide_deck.html', 'html', 'MWTP-50C Split-Power Pitch Deck')" class="flex-1 px-3 py-2 rounded-lg text-xs font-semibold bg-violet-600 text-white hover:bg-violet-500 transition">
+              Launch Deck
             </button>
-            <a href="mwtp_250_slide_deck.html" target="_blank" class="px-3 py-2 rounded-lg text-xs font-semibold bg-[var(--secondary)] text-[var(--secondary-foreground)] border border-[var(--border)] hover:border-purple-500 transition">
+            <a href="mwtp_50c_slide_deck.html" target="_blank" class="px-3 py-2 rounded-lg text-xs font-semibold bg-[var(--secondary)] text-[var(--secondary-foreground)] border border-[var(--border)] hover:border-violet-500 transition">
               New Tab ↗
             </a>
           </div>
         </div>
 
-        <!-- Card 4: Hospital Sales Brochure -->
-        <div class="bg-[var(--card)] border border-[var(--border)] hover:border-blue-500/60 rounded-xl p-5 flex flex-col justify-between gap-4 shadow-sm transition">
+        <!-- 50C Card 4: Engineering Design & BOM Doc -->
+        <div class="bg-[var(--card)] border border-violet-500/40 hover:border-violet-400 rounded-xl p-5 flex flex-col justify-between gap-4 shadow-sm transition">
           <div class="space-y-2">
             <div class="flex items-center justify-between">
-              <span class="px-2.5 py-0.5 rounded text-xs font-bold bg-blue-500/15 text-blue-400">MWTP-250 HOSPITAL BROCHURE</span>
-              <span class="text-xs font-mono text-[var(--muted-foreground)]">Print / PDF Ready</span>
+              <span class="px-2.5 py-0.5 rounded text-xs font-bold bg-violet-500/20 text-violet-300">MWTP-50C • DESIGN &amp; BOM</span>
+              <span class="text-xs font-mono text-[var(--muted-foreground)]">$219.4k + $34.5k</span>
             </div>
-            <h3 class="text-base font-bold">MWTP-250 Hospital &amp; Healthcare Continuity Brochure</h3>
+            <h3 class="text-base font-bold">MWTP-50C Split-Power Engineering Design &amp; BOM</h3>
             <p class="text-xs text-[var(--muted-foreground)] leading-relaxed">
-              Client leave-behind for Hospital Facilities Directors & COOs. Supports CMS 42 CFR 482.15 &amp; Joint Commission emergency water planning, with the $1,500/mo Priority Standby Retainer (max 3 hospitals per trailer).
+              Complete engineering design for the 20-ft water trailer (7,310 lb road / 8,660 lb site) and PWR-25 generator trailer (~3,540 lb wet): RPZ direct feed, 186 mJ/cm² UV validation, BOM, and 3-year financial pro forma.
             </p>
           </div>
           <div class="flex items-center gap-2 pt-2 border-t border-[var(--border)]">
-            <button onclick="openArtifact('MWTP_250_Hospital_Sales_Brochure.html', 'html', 'MWTP-250 Hospital Sales Brochure')" class="flex-1 px-3 py-2 rounded-lg text-xs font-semibold bg-blue-600 text-white hover:bg-blue-500 transition">
-              Open Brochure
+            <button onclick="openArtifact('MWTP_50C_Split_Power_Design.md', 'md', 'MWTP-50C Split-Power Rev C Design')" class="flex-1 px-3 py-2 rounded-lg text-xs font-semibold bg-violet-600 text-white hover:bg-violet-500 transition">
+              Read Document
             </button>
-            <a href="MWTP_250_Hospital_Sales_Brochure.html" target="_blank" class="px-3 py-2 rounded-lg text-xs font-semibold bg-[var(--secondary)] text-[var(--secondary-foreground)] border border-[var(--border)] hover:border-blue-500 transition">
-              New Tab ↗
+            <a href="MWTP_50C_Split_Power_Design.md" target="_blank" class="px-3 py-2 rounded-lg text-xs font-semibold bg-[var(--secondary)] text-[var(--secondary-foreground)] border border-[var(--border)] hover:border-violet-500 transition">
+              Raw .MD ↗
             </a>
           </div>
         </div>
 
-        <!-- Card 5: Restaurant Sales Brochure -->
-        <div class="bg-[var(--card)] border border-[var(--border)] hover:border-emerald-500/60 rounded-xl p-5 flex flex-col justify-between gap-4 shadow-sm transition">
+      </div>
+    </section>
+
+    <!-- ========================================================================= -->
+    <!-- SECTION 2: SYSTEM 2 — MWTP-50 ("KITCHENSHIELD-50") SELF-CONTAINED (REV B) -->
+    <!-- ========================================================================= -->
+    <section id="system-50" class="scroll-mt-24 rounded-2xl border-2 border-emerald-500/40 bg-emerald-950/10 p-5 md:p-7 space-y-5">
+      <div class="flex flex-col lg:flex-row lg:items-center justify-between gap-4 border-b border-emerald-500/30 pb-4">
+        <div class="space-y-1">
+          <div class="flex flex-wrap items-center gap-2">
+            <span class="px-3 py-1 rounded-md text-xs font-extrabold bg-emerald-600 text-white uppercase tracking-wider">SYSTEM 2 • MWTP-50 (REV B)</span>
+            <span class="px-2.5 py-0.5 rounded-full text-xs font-semibold bg-emerald-500/20 text-emerald-300 border border-emerald-500/30">22-ft Self-Contained Gooseneck • 9,990 lb GVWR Non-CDL</span>
+            <span class="px-2.5 py-0.5 rounded-full text-xs font-semibold bg-teal-500/20 text-teal-300 border border-teal-500/30">Onboard 20 kW Diesel Gen + 600-Gal CT Tank</span>
+          </div>
+          <h2 class="text-xl md:text-2xl font-extrabold">
+            MWTP-50 ("KitchenShield-50") Self-Contained Restaurant Unit Suite
+          </h2>
+          <p class="text-xs md:text-sm text-[var(--muted-foreground)]">
+            All artifacts below refer to the <strong>MWTP-50</strong> single-trailer 22-ft compact gooseneck with onboard 20 kW diesel generator, 240V 50A shore plug, and 600-gal baffled chlorine contact tank, plus the interactive Restaurant ROI &amp; Standby LOI Calculator.
+          </p>
+        </div>
+        <div class="shrink-0 text-xs font-mono text-emerald-300 bg-emerald-950/60 border border-emerald-500/40 rounded-xl px-3.5 py-2">
+          5 Dedicated MWTP-50 Artifacts (4 Interactive Apps + 1 Design Spec)
+        </div>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+
+        <!-- 50 Card 1: 3D Explodable View -->
+        <div class="bg-[var(--card)] border border-emerald-500/40 hover:border-emerald-400 rounded-xl p-5 flex flex-col justify-between gap-4 shadow-sm transition">
           <div class="space-y-2">
             <div class="flex items-center justify-between">
-              <span class="px-2.5 py-0.5 rounded text-xs font-bold bg-emerald-500/15 text-emerald-400">MWTP-50 &amp; MWTP-250 BROCHURE</span>
-              <span class="text-xs font-mono text-[var(--muted-foreground)]">Print / PDF Ready</span>
+              <span class="px-2.5 py-0.5 rounded text-xs font-bold bg-emerald-500/20 text-emerald-400">MWTP-50 • 3D CAD</span>
+              <span class="text-xs font-mono text-[var(--muted-foreground)]">Three.js WebGL</span>
             </div>
-            <h3 class="text-base font-bold">MWTP-50 &amp; MWTP-250 Restaurant &amp; Hospitality Sales Brochure</h3>
+            <h3 class="text-base font-bold">MWTP-50 ("KitchenShield-50") 3D Explodable View</h3>
             <p class="text-xs text-[var(--muted-foreground)] leading-relaxed">
-              Sales leave-behind for Restaurant Groups, Hotels & Commercial Kitchens. Highlights staying open on an approved alternate source during Boil Water Advisories and protecting dishwashers &amp; ice machines.
+              Interactive Three.js 3D digital twin of the non-CDL 22-ft compact gooseneck behind a 1-ton SRW pickup: onboard 20 kW gen, 4-module UF rack, 150-gal clearwell, 600-gal baffled CT tank, and duplex VFD boosters.
             </p>
           </div>
           <div class="flex items-center gap-2 pt-2 border-t border-[var(--border)]">
-            <button onclick="openArtifact('MWTP_250_Restaurant_Sales_Brochure.html', 'html', 'MWTP-50 & MWTP-250 Restaurant & Hospitality Brochure')" class="flex-1 px-3 py-2 rounded-lg text-xs font-semibold bg-emerald-600 text-white hover:bg-emerald-500 transition">
-              Open Brochure
+            <button onclick="openArtifact('mwtp_50_3d_explodable_view.html', 'html', 'MWTP-50 3D Explodable CAD & Water Flow')" class="flex-1 px-3 py-2 rounded-lg text-xs font-semibold bg-emerald-600 text-white hover:bg-emerald-500 transition">
+              Launch 3D View
             </button>
-            <a href="MWTP_250_Restaurant_Sales_Brochure.html" target="_blank" class="px-3 py-2 rounded-lg text-xs font-semibold bg-[var(--secondary)] text-[var(--secondary-foreground)] border border-[var(--border)] hover:border-emerald-500 transition">
+            <a href="mwtp_50_3d_explodable_view.html" target="_blank" class="px-3 py-2 rounded-lg text-xs font-semibold bg-[var(--secondary)] text-[var(--secondary-foreground)] border border-[var(--border)] hover:border-emerald-500 transition">
               New Tab ↗
             </a>
           </div>
         </div>
 
-        <!-- Card 6: MWTP-50 Compact Restaurant Simulator -->
-        <div class="bg-[var(--card)] border border-emerald-500/40 hover:border-emerald-500 rounded-xl p-5 flex flex-col justify-between gap-4 shadow-sm transition">
+        <!-- 50 Card 2: Simulator -->
+        <div class="bg-[var(--card)] border border-emerald-500/40 hover:border-emerald-400 rounded-xl p-5 flex flex-col justify-between gap-4 shadow-sm transition">
           <div class="space-y-2">
             <div class="flex items-center justify-between">
-              <span class="px-2.5 py-0.5 rounded text-xs font-bold bg-emerald-500/20 text-emerald-400">MWTP-50 GOOSENECK (NEW)</span>
-              <span class="text-xs font-mono text-[var(--muted-foreground)]">Non-CDL · 35/50 GPM</span>
+              <span class="px-2.5 py-0.5 rounded text-xs font-bold bg-emerald-500/20 text-emerald-400">MWTP-50 • SIMULATOR</span>
+              <span class="text-xs font-mono text-[var(--muted-foreground)]">Interactive HMI</span>
             </div>
             <h3 class="text-base font-bold">MWTP-50 Compact Gooseneck Floorplan &amp; CT Simulator</h3>
             <p class="text-xs text-[var(--muted-foreground)] leading-relaxed">
@@ -318,7 +427,7 @@
           </div>
           <div class="flex items-center gap-2 pt-2 border-t border-[var(--border)]">
             <button onclick="openArtifact('mwtp_50_restaurant_simulator.html', 'html', 'MWTP-50 Compact Restaurant Unit Simulator')" class="flex-1 px-3 py-2 rounded-lg text-xs font-semibold bg-emerald-600 text-white hover:bg-emerald-500 transition">
-              Launch in Viewer
+              Launch Simulator
             </button>
             <a href="mwtp_50_restaurant_simulator.html" target="_blank" class="px-3 py-2 rounded-lg text-xs font-semibold bg-[var(--secondary)] text-[var(--secondary-foreground)] border border-[var(--border)] hover:border-emerald-500 transition">
               New Tab ↗
@@ -326,33 +435,11 @@
           </div>
         </div>
 
-        <!-- Card 6b: MWTP-50C Split-Power Simulator -->
-        <div class="bg-[var(--card)] border border-violet-500/40 hover:border-violet-500 rounded-xl p-5 flex flex-col justify-between gap-4 shadow-sm transition">
+        <!-- 50 Card 3: Pitch Deck -->
+        <div class="bg-[var(--card)] border border-emerald-500/40 hover:border-emerald-400 rounded-xl p-5 flex flex-col justify-between gap-4 shadow-sm transition">
           <div class="space-y-2">
             <div class="flex items-center justify-between">
-              <span class="px-2.5 py-0.5 rounded text-xs font-bold bg-violet-500/20 text-violet-400">MWTP-50C SIMULATOR (REV C)</span>
-              <span class="text-xs font-mono text-[var(--muted-foreground)]">Interactive</span>
-            </div>
-            <h3 class="text-base font-bold">MWTP-50C Split-Power System Simulator</h3>
-            <p class="text-xs text-[var(--muted-foreground)] leading-relaxed">
-              Clickable 20-ft water trailer layout plus live PLC logic: city pressure and Port A/B supply, 186 mJ/cm² UV dose vs. UVT and lamp output, 50A shore-current HVAC shed, PWR-25 fuel burn, and daily margin. Five one-click job scenarios.
-            </p>
-          </div>
-          <div class="flex items-center gap-2 pt-2 border-t border-[var(--border)]">
-            <button onclick="openArtifact('mwtp_50c_simulator.html', 'html', 'MWTP-50C Split-Power System Simulator')" class="flex-1 px-3 py-2 rounded-lg text-xs font-semibold bg-violet-600 text-white hover:bg-violet-500 transition">
-              Launch in Viewer
-            </button>
-            <a href="mwtp_50c_simulator.html" target="_blank" class="px-3 py-2 rounded-lg text-xs font-semibold bg-[var(--secondary)] text-[var(--secondary-foreground)] border border-[var(--border)] hover:border-violet-500 transition">
-              New Tab ↗
-            </a>
-          </div>
-        </div>
-
-        <!-- Card 7: MWTP-50 Pitch Deck Presentation -->
-        <div class="bg-[var(--card)] border border-emerald-500/40 hover:border-emerald-500 rounded-xl p-5 flex flex-col justify-between gap-4 shadow-sm transition">
-          <div class="space-y-2">
-            <div class="flex items-center justify-between">
-              <span class="px-2.5 py-0.5 rounded text-xs font-bold bg-emerald-500/20 text-emerald-400">MWTP-50 PITCH DECK (NEW)</span>
+              <span class="px-2.5 py-0.5 rounded text-xs font-bold bg-emerald-500/20 text-emerald-400">MWTP-50 • PITCH DECK</span>
               <span class="text-xs font-mono text-[var(--muted-foreground)]">10 Slides</span>
             </div>
             <h3 class="text-base font-bold">MWTP-50 ("KitchenShield-50") Executive Pitch Deck</h3>
@@ -362,7 +449,7 @@
           </div>
           <div class="flex items-center gap-2 pt-2 border-t border-[var(--border)]">
             <button onclick="openArtifact('mwtp_50_slide_deck.html', 'html', 'MWTP-50 Compact Restaurant Pitch Deck')" class="flex-1 px-3 py-2 rounded-lg text-xs font-semibold bg-emerald-600 text-white hover:bg-emerald-500 transition">
-              Launch in Viewer
+              Launch Deck
             </button>
             <a href="mwtp_50_slide_deck.html" target="_blank" class="px-3 py-2 rounded-lg text-xs font-semibold bg-[var(--secondary)] text-[var(--secondary-foreground)] border border-[var(--border)] hover:border-emerald-500 transition">
               New Tab ↗
@@ -370,38 +457,16 @@
           </div>
         </div>
 
-        <!-- Card 7b: MWTP-50C Pitch Deck Presentation -->
-        <div class="bg-[var(--card)] border border-violet-500/40 hover:border-violet-500 rounded-xl p-5 flex flex-col justify-between gap-4 shadow-sm transition">
+        <!-- 50 Card 4: ROI & LOI Calculator -->
+        <div class="bg-[var(--card)] border border-emerald-500/40 hover:border-emerald-400 rounded-xl p-5 flex flex-col justify-between gap-4 shadow-sm transition">
           <div class="space-y-2">
             <div class="flex items-center justify-between">
-              <span class="px-2.5 py-0.5 rounded text-xs font-bold bg-violet-500/20 text-violet-400">MWTP-50C PITCH DECK (REV C)</span>
-              <span class="text-xs font-mono text-[var(--muted-foreground)]">10 Slides</span>
-            </div>
-            <h3 class="text-base font-bold">MWTP-50C ("KitchenShield-50C") Split-Power Pitch Deck</h3>
-            <p class="text-xs text-[var(--muted-foreground)] leading-relaxed">
-              10-slide presentation for the two-trailer system: 20-ft water trailer on 50A shore power, 186 mJ/cm² virus-rated UV with no ground tanks, PWR-25 generator trailer for outages, $253.9k system cost, and 1.40x–1.73x Yr-1 DSCR.
-            </p>
-          </div>
-          <div class="flex items-center gap-2 pt-2 border-t border-[var(--border)]">
-            <button onclick="openArtifact('mwtp_50c_slide_deck.html', 'html', 'MWTP-50C Split-Power Pitch Deck')" class="flex-1 px-3 py-2 rounded-lg text-xs font-semibold bg-violet-600 text-white hover:bg-violet-500 transition">
-              Launch in Viewer
-            </button>
-            <a href="mwtp_50c_slide_deck.html" target="_blank" class="px-3 py-2 rounded-lg text-xs font-semibold bg-[var(--secondary)] text-[var(--secondary-foreground)] border border-[var(--border)] hover:border-violet-500 transition">
-              New Tab ↗
-            </a>
-          </div>
-        </div>
-
-        <!-- Card 8: Interactive Restaurant ROI & LOI Generator -->
-        <div class="bg-[var(--card)] border border-emerald-500/40 hover:border-emerald-500 rounded-xl p-5 flex flex-col justify-between gap-4 shadow-sm transition">
-          <div class="space-y-2">
-            <div class="flex items-center justify-between">
-              <span class="px-2.5 py-0.5 rounded text-xs font-bold bg-emerald-500/20 text-emerald-400">MWTP-50 ROI &amp; LOI GENERATOR</span>
+              <span class="px-2.5 py-0.5 rounded text-xs font-bold bg-emerald-500/20 text-emerald-400">MWTP-50 / 50C • ROI &amp; LOI TOOL</span>
               <span class="text-xs font-mono text-[var(--muted-foreground)]">Sales + SBA Tool</span>
             </div>
             <h3 class="text-base font-bold">MWTP-50 Restaurant Downtime ROI &amp; Standby LOI Generator</h3>
             <p class="text-xs text-[var(--muted-foreground)] leading-relaxed">
-              Enter kitchen revenue, seats, and F.O.G./hood bundle status to calculate net revenue saved during a 3-day Boil Water Advisory, payback in hours, and generate a printable SBA 7(a) Standby LOI.
+              Enter kitchen revenue, seats, and F.O.G./hood bundle status to compare closing vs. workaround operation vs. full KitchenShield-50 hookup during a Boil Water Advisory, and print an SBA 7(a) Standby LOI.
             </p>
           </div>
           <div class="flex items-center gap-2 pt-2 border-t border-[var(--border)]">
@@ -414,16 +479,291 @@
           </div>
         </div>
 
-        <!-- Card 9: Pre-Deployment Site Survey & Health Inspector Packet -->
-        <div class="bg-[var(--card)] border border-amber-500/40 hover:border-amber-500 rounded-xl p-5 flex flex-col justify-between gap-4 shadow-sm transition">
+        <!-- 50 Card 5: Engineering Design & BOM Doc -->
+        <div class="bg-[var(--card)] border border-emerald-500/40 hover:border-emerald-400 rounded-xl p-5 flex flex-col justify-between gap-4 shadow-sm transition">
           <div class="space-y-2">
             <div class="flex items-center justify-between">
-              <span class="px-2.5 py-0.5 rounded text-xs font-bold bg-amber-500/20 text-amber-400">MWTP-50 &amp; MWTP-250 PACKET</span>
+              <span class="px-2.5 py-0.5 rounded text-xs font-bold bg-emerald-500/20 text-emerald-400">MWTP-50 • DESIGN &amp; BOM</span>
+              <span class="text-xs font-mono text-[var(--muted-foreground)]">$238,625 Turnkey</span>
+            </div>
+            <h3 class="text-base font-bold">MWTP-50 Compact Gooseneck Engineering Design &amp; BOM</h3>
+            <p class="text-xs text-[var(--muted-foreground)] leading-relaxed">
+              Complete engineering design for the 22-ft compact gooseneck (8,670 lb road / 9,820 lb site, 9,990 lb GVWR), 4-module UF + 600-gal CT check, BOM ($238.6k), and 3-year restaurant unit pro forma (1.41x–1.76x Yr-1 DSCR).
+            </p>
+          </div>
+          <div class="flex items-center gap-2 pt-2 border-t border-[var(--border)]">
+            <button onclick="openArtifact('MWTP_50_Restaurant_Compact_Unit_Design.md', 'md', 'MWTP-50 Compact Restaurant Unit Design & BOM')" class="flex-1 px-3 py-2 rounded-lg text-xs font-semibold bg-emerald-600 text-white hover:bg-emerald-500 transition">
+              Read Document
+            </button>
+            <a href="MWTP_50_Restaurant_Compact_Unit_Design.md" target="_blank" class="px-3 py-2 rounded-lg text-xs font-semibold bg-[var(--secondary)] text-[var(--secondary-foreground)] border border-[var(--border)] hover:border-emerald-500 transition">
+              Raw .MD ↗
+            </a>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- ========================================================================= -->
+    <!-- SECTION 3: SYSTEM 3 — MWTP-250 HOSPITAL & INSTITUTIONAL UNIT (250 GPM)    -->
+    <!-- ========================================================================= -->
+    <section id="system-250" class="scroll-mt-24 rounded-2xl border-2 border-blue-500/40 bg-blue-950/10 p-5 md:p-7 space-y-5">
+      <div class="flex flex-col lg:flex-row lg:items-center justify-between gap-4 border-b border-blue-500/30 pb-4">
+        <div class="space-y-1">
+          <div class="flex flex-wrap items-center gap-2">
+            <span class="px-3 py-1 rounded-md text-xs font-extrabold bg-blue-600 text-white uppercase tracking-wider">SYSTEM 3 • MWTP-250 (HOSPITAL)</span>
+            <span class="px-2.5 py-0.5 rounded-full text-xs font-semibold bg-blue-500/20 text-blue-300 border border-blue-500/30">36-ft Triple-Axle Gooseneck • 250 GPM (360,000 GPD)</span>
+            <span class="px-2.5 py-0.5 rounded-full text-xs font-semibold bg-cyan-500/20 text-cyan-300 border border-cyan-500/30">80 kW Diesel Gen • Class A CDL</span>
+          </div>
+          <h2 class="text-xl md:text-2xl font-extrabold">
+            MWTP-250 (36-ft Hospital &amp; Critical Facility) System Suite
+          </h2>
+          <p class="text-xs md:text-sm text-[var(--muted-foreground)]">
+            All artifacts below refer specifically to the <strong>MWTP-250</strong> 250 GPM hospital and large institutional mobile water treatment plant (24,100 lb road / 28,420 lb site, $601,450 turnkey CapEx).
+          </p>
+        </div>
+        <div class="shrink-0 text-xs font-mono text-blue-300 bg-blue-950/60 border border-blue-500/40 rounded-xl px-3.5 py-2">
+          7 Dedicated MWTP-250 Artifacts (4 Interactive Apps + 3 Engineering Docs)
+        </div>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+
+        <!-- 250 Card 1: 3D Explodable View -->
+        <div class="bg-[var(--card)] border border-blue-500/40 hover:border-blue-400 rounded-xl p-5 flex flex-col justify-between gap-4 shadow-sm transition">
+          <div class="space-y-2">
+            <div class="flex items-center justify-between">
+              <span class="px-2.5 py-0.5 rounded text-xs font-bold bg-blue-500/20 text-blue-400">MWTP-250 • 3D CAD</span>
+              <span class="text-xs font-mono text-[var(--muted-foreground)]">Three/Canvas3D</span>
+            </div>
+            <h3 class="text-base font-bold">MWTP-250 (36-ft Hospital) 3D Explodable View &amp; Water Flow</h3>
+            <p class="text-xs text-[var(--muted-foreground)] leading-relaxed">
+              Orbit 360°, explode the 36-ft gooseneck assembly from 0% to 100%, toggle 3D callout labels, and trace animated water droplets through all 6 hospital treatment stages.
+            </p>
+          </div>
+          <div class="flex items-center gap-2 pt-2 border-t border-[var(--border)]">
+            <button onclick="openArtifact('mwtp_250_3d_explodable_view.html', 'html', 'MWTP-250 3D Explodable CAD & Water Flow')" class="flex-1 px-3 py-2 rounded-lg text-xs font-semibold bg-blue-600 text-white hover:bg-blue-500 transition">
+              Launch 3D View
+            </button>
+            <a href="mwtp_250_3d_explodable_view.html" target="_blank" class="px-3 py-2 rounded-lg text-xs font-semibold bg-[var(--secondary)] text-[var(--secondary-foreground)] border border-[var(--border)] hover:border-blue-500 transition">
+              New Tab ↗
+            </a>
+          </div>
+        </div>
+
+        <!-- 250 Card 2: Interactive Simulator -->
+        <div class="bg-[var(--card)] border border-blue-500/40 hover:border-blue-400 rounded-xl p-5 flex flex-col justify-between gap-4 shadow-sm transition">
+          <div class="space-y-2">
+            <div class="flex items-center justify-between">
+              <span class="px-2.5 py-0.5 rounded text-xs font-bold bg-cyan-500/20 text-cyan-400">MWTP-250 • SCADA SIMULATOR</span>
+              <span class="text-xs font-mono text-[var(--muted-foreground)]">Interactive HMI</span>
+            </div>
+            <h3 class="text-base font-bold">MWTP-250 Interactive Floorplan &amp; Process Simulator</h3>
+            <p class="text-xs text-[var(--muted-foreground)] leading-relaxed">
+              Click any skid on the 36-ft top-down trailer blueprint, switch between Normal Filtration, UF Backwash, and Drain &amp; Preserve transport modes, and simulate hospital flow demand.
+            </p>
+          </div>
+          <div class="flex items-center gap-2 pt-2 border-t border-[var(--border)]">
+            <button onclick="openArtifact('mwtp_250_interactive_simulator.html', 'html', 'MWTP-250 Interactive Floorplan & Process Simulator')" class="flex-1 px-3 py-2 rounded-lg text-xs font-semibold bg-blue-600 text-white hover:bg-blue-500 transition">
+              Launch Simulator
+            </button>
+            <a href="mwtp_250_interactive_simulator.html" target="_blank" class="px-3 py-2 rounded-lg text-xs font-semibold bg-[var(--secondary)] text-[var(--secondary-foreground)] border border-[var(--border)] hover:border-blue-500 transition">
+              New Tab ↗
+            </a>
+          </div>
+        </div>
+
+        <!-- 250 Card 3: Slide Deck -->
+        <div class="bg-[var(--card)] border border-blue-500/40 hover:border-blue-400 rounded-xl p-5 flex flex-col justify-between gap-4 shadow-sm transition">
+          <div class="space-y-2">
+            <div class="flex items-center justify-between">
+              <span class="px-2.5 py-0.5 rounded text-xs font-bold bg-blue-500/20 text-blue-400">MWTP-250 • PITCH DECK</span>
+              <span class="text-xs font-mono text-[var(--muted-foreground)]">10 Slides</span>
+            </div>
+            <h3 class="text-base font-bold">MWTP-250 Hospital Executive Presentation Slide Deck</h3>
+            <p class="text-xs text-[var(--muted-foreground)] leading-relaxed">
+              10-slide interactive presentation explaining the hospital water continuity problem, why UF beats RO, the 6-stage train, weight and CDL requirements, safety interlocks, CapEx/OpEx, and 1.58x bank DSCR.
+            </p>
+          </div>
+          <div class="flex items-center gap-2 pt-2 border-t border-[var(--border)]">
+            <button onclick="openArtifact('mwtp_250_slide_deck.html', 'html', 'MWTP-250 10-Slide Executive Presentation')" class="flex-1 px-3 py-2 rounded-lg text-xs font-semibold bg-blue-600 text-white hover:bg-blue-500 transition">
+              Launch Deck
+            </button>
+            <a href="mwtp_250_slide_deck.html" target="_blank" class="px-3 py-2 rounded-lg text-xs font-semibold bg-[var(--secondary)] text-[var(--secondary-foreground)] border border-[var(--border)] hover:border-blue-500 transition">
+              New Tab ↗
+            </a>
+          </div>
+        </div>
+
+        <!-- 250 Card 4: Hospital Sales Brochure -->
+        <div class="bg-[var(--card)] border border-blue-500/40 hover:border-blue-400 rounded-xl p-5 flex flex-col justify-between gap-4 shadow-sm transition">
+          <div class="space-y-2">
+            <div class="flex items-center justify-between">
+              <span class="px-2.5 py-0.5 rounded text-xs font-bold bg-blue-500/20 text-blue-400">MWTP-250 • HOSPITAL BROCHURE</span>
+              <span class="text-xs font-mono text-[var(--muted-foreground)]">Print / PDF Ready</span>
+            </div>
+            <h3 class="text-base font-bold">MWTP-250 Hospital &amp; Healthcare Continuity Brochure</h3>
+            <p class="text-xs text-[var(--muted-foreground)] leading-relaxed">
+              Client leave-behind for Hospital Facilities Directors &amp; COOs. Supports CMS 42 CFR 482.15 &amp; Joint Commission emergency water planning, with the $1,500/mo Priority Standby Retainer (max 3 hospitals per trailer).
+            </p>
+          </div>
+          <div class="flex items-center gap-2 pt-2 border-t border-[var(--border)]">
+            <button onclick="openArtifact('MWTP_250_Hospital_Sales_Brochure.html', 'html', 'MWTP-250 Hospital Sales Brochure')" class="flex-1 px-3 py-2 rounded-lg text-xs font-semibold bg-blue-600 text-white hover:bg-blue-500 transition">
+              Open Brochure
+            </button>
+            <a href="MWTP_250_Hospital_Sales_Brochure.html" target="_blank" class="px-3 py-2 rounded-lg text-xs font-semibold bg-[var(--secondary)] text-[var(--secondary-foreground)] border border-[var(--border)] hover:border-blue-500 transition">
+              New Tab ↗
+            </a>
+          </div>
+        </div>
+
+        <!-- 250 Card 5: Engineering Design Package -->
+        <div class="bg-[var(--card)] border border-blue-500/40 hover:border-blue-400 rounded-xl p-5 flex flex-col justify-between gap-4 shadow-sm transition">
+          <div class="space-y-2">
+            <div class="flex items-center justify-between">
+              <span class="px-2.5 py-0.5 rounded text-xs font-bold bg-blue-500/20 text-blue-400">MWTP-250 • ENGINEERING SPECS</span>
+              <span class="text-xs font-mono text-[var(--muted-foreground)]">Markdown + Mermaid</span>
+            </div>
+            <h3 class="text-base font-bold">MWTP-250 Complete Engineering Design Package</h3>
+            <p class="text-xs text-[var(--muted-foreground)] leading-relaxed">
+              Design basis, disinfection credit and CT check, mass balance (S-100 to S-107), equipment schedule, road/wet weight budget (24,100 vs 28,420 lbs), and 80 kW generator load table.
+            </p>
+          </div>
+          <div class="flex items-center gap-2 pt-2 border-t border-[var(--border)]">
+            <button onclick="openArtifact('MWTP_250_Engineering_Design_Package.md', 'md', 'MWTP-250 Complete Engineering Design Package')" class="flex-1 px-3 py-2 rounded-lg text-xs font-semibold bg-blue-600 text-white hover:bg-blue-500 transition">
+              Read Document
+            </button>
+            <a href="MWTP_250_Engineering_Design_Package.md" target="_blank" class="px-3 py-2 rounded-lg text-xs font-semibold bg-[var(--secondary)] text-[var(--secondary-foreground)] border border-[var(--border)] hover:border-blue-500 transition">
+              Raw .MD ↗
+            </a>
+          </div>
+        </div>
+
+        <!-- 250 Card 6: Detailed P&ID & Valve Matrix -->
+        <div class="bg-[var(--card)] border border-blue-500/40 hover:border-blue-400 rounded-xl p-5 flex flex-col justify-between gap-4 shadow-sm transition">
+          <div class="space-y-2">
+            <div class="flex items-center justify-between">
+              <span class="px-2.5 py-0.5 rounded text-xs font-bold bg-blue-500/20 text-blue-400">MWTP-250 • P&amp;ID &amp; PLC LOGIC</span>
+              <span class="text-xs font-mono text-[var(--muted-foreground)]">ISA-5.1 Tagged</span>
+            </div>
+            <h3 class="text-base font-bold">MWTP-250 Detailed P&amp;ID &amp; Automated Valve Matrix</h3>
+            <p class="text-xs text-[var(--muted-foreground)] leading-relaxed">
+              Master P&amp;ID schematic, 20-valve register (<code>XV-100</code> to <code>XV-602</code>), PLC truth matrix across 8 modes incl. daily pressure-decay integrity test, and fail-safe interlocks.
+            </p>
+          </div>
+          <div class="flex items-center gap-2 pt-2 border-t border-[var(--border)]">
+            <button onclick="openArtifact('MWTP_250_PID_and_Valve_Matrix.md', 'md', 'MWTP-250 Detailed P&ID & Automated Valve Matrix')" class="flex-1 px-3 py-2 rounded-lg text-xs font-semibold bg-blue-600 text-white hover:bg-blue-500 transition">
+              Read Document
+            </button>
+            <a href="MWTP_250_PID_and_Valve_Matrix.md" target="_blank" class="px-3 py-2 rounded-lg text-xs font-semibold bg-[var(--secondary)] text-[var(--secondary-foreground)] border border-[var(--border)] hover:border-blue-500 transition">
+              Raw .MD ↗
+            </a>
+          </div>
+        </div>
+
+        <!-- 250 Card 7: BOM & Cost Breakdown -->
+        <div class="bg-[var(--card)] border border-blue-500/40 hover:border-blue-400 rounded-xl p-5 flex flex-col justify-between gap-4 shadow-sm transition">
+          <div class="space-y-2">
+            <div class="flex items-center justify-between">
+              <span class="px-2.5 py-0.5 rounded text-xs font-bold bg-blue-500/20 text-blue-400">MWTP-250 • BOM &amp; CAPEX/OPEX</span>
+              <span class="text-xs font-mono text-[var(--muted-foreground)]">$601,450 Turnkey</span>
+            </div>
+            <h3 class="text-base font-bold">MWTP-250 Bill of Materials (BOM) &amp; Cost Breakdown</h3>
+            <p class="text-xs text-[var(--muted-foreground)] leading-relaxed">
+              Line-item BOM across 11 categories incl. engineering and 15% contingency, with reference OEM models (Cummins, DuPont IntegraFlux, Grundfos, Rockwell, Hach) plus daily OpEx ($1.29 / 1,000 gal).
+            </p>
+          </div>
+          <div class="flex items-center gap-2 pt-2 border-t border-[var(--border)]">
+            <button onclick="openArtifact('MWTP_250_BOM_and_Cost_Breakdown.md', 'md', 'MWTP-250 Bill of Materials & Cost Breakdown')" class="flex-1 px-3 py-2 rounded-lg text-xs font-semibold bg-blue-600 text-white hover:bg-blue-500 transition">
+              Read Document
+            </button>
+            <a href="MWTP_250_BOM_and_Cost_Breakdown.md" target="_blank" class="px-3 py-2 rounded-lg text-xs font-semibold bg-[var(--secondary)] text-[var(--secondary-foreground)] border border-[var(--border)] hover:border-blue-500 transition">
+              Raw .MD ↗
+            </a>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- ========================================================================= -->
+    <!-- SECTION 4: MULTI-SYSTEM TRADE DRAWINGS, FIELD PACKETS & SBA LOAN PLAN     -->
+    <!-- ========================================================================= -->
+    <section id="shared-suite" class="scroll-mt-24 rounded-2xl border-2 border-amber-500/40 bg-amber-950/10 p-5 md:p-7 space-y-5">
+      <div class="flex flex-col lg:flex-row lg:items-center justify-between gap-4 border-b border-amber-500/30 pb-4">
+        <div class="space-y-1">
+          <div class="flex flex-wrap items-center gap-2">
+            <span class="px-3 py-1 rounded-md text-xs font-extrabold bg-amber-600 text-white uppercase tracking-wider">SECTION 4 • MULTI-SYSTEM &amp; TRADE PACKAGES</span>
+            <span class="px-2.5 py-0.5 rounded-full text-xs font-semibold bg-amber-500/20 text-amber-300 border border-amber-500/30">Covers MWTP-50, MWTP-50C &amp; MWTP-250</span>
+          </div>
+          <h2 class="text-xl md:text-2xl font-extrabold">
+            Cross-Fleet Trade Drawings (Electrical &amp; Piping), Field SOP, Health Packet &amp; SBA Loan Plan
+          </h2>
+          <p class="text-xs md:text-sm text-[var(--muted-foreground)]">
+            Shared engineering drawings for your Electrician, PE, Plumber, and Pipefitter, plus field tie-in procedures, Health Department sign-off forms, and the combined Commercial Bank / SBA 7(a) Business Plan. Each card clearly states which systems are covered inside.
+          </p>
+        </div>
+        <div class="shrink-0 text-xs font-mono text-amber-300 bg-amber-950/60 border border-amber-500/40 rounded-xl px-3.5 py-2">
+          6 Cross-Fleet Artifacts (4 Printable HTML Packages + 2 Docs)
+        </div>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+
+        <!-- Shared Card 1: Electrical Schematics -->
+        <div class="bg-[var(--card)] border border-amber-500/40 hover:border-amber-400 rounded-xl p-5 flex flex-col justify-between gap-4 shadow-sm transition">
+          <div class="space-y-2">
+            <div class="flex items-center justify-between">
+              <span class="px-2.5 py-0.5 rounded text-xs font-bold bg-amber-500/20 text-amber-400">MWTP-50 &amp; MWTP-250 • ELECTRICAL</span>
+              <span class="text-xs font-mono text-[var(--muted-foreground)]">DWG E-101..E-104</span>
+            </div>
+            <h3 class="text-base font-bold">MWTP-50 &amp; MWTP-250 Electrical Schematics &amp; Panel Schedules</h3>
+            <p class="text-xs text-[var(--muted-foreground)] leading-relaxed">
+              4-sheet printable package for Electrician &amp; PE: Sheet E-101 covers <strong>MWTP-50</strong> (240V 1Φ VFD phase conversion + 50A shore load-shed), Sheet E-102 covers <strong>MWTP-250</strong> (480V/208V 3Φ MCC), plus E-103/E-104 (24VDC K-SAFE safety ladder &amp; PLC I/O).
+            </p>
+          </div>
+          <div class="flex items-center gap-2 pt-2 border-t border-[var(--border)]">
+            <button onclick="openArtifact('MWTP_Electrical_Schematics.html', 'html', 'MWTP-50 & MWTP-250 Electrical Schematics (E-101 to E-104)')" class="flex-1 px-3 py-2 rounded-lg text-xs font-semibold bg-amber-600 text-white hover:bg-amber-500 transition">
+              Open Schematics
+            </button>
+            <a href="MWTP_Electrical_Schematics.html" target="_blank" class="px-3 py-2 rounded-lg text-xs font-semibold bg-[var(--secondary)] text-[var(--secondary-foreground)] border border-[var(--border)] hover:border-amber-500 transition">
+              New Tab ↗
+            </a>
+          </div>
+        </div>
+
+        <!-- Shared Card 2: Piping & Plumbing Diagrams -->
+        <div class="bg-[var(--card)] border border-cyan-500/40 hover:border-cyan-400 rounded-xl p-5 flex flex-col justify-between gap-4 shadow-sm transition">
+          <div class="space-y-2">
+            <div class="flex items-center justify-between">
+              <span class="px-2.5 py-0.5 rounded text-xs font-bold bg-cyan-500/20 text-cyan-400">MWTP-50 &amp; MWTP-250 • PIPING</span>
+              <span class="text-xs font-mono text-[var(--muted-foreground)]">DWG P-101..P-104</span>
+            </div>
+            <h3 class="text-base font-bold">MWTP-50 &amp; MWTP-250 Piping Diagrams &amp; Plumber Tie-In Details</h3>
+            <p class="text-xs text-[var(--muted-foreground)] leading-relaxed">
+              4-sheet printable package for Plumber &amp; Pipefitter: Sheet P-101 covers <strong>MWTP-50</strong> (1.5"–2" 316L SS), Sheet P-102 covers <strong>MWTP-250</strong> (3"–4" 316L SS), plus P-103/P-104 (customer riser bypass tee, ASSE 1013 RPZ air-gap drain, and 150 PSI hydrotest log).
+            </p>
+          </div>
+          <div class="flex items-center gap-2 pt-2 border-t border-[var(--border)]">
+            <button onclick="openArtifact('MWTP_Piping_and_Plumbing_Diagrams.html', 'html', 'MWTP-50 & MWTP-250 Piping Diagrams (P-101 to P-104)')" class="flex-1 px-3 py-2 rounded-lg text-xs font-semibold bg-cyan-600 text-white hover:bg-cyan-500 transition">
+              Open Piping DWG
+            </button>
+            <a href="MWTP_Piping_and_Plumbing_Diagrams.html" target="_blank" class="px-3 py-2 rounded-lg text-xs font-semibold bg-[var(--secondary)] text-[var(--secondary-foreground)] border border-[var(--border)] hover:border-cyan-500 transition">
+              New Tab ↗
+            </a>
+          </div>
+        </div>
+
+        <!-- Shared Card 3: Pre-Deployment Site Survey & Health Inspector Packet -->
+        <div class="bg-[var(--card)] border border-amber-500/40 hover:border-amber-400 rounded-xl p-5 flex flex-col justify-between gap-4 shadow-sm transition">
+          <div class="space-y-2">
+            <div class="flex items-center justify-between">
+              <span class="px-2.5 py-0.5 rounded text-xs font-bold bg-amber-500/20 text-amber-400">MWTP-50 &amp; MWTP-250 • FIELD PACKET</span>
               <span class="text-xs font-mono text-[var(--muted-foreground)]">2-Page Printable</span>
             </div>
             <h3 class="text-base font-bold">MWTP-50 &amp; MWTP-250 Pre-Deployment Site Survey &amp; Health Packet</h3>
             <p class="text-xs text-[var(--muted-foreground)] leading-relaxed">
-              2-page field checklist for F.O.G./hood techs (staging, meter/riser tie-in, 50A shore plug, raw feed source) plus County Health Inspector emergency operating permit sign-off &amp; Standby LOI.
+              2-page field checklist for F.O.G./hood techs (staging, meter/riser tie-in, 50A shore plug, raw feed source for both <strong>MWTP-50</strong> and <strong>MWTP-250</strong>) plus County Health Inspector emergency operating permit sign-off &amp; Standby LOI.
             </p>
           </div>
           <div class="flex items-center gap-2 pt-2 border-t border-[var(--border)]">
@@ -436,218 +776,74 @@
           </div>
         </div>
 
-        <!-- Card 10: Electrical Schematics & Panel Schedules (Both Units) -->
-        <div class="bg-[var(--card)] border border-amber-500/40 hover:border-amber-500 rounded-xl p-5 flex flex-col justify-between gap-4 shadow-sm transition">
+        <!-- Shared Card 4: Restaurant & Hospitality Sales Brochure -->
+        <div class="bg-[var(--card)] border border-emerald-500/40 hover:border-emerald-400 rounded-xl p-5 flex flex-col justify-between gap-4 shadow-sm transition">
           <div class="space-y-2">
             <div class="flex items-center justify-between">
-              <span class="px-2.5 py-0.5 rounded text-xs font-bold bg-amber-500/20 text-amber-400">MWTP-50 &amp; MWTP-250 ELECTRICAL</span>
-              <span class="text-xs font-mono text-[var(--muted-foreground)]">DWG E-101..E-104</span>
+              <span class="px-2.5 py-0.5 rounded text-xs font-bold bg-emerald-500/20 text-emerald-400">MWTP-50 &amp; MWTP-250 • BROCHURE</span>
+              <span class="text-xs font-mono text-[var(--muted-foreground)]">Print / PDF Ready</span>
             </div>
-            <h3 class="text-base font-bold">MWTP-50 &amp; MWTP-250 Electrical Schematics &amp; Panel Schedules</h3>
+            <h3 class="text-base font-bold">MWTP-50 &amp; MWTP-250 Restaurant &amp; Hospitality Sales Brochure</h3>
             <p class="text-xs text-[var(--muted-foreground)] leading-relaxed">
-              4-sheet printable package for Electrician &amp; PE: MWTP-50 (240V 1Φ VFD phase conversion + 50A shore load-shed), MWTP-250 (480V/208V 3Φ MCC), 24VDC K-SAFE relay ladder, and PLC I/O map.
+              Sales leave-behind comparing the 35–50 GPM <strong>MWTP-50</strong> (single-site commercial kitchens) and the 250 GPM <strong>MWTP-250</strong> (large hotels, resorts, and multi-restaurant complexes).
             </p>
           </div>
           <div class="flex items-center gap-2 pt-2 border-t border-[var(--border)]">
-            <button onclick="openArtifact('MWTP_Electrical_Schematics.html', 'html', 'Electrical Schematics & Panel Schedules (E-101 to E-104)')" class="flex-1 px-3 py-2 rounded-lg text-xs font-semibold bg-amber-600 text-white hover:bg-amber-500 transition">
-              Open Schematics
+            <button onclick="openArtifact('MWTP_250_Restaurant_Sales_Brochure.html', 'html', 'MWTP-50 & MWTP-250 Restaurant & Hospitality Brochure')" class="flex-1 px-3 py-2 rounded-lg text-xs font-semibold bg-emerald-600 text-white hover:bg-emerald-500 transition">
+              Open Brochure
             </button>
-            <a href="MWTP_Electrical_Schematics.html" target="_blank" class="px-3 py-2 rounded-lg text-xs font-semibold bg-[var(--secondary)] text-[var(--secondary-foreground)] border border-[var(--border)] hover:border-amber-500 transition">
+            <a href="MWTP_250_Restaurant_Sales_Brochure.html" target="_blank" class="px-3 py-2 rounded-lg text-xs font-semibold bg-[var(--secondary)] text-[var(--secondary-foreground)] border border-[var(--border)] hover:border-emerald-500 transition">
               New Tab ↗
             </a>
           </div>
         </div>
 
-        <!-- Card 11: Piping Diagrams, Spool Schedules & Plumber Details (Both Units) -->
-        <div class="bg-[var(--card)] border border-cyan-500/40 hover:border-cyan-500 rounded-xl p-5 flex flex-col justify-between gap-4 shadow-sm transition">
+        <!-- Shared Card 5: Field Tie-In SOP -->
+        <div class="bg-[var(--card)] border border-rose-500/40 hover:border-rose-400 rounded-xl p-5 flex flex-col justify-between gap-4 shadow-sm transition">
           <div class="space-y-2">
             <div class="flex items-center justify-between">
-              <span class="px-2.5 py-0.5 rounded text-xs font-bold bg-cyan-500/20 text-cyan-400">MWTP-50 &amp; MWTP-250 PIPING</span>
-              <span class="text-xs font-mono text-[var(--muted-foreground)]">DWG P-101..P-104</span>
-            </div>
-            <h3 class="text-base font-bold">MWTP-50 &amp; MWTP-250 Piping Diagrams &amp; Plumber Tie-In Details</h3>
-            <p class="text-xs text-[var(--muted-foreground)] leading-relaxed">
-              4-sheet printable package for Plumber &amp; Pipefitter: MWTP-50 (1.5"–2" 316L SS), MWTP-250 (3"–4" 316L SS), customer riser bypass tee, ASSE 1013 RPZ air-gap drain, and 150 PSI hydrotest log.
-            </p>
-          </div>
-          <div class="flex items-center gap-2 pt-2 border-t border-[var(--border)]">
-            <button onclick="openArtifact('MWTP_Piping_and_Plumbing_Diagrams.html', 'html', 'Piping Diagrams & Plumber Tie-In Details (P-101 to P-104)')" class="flex-1 px-3 py-2 rounded-lg text-xs font-semibold bg-cyan-600 text-white hover:bg-cyan-500 transition">
-              Open Piping DWG
-            </button>
-            <a href="MWTP_Piping_and_Plumbing_Diagrams.html" target="_blank" class="px-3 py-2 rounded-lg text-xs font-semibold bg-[var(--secondary)] text-[var(--secondary-foreground)] border border-[var(--border)] hover:border-cyan-500 transition">
-              New Tab ↗
-            </a>
-          </div>
-        </div>
-
-      </div>
-    </div>
-
-    <!-- SECTION 2: ENGINEERING DOCUMENTS, SOPs & BANK BUSINESS PLAN -->
-    <div class="space-y-4">
-      <div class="flex items-center justify-between border-b border-[var(--border)] pb-2">
-        <h2 class="text-lg font-bold">2. Engineering Specifications, P&ID, BOM, Field SOP & Bank Loan Business Plan</h2>
-        <span class="text-xs font-mono text-[var(--muted-foreground)]">7 Technical &amp; Financial Documents</span>
-      </div>
-
-      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-
-        <!-- Doc 1: Engineering Design Package -->
-        <div class="bg-[var(--card)] border border-[var(--border)] hover:border-amber-500/60 rounded-xl p-5 flex flex-col justify-between gap-4 shadow-sm transition">
-          <div class="space-y-2">
-            <div class="flex items-center justify-between">
-              <span class="px-2.5 py-0.5 rounded text-xs font-bold bg-amber-500/15 text-amber-400">MWTP-250 ENGINEERING SPECS</span>
-              <span class="text-xs font-mono text-[var(--muted-foreground)]">Markdown + Mermaid</span>
-            </div>
-            <h3 class="text-base font-bold">MWTP-250 Complete Engineering Design Package</h3>
-            <p class="text-xs text-[var(--muted-foreground)] leading-relaxed">
-              Design basis, disinfection credit and CT check, mass balance (S-100 to S-107), equipment schedule, road/wet weight budget (24,100 vs 28,420 lbs), and 80 kW generator load table.
-            </p>
-          </div>
-          <div class="flex items-center gap-2 pt-2 border-t border-[var(--border)]">
-            <button onclick="openArtifact('MWTP_250_Engineering_Design_Package.md', 'md', 'MWTP-250 Complete Engineering Design Package')" class="flex-1 px-3 py-2 rounded-lg text-xs font-semibold bg-amber-600 text-white hover:bg-amber-500 transition">
-              Read Document
-            </button>
-            <a href="MWTP_250_Engineering_Design_Package.md" target="_blank" class="px-3 py-2 rounded-lg text-xs font-semibold bg-[var(--secondary)] text-[var(--secondary-foreground)] border border-[var(--border)] transition">
-              Raw .MD ↗
-            </a>
-          </div>
-        </div>
-
-        <!-- Doc 2: Detailed P&ID & Valve Matrix -->
-        <div class="bg-[var(--card)] border border-[var(--border)] hover:border-cyan-500/60 rounded-xl p-5 flex flex-col justify-between gap-4 shadow-sm transition">
-          <div class="space-y-2">
-            <div class="flex items-center justify-between">
-              <span class="px-2.5 py-0.5 rounded text-xs font-bold bg-cyan-500/15 text-cyan-400">MWTP-250 P&amp;ID &amp; PLC LOGIC</span>
-              <span class="text-xs font-mono text-[var(--muted-foreground)]">ISA-5.1 Tagged</span>
-            </div>
-            <h3 class="text-base font-bold">MWTP-250 Detailed P&amp;ID &amp; Automated Valve Matrix</h3>
-            <p class="text-xs text-[var(--muted-foreground)] leading-relaxed">
-              Master P&amp;ID schematic, 20-valve register (<code>XV-100</code> to <code>XV-602</code>), PLC truth matrix across 8 modes incl. daily integrity test, and fail-safe interlocks.
-            </p>
-          </div>
-          <div class="flex items-center gap-2 pt-2 border-t border-[var(--border)]">
-            <button onclick="openArtifact('MWTP_250_PID_and_Valve_Matrix.md', 'md', 'MWTP-250 Detailed P&ID & Automated Valve Matrix')" class="flex-1 px-3 py-2 rounded-lg text-xs font-semibold bg-cyan-600 text-white hover:bg-cyan-500 transition">
-              Read Document
-            </button>
-            <a href="MWTP_250_PID_and_Valve_Matrix.md" target="_blank" class="px-3 py-2 rounded-lg text-xs font-semibold bg-[var(--secondary)] text-[var(--secondary-foreground)] border border-[var(--border)] transition">
-              Raw .MD ↗
-            </a>
-          </div>
-        </div>
-
-        <!-- Doc 3: Bill of Materials & Cost Breakdown -->
-        <div class="bg-[var(--card)] border border-[var(--border)] hover:border-emerald-500/60 rounded-xl p-5 flex flex-col justify-between gap-4 shadow-sm transition">
-          <div class="space-y-2">
-            <div class="flex items-center justify-between">
-              <span class="px-2.5 py-0.5 rounded text-xs font-bold bg-emerald-500/15 text-emerald-400">MWTP-250 BOM &amp; CAPEX/OPEX</span>
-              <span class="text-xs font-mono text-[var(--muted-foreground)]">$601,450 Turnkey</span>
-            </div>
-            <h3 class="text-base font-bold">MWTP-250 Bill of Materials (BOM) &amp; Cost Breakdown</h3>
-            <p class="text-xs text-[var(--muted-foreground)] leading-relaxed">
-              Line-item BOM across 11 categories incl. engineering and 15% contingency, with reference OEM models (Cummins, DuPont IntegraFlux, Grundfos, Rockwell, Hach) plus daily OpEx ($1.29 / 1,000 gal).
-            </p>
-          </div>
-          <div class="flex items-center gap-2 pt-2 border-t border-[var(--border)]">
-            <button onclick="openArtifact('MWTP_250_BOM_and_Cost_Breakdown.md', 'md', 'MWTP-250 Bill of Materials & Cost Breakdown')" class="flex-1 px-3 py-2 rounded-lg text-xs font-semibold bg-emerald-600 text-white hover:bg-emerald-500 transition">
-              Read Document
-            </button>
-            <a href="MWTP_250_BOM_and_Cost_Breakdown.md" target="_blank" class="px-3 py-2 rounded-lg text-xs font-semibold bg-[var(--secondary)] text-[var(--secondary-foreground)] border border-[var(--border)] transition">
-              Raw .MD ↗
-            </a>
-          </div>
-        </div>
-
-        <!-- Doc 4: Field Tie-In SOP -->
-        <div class="bg-[var(--card)] border border-[var(--border)] hover:border-rose-500/60 rounded-xl p-5 flex flex-col justify-between gap-4 shadow-sm transition">
-          <div class="space-y-2">
-            <div class="flex items-center justify-between">
-              <span class="px-2.5 py-0.5 rounded text-xs font-bold bg-rose-500/15 text-rose-400">MWTP-250 &amp; MWTP-50 FIELD SOP</span>
-              <span class="text-xs font-mono text-[var(--muted-foreground)]">~3-Hr Hookup</span>
+              <span class="px-2.5 py-0.5 rounded text-xs font-bold bg-rose-500/20 text-rose-400">MWTP-250 &amp; MWTP-50 • FIELD SOP</span>
+              <span class="text-xs font-mono text-[var(--muted-foreground)]">Step-by-Step SOP</span>
             </div>
             <h3 class="text-base font-bold">MWTP-250 &amp; MWTP-50 Hospital &amp; Restaurant Emergency Tie-In SOP</h3>
             <p class="text-xs text-[var(--muted-foreground)] leading-relaxed">
-              Step-by-step field manual for break-tank supply (hydrant or tanker), building isolation, start-up proving and integrity test, hose sanitization, and 2-stage soft-ramp pressurization.
+              Step-by-step field manual covering both <strong>MWTP-250</strong> (3-hr hospital FDC/yard-vault hookup) and <strong>MWTP-50</strong> (2-hr restaurant service-line tee / RPZ hookup), start-up proving, hose sanitization, and soft-ramp pressurization.
             </p>
           </div>
           <div class="flex items-center gap-2 pt-2 border-t border-[var(--border)]">
             <button onclick="openArtifact('MWTP_250_Hospital_Restaurant_Tie_In_SOP.md', 'md', 'MWTP-250 & MWTP-50 Hospital & Restaurant Tie-In SOP')" class="flex-1 px-3 py-2 rounded-lg text-xs font-semibold bg-rose-600 text-white hover:bg-rose-500 transition">
               Read Document
             </button>
-            <a href="MWTP_250_Hospital_Restaurant_Tie_In_SOP.md" target="_blank" class="px-3 py-2 rounded-lg text-xs font-semibold bg-[var(--secondary)] text-[var(--secondary-foreground)] border border-[var(--border)] transition">
+            <a href="MWTP_250_Hospital_Restaurant_Tie_In_SOP.md" target="_blank" class="px-3 py-2 rounded-lg text-xs font-semibold bg-[var(--secondary)] text-[var(--secondary-foreground)] border border-[var(--border)] hover:border-rose-500 transition">
               Raw .MD ↗
             </a>
           </div>
         </div>
 
-        <!-- Doc 5: Bank Loan Business Plan -->
-        <div class="bg-[var(--card)] border border-[var(--border)] hover:border-blue-500/60 rounded-xl p-5 flex flex-col justify-between gap-4 shadow-sm transition">
+        <!-- Shared Card 6: Commercial Bank / SBA 7(a) Loan Business Plan -->
+        <div class="bg-[var(--card)] border border-blue-500/40 hover:border-blue-400 rounded-xl p-5 flex flex-col justify-between gap-4 shadow-sm transition">
           <div class="space-y-2">
             <div class="flex items-center justify-between">
-              <span class="px-2.5 py-0.5 rounded text-xs font-bold bg-blue-500/15 text-blue-400">MWTP-50 &amp; MWTP-250 LOAN PLAN</span>
+              <span class="px-2.5 py-0.5 rounded text-xs font-bold bg-blue-500/20 text-blue-400">MWTP-50 &amp; MWTP-250 • LOAN PLAN</span>
               <span class="text-xs font-mono text-[var(--muted-foreground)]">1.41x–1.76x / 1.58x DSCR</span>
             </div>
             <h3 class="text-base font-bold">MWTP-50 &amp; MWTP-250 Commercial Bank / SBA 7(a) Loan Business Plan</h3>
             <p class="text-xs text-[var(--muted-foreground)] leading-relaxed">
-              Underwriting package ($769k project / $654k loan request), retainer + deployment model with hospital capacity cap, 3-year pro forma, and stress tests.
+              Underwriting package covering both the Phase 1A <strong>MWTP-50</strong> launch ($238.6k–$291.6k project) and the full <strong>MWTP-250</strong> hospital launch ($769k project / $654k loan request), 3-year pro forma, and stress tests.
             </p>
           </div>
           <div class="flex items-center gap-2 pt-2 border-t border-[var(--border)]">
             <button onclick="openArtifact('MWTP_250_Bank_Loan_Business_Plan.md', 'md', 'MWTP-50 & MWTP-250 Commercial Bank Loan Business Plan')" class="flex-1 px-3 py-2 rounded-lg text-xs font-semibold bg-blue-600 text-white hover:bg-blue-500 transition">
               Read Document
             </button>
-            <a href="MWTP_250_Bank_Loan_Business_Plan.md" target="_blank" class="px-3 py-2 rounded-lg text-xs font-semibold bg-[var(--secondary)] text-[var(--secondary-foreground)] border border-[var(--border)] transition">
-              Raw .MD ↗
-            </a>
-          </div>
-        </div>
-
-        <!-- Doc 6: MWTP-50 Compact Restaurant Design & BOM -->
-        <div class="bg-[var(--card)] border border-emerald-500/40 hover:border-emerald-500 rounded-xl p-5 flex flex-col justify-between gap-4 shadow-sm transition">
-          <div class="space-y-2">
-            <div class="flex items-center justify-between">
-              <span class="px-2.5 py-0.5 rounded text-xs font-bold bg-emerald-500/20 text-emerald-400">MWTP-50 DESIGN &amp; BOM</span>
-              <span class="text-xs font-mono text-[var(--muted-foreground)]">$238,625 Turnkey</span>
-            </div>
-            <h3 class="text-base font-bold">MWTP-50 Compact Gooseneck Restaurant Unit (Non-CDL)</h3>
-            <p class="text-xs text-[var(--muted-foreground)] leading-relaxed">
-              Complete engineering design for the 22-ft compact gooseneck (9,990 lb GVWR), 4-module UF + 600-gal CT check, BOM ($238.6k), and 3-year restaurant unit pro forma (1.41x–1.76x Yr-1 DSCR).
-            </p>
-          </div>
-          <div class="flex items-center gap-2 pt-2 border-t border-[var(--border)]">
-            <button onclick="openArtifact('MWTP_50_Restaurant_Compact_Unit_Design.md', 'md', 'MWTP-50 Compact Restaurant Unit Design & BOM')" class="flex-1 px-3 py-2 rounded-lg text-xs font-semibold bg-emerald-600 text-white hover:bg-emerald-500 transition">
-              Read Document
-            </button>
-            <a href="MWTP_50_Restaurant_Compact_Unit_Design.md" target="_blank" class="px-3 py-2 rounded-lg text-xs font-semibold bg-[var(--secondary)] text-[var(--secondary-foreground)] border border-[var(--border)] transition">
-              Raw .MD ↗
-            </a>
-          </div>
-        </div>
-
-        <!-- Doc 7: MWTP-50C Split-Power Rev C -->
-        <div class="bg-[var(--card)] border border-violet-500/40 hover:border-violet-500 rounded-xl p-5 flex flex-col justify-between gap-4 shadow-sm transition">
-          <div class="space-y-2">
-            <div class="flex items-center justify-between">
-              <span class="px-2.5 py-0.5 rounded text-xs font-bold bg-violet-500/20 text-violet-400">MWTP-50C REV C</span>
-              <span class="text-xs font-mono text-[var(--muted-foreground)]">$219k + $34.5k Gen</span>
-            </div>
-            <h3 class="text-base font-bold">MWTP-50C Split-Power Restaurant System</h3>
-            <p class="text-xs text-[var(--muted-foreground)] leading-relaxed">
-              20-ft water trailer with no onboard generator: RPZ direct feed, UV validated at 186 mJ/cm² for 4-log virus (no ground tanks on BWA jobs), 50A shore power, plus a separate PWR-25 generator &amp; outage-kit trailer. Both under 10,000 lb — no CDL.
-            </p>
-          </div>
-          <div class="flex items-center gap-2 pt-2 border-t border-[var(--border)]">
-            <button onclick="openArtifact('MWTP_50C_Split_Power_Design.md', 'md', 'MWTP-50C Split-Power Rev C Design')" class="flex-1 px-3 py-2 rounded-lg text-xs font-semibold bg-violet-600 text-white hover:bg-violet-500 transition">
-              Read Document
-            </button>
-            <a href="MWTP_50C_Split_Power_Design.md" target="_blank" class="px-3 py-2 rounded-lg text-xs font-semibold bg-[var(--secondary)] text-[var(--secondary-foreground)] border border-[var(--border)] transition">
+            <a href="MWTP_250_Bank_Loan_Business_Plan.md" target="_blank" class="px-3 py-2 rounded-lg text-xs font-semibold bg-[var(--secondary)] text-[var(--secondary-foreground)] border border-[var(--border)] hover:border-blue-500 transition">
               Raw .MD ↗
             </a>
           </div>
         </div>
 
       </div>
-    </div>
+    </section>
 
   </main>
 
@@ -656,7 +852,7 @@
     <div class="bg-[var(--card)] border border-[var(--border)] rounded-xl px-4 py-3 flex items-center justify-between">
       <div class="flex items-center gap-3">
         <button onclick="showDashboard()" class="px-3 py-1.5 rounded-lg text-xs font-semibold bg-blue-600 text-white hover:bg-blue-500 transition">
-          ← Back to All Artifacts
+          ← Back to All Systems
         </button>
         <h2 id="viewer-title" class="text-sm md:text-base font-bold">Artifact Viewer</h2>
       </div>
