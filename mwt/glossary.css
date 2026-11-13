@@ -1,0 +1,24 @@
+#glossary { scroll-margin-top: 160px; padding: clamp(20px, 4vw, 32px); border: 1px solid #0891b2; border-radius: 16px; background: var(--card); }
+#glossary h1, #glossary h2 { font-size: 1.6rem; font-weight: 800; margin: 0 0 8px; }
+#glossary p { color: var(--muted-foreground); margin-bottom: 16px; }
+#glossary label { display: block; font-weight: 600; margin-bottom: 6px; }
+#glossary .glossary-search { display: flex; gap: 8px; }
+#glossary input { min-width: 0; width: 100%; background: var(--background); color: var(--foreground); border: 1px solid #64748b; border-radius: 8px; padding: 10px; }
+#glossary button { border: 1px solid #64748b; border-radius: 8px; padding: 8px 14px; }
+#glossary input:focus-visible, #glossary button:focus-visible, #glossary summary:focus-visible { outline: 3px solid #22d3ee; outline-offset: 3px; }
+#glossary [role="status"] { margin: 8px 0 16px; font-size: .85rem; color: var(--muted-foreground); }
+#glossary details { border-top: 1px solid var(--border); padding: 12px 0; }
+#glossary summary { cursor: pointer; font-weight: 700; }
+#glossary dl { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 280px), 1fr)); gap: 16px 24px; margin-top: 16px; }
+#glossary dt { color: #0891b2; font-weight: 800; }
+#glossary dd { margin: 4px 0 0; font-size: .9rem; line-height: 1.6; color: var(--secondary-foreground); }
+#glossary [hidden] { display: none !important; }
+.glossary-page { --background: #0b1120; --foreground: #f1f5f9; --card: #111827; --muted-foreground: #94a3b8; --secondary-foreground: #e2e8f0; --border: #334155; margin: 0; background: var(--background); color: var(--foreground); font-family: system-ui, sans-serif; }
+.glossary-page * { box-sizing: border-box; }
+.glossary-page main, .glossary-header { max-width: 1200px; margin: auto; padding: 24px; }
+.glossary-header { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 20px; }
+.glossary-header img { display: block; width: 250px; max-width: 100%; }
+.glossary-header nav { display: flex; flex-wrap: wrap; gap: 16px; }
+.glossary-header a { color: #67e8f9; text-underline-offset: 4px; }
+.glossary-page button { background: var(--card); color: var(--foreground); cursor: pointer; font: inherit; }
+.glossary-page #glossary dt { color: #67e8f9; }
