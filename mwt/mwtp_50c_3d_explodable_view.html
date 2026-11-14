@@ -366,6 +366,30 @@
     }
 
     // ---------------- Skid groups ----------------
+    // Port callouts are children of their equipment group, so they follow exploded views.
+    const portLabels = [];
+    function labelPort(group, position, text, color, row, total) {
+      const offset = (row - (total - 1) / 2) * 30;
+      const wrap = document.createElement('div');
+      wrap.style.cssText = 'width:0;height:0;pointer-events:none;overflow:visible';
+      const line = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+      line.setAttribute('width', '40');
+      line.setAttribute('height', String(Math.abs(offset) + 2));
+      line.style.cssText = `position:absolute;left:0;top:${Math.min(0, offset)}px;overflow:visible`;
+      const path = document.createElementNS('http://www.w3.org/2000/svg', 'line');
+      path.setAttribute('x1', '0'); path.setAttribute('y1', String(Math.max(0, -offset)));
+      path.setAttribute('x2', '40'); path.setAttribute('y2', String(Math.max(0, offset)));
+      path.setAttribute('stroke', color); path.setAttribute('stroke-width', '2');
+      line.appendChild(path); wrap.appendChild(line);
+      const pill = document.createElement('span');
+      pill.textContent = text;
+      pill.style.cssText = `position:absolute;left:40px;top:${offset}px;transform:translateY(-50%);white-space:nowrap;background:#0b1120ee;color:#f8fafc;border:1px solid ${color};border-left:5px solid ${color};border-radius:5px;padding:4px 7px;font:600 11px system-ui;box-shadow:0 2px 5px #0008`;
+      wrap.appendChild(pill);
+      const label = new CSS2DObject(wrap);
+      label.position.set(...position);
+      group.add(label); portLabels.push(label);
+    }
+
     const groups = {};
     Object.keys(skids).forEach(id => {
       const g = new THREE.Group();
@@ -571,6 +595,14 @@
         cylH(g, r, 0.45, REAR + 0.25, D + 1.8, z, mat(c, { m: 0.5, r: 0.35 }), 'x');
       });
       box(g, 0.3, 0.7, 0.7, REAR + 0.25, D + 1.45, 2.2, mat('#facc15', { m: 0.3, e: '#ca8a04', ei: 0.25 }));
+      [
+        [-2.0, 'Port A — pressurized raw inlet', '#0ea5e9'],
+        [-1.0, 'Port B — tank suction inlet', '#0369a1'],
+        [0.0, 'Potable out — building', '#f8fafc'],
+        [1.0, 'Waste out — sanitary', '#9ca3af'],
+        [2.2, 'Shore power — 240 V / 50 A', '#facc15']
+      ].forEach(([z, text, color], i) => labelPort(g, [REAR + 0.5, D + 1.8, z], text, color, i, 5));
+
       // RPZ-602 2" ASSE 1013 + XV-602 actuator
       cylH(g, 0.24, 1.9, 6.6, D + 3.0, 3.3, mat('#a16207', { m: 0.75, r: 0.35 }), 'x');
       [6.0, 7.2].forEach(x => cylV(g, 0.14, 0.45, x, D + 3.18, 3.3, mat('#ca8a04', { m: 0.7 })));
@@ -1110,6 +1142,7 @@
       });
 
       renderer.render(scene, camera);
+      portLabels.forEach(label => { label.visible = showLabels; });
       labelRenderer.render(scene, camera);
     }
     loop();
