@@ -47,37 +47,40 @@ A restaurant kitchen needs city power to cook. When its power is out, the kitche
 ### 3.1 Treatment Train
 
 ```mermaid
-flowchart LR
-    subgraph IN["Stage 1: Supply"]
-        TEE["Service-Line Tee or Hydrant (utility meter + backflow)"] --> PSV["PT-100 + PSV-100 (holds 20 PSI or more upstream)"]
-        PSV --> RPZ1["RPZ-100: 1.5'' ASSE 1013 Backflow"]
-        TANK["Outage: Tanker or PWR-25 Folding Break Tank"] --> PORTB["Port B: 2'' Suction (XV-103)"]
+flowchart TB
+    subgraph IN["Stage 1: Direct Pressurized Supply (Port A) or Outage Draft (Port B)"]
+        direction LR
+        TEE["Service-Line Tee or Hydrant<br/>(utility meter + backflow)"] --> PSV["PT-100 + PSV-100<br/>(holds ≥ 20 PSI upstream)"]
+        PSV --> RPZ1["RPZ-100: 1.5'' ASSE 1013<br/>Containment Backflow"]
+        TANK["Outage: Tanker or PWR-25<br/>550-Gal Folding Break Tank"] --> PORTB["Port B: 2'' Suction<br/>(XV-103 Valve)"]
     end
 
-    subgraph PRE["Stage 2: Pre-Filtration"]
-        RPZ1 --> XV100["XV-100 Inlet Valve"]
-        XV100 --> P101["P-101: 3 HP VFD Pump (boost or draft)"]
-        PORTB --> P101
-        P101 --> STR["STR-101: 200 um Auto-Strainer"]
-        STR --> BF["BF-101A/B: Duplex 25 um Bags / Carbon Block"]
-        BF --> PAC["P-501 PACl + SM-101 (only above 5 NTU)"]
+    subgraph PRE["Stage 2: Boost/Draft Pump, Auto-Strainer & Bag/Carbon Pre-Filtration"]
+        direction LR
+        XV100["XV-100 Port A<br/>Inlet Valve"] --> P101["P-101: 3 HP VFD Pump<br/>(boost or suction draft)"]
+        P101 --> STR["STR-101: 200 μm<br/>Auto-Strainer"]
+        STR --> BF["BF-101A/B: Duplex 25 μm<br/>Bags / Carbon Block"]
+        BF --> PAC["P-501 PACl + SM-101<br/>(only above 5 NTU)"]
     end
 
-    subgraph UF["Stage 3: Ultrafiltration"]
-        PAC --> UFM["UF-201A/B: 4 x 60'' PVDF Modules + Daily DIT"]
+    subgraph UF_UV["Stage 3: 0.02 μm Ultrafiltration & Stage 4: 186 mJ/cm² Virus-Rated UV"]
+        direction LR
+        UFM["UF-201A/B: 4 × 60'' PVDF<br/>Modules + Daily DIT-201"] --> AIT201["AIT-201 Permeate<br/>Turbidity (< 0.05 NTU)"]
+        AIT201 --> UV["UV-401A/B: 186 mJ/cm² Validated<br/>(1 Duty + 1 Standby) + AIT-401 UVT"]
     end
 
-    subgraph UVS["Stage 4: Virus-Rated UV"]
-        UFM --> UV["UV-401A/B: 186 mJ/cm2 Validated (Duty + Standby) + AIT-401 UVT"]
+    subgraph OUT["Stage 5 & 6: Chlorine Residual, 150-Gal Clearwell & 50 GPM Booster"]
+        direction LR
+        CL["P-502A/B: NaOCl<br/>Residual Dosing"] --> CW["TK-601: 150-Gal<br/>Onboard Clearwell"]
+        CW --> BST["P-601A/B: Duplex 3 HP<br/>VFD Booster (50 GPM)"]
+        BST --> RPZ2["RPZ-602: 2''<br/>ASSE 1013"]
+        RPZ2 --> BLDG["Restaurant Domestic<br/>Tie-In (60–75 PSI)"]
     end
 
-    subgraph OUT["Stage 5 & 6: Residual & Delivery"]
-        UV --> CL["P-502A/B: NaOCl Residual Dose"]
-        CL --> CW["TK-601: 150-Gal Clearwell"]
-        CW --> BST["P-601A/B: Duplex 3 HP VFD Booster"]
-        BST --> RPZ2["RPZ-602: 2'' ASSE 1013"]
-        RPZ2 --> BLDG["Restaurant Domestic Tie-In (60-75 PSI)"]
-    end
+    RPZ1 --> XV100
+    PORTB --> P101
+    PAC --> UFM
+    UV --> CL
 ```
 
 ### 3.2 Disinfection Credit Basis

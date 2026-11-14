@@ -8,6 +8,7 @@
   <script src="https://www.gstatic.com/antigravity/web/dev/tailwindcss.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+  <script src="docs-bundle.js"></script>
   <style>
     :root {
       --background: #0b1120;
@@ -873,8 +874,56 @@
     <div id="md-container" class="hidden bg-[var(--card)] border border-[var(--border)] rounded-2xl p-6 md:p-10 shadow-lg md-prose overflow-x-auto"></div>
   </section>
 
+  <!-- Fullscreen Diagram Lightbox Modal -->
+  <div id="diagram-modal" class="fixed inset-0 z-50 hidden bg-slate-950/95 backdrop-blur-md flex-col">
+    <div class="flex flex-wrap items-center justify-between gap-3 px-5 py-3 bg-slate-900 border-b border-slate-800">
+      <div class="flex items-center gap-3">
+        <span class="px-2.5 py-1 rounded text-xs font-mono font-bold bg-cyan-500/20 text-cyan-300 border border-cyan-500/40">INTERACTIVE SCHEMATIC VIEWER</span>
+        <span class="text-xs text-slate-400 hidden sm:inline">Drag to pan • Scroll wheel or buttons to zoom</span>
+      </div>
+      <div class="flex items-center gap-2">
+        <button type="button" onclick="modalZoomBy(-0.25)" class="px-3 py-1.5 rounded-lg text-xs font-bold bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-700">− Zoom Out</button>
+        <span id="modal-zoom-label" class="px-2.5 py-1 rounded text-xs font-mono font-bold bg-slate-950 text-cyan-400 border border-slate-800 min-w-[60px] text-center">100%</span>
+        <button type="button" onclick="modalZoomBy(0.25)" class="px-3 py-1.5 rounded-lg text-xs font-bold bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-700">+ Zoom In</button>
+        <button type="button" onclick="modalZoomFit()" class="px-3 py-1.5 rounded-lg text-xs font-semibold bg-slate-800 hover:bg-slate-700 text-cyan-300 border border-slate-700">Fit Screen</button>
+        <button type="button" onclick="modalZoomReset()" class="px-3 py-1.5 rounded-lg text-xs font-semibold bg-slate-800 hover:bg-slate-700 text-emerald-300 border border-slate-700">1:1 Native</button>
+        <button type="button" onclick="closeDiagramModal()" class="ml-2 px-3.5 py-1.5 rounded-lg text-xs font-bold bg-rose-600 hover:bg-rose-500 text-white">✕ Close (Esc)</button>
+      </div>
+    </div>
+    <div id="diagram-modal-viewport" class="flex-1 overflow-auto p-6 cursor-grab active:cursor-grabbing flex items-start justify-start">
+      <div id="diagram-modal-stage" class="mx-auto my-auto transition-all duration-75"></div>
+    </div>
+  </div>
+
   <script>
-    mermaid.initialize({ startOnLoad: false, theme: 'dark' });
+    mermaid.initialize({
+      startOnLoad: false,
+      theme: 'base',
+      flowchart: {
+        useMaxWidth: false,
+        htmlLabels: true,
+        nodeSpacing: 34,
+        rankSpacing: 46,
+        padding: 16,
+        curve: 'basis'
+      },
+      themeVariables: {
+        darkMode: true,
+        background: '#0b1526',
+        fontFamily: 'ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, sans-serif',
+        fontSize: '15px',
+        primaryColor: '#132a46',
+        primaryTextColor: '#f8fafc',
+        primaryBorderColor: '#38bdf8',
+        lineColor: '#38bdf8',
+        secondaryColor: '#1e293b',
+        tertiaryColor: '#0f172a',
+        clusterBkg: '#0f1e34',
+        clusterBorder: '#0284c7',
+        titleColor: '#7dd3fc',
+        edgeLabelBackground: '#0f172a'
+      }
+    });
 
     function toggleTheme() {
       const root = document.documentElement;
@@ -889,6 +938,161 @@
       document.getElementById('viewer-stage').classList.remove('flex');
       document.getElementById('btn-open-new').classList.add('hidden');
       document.getElementById('html-iframe').src = 'about:blank';
+    }
+
+    function enableDragPan(viewport) {
+      let isDown = false, startX = 0, startY = 0, scrollLeft = 0, scrollTop = 0;
+      viewport.addEventListener('mousedown', (e) => {
+        if (e.button !== 0 || e.target.closest('button')) return;
+        isDown = true;
+        startX = e.pageX - viewport.offsetLeft;
+        startY = e.pageY - viewport.offsetTop;
+        scrollLeft = viewport.scrollLeft;
+        scrollTop = viewport.scrollTop;
+      });
+      viewport.addEventListener('mouseleave', () => { isDown = false; });
+      viewport.addEventListener('mouseup', () => { isDown = false; });
+      viewport.addEventListener('mousemove', (e) => {
+        if (!isDown) return;
+        e.preventDefault();
+        const x = e.pageX - viewport.offsetLeft;
+        const y = e.pageY - viewport.offsetTop;
+        viewport.scrollLeft = scrollLeft - (x - startX);
+        viewport.scrollTop = scrollTop - (y - startY);
+      });
+    }
+
+    let modalBaseWidth = 1100;
+    let modalScale = 1;
+
+    function applyModalScale(newScale) {
+      modalScale = Math.min(4, Math.max(0.35, newScale));
+      const stage = document.getElementById('diagram-modal-stage');
+      const svg = stage.querySelector('svg');
+      if (svg) {
+        svg.style.width = Math.round(modalBaseWidth * modalScale) + 'px';
+        svg.style.maxWidth = 'none';
+        svg.style.height = 'auto';
+      }
+      document.getElementById('modal-zoom-label').textContent = Math.round(modalScale * 100) + '%';
+    }
+
+    function modalZoomBy(delta) { applyModalScale(modalScale + delta); }
+    function modalZoomReset() { applyModalScale(1); }
+    function modalZoomFit() {
+      const vp = document.getElementById('diagram-modal-viewport');
+      const fitScale = Math.max(0.5, Math.min(2.2, (vp.clientWidth - 64) / modalBaseWidth));
+      applyModalScale(fitScale);
+    }
+
+    function openDiagramModal(svgEl, baseW) {
+      const modal = document.getElementById('diagram-modal');
+      const stage = document.getElementById('diagram-modal-stage');
+      stage.innerHTML = '';
+      const clone = svgEl.cloneNode(true);
+      modalBaseWidth = baseW || 1100;
+      stage.appendChild(clone);
+      modal.classList.remove('hidden');
+      modal.classList.add('flex');
+      const vp = document.getElementById('diagram-modal-viewport');
+      const fitScale = Math.max(0.85, Math.min(1.6, (vp.clientWidth - 64) / modalBaseWidth));
+      applyModalScale(fitScale);
+    }
+
+    function closeDiagramModal() {
+      const modal = document.getElementById('diagram-modal');
+      modal.classList.add('hidden');
+      modal.classList.remove('flex');
+    }
+
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape') closeDiagramModal();
+    });
+    enableDragPan(document.getElementById('diagram-modal-viewport'));
+    document.getElementById('diagram-modal-viewport').addEventListener('wheel', (e) => {
+      e.preventDefault();
+      modalZoomBy(e.deltaY < 0 ? 0.15 : -0.15);
+    }, { passive: false });
+
+    function decorateMermaidDiagrams(container) {
+      const mermaidDivs = container.querySelectorAll('.mermaid');
+      mermaidDivs.forEach((div, idx) => {
+        const svg = div.querySelector('svg');
+        if (!svg) return;
+
+        // Determine native viewBox dimensions so text is never squished unreadable
+        const vb = svg.viewBox && svg.viewBox.baseVal;
+        const nativeW = (vb && vb.width > 0) ? vb.width : (parseFloat(svg.getAttribute('width')) || 1100);
+        // Ensure a readable minimum base width: if the diagram is very wide, keep text readable
+        const readableBaseW = Math.max(900, Math.min(nativeW, 1800));
+
+        svg.removeAttribute('width');
+        svg.style.maxWidth = 'none';
+        svg.style.height = 'auto';
+        svg.style.display = 'block';
+
+        const wrapper = document.createElement('div');
+        wrapper.className = 'my-6 rounded-xl border-2 border-cyan-500/30 bg-[#081221] shadow-lg overflow-hidden';
+
+        const toolbar = document.createElement('div');
+        toolbar.className = 'flex flex-wrap items-center justify-between gap-2 px-3.5 py-2 bg-slate-900/95 border-b border-slate-800 text-xs';
+        toolbar.innerHTML = `
+          <div class="flex items-center gap-2">
+            <span class="px-2 py-0.5 rounded font-mono font-bold text-[11px] bg-cyan-500/15 text-cyan-300 border border-cyan-500/30">SCHEMATIC ${idx + 1}</span>
+            <span class="text-slate-400 text-[11px] hidden sm:inline">Drag to pan • Ctrl+Wheel or buttons to zoom</span>
+          </div>
+          <div class="flex items-center gap-1.5">
+            <button type="button" data-act="out" class="px-2.5 py-1 rounded font-bold bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-700" title="Zoom Out">−</button>
+            <span data-act="label" class="px-2 py-0.5 rounded font-mono font-bold text-cyan-400 bg-slate-950 border border-slate-800 min-w-[52px] text-center">100%</span>
+            <button type="button" data-act="in" class="px-2.5 py-1 rounded font-bold bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-700" title="Zoom In">+</button>
+            <button type="button" data-act="fit" class="px-2.5 py-1 rounded font-semibold bg-slate-800 hover:bg-slate-700 text-cyan-300 border border-slate-700">Fit</button>
+            <button type="button" data-act="native" class="px-2.5 py-1 rounded font-semibold bg-slate-800 hover:bg-slate-700 text-emerald-300 border border-slate-700">1:1</button>
+            <button type="button" data-act="full" class="px-2.5 py-1 rounded font-bold bg-cyan-600 hover:bg-cyan-500 text-white">⛶ Fullscreen</button>
+          </div>
+        `;
+
+        const viewport = document.createElement('div');
+        viewport.className = 'overflow-auto p-4 cursor-grab active:cursor-grabbing';
+        viewport.style.maxHeight = '760px';
+
+        div.parentNode.insertBefore(wrapper, div);
+        div.className = 'inline-block min-w-full';
+        viewport.appendChild(div);
+        wrapper.appendChild(toolbar);
+        wrapper.appendChild(viewport);
+
+        let scale = 1;
+        const labelEl = toolbar.querySelector('[data-act="label"]');
+
+        function setScale(nextScale) {
+          scale = Math.min(3.5, Math.max(0.45, nextScale));
+          svg.style.width = Math.round(readableBaseW * scale) + 'px';
+          labelEl.textContent = Math.round(scale * 100) + '%';
+        }
+
+        function fitToViewport() {
+          const availW = Math.max(680, viewport.clientWidth - 36);
+          // Never shrink below 0.78x of readableBaseW so text stays >= 12px
+          const fitScale = Math.max(0.78, Math.min(1.25, availW / readableBaseW));
+          setScale(fitScale);
+        }
+
+        toolbar.querySelector('[data-act="out"]').addEventListener('click', () => setScale(scale - 0.2));
+        toolbar.querySelector('[data-act="in"]').addEventListener('click', () => setScale(scale + 0.2));
+        toolbar.querySelector('[data-act="fit"]').addEventListener('click', fitToViewport);
+        toolbar.querySelector('[data-act="native"]').addEventListener('click', () => setScale(1.15));
+        toolbar.querySelector('[data-act="full"]').addEventListener('click', () => openDiagramModal(svg, readableBaseW));
+
+        enableDragPan(viewport);
+        viewport.addEventListener('wheel', (e) => {
+          if (e.ctrlKey || e.metaKey || e.altKey) {
+            e.preventDefault();
+            setScale(scale + (e.deltaY < 0 ? 0.15 : -0.15));
+          }
+        }, { passive: false });
+
+        requestAnimationFrame(fitToViewport);
+      });
     }
 
     async function openArtifact(filename, type, title) {
@@ -917,8 +1121,23 @@
         mdBox.innerHTML = '<div class="text-sm text-[var(--muted-foreground)] py-8 text-center">Loading engineering document...</div>';
 
         try {
-          const res = await fetch(filename);
-          let text = await res.text();
+          let text = '';
+          const bundled = window.MWT_DOCS_BUNDLE && window.MWT_DOCS_BUNDLE[filename];
+          if (window.location.protocol === 'file:' && bundled) {
+            text = bundled;
+          } else {
+            try {
+              const res = await fetch(filename);
+              if (!res.ok) throw new Error('HTTP ' + res.status);
+              text = await res.text();
+            } catch (fetchErr) {
+              if (bundled) {
+                text = bundled;
+              } else {
+                throw fetchErr;
+              }
+            }
+          }
 
           // Convert GitHub alerts like > [!IMPORTANT] into styled callouts
           text = text.replace(/>\s*\[!(NOTE|TIP|IMPORTANT|WARNING|CAUTION)\]/g, '> **$1:**');
@@ -932,11 +1151,12 @@
             const preEl = codeEl.parentElement;
             const graphDef = codeEl.textContent;
             const div = document.createElement('div');
-            div.className = 'mermaid my-6 flex justify-center bg-slate-900/60 p-4 rounded-xl border border-slate-800 overflow-x-auto';
+            div.className = 'mermaid';
             div.textContent = graphDef;
             preEl.replaceWith(div);
           }
           await mermaid.run({ nodes: mdBox.querySelectorAll('.mermaid') });
+          decorateMermaidDiagrams(mdBox);
         } catch (err) {
           mdBox.innerHTML = `<div class="text-rose-500 text-sm">Failed to load ${filename}: ${err.message}</div>`;
         }

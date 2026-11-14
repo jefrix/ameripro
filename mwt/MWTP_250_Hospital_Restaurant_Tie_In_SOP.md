@@ -72,39 +72,34 @@ When deploying the **`MWTP-50`** to a restaurant during a Boil Water Advisory wh
 ## 3. Identifying the Building Tie-In Point (Hospital vs. Restaurant)
 
 ```mermaid
-flowchart LR
-    subgraph City["City System"]
-        CM["Street Water Main"]
-        HYD["Fire Hydrant OR Upstream BWA Tap"]
-        CM --> HYD
+flowchart TB
+    subgraph City["1. Municipal Street Main & Source"]
+        direction LR
+        CM["Street Water Main"] --> HYD["Fire Hydrant OR<br/>Upstream Service-Line Tap"]
     end
 
-    subgraph Supply["Supply"]
-        PSV["Utility Meter/Backflow + PSV-100 (hold ≥20 PSI)"]
-        TK100["TK-100 Raw Break Tank (air gap: 3,000 or 550 gal)"]
-        TANKER["Potable Tanker (if no pressure)"]
-        PSV --> TK100
-        TANKER --> TK100
+    subgraph Supply["2. Raw Supply Protection & Air-Gap Break Tank"]
+        direction LR
+        PSV["Utility Meter / Backflow +<br/>PSV-100 (hold ≥ 20 PSI)"] --> TK100["TK-100 Raw Break Tank<br/>(Air Gap: 3,000 or 550 Gal)"]
+        TANKER["Potable Water Tanker<br/>(if main has zero pressure)"] --> TK100
     end
 
-    subgraph Trailer["MWTP-250 or MWTP-50 Gooseneck"]
-        TREAT["UF (0.02 μm + DIT) + UV (1+1)"]
-        CT["TK-401 Baffled Contact Tank (3,000 or 600 gal)"]
-        BOOST["Onboard Clearwell + VFD Booster + RPZ-602"]
-        TREAT --> CT --> BOOST
+    subgraph Trailer["3. MWTP-250 / MWTP-50 / MWTP-50C Treatment & Booster"]
+        direction LR
+        TREAT["UF (0.02 μm + DIT)<br/>+ Redundant UV"] --> CT["4-Log Virus Barrier:<br/>TK-401 CT Tank or 186 mJ/cm² UV"]
+        CT --> BOOST["Onboard Clearwell +<br/>VFD Booster + RPZ-602"]
     end
 
-    subgraph Facility["Hospital / Restaurant Domestic Entry"]
-        V_ISO["1. Service valve CLOSED (utility/facility)"]
-        PORT["2. Pre-installed domestic tie-in (NOT the FDC)"]
-        DIST["Pressurized Building Plumbing (60-85 PSI)"]
-        CM -- "X BLOCKED X" --> V_ISO
-        V_ISO --> PORT --> DIST
+    subgraph Facility["4. Hospital / Restaurant Domestic Entry"]
+        direction LR
+        V_ISO["1. Building Service Valve<br/>CLOSED & TAGGED"] --> PORT["2. Pre-Installed Domestic<br/>Tie-In (NEVER the FDC)"]
+        PORT --> DIST["Pressurized Building<br/>Plumbing (60–85 PSI)"]
     end
 
-    HYD == "Raw Hose" ==> PSV
+    HYD == "Blue Raw Hose" ==> PSV
+    CM -. "X ISOLATED X" .-> V_ISO
     TK100 == "4'' or 2'' Suction" ==> TREAT
-    BOOST == "3'' or 2'' Sanitized Potable Hose" ==> PORT
+    BOOST == "3'' or 2'' Sanitized White Potable Hose" ==> PORT
 ```
 
 ### Option A: Acute-Care Hospital Tie-In (`MWTP-250` — 100 to 250 GPM)

@@ -47,43 +47,45 @@ Because the feed water is fresh municipal or surface water (TDS < 500 mg/L), **r
 The treatment train is a **6-stage multi-barrier process** with automated fail-safe monitoring:
 
 ```mermaid
-flowchart TD
-    subgraph Stage1["Stage 1: Supply, Break Tank & Intake"]
-        HYD["Hydrant at 20 PSI or more (utility meter + backflow) OR Tanker / Surface Source"] --> PSV["PSV-100 Hydrant Pressure-Sustaining Valve (holds 20 PSI residual)"]
-        PSV --> TK100["TK-100 3,000-Gal Raw Break Tank (air-gap fill, ground-deployed)"]
-        TK100 --> P101["P-101 Raw Intake Pump (15 HP VFD, 260 GPM)"]
-        P101 --> AS["STR-101 Auto-Backwashing Strainer (200 um)"]
+flowchart TB
+    subgraph Stage1["Stage 1: Supply, Break Tank & Intake (260 GPM)"]
+        direction LR
+        HYD["Hydrant ≥ 20 PSI (meter + backflow)<br/>OR Tanker / Surface Source"] --> PSV["PSV-100 Pressure-<br/>Sustaining Valve (20 PSI)"]
+        PSV --> TK100["TK-100 3,000-Gal Raw<br/>Break Tank (air-gap fill)"]
+        TK100 --> P101["P-101 Raw Intake Pump<br/>(15 HP VFD, 260 GPM)"]
+        P101 --> AS["STR-101 Auto-Backwashing<br/>Strainer (200 μm)"]
     end
 
     subgraph Stage2["Stage 2: Pre-Filtration & Inline Coagulation"]
-        AS --> BF["BF-101A/B Duplex Bag Filters (25 um)"]
-        BF --> INJ1["P-501 PACl Coagulant (only if raw turbidity above 5 NTU)"]
-        INJ1 --> SM["SM-101 316SS Static Mixer"]
+        direction LR
+        BF["BF-101A/B Duplex<br/>Bag Filters (25 μm)"] --> INJ1["P-501 PACl Coagulant<br/>(only if turbidity > 5 NTU)"]
+        INJ1 --> SM["SM-101 316SS<br/>Static Mixer"]
     end
 
-    subgraph Stage3["Stage 3: Hollow-Fiber Ultrafiltration (UF)"]
-        SM --> UF1["UF Train A (125 GPM, 7 modules)"]
-        SM --> UF2["UF Train B (125 GPM, 7 modules)"]
-        UF1 & UF2 --> BW["Air Scour + Backwash + Daily Pressure-Decay Integrity Test"]
+    subgraph Stage34["Stage 3: Parallel Hollow-Fiber UF & Stage 4: Validated UV"]
+        direction LR
+        UF1["UF Train A & Train B<br/>(2 × 125 GPM, 14 PVDF Modules)"] --> BW["Air Scour + Backwash +<br/>Daily Pressure-Decay DIT"]
+        BW --> UV["UV-401A/B/C Validated Reactors<br/>(2 Duty + 1 Standby, ≥ 40 mJ/cm²)"]
     end
 
-    subgraph Stage4["Stage 4: UV Disinfection"]
-        UF1 & UF2 --> UV["UV-401A/B/C Validated UV Reactors (2 duty + 1 standby, 40 mJ/cm2 or more)"]
+    subgraph Stage5["Stage 5: Chlorination & Measured Contact Time (CT)"]
+        direction LR
+        INJ2["P-502A/B 12.5% NaOCl<br/>(flow-paced, residual-trimmed)"] --> CT["TK-401 3,000-Gal Baffled<br/>Contact Tank (T10 ≥ 6 min)"]
+        CT --> P401["P-401 Transfer<br/>Pump (5 HP)"]
+        P401 --> CW["TK-601 500-Gal<br/>Baffled Clearwell"]
     end
 
-    subgraph Stage5["Stage 5: Chlorination & Measured Contact Time"]
-        UV --> INJ2["P-502A/B 12.5% NaOCl (flow-paced, residual-trimmed)"]
-        INJ2 --> CT["TK-401 3,000-Gal Baffled Contact Tank (ground-deployed, T10 6 min or more)"]
-        CT --> P401["P-401 Transfer Pump"]
-        P401 --> CW["TK-601 500-Gal Baffled Clearwell (booster suction)"]
+    subgraph Stage6["Stage 6: Facility Pressurization & Distribution (250 GPM)"]
+        direction LR
+        DUP["P-601A/B/C Triplex VFD Booster<br/>(2 Duty + 1 Standby, 15 HP ea)"] --> RPZ["RPZ-602 ASSE 1013<br/>Backflow Preventer"]
+        RPZ --> BLDG["Hospital / Restaurant Domestic<br/>Tie-In (never the fire FDC)"]
+        RPZ --> TAP["12-Tap Community<br/>Filling Manifold"]
     end
 
-    subgraph Stage6["Stage 6: Facility Pressurization & Distribution"]
-        CW --> DUP["P-601A/B/C Triplex VFD Booster Skid (2 duty + 1 standby, 15 HP each)"]
-        DUP --> RPZ["RPZ-602 ASSE 1013 Backflow Preventer"]
-        RPZ --> BLDG["Hospital / Restaurant Domestic Water Tie-In (never the fire FDC)"]
-        RPZ --> TAP["12-Tap Exterior Community Filling Manifold"]
-    end
+    AS --> BF
+    SM --> UF1
+    UV --> INJ2
+    CW --> DUP
 ```
 
 ### 2.2 Disinfection Credit Basis

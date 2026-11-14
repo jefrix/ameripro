@@ -1324,6 +1324,27 @@
     </div>
   </section>
 
+  <!-- Fullscreen Blueprint Lightbox Modal -->
+  <div id="blueprint-modal" class="fixed inset-0 z-50 hidden bg-slate-950/95 backdrop-blur-md flex-col no-print">
+    <div class="flex flex-wrap items-center justify-between gap-3 px-5 py-3 bg-slate-900 border-b border-slate-800">
+      <div class="flex items-center gap-3">
+        <span class="px-2.5 py-1 rounded text-xs font-mono font-bold bg-amber-500/20 text-amber-300 border border-amber-500/40">ELECTRICAL DWG FULLSCREEN VIEWER</span>
+        <span class="text-xs text-slate-400 hidden sm:inline">Drag to pan • Mouse wheel or buttons to zoom up to 350%</span>
+      </div>
+      <div class="flex items-center gap-2">
+        <button type="button" onclick="bpModalZoomBy(-0.25)" class="px-3 py-1.5 rounded-lg text-xs font-bold bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-700">− Zoom Out</button>
+        <span id="bp-modal-zoom-label" class="px-2.5 py-1 rounded text-xs font-mono font-bold bg-slate-950 text-amber-400 border border-slate-800 min-w-[60px] text-center">125%</span>
+        <button type="button" onclick="bpModalZoomBy(0.25)" class="px-3 py-1.5 rounded-lg text-xs font-bold bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-700">+ Zoom In</button>
+        <button type="button" onclick="bpModalSet(1)" class="px-3 py-1.5 rounded-lg text-xs font-semibold bg-slate-800 hover:bg-slate-700 text-amber-300 border border-slate-700">100% Fit</button>
+        <button type="button" onclick="bpModalSet(1.75)" class="px-3 py-1.5 rounded-lg text-xs font-semibold bg-slate-800 hover:bg-slate-700 text-emerald-300 border border-slate-700">175% Detail</button>
+        <button type="button" onclick="closeBpModal()" class="ml-2 px-3.5 py-1.5 rounded-lg text-xs font-bold bg-rose-600 hover:bg-rose-500 text-white">✕ Close (Esc)</button>
+      </div>
+    </div>
+    <div id="bp-modal-viewport" class="flex-1 overflow-auto p-6 cursor-grab active:cursor-grabbing blueprint-canvas">
+      <div id="bp-modal-stage" class="mx-auto"></div>
+    </div>
+  </div>
+
   <script>
     function showSheet(id) {
       const sheets = ['e1', 'e2', 'e3', 'e4', 'e5'];
@@ -1348,6 +1369,110 @@
       const isLight = root.classList.toggle('light');
       document.getElementById('theme-btn').textContent = isLight ? 'Theme: Light' : 'Theme: Dark';
     }
+
+    function attachDragPan(vp) {
+      let down = false, sx = 0, sy = 0, sl = 0, st = 0;
+      vp.addEventListener('mousedown', e => {
+        if (e.button !== 0 || e.target.closest('button')) return;
+        down = true; sx = e.pageX - vp.offsetLeft; sy = e.pageY - vp.offsetTop; sl = vp.scrollLeft; st = vp.scrollTop;
+      });
+      vp.addEventListener('mouseleave', () => { down = false; });
+      vp.addEventListener('mouseup', () => { down = false; });
+      vp.addEventListener('mousemove', e => {
+        if (!down) return;
+        e.preventDefault();
+        vp.scrollLeft = sl - (e.pageX - vp.offsetLeft - sx);
+        vp.scrollTop = st - (e.pageY - vp.offsetTop - sy);
+      });
+    }
+
+    let bpModalScale = 1.25;
+    const bpBaseW = 1280;
+    function bpModalSet(s) {
+      bpModalScale = Math.min(3.5, Math.max(0.6, s));
+      const svg = document.querySelector('#bp-modal-stage svg');
+      if (svg) {
+        svg.style.width = Math.round(bpBaseW * bpModalScale) + 'px';
+        svg.style.maxWidth = 'none';
+      }
+      document.getElementById('bp-modal-zoom-label').textContent = Math.round(bpModalScale * 100) + '%';
+    }
+    function bpModalZoomBy(d) { bpModalSet(bpModalScale + d); }
+    function openBpModal(svgEl) {
+      const stage = document.getElementById('bp-modal-stage');
+      stage.innerHTML = '';
+      const clone = svgEl.cloneNode(true);
+      clone.classList.remove('w-full');
+      stage.appendChild(clone);
+      const modal = document.getElementById('blueprint-modal');
+      modal.classList.remove('hidden');
+      modal.classList.add('flex');
+      bpModalSet(1.35);
+    }
+    function closeBpModal() {
+      const modal = document.getElementById('blueprint-modal');
+      modal.classList.add('hidden');
+      modal.classList.remove('flex');
+    }
+    document.addEventListener('keydown', e => { if (e.key === 'Escape') closeBpModal(); });
+    attachDragPan(document.getElementById('bp-modal-viewport'));
+    document.getElementById('bp-modal-viewport').addEventListener('wheel', e => {
+      e.preventDefault();
+      bpModalZoomBy(e.deltaY < 0 ? 0.15 : -0.15);
+    }, { passive: false });
+
+    // Add interactive zoom/pan toolbar to every blueprint canvas
+    document.querySelectorAll('.blueprint-canvas').forEach((canvas, idx) => {
+      if (canvas.id === 'bp-modal-viewport') return;
+      const svg = canvas.querySelector('svg');
+      if (!svg) return;
+      canvas.classList.add('cursor-grab', 'active:cursor-grabbing');
+      attachDragPan(canvas);
+
+      const bar = document.createElement('div');
+      bar.className = 'no-print flex flex-wrap items-center justify-between gap-2 px-3.5 py-2 mb-2 rounded-lg bg-slate-900/90 border border-amber-500/30 text-xs';
+      bar.innerHTML = `
+        <div class="flex items-center gap-2">
+          <span class="px-2 py-0.5 rounded font-mono font-bold text-[11px] bg-amber-500/20 text-amber-300">INTERACTIVE DWG E-10${idx + 1}</span>
+          <span class="text-slate-400 text-[11px] hidden sm:inline">Drag drawing to pan • Ctrl+Wheel or buttons to zoom</span>
+        </div>
+        <div class="flex items-center gap-1.5">
+          <button type="button" data-z="out" class="px-2.5 py-1 rounded font-bold bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-700">−</button>
+          <span data-z="lbl" class="px-2 py-0.5 rounded font-mono font-bold text-amber-400 bg-slate-950 border border-slate-800 min-w-[52px] text-center">100%</span>
+          <button type="button" data-z="in" class="px-2.5 py-1 rounded font-bold bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-700">+</button>
+          <button type="button" data-z="fit" class="px-2.5 py-1 rounded font-semibold bg-slate-800 hover:bg-slate-700 text-amber-300 border border-slate-700">100%</button>
+          <button type="button" data-z="detail" class="px-2.5 py-1 rounded font-semibold bg-slate-800 hover:bg-slate-700 text-emerald-300 border border-slate-700">150% Detail</button>
+          <button type="button" data-z="full" class="px-2.5 py-1 rounded font-bold bg-amber-600 hover:bg-amber-500 text-white">⛶ Fullscreen</button>
+        </div>
+      `;
+      canvas.parentNode.insertBefore(bar, canvas);
+
+      let z = 1;
+      const lbl = bar.querySelector('[data-z="lbl"]');
+      function applyZ(next) {
+        z = Math.min(3.5, Math.max(0.75, next));
+        if (z === 1) {
+          svg.style.width = '100%';
+          svg.style.maxWidth = 'none';
+        } else {
+          const base = Math.max(1150, canvas.clientWidth - 24);
+          svg.style.width = Math.round(base * z) + 'px';
+          svg.style.maxWidth = 'none';
+        }
+        lbl.textContent = Math.round(z * 100) + '%';
+      }
+      bar.querySelector('[data-z="out"]').addEventListener('click', () => applyZ(z - 0.25));
+      bar.querySelector('[data-z="in"]').addEventListener('click', () => applyZ(z + 0.25));
+      bar.querySelector('[data-z="fit"]').addEventListener('click', () => applyZ(1));
+      bar.querySelector('[data-z="detail"]').addEventListener('click', () => applyZ(1.5));
+      bar.querySelector('[data-z="full"]').addEventListener('click', () => openBpModal(svg));
+      canvas.addEventListener('wheel', e => {
+        if (e.ctrlKey || e.metaKey || e.altKey) {
+          e.preventDefault();
+          applyZ(z + (e.deltaY < 0 ? 0.15 : -0.15));
+        }
+      }, { passive: false });
+    });
   </script>
 </body>
 </html>

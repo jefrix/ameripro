@@ -24,89 +24,94 @@
 
 ### 1.2 Master System P&ID Schematic
 
+> **Tip:** Use the **Zoom (`+` / `−`), Fit, Drag-to-Pan, or Fullscreen (`⛶`)** controls in the top-right corner of each schematic below to inspect individual valve tags and instrument loops.
+
+#### Sheet 1.2A — Stages 1, 2 & 3: Supply, Pre-Filtration & Parallel Hollow-Fiber UF
+
 ```mermaid
-flowchart TD
-    %% STAGE 1: SUPPLY, BREAK TANK & INTAKE
-    subgraph S1["STAGE 1 & 2: SUPPLY, BREAK TANK, PRE-FILTRATION & COAGULATION"]
-        HYD["Hydrant (utility meter + backflow) or Tanker"] --> PT100(["PT-100 Hydrant Residual (hold 20 PSI or more)"])
-        PT100 --> PSV100["PSV-100 Pressure-Sustaining Valve"]
-        PSV100 --> XV100["XV-100 Break Tank Fill Valve"]
-        XV100 -- "Air Gap" --> TK100["TK-100 3,000-Gal Raw Break Tank (LIT-100)"]
-        TK100 --> HV101["HV-101 Manual Iso"]
-        HV101 --> PSL101(["PSL/PT-101 Pump Suction (dry-run protection)"])
-        PSL101 --> P101["P-101 Raw Intake Pump (15 HP VFD, 260 GPM)"]
-        P101 --> CV101["CV-101 Check"]
-        CV101 --> AIT101(["AIT-101 Raw Turbidity & pH"])
-        AIT101 --> STR101["STR-101 200um Auto Strainer"]
-        STR101 -- "PDI-102 above 7 PSI" --> XV101["XV-101 Strainer Flush Valve"]
-        XV101 --> WASTE_HDR["3'' Common Waste Header"]
-        STR101 --> BF101["BF-101A/B Duplex 25um Bag Filters (HV-102 Changeover)"]
-        BF101 --> INJ_PACL["P-501 PACl Coagulant Injection"]
-        INJ_PACL --> SM101["SM-101 316SS Static Mixer"]
+flowchart TB
+    subgraph S1["STAGE 1: RAW SUPPLY, BREAK TANK & INTAKE"]
+        direction LR
+        HYD["Hydrant (meter + backflow)<br/>or Potable Tanker"] --> PT100(["PT-100 Residual<br/>(hold ≥ 20 PSI)"])
+        PT100 --> PSV100["PSV-100 Pressure-<br/>Sustaining Valve"]
+        PSV100 --> XV100["XV-100 Break Tank<br/>Fill Valve"]
+        XV100 -- "Air Gap" --> TK100["TK-100 3,000-Gal<br/>Raw Break Tank (LIT-100)"]
+        TK100 --> HV101["HV-101 Iso +<br/>PSL/PT-101 Suction"]
+        HV101 --> P101["P-101 Intake Pump<br/>(15 HP VFD, 260 GPM) + CV-101"]
     end
 
-    %% STAGE 3: HOLLOW-FIBER ULTRAFILTRATION
-    subgraph S3["STAGE 3: PARALLEL HOLLOW-FIBER ULTRAFILTRATION + INTEGRITY TEST"]
-        SM101 --> FIT200(["FIT-200 & PT-200 UF Feed"])
-
-        FIT200 --> XV201A["XV-201A Train A Feed"]
-        XV201A --> UFA["UF-201A (7x PVDF Modules, 125 GPM)"]
-        UFA --> XV202A["XV-202A Train A Filtrate"]
-        UFA -- "Top Reject" --> XV204A["XV-204A Train A Upper BW Drain"]
-        UFA -- "Bottom Drain" --> XV205A["XV-205A Train A Lower Drain"]
-
-        FIT200 --> XV201B["XV-201B Train B Feed"]
-        XV201B --> UFB["UF-201B (7x PVDF Modules, 125 GPM)"]
-        UFB --> XV202B["XV-202B Train B Filtrate"]
-        UFB -- "Top Reject" --> XV204B["XV-204B Train B Upper BW Drain"]
-        UFB -- "Bottom Drain" --> XV205B["XV-205B Train B Lower Drain"]
-
-        BL201["BL-201 Oil-Free Air Scour Blower"] --> XV206A["XV-206A Air A"] & XV206B["XV-206B Air B"]
-        XV206A --> UFA
-        XV206B --> UFB
-
-        IA["Instrument Air (regulated)"] --> XV207A["XV-207A DIT Air A"] & XV207B["XV-207B DIT Air B"]
-        XV207A --> UFA
-        XV207B --> UFB
-        UFA & UFB --> DIT(["PDIT-201A/B TMP & Pressure-Decay Test"])
-
-        P202["P-202 UF Backwash Pump (180 GPM)"] --> XV203A["XV-203A BW Supply A"] & XV203B["XV-203B BW Supply B"]
-        XV203A --> UFA
-        XV203B --> UFB
-
-        XV204A & XV205A & XV204B & XV205B --> WASTE_HDR
+    subgraph S2["STAGE 2: AUTO-STRAINER, DUPLEX BAG FILTERS & INLINE COAGULATION"]
+        direction LR
+        AIT101(["AIT-101 Raw<br/>Turbidity & pH"]) --> STR101["STR-101 200 μm<br/>Auto Strainer"]
+        STR101 -- "PDI-102 > 7 PSI" --> XV101["XV-101 Flush<br/>to Waste Header"]
+        STR101 --> BF101["BF-101A/B Duplex 25 μm<br/>Bag Filters (HV-102)"]
+        BF101 --> INJ_PACL["P-501 PACl Dosing<br/>(if > 5 NTU)"]
+        INJ_PACL --> SM101["SM-101 316SS<br/>Static Mixer"]
+        SM101 --> FIT200(["FIT-200 & PT-200<br/>UF Feed Header"])
     end
 
-    %% STAGE 4 & 5: UV, CHLORINE & CONTACT TIME
-    subgraph S45["STAGE 4 & 5: UV, CHLORINATION & MEASURED CONTACT TIME"]
-        XV202A & XV202B --> AIT201(["AIT-201 UF Permeate Turbidity (below 0.05 NTU)"])
-        AIT201 --> XV300["XV-300 Off-Spec Divert Valve"]
-        XV300 -- "If above 0.15 NTU" --> WASTE_HDR
-        AIT201 --> UV401["UV-401A/B/C UV Reactors (2 duty + 1 standby) + AIT-401 UVT"]
-        UV401 --> INJ_CL2["P-502A/B 12.5% NaOCl Dosing"]
-        INJ_CL2 --> XV401["XV-401 Contact Tank Feed Valve"]
-        XV401 --> TK401["TK-401 3,000-Gal Baffled Contact Tank (LIT-401)"]
-        TK401 --> AIT402(["AIT-402 Free Cl2, pH & Temp (live CT calc)"])
-        AIT402 --> P401["P-401 Transfer Pump (5 HP)"]
+    subgraph S3["STAGE 3: PARALLEL HOLLOW-FIBER UF TRAINS A & B + DIRECT INTEGRITY TEST"]
+        direction TB
+        subgraph UFA_ROW["UF Train A (125 GPM — 7x PVDF 0.02 μm Modules)"]
+            direction LR
+            XV201A["XV-201A<br/>Train A Feed"] --> UFA["UF-201A<br/>(7x PVDF Modules)"]
+            UFA --> XV202A["XV-202A<br/>Train A Filtrate"]
+            UFA -. "BW / Drain" .-> BW_A["XV-204A Upper &<br/>XV-205A Lower Drain"]
+        end
+        subgraph UFB_ROW["UF Train B (125 GPM — 7x PVDF 0.02 μm Modules)"]
+            direction LR
+            XV201B["XV-201B<br/>Train B Feed"] --> UFB["UF-201B<br/>(7x PVDF Modules)"]
+            UFB --> XV202B["XV-202B<br/>Train B Filtrate"]
+            UFB -. "BW / Drain" .-> BW_B["XV-204B Upper &<br/>XV-205B Lower Drain"]
+        end
+        subgraph UF_AUX["Shared UF Backwash, Air Scour & Daily Pressure-Decay DIT"]
+            direction LR
+            P202["P-202 Backwash Pump (180 GPM)<br/>via XV-203A / XV-203B"]
+            BL201["BL-201 Oil-Free Air Scour<br/>via XV-206A / XV-206B"]
+            DIT["Regulated Instrument Air (XV-207A/B)<br/>+ PDIT-201A/B Pressure-Decay DIT"]
+        end
     end
 
-    %% STAGE 6: CLEARWELL & BUILDING BOOSTER
-    subgraph S6["STAGE 6: CLEARWELL & VFD BUILDING PRESSURIZATION"]
-        P401 --> TK601["TK-601 500-Gal Baffled Clearwell (LIT-601)"]
-        TK601 -- "Suction" --> P202
-        TK601 --> XV601["XV-601 Clearwell Drain (3'')"]
-        XV601 --> WASTE_HDR
-        TK601 --> AIT601(["AIT-601 Free Cl2 & pH (finished)"])
-        AIT601 --> P601["P-601A/B/C Triplex VFD Booster (2 duty + 1 standby, 15 HP)"]
-        P601 --> PT602(["PT-602 & FIT-602 Pump Discharge"])
-        PT602 --> XV602["XV-602 Potable Isolation Valve"]
-        XV602 --> RPZ602["RPZ-602 ASSE 1013 Backflow Preventer"]
-        RPZ602 --> OUT_A["Outlet A/B/C: Hospital, Restaurant & 12-Tap Manifold"]
-        OUT_A --> PT603(["PT-603 Remote Building Pressure (VFD control)"])
+    P101 --> AIT101
+    FIT200 --> XV201A & XV201B
+    XV202A & XV202B --> TO_S4(["To Stage 4: Combined UF Permeate Header (UF-3''-316SS)"])
+```
+
+#### Sheet 1.2B — Stages 4, 5 & 6: UV, Chlorination, Contact Time, Clearwell & Triplex Booster
+
+```mermaid
+flowchart TB
+    subgraph S45["STAGE 4 & 5: VALIDATED UV, NaOCl CHLORINATION & 3,000-GAL CONTACT TANK"]
+        direction LR
+        FROM_S3(["From Stage 3:<br/>UF Permeate"]) --> AIT201(["AIT-201 Turbidity<br/>(< 0.05 NTU)"])
+        AIT201 -. "> 0.15 NTU" .-> XV300["XV-300 Off-Spec<br/>Divert to Waste"]
+        AIT201 --> UV401["UV-401A/B/C Reactors<br/>(2 Duty + 1 Standby) + AIT-401 UVT"]
+        UV401 --> INJ_CL2["P-502A/B 12.5%<br/>NaOCl Dosing + XV-401"]
+        INJ_CL2 --> TK401["TK-401 3,000-Gal Baffled<br/>Contact Tank (LIT-401, T10 ≥ 6 min)"]
+        TK401 --> AIT402(["AIT-402 Free Cl2,<br/>pH & Temp (Live CT)"])
+        AIT402 --> P401["P-401 CT Transfer<br/>Pump (5 HP VFD)"]
     end
 
-    WASTE_HDR --> INJ_SBS["P-503 NaHSO3 Dechlorination (all waste)"]
-    INJ_SBS --> SEWER["Sanitary Sewer Cleanout (with utility permission)"]
+    subgraph S6["STAGE 6: ONBOARD CLEARWELL, TRIPLEX VFD BOOSTER & BUILDING TIE-IN"]
+        direction LR
+        TK601["TK-601 500-Gal<br/>Baffled Clearwell (LIT-601)"] --> AIT601(["AIT-601 Finished<br/>Free Cl2 & pH"])
+        TK601 -. "BW Suction" .-> P202_REF["To P-202 UF<br/>Backwash Pump"]
+        TK601 -. "Drain" .-> XV601["XV-601 Clearwell<br/>Drain (3'')"]
+        AIT601 --> P601["P-601A/B/C Triplex VFD Booster<br/>(2 Duty + 1 Standby, 15 HP ea)"]
+        P601 --> PT602(["PT-602 & FIT-602<br/>Discharge"])
+        PT602 --> XV602["XV-602 Potable<br/>Isolation Valve"]
+        XV602 --> RPZ602["RPZ-602 ASSE 1013<br/>Backflow Preventer"]
+        RPZ602 --> OUT_A["Outlets A/B/C: Hospital, Restaurant<br/>& 12-Tap Manifold (PT-603 Remote)"]
+    end
+
+    subgraph WASTE["COMMON DECHLORINATED WASTE HEADER (BW-3''-PVC80)"]
+        direction LR
+        W_IN["All Flush, UF Backwash, Off-Spec<br/>Divert (XV-300) & Tank Drains"] --> INJ_SBS["P-503 NaHSO3 Bisulfite<br/>Dechlorination Dosing"]
+        INJ_SBS --> SEWER["Approved Sanitary Sewer Cleanout<br/>(0.0 mg/L Total Chlorine)"]
+    end
+
+    P401 --> TK601
+    XV300 & XV601 --> W_IN
 ```
 
 ---

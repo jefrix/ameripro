@@ -76,40 +76,43 @@ Building the **MWTP-50 ("KitchenShield-50")** first — or alongside the MWTP-25
 The MWTP-50 applies the exact same **multi-barrier UF + UV + Free Chlorine CT** engineering and regulatory rigor as Revision B of the MWTP-250, scaled to **35 GPM continuous treatment** and **50 GPM peak delivery**.
 
 ```mermaid
-flowchart LR
-    subgraph S1["Stage 1: Supply & Air Gap"]
-        SRC["Hydrant (≥20 PSI via PSV-100) OR Restaurant Upstream Tap OR Tanker"] --> TK100["TK-100: 550-Gal Air-Gap Break Tank (Ground)"]
+flowchart TB
+    subgraph S1["Stage 1: Raw Water Supply & Air-Gap Break Tank"]
+        direction LR
+        SRC["Hydrant (≥ 20 PSI via PSV-100)<br/>OR Service-Line Tap OR Tanker"] --> TK100["TK-100: 550-Gal Air-Gap<br/>Break Tank (Ground)"]
     end
 
-    subgraph S2["Stage 2: Pre-Filtration"]
-        TK100 --> P101["P-101: 3 HP VFD Intake Pump (40 GPM)"]
-        P101 --> STR["STR-101: 1.5'' Auto-Strainer (200 μm)"]
-        STR --> BF["BF-101A/B: Duplex #2 Bag / Carbon Housing (25 μm)"]
-        BF --> PAC["P-501: PACl Coagulant + SM-101 Static Mixer"]
+    subgraph S2["Stage 2: Intake, Auto-Strainer, Bag/Carbon & Coagulation"]
+        direction LR
+        P101["P-101: 3 HP VFD<br/>Intake Pump (40 GPM)"] --> STR["STR-101: 1.5'' Auto-<br/>Strainer (200 μm)"]
+        STR --> BF["BF-101A/B: Duplex #2<br/>Bag / Carbon (25 μm)"]
+        BF --> PAC["P-501: PACl Coagulant<br/>+ SM-101 Static Mixer"]
     end
 
-    subgraph S3["Stage 3: 0.02 μm Ultrafiltration"]
-        PAC --> UF["UF-201A/B: 4 × 60'' Hollow-Fiber PVDF Modules + Daily DIT-201"]
-        UF --> AIT201["AIT-201: Laser Nephelometer (<0.05 NTU)"]
+    subgraph S3["Stage 3: 0.02 μm Hollow-Fiber Ultrafiltration & Stage 4: Redundant UV"]
+        direction LR
+        UF["UF-201A/B: 4 × 60'' PVDF<br/>Modules + Daily DIT-201"] --> AIT201["AIT-201: Laser<br/>Nephelometer (< 0.05 NTU)"]
+        AIT201 --> UV["UV-401A/B: 2 × 40 GPM<br/>Reactors (1+1, ≥ 40 mJ/cm²)"]
     end
 
-    subgraph S4["Stage 4: Redundant UV"]
-        AIT201 --> UV["UV-401A/B: 2 × 40 GPM Reactors (1 Duty + 1 Standby, ≥40 mJ/cm²)"]
+    subgraph S5["Stage 5: 4-Log Virus Chlorine Contact Time (CT)"]
+        direction LR
+        CL2["P-502A/B: 12.5%<br/>NaOCl Dosing"] --> TK401["TK-401: 600-Gal Baffled<br/>Contact Tank (T10 = 8.5 min)"]
+        TK401 --> P401["P-401: 1.5 HP CT<br/>Transfer Pump"]
+        P401 --> AIT601["AIT-601: Free Cl2 & pH<br/>(1.5–2.2 mg/L)"]
     end
 
-    subgraph S5["Stage 5: 4-Log Virus Chlorine CT"]
-        UV --> CL2["P-502A/B: 12.5% NaOCl Dosing"]
-        CL2 --> TK401["TK-401: 600-Gal Baffled Contact Tank (Ground, T10 = 8.5 min)"]
-        TK401 --> P401["P-401: 1.5 HP CT Transfer Pump"]
-        P401 --> AIT601["AIT-601: Free Cl2 & pH (1.5–2.2 mg/L)"]
+    subgraph S6["Stage 6: 150-Gal Surge Clearwell & 50 GPM Peak Kitchen Booster"]
+        direction LR
+        TK601["TK-601: 150-Gal<br/>Onboard Clearwell"] --> P601["P-601A/B: Duplex 3 HP<br/>VFD Booster (50 GPM @ 60–75 PSI)"]
+        P601 --> RPZ["RPZ-602: 2'' ASSE 1013<br/>Backflow Preventer"]
+        RPZ --> KIT["Restaurant Domestic Tie-In<br/>(Upstream of Ice, Dish & Sinks)"]
     end
 
-    subgraph S6["Stage 6: 50 GPM Peak Kitchen Booster"]
-        AIT601 --> TK601["TK-601: 150-Gal Onboard Clearwell"]
-        TK601 --> P601["P-601A/B: Duplex 3 HP VFD Booster (50 GPM @ 60–75 PSI)"]
-        P601 --> RPZ["RPZ-602: 2'' ASSE 1013 Backflow"]
-        RPZ --> KIT["Restaurant Domestic Tie-In (Upstream of Ice, Dish & Sinks)"]
-    end
+    TK100 --> P101
+    PAC --> UF
+    UV --> CL2
+    AIT601 --> TK601
 ```
 
 ### Stage 1: Raw Water Supply (Three Restaurant Feed Options)
