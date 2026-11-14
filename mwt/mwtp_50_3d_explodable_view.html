@@ -340,6 +340,30 @@
     }
 
     // ---------------- Skid groups ----------------
+    // Port callouts are children of their equipment group, so they follow exploded views.
+    const portLabels = [];
+    function labelPort(group, position, text, color, row, total) {
+      const offset = (row - (total - 1) / 2) * 30;
+      const wrap = document.createElement('div');
+      wrap.style.cssText = 'width:0;height:0;pointer-events:none;overflow:visible';
+      const line = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+      line.setAttribute('width', '40');
+      line.setAttribute('height', String(Math.abs(offset) + 2));
+      line.style.cssText = `position:absolute;left:0;top:${Math.min(0, offset)}px;overflow:visible`;
+      const path = document.createElementNS('http://www.w3.org/2000/svg', 'line');
+      path.setAttribute('x1', '0'); path.setAttribute('y1', String(Math.max(0, -offset)));
+      path.setAttribute('x2', '40'); path.setAttribute('y2', String(Math.max(0, offset)));
+      path.setAttribute('stroke', color); path.setAttribute('stroke-width', '2');
+      line.appendChild(path); wrap.appendChild(line);
+      const pill = document.createElement('span');
+      pill.textContent = text;
+      pill.style.cssText = `position:absolute;left:40px;top:${offset}px;transform:translateY(-50%);white-space:nowrap;background:#0b1120ee;color:#f8fafc;border:1px solid ${color};border-left:5px solid ${color};border-radius:5px;padding:4px 7px;font:600 11px system-ui;box-shadow:0 2px 5px #0008`;
+      wrap.appendChild(pill);
+      const label = new CSS2DObject(wrap);
+      label.position.set(...position);
+      group.add(label); portLabels.push(label);
+    }
+
     const groups = {};
     Object.keys(skids).forEach(id => {
       const g = new THREE.Group();
@@ -394,6 +418,14 @@
       [[-2.0, '#0ea5e9'], [-1.0, '#f59e0b'], [0.0, '#10b981'], [1.0, '#3b82f6'], [2.0, '#f43f5e']].forEach(([z, c]) => {
         cylH(g, 0.18, 0.45, 11.25, D + 1.8, z, mat(c, { m: 0.5, r: 0.35 }), 'x');
       });
+
+      [
+        [-2.0, 'Raw inlet A — tank suction', '#0ea5e9'],
+        [-1.0, 'Hydrant / tap inlet', '#f59e0b'],
+        [0.0, 'Contact tank out / return', '#10b981'],
+        [1.0, 'Potable out — building', '#3b82f6'],
+        [2.0, 'Waste out — dechlorination', '#f43f5e']
+      ].forEach(([z, text, color], i) => labelPort(g, [11.49, D + 1.8, z], text, color, i, 5));
 
       // Rear Sanitary Hose Reels (Blue Raw & White Potable)
       [[D + 1.1, '#2563eb'], [D + 3.2, '#e5e7eb']].forEach(([y, c]) => {
@@ -1026,6 +1058,7 @@
       });
 
       renderer.render(scene, camera);
+      portLabels.forEach(label => { label.visible = showLabels; });
       labelRenderer.render(scene, camera);
     }
     loop();
